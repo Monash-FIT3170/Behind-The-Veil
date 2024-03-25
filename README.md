@@ -10,7 +10,7 @@ Team Composition:
 - Vicky Huang
 - Anusha Yadav
 - Katie (Kathryn) Mitchell
-- Joshua Loong (test)
+- Joshua Loong
 - Trung Nguyen
 - Hirun Hettigoda
 - Nishan Chakma
