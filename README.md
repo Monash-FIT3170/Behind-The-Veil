@@ -16,3 +16,4 @@ Team Composition:
 - Hirun Hettigoda
 - Nishan Chakma
 - Nikki Li Shao
+- Ryan Hicks
