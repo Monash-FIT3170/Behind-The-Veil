@@ -10,3 +10,5 @@ Team Composition:
 - Vicky Huang
 - Anusha Yadav
 - Trung Nguyen
+- Katie (Kathryn) Mitchell
+- Joshua Loong
