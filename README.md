@@ -6,3 +6,4 @@ Team Composition:
 
 - Phillip (Kefei) Li
 - Lucas Sharp
+- Laura Zhakupova
