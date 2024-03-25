@@ -17,3 +17,4 @@ Team Composition:
 - Nishan Chakma
 - Nikki Li Shao
 - Ryan Hicks
+- Neth Botheju
