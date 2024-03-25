@@ -11,3 +11,4 @@ Team Composition:
 - Anusha Yadav
 - Katie (Kathryn) Mitchell
 - Joshua Loong
+- Hirun Hettigoda
