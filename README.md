@@ -9,4 +9,5 @@ Team Composition:
 - Laura Zhakupova
 - Vicky Huang
 - Anusha Yadav
-- Katie (Kathryn) Mitchell- Joshua Loong
+- Katie (Kathryn) Mitchell
+- Joshua Loong
