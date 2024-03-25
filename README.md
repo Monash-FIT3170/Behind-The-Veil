@@ -7,4 +7,6 @@ Team Composition:
 - Phillip (Kefei) Li
 - Lucas Sharp
 - Laura Zhakupova
+- Vicky Huang
+- Anusha Yadav
 - Joshua Loong
