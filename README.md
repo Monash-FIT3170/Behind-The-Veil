@@ -12,4 +12,4 @@ Team Composition:
 - Katie (Kathryn) Mitchell
 - Joshua Loong
 - Trung Nguyen
-
+- Hirun Hettigoda
