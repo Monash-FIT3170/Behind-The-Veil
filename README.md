@@ -9,3 +9,4 @@ Team Composition:
 - Laura Zhakupova
 - Vicky Huang
 - Anusha Yadav
+- Trung Nguyen
