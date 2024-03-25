@@ -8,3 +8,4 @@ Team Composition:
 - Lucas Sharp
 - Laura Zhakupova
 - Vicky Huang
+- Anusha Yadav
