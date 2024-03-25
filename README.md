@@ -14,3 +14,4 @@ Team Composition:
 - Trung Nguyen
 - Hirun Hettigoda
 - Nishan Chakma
+- Nikki Li Shao
