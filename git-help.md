@@ -26,3 +26,37 @@ Push the new branch to remote
 Reset the upstream branch for the new_name local branch
 
 <code>git push <remote> -u <new_name></code>
+
+## Git push errors
+> error: src refspec feature/86cv1cexu-git-repo-setup does not match any \
+> error: failed to push some refs to 'https://github.com/Monash-FIT3170/Behind-The-Veil.git'
+
+This error means the branch doesn't exist in remote but does locally. To resolve this you can do a git status to see what uncommitted files you have and commit them. Do a git push and the branch should push to remote and create it for you.
+
+## Merge Request Issues
+### Git doesn't give me the option to merge into developer branch?
+This means the branch you are trying to push has a detached head i.e it was never branched off the developer branch.
+
+To resolve this go into your current working branch and run
+
+<code> git rebase develop </code>
+
+Resolve any conflicts that may occur and do add all changed files using 
+
+<code> git add . </code>
+
+or 
+
+<code> git add filename </code> (recommended)
+
+Finally to attach your branch back to head with all changes do
+
+<code> git push -f </code>
+
+**Note** if you are unsure about any of this please reach out to team members via General.
+
+
+
+
+
+
