@@ -3,6 +3,10 @@
 ## Getting started
 **Note:** This project runs react through yarn so you don't need to use npm or npm to run it. 
 
+> ***! Important !*** Make sure to install yarn dependencies installed:
+> - if you have npm already follow this: https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable
+> - if you don't have npm follow this: https://yarnpkg.com/getting-started/install
+
 When running the system in your local host, simply open your terminal inside your IDE or computer and navigate into the siteroot folder using:
 
 <code> cd siteroot </code>
@@ -10,10 +14,6 @@ When running the system in your local host, simply open your terminal inside you
 then run yarn 
 
 <code> yarn start</code>
-
-***! Important !*** Make sure to install yarn dependencies installed:
-- if you have npm already follow this: https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable
-- if you don't have npm follow this: https://yarnpkg.com/getting-started/install
 
 The website should automatically open on your browser, if it does not simple copy past the local link displayed in your terminal with local host and port into your brower search.
 
