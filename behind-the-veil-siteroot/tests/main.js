@@ -1,9 +1,9 @@
 import assert from "assert";
 
-describe("behind-the-veil", function () {
+describe("behind-the-veil-siteroot", function () {
   it("package.json has correct name", async function () {
     const { name } = await import("../package.json");
-    assert.strictEqual(name, "behind-the-veil");
+    assert.strictEqual(name, "behind-the-veil-siteroot");
   });
 
   if (Meteor.isClient) {
