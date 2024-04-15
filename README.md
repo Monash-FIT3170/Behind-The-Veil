@@ -1,5 +1,5 @@
 # Behind-The-Veil
-
+## Dependancies
 ## Getting started
 **Note:** This project runs react through yarn so you don't need to use npm or npm to run it. 
 

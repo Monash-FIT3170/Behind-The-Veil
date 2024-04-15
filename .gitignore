@@ -1,3 +1,2 @@
 # some team use a different IDE i.e Jetbrains Webstrom hence this need to be ignored to reduce ties to a single IDE
 .idea
-node_modules
