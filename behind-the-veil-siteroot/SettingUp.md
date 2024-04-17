@@ -40,10 +40,10 @@ For Windows, Mac or Linux run the following:
 ```console
 npm install -g meteor
 ```
----
+
 ### React
 - Installing meteor already installs React so you don't need to do anything!
-
+---
 ## Running the app
 Once all your dependencies have been installed:
 - Make sure you are in the behind-the-veil-siteroot directory
