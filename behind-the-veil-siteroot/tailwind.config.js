@@ -17,9 +17,8 @@ module.exports = {
         "confirmed-colour": "#27AD6D",
         "pending-colour": "#4F76D9",
         "cancelled-colour": "#D33B3B",
-        "background-gradient": "linear-gradient(#BBCAFE, #E5D6FF)",
-        "bubble-gradient":
-          "linear-gradient(#FFFFFF 4%, #FBFBFF 53%, #E6DFF3 100%)",
+        "bg-gradient-start": "#BBCAFE",
+        "bg-gradient-end": "#E5D6FF"
       },
     },
   },

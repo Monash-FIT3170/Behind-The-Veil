@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* 
+Define base styles here and apply them to common reused components.
+This approach allows us to define base styles but allow the base styles to be overwritten 
+on a case by case basis within individual JSX components.
+*/
+@layer components {
+  .btn-base {
+    @apply bg-light-grey font-bold py-2 px-4 rounded-full w-fit;
+  }
+}
