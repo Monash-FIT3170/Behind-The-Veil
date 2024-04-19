@@ -1,4 +1,32 @@
 body {
-  padding: 10px;
+  padding-top: 7rem;
   font-family: sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+/*to be removed after merging with global CSS and tailwind setup*/
+.btn-base-purple {
+  text-decoration: none;
+  background-color: #BBB4E8;
+  color: #282828;
+  padding: 0.75rem 1rem;
+  font-weight: bold;
+  width: 4rem;
+  border-radius: 9999px;
+}
+
+.btn-base-white {
+  text-decoration: none;
+  background-color: #ffffff;
+  outline: 0.1rem solid #D4D4D4;
+  color: #282828;
+  padding: 0.75rem 1rem;
+  font-weight: bold;
+  width: 4rem;
+  border-radius: 9999px;
 }
