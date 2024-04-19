@@ -1,11 +1,12 @@
-import React from 'react';
-import { Hello } from './Hello.jsx';
-import { Info } from './Info.jsx';
+import React from "react";
+import Button from "./Button.jsx";
 
 export const App = () => (
   <div>
-    <h1>Welcome to Meteor!</h1>
-    <Hello/>
-    <Info/>
+    {/* example use case */}
+    <div className="flex flex-col gap-5 p-10">
+      Example button:
+      <Button className="bg-main-blue hover:bg-main-blue-hover ">Example</Button>
+    </div>
   </div>
 );
