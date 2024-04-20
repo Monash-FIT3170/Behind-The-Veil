@@ -1,13 +1,13 @@
 import React from "react";
 
-import NavigationBar from './components/navigation-bar/navigation-bar.jsx'
+import NavigationBar from './components/navigationBar/NavigationBar.jsx'
 import Examples from './components/pages/Examples.jsx'
 
-import {ArtistsPage} from './components/pages/artists-page.jsx'
-import {HomePage} from './components/pages/home-page.jsx'
-import {ServicesPage} from './components/pages/services-page.jsx'
-import {LoginPage} from './components/pages/login-page.jsx'
-import {RegisterPage} from './components/pages/register-page.jsx'
+import {ArtistsPage} from './components/pages/ArtistsPage.jsx'
+import {HomePage} from './components/pages/HomePage.jsx'
+import {ServicesPage} from './components/pages/ServicesPage.jsx'
+import {LoginPage} from './components/pages/LoginPage.jsx'
+import {RegisterPage} from './components/pages/RegisterPage.jsx'
 
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";

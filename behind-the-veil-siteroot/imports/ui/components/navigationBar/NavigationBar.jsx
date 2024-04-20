@@ -5,7 +5,7 @@ import {NavLink} from "react-router-dom";
 import Button from "../button/Button";
 import {XMarkIcon, Bars3Icon} from "@heroicons/react/16/solid"
 
-import "./navigation-bar.css"
+import "./navigationBar.css"
 
 /**
  *
