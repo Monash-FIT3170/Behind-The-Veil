@@ -11,9 +11,9 @@ export const NavigationBar = () => {
                 </NavLink>
 
                 <ul className="nav__list">
-                    {/*<li className="nav__item">*/}
-                    {/*    <NavLink to="/examples" className="nav__link">Examples Here</NavLink>*/}
-                    {/*</li>*/}
+                    <li className="nav__item">
+                        <NavLink to="/examples" className="nav__link">Examples Here</NavLink>
+                    </li>
                     <li className="nav__item">
                         <NavLink to="/" className="nav__link">Home</NavLink>
                     </li>
