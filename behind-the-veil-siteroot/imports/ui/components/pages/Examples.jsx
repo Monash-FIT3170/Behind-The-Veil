@@ -18,6 +18,9 @@ const Examples = () => {
       <Button className="bg-gradient-to-r from-bg-gradient-start to-bg-gradient-end">
         Background gradient
       </Button>
+      <Button onClick={() => console.log("Hello")}>
+        Click me and look at your console
+      </Button>
       <div className="large-text">Font styles:</div>
       <div className="title-text">title-text</div>
       <div className="main-text">main-text</div>
@@ -27,7 +30,9 @@ const Examples = () => {
       <div className="large-number-text">large-number-text</div>
       <div className="logo-text">logo-text</div>
       <div className="message-tag-text">message-tag-text</div>
-      <div className="message-receiver-name-text">message-receiver-name-text</div>
+      <div className="message-receiver-name-text">
+        message-receiver-name-text
+      </div>
       <div className="message-read-text">message-read-text</div>
       <div className="message-unread-text">message-unread-text</div>
       <div className="message-name-read-text">message-name-read-text</div>
