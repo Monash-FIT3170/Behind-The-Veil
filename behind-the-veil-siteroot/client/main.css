@@ -1,4 +1,96 @@
-body {
-  padding: 10px;
-  font-family: sans-serif;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* base font styles */
+  .main-text {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 150%;
+  }
+
+  .large-text {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 150%;
+  }
+
+  .medium-text {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 150%;
+  }
+
+  .small-text {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 150%;
+  }
+
+  .title-text {
+    font-size: 40px;
+    font-weight: 600;
+    line-height: 150%;
+  }
+
+  .large-number-text {
+    font-size: 48px;
+    font-weight: 400;
+    line-height: 150%;
+  }
+
+  .logo-text {
+    /* TODO: font should be poppins */
+    font-size: 25px;
+    font-weight: 400;
+    line-height: 150%;
+  }
+
+  .message-tag-text {
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 150%;
+  }
+
+  .message-receiver-name-text {
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 150%;
+  }
+
+  .message-read-text {
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 150%;
+  }
+
+  .message-unread-text {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 150%;
+  }
+
+  .message-name-read-text {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 150%;
+  }
+
+  .message-name-unread-text {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 150%;
+  }
+}
+
+/* 
+Define base styles for common reused components here.
+This approach allows us to define base styles but allow the base styles to be overwritten 
+on a case by case basis within individual JSX components.
+*/
+@layer components {
+  .btn-base {
+    @apply bg-light-grey hover:bg-dark-grey font-bold py-2 px-4 rounded-full w-fit;
+  }
 }
