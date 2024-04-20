@@ -1,18 +1,16 @@
 import React from "react";
-import Examples from "./components/pages/Examples.jsx";
-import {NavigationBar} from '../../client/components/navigation-bar/navigation-bar.jsx'
 
-import {ArtistsPage} from '../../client/components/pages/artists-page'
-import {HomePage} from '../../client/components/pages/home-page'
-import {ServicesPage} from '../../client/components/pages/services-page'
-import {LoginPage} from '../../client/components/pages/login-page'
-import {RegisterPage} from '../../client/components/pages/register-page'
+import NavigationBar from './components/navigation-bar/navigation-bar.jsx'
+import Examples from './components/pages/Examples.jsx'
 
-// import {Examples} from '../../client/components/pages/Examples.jsx'
+import {ArtistsPage} from './components/pages/artists-page.jsx'
+import {HomePage} from './components/pages/home-page.jsx'
+import {ServicesPage} from './components/pages/services-page.jsx'
+import {LoginPage} from './components/pages/login-page.jsx'
+import {RegisterPage} from './components/pages/register-page.jsx'
 
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
 
 
 export const App = () => (
@@ -30,7 +28,7 @@ export const App = () => (
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
 
-                    {/*<Route path="/examples" element={<Examples />} />  /!* removed once dev is finished*!/*/}
+                    <Route path="/examples" element={<Examples />} />  {/* removed once dev is finished*/}
 
                     {/* Define other routes that you need*/}
                 </Routes>
