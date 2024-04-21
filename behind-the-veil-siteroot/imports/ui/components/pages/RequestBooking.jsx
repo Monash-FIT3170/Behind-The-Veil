@@ -14,7 +14,7 @@ const RequestBooking = () => {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 px-40 py-10">
       <div className="large-text">Request Booking</div>
       <ServiceDetailsHeader details={MOCK_SERVICE_DETAILS}/>
     </div>
