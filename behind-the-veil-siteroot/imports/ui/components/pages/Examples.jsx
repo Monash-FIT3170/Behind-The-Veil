@@ -1,9 +1,14 @@
+/**
+ * File Description: Examples page
+ * File version: 1.1
+ * Contributors: Josh, Nikki
+ */
+
 import React from "react";
 import Button from "../button/Button";
 
 /**
  * Page to showcase examples
- * TODO: once routing is set up, move this page behind a /examples route
  */
 const Examples = () => {
     // Example buttons
