@@ -12,6 +12,8 @@ import Button from "../button/Button.jsx";
 import {getUserAuth} from "../hooks/UserAuth.jsx";
 import "./navigationBar.css"
 
+// const logo1 = require("../../../../client/logo.png");
+
 /**
  * Navigation Bar component for all pages of the app, relies on the Route object in App.js
  * for correct routing.
@@ -26,7 +28,7 @@ export const NavigationBar = () => {
     const [loggedInUser, setLoggedInUser] = useState(user) // temp currently hardcoded
 
     // variable for tracking which is the currently active tab
-    const [activeTab, setActiveTab] = useState("none");
+    const [activeTab, setActiveTab] = useState("home");
 
     // Code for menu open and close
     const [menuShown, setMenuShown] = useState(false);
@@ -123,8 +125,9 @@ export const NavigationBar = () => {
                                  setActiveTab("login");
                              }}>
                         <Button type="button"
-                                className="bg-white hover:bg-light-grey
-                                    outline outline-2 outline-light-grey">
+                                className="
+                                bg-white hover:bg-light-grey
+                                outline outline-2 outline-light-grey">
                             Sign In
                         </Button>
                     </NavLink>
@@ -182,7 +185,7 @@ export const NavigationBar = () => {
                              }}
                     >
                         Logo (also press to toggle UI for testing)
-                        <img src="../../../../client/assets/Logo.png" alt=""/>
+                        <img src="../../../../client/logo.png" alt=""/>
                     </NavLink>
 
                     {/* All the navigation links in a list (hidden when small screen) */}
