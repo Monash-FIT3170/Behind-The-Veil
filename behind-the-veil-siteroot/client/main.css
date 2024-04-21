@@ -111,6 +111,6 @@ on a case by case basis within individual JSX components.
   }
 
   .card-base {
-    @apply border-main-blue border-2 w-fit rounded-[45px] p-4;
+    @apply border-main-blue border-2 w-fit rounded-[45px] p-4 bg-white;
   }
 }
