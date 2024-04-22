@@ -7,6 +7,7 @@
 import React from "react";
 import Button from "../../button/Button";
 import Card from "../../card/Card";
+import ServiceDetailsHeader from "../../service-details-header/ServiceDetailsHeader";
 
 /**
  * Page to showcase examples
@@ -62,6 +63,15 @@ const Examples = () => {
                     Or buttons:
                     <Button>Hello</Button>
                 </Card>
+            </div>
+            <div className="flex flex-col gap-3">
+                <div className="large-text underline">Service Details Header</div>
+                <ServiceDetailsHeader 
+                    service="Super Awesome Makeover"
+                    date="1 Apr 2000"
+                    artist="Bruce Wayne"
+                    price="$9999"
+                />
             </div>
         </div>
     );
