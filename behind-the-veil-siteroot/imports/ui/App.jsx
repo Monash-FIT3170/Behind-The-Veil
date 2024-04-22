@@ -7,12 +7,12 @@ import LoggedOutOnlyRoute from "./components/protectedRoute/LoggedOutOnlyRoute.j
 
 import Examples from './components/pages/Examples.jsx'
 
-import HomePage from './components/pages/HomePage.jsx'
-import ServicesPage from './components/pages/ServicesPage.jsx'
-import ArtistsPage from './components/pages/ArtistsPage.jsx'
-import MessagesPage from './components/pages/MessagesPage.jsx'
-import LoginPage from './components/pages/LoginPage.jsx'
-import RegisterPage from './components/pages/RegisterPage.jsx'
+import HomePage from './components/pages/home/HomePage.jsx'
+import ServicesPage from './components/pages/service/ServicesPage.jsx'
+import ArtistsPage from './components/pages/artist/ArtistsPage.jsx'
+import MessagesPage from './components/pages/messages/MessagesPage.jsx'
+import LoginPage from './components/pages/login/LoginPage.jsx'
+import RegisterPage from './components/pages/register/RegisterPage.jsx'
 
 export const App = () => (
 
