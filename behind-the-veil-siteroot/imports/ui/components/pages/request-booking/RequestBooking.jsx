@@ -1,5 +1,10 @@
+/**
+ * File Description: Request Booking page
+ * File version: 1.0
+ * Contributors: Josh
+ */
+
 import React from "react";
-import Card from "../../card/Card";
 import ServiceDetailsHeader from "../../service-details-header/ServiceDetailsHeader";
 
 /**
