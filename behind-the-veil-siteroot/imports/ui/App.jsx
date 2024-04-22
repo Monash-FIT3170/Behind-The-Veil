@@ -13,6 +13,7 @@ import ArtistsPage from './components/pages/artist/ArtistsPage.jsx'
 import MessagesPage from './components/pages/messages/MessagesPage.jsx'
 import LoginPage from './components/pages/login/LoginPage.jsx'
 import RegisterPage from './components/pages/register/RegisterPage.jsx'
+import RequestBooking from "./components/pages/RequestBooking.jsx";
 
 export const App = () => (
 
@@ -45,6 +46,7 @@ export const App = () => (
                            element={<LoggedInOnlyRoute> <MessagesPage/></LoggedInOnlyRoute>}/>
 
                     {/* Define other routes that you need*/}
+                    <Route path="/request-booking" element={<RequestBooking/>} />
                 </Routes>
             </main>
         </Router>
