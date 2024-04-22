@@ -6,7 +6,6 @@ import LoggedInOnlyRoute from "./components/protectedRoute/LoggedInOnlyRoute.jsx
 import LoggedOutOnlyRoute from "./components/protectedRoute/LoggedOutOnlyRoute.jsx";
 
 import Examples from './components/pages/examples/Examples.jsx'
-
 import HomePage from './components/pages/home/HomePage.jsx'
 import ServicesPage from './components/pages/service/ServicesPage.jsx'
 import ArtistsPage from './components/pages/artist/ArtistsPage.jsx'
@@ -18,7 +17,6 @@ import RequestBooking from "./components/pages/request-booking/RequestBooking.js
 export const App = () => (
 
   <div>
-
     {/*This is the navigation bar on every Page*/}
     <Router>
       <NavigationBar />
@@ -53,12 +51,5 @@ export const App = () => (
         </Routes>
       </main>
     </Router>
-
-
-    {/*<h1>Welcome to Meteor!</h1>*/}
-    {/*<Hello/>*/}
-    {/*<Info/>*/}
-
-
   </div>
 );

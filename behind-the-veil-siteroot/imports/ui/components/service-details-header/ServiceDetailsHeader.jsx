@@ -1,3 +1,9 @@
+/**
+ * File Description: Service details header component
+ * File version: 1.0
+ * Contributors: Josh
+ */
+
 import React from "react";
 import Card from "../card/Card";
 import classNames from "classnames";

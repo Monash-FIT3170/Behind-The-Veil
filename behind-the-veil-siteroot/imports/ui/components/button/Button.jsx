@@ -1,3 +1,9 @@
+/**
+ * File Description: Button component
+ * File version: 1.1
+ * Contributors: Josh
+ */
+
 import React, { forwardRef } from "react";
 import classNames from "classnames";
 
