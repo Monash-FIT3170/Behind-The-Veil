@@ -3,6 +3,22 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    /* scroll bar is always present, so it doesnt affect width and style of pages with/without overflow*/
+    overflow: scroll;
+  }
+
+  body {
+    /*padding on top for nav bar room*/
+    padding-top: 5rem;
+  }
+
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+
   /* base font styles */
   .main-text {
     font-size: 16px;
@@ -91,6 +107,9 @@ on a case by case basis within individual JSX components.
 */
 @layer components {
   .btn-base {
-    @apply bg-light-grey hover:bg-dark-grey font-bold py-2 px-4 rounded-full w-fit;
+    @apply bg-light-grey hover:bg-light-grey-hover transition duration-500 font-bold py-2 px-4 rounded-full w-fit;
   }
+
+
+
 }
