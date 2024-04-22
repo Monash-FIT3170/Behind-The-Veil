@@ -1,6 +1,6 @@
 import React from "react";
-import Card from "../card/Card";
-import ServiceDetailsHeader from "../service-details-header/ServiceDetailsHeader";
+import Card from "../../card/Card";
+import ServiceDetailsHeader from "../../service-details-header/ServiceDetailsHeader";
 
 /**
  * Page for user to request a booking
