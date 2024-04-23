@@ -17,7 +17,9 @@ export const LoginPage = () => {
         // then use center aligned and no visuals on the left so the inputs aren't all squished
         <WhiteBackground pageLayout={window.innerWidth <= 1024 ? PageLayout.SMALL_CENTER : PageLayout.SMALL_RIGHT}>
             {/*you MUST keep this div and put everything on the left side (e.g. the visual) of it*/}
-            <div className="translate-x-1/2 translate-y-[80vh]">
+            <div className="hidden lg:flex translate-x-1/2 translate-y-[80vh]">
+                {/*You might have to alter the above translation values or something to make sure that the visual
+                doesn't move when changing screen size*/}
                 <span>Sign In Page Visual here!!</span>
             </div>
             {/*you MUST keep this div and put everything on the right side inside of it*/}
