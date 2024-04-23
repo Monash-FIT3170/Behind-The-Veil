@@ -114,12 +114,11 @@ on a case by case basis within individual JSX components.
     /*used for ALL cards and background (basically anything that is a background and is white, use this)*/
     .white-glass-base {
         @apply rounded-3xl bg-white bg-opacity-90 backdrop-blur-lg /*style of the div*/
-        flex flex-col gap-5;
-        /*consistent styling for inside the div*/
+        flex flex-col gap-5; /*consistent styling for inside the div*/
     }
 
     .card-base {
-        @apply border-main-blue border-2 w-fit rounded-[45px] p-6 bg-white;
+        @apply white-glass-base border-main-blue border-2 w-fit rounded-[45px] p-6;
     }
 
     .service-details-header-base {
