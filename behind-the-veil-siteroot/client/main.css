@@ -3,101 +3,102 @@
 @tailwind utilities;
 
 @layer base {
-  html {
-    /* scroll bar is always present, so it doesnt affect width and style of pages with/without overflow*/
-    overflow: scroll;
-  }
+    html {
+        /* scroll bar is always present on the side, so it doesnt affect width and style of pages with/without overflow*/
+        overflow-y: scroll;
+    }
 
-  body {
-    /*padding on top for nav bar room*/
-    padding-top: 5rem;
-  }
+    body {
+        /*padding on top for nav bar room*/
+        padding-top: 5rem;
+        @apply bg-main-bkg bg-no-repeat bg-cover bg-fixed;
+    }
 
-  * {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-  }
+    * {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+    }
 
-  /* base font styles */
-  .main-text {
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 150%;
-  }
+    /* base font styles */
+    .main-text {
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 150%;
+    }
 
-  .large-text {
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 150%;
-  }
+    .large-text {
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 150%;
+    }
 
-  .medium-text {
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 150%;
-  }
+    .medium-text {
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 150%;
+    }
 
-  .small-text {
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 150%;
-  }
+    .small-text {
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 150%;
+    }
 
-  .title-text {
-    font-size: 40px;
-    font-weight: 600;
-    line-height: 150%;
-  }
+    .title-text {
+        font-size: 40px;
+        font-weight: 600;
+        line-height: 150%;
+    }
 
-  .large-number-text {
-    font-size: 48px;
-    font-weight: 400;
-    line-height: 150%;
-  }
+    .large-number-text {
+        font-size: 48px;
+        font-weight: 400;
+        line-height: 150%;
+    }
 
-  .logo-text {
-    /* TODO: font should be poppins */
-    font-size: 25px;
-    font-weight: 400;
-    line-height: 150%;
-  }
+    .logo-text {
+        /* TODO: font should be poppins */
+        font-size: 25px;
+        font-weight: 400;
+        line-height: 150%;
+    }
 
-  .message-tag-text {
-    font-size: 12px;
-    font-weight: 300;
-    line-height: 150%;
-  }
+    .message-tag-text {
+        font-size: 12px;
+        font-weight: 300;
+        line-height: 150%;
+    }
 
-  .message-receiver-name-text {
-    font-size: 32px;
-    font-weight: 500;
-    line-height: 150%;
-  }
+    .message-receiver-name-text {
+        font-size: 32px;
+        font-weight: 500;
+        line-height: 150%;
+    }
 
-  .message-read-text {
-    font-size: 12px;
-    font-weight: 300;
-    line-height: 150%;
-  }
+    .message-read-text {
+        font-size: 12px;
+        font-weight: 300;
+        line-height: 150%;
+    }
 
-  .message-unread-text {
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 150%;
-  }
+    .message-unread-text {
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 150%;
+    }
 
-  .message-name-read-text {
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 150%;
-  }
+    .message-name-read-text {
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 150%;
+    }
 
-  .message-name-unread-text {
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 150%;
-  }
+    .message-name-unread-text {
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 150%;
+    }
 }
 
 /* 
@@ -106,15 +107,22 @@ This approach allows us to define base styles but allow the base styles to be ov
 on a case by case basis within individual JSX components.
 */
 @layer components {
-  .btn-base {
-    @apply bg-light-grey hover:bg-light-grey-hover transition duration-500 font-bold py-2 px-4 rounded-full w-fit;
-  }
+    .btn-base {
+        @apply bg-light-grey hover:bg-light-grey-hover transition duration-500 font-bold py-2 px-4 rounded-full w-fit;
+    }
 
-  .card-base {
-    @apply border-main-blue border-2 w-fit rounded-[45px] p-6 bg-white;
-  }
+    /*used for ALL cards and background (basically anything that is a background and is white, use this)*/
+    .white-glass-base {
+        @apply rounded-3xl bg-white bg-opacity-90 backdrop-blur-lg /*style of the div*/
+        flex flex-col gap-5;
+        /*consistent styling for inside the div*/
+    }
 
-  .service-details-header-base {
-    @apply grid grid-cols-2 grid-rows-2 gap-x-10 gap-y-4 w-full;
-  }
+    .card-base {
+        @apply border-main-blue border-2 w-fit rounded-[45px] p-6 bg-white;
+    }
+
+    .service-details-header-base {
+        @apply grid grid-cols-2 grid-rows-2 gap-x-10 gap-y-4 w-full;
+    }
 }
