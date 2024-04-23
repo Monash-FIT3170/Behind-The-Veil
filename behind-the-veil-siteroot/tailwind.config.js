@@ -4,6 +4,9 @@ module.exports = {
   content: ["./imports/ui/**/*.{js,jsx,ts,tsx}", "./client/*.html"],
   theme: {
     extend: {
+      backgroundImage: {
+        'main-bkg': "url('http://localhost:8000/Background.svg')", // host image on python server
+      },
       colors: {
         "our-black": "#282828",
         "dark-grey": "#757575",
