@@ -5,16 +5,18 @@
  */
 
 import React from "react";
-import Button from "../../button/Button";
-import Card from "../../card/Card";
-import ServiceDetailsHeader from "../../service-details-header/ServiceDetailsHeader";
+import Card from "../../card/Card.jsx";
+import ServiceDetailsHeader from "../../service-details-header/ServiceDetailsHeader.jsx";
+import Button from "../../button/Button.jsx";
+import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
+import PageLayout from "../../../enums/PageLayout";
 
 /**
  * Page to showcase examples
  */
 const Examples = () => {
     return (
-        <div className="flex flex-col gap-5 p-10">
+        <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
             <div className="title-text">Examples</div>
             <div className="flex flex-col gap-3">
                 <div className="large-text underline">Buttons:</div>
@@ -53,7 +55,8 @@ const Examples = () => {
                     This text is written on a card component.
                 </Card>
                 <Card className="bg-dark-grey text-white">
-                    You can also supply custom classes to this component to override the base styling if you really need to.
+                    You can also supply custom classes to this component to override the base styling if you really need
+                    to.
                     To demonstrate, I've styled this card with a dark grey background and white text.
                 </Card>
                 <Card className="flex flex-col gap-2">
@@ -66,15 +69,16 @@ const Examples = () => {
             </div>
             <div className="flex flex-col gap-3">
                 <div className="large-text underline">Service Details Header</div>
-                <ServiceDetailsHeader 
+                <ServiceDetailsHeader
                     service="Super Awesome Makeover"
                     date="1 Apr 2000"
                     artist="Bruce Wayne"
                     price="$9999"
                 />
             </div>
-        </div>
+        </WhiteBackground>
     );
 };
 
 export default Examples;
+

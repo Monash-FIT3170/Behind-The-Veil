@@ -5,15 +5,17 @@
  */
 
 import React from 'react';
+import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
+import PageLayout from "../../../enums/PageLayout";
 
 /**
  * Page of a list of Artist cards for users to see
  */
 export const ArtistsPage = () => {
     return (
-        <div className="flex flex-col gap-5 p-10">
+        <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
             <span>Artists Page to be done!!</span>
-        </div>
+        </WhiteBackground>
     );
 };
 

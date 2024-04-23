@@ -5,15 +5,17 @@
  */
 
 import React from 'react';
+import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
+import PageLayout from "../../../enums/PageLayout";
 
 /**
  * Home page which is also the landing page
  */
 export const HomePage = () => {
     return (
-        <div className="flex flex-col gap-5 p-10">
+        <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
             <span>Home Page to be done!!</span>
-        </div>
+        </WhiteBackground>
     );
 };
 
