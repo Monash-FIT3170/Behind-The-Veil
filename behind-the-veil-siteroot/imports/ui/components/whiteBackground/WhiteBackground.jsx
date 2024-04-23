@@ -25,58 +25,69 @@ import "./whiteBackground.css"
  */
 export const WhiteBackground = ({children, className, pageLayout, ...divProps}) => {
 
-    // all will have the class white-glass-base, and the standard shadow
-    let pageDivClasses = classNames("white-glass-base standard-shadow", className);
-
     // the classes for the div outside the actual white page, determines its alignment (left/right/center)
     let outerDivClasses = "flex flex-row";
 
+    // all pages will have a background with white-glass-base, and the standard shadow
+    let pageMainDivClasses = classNames("white-glass-base standard-shadow", className);
+
+    // some layouts have an extra background div on the left, like messages and sign in/up pages
+    let pageSubDivClasses = null;
+
     if (!pageLayout || pageLayout === PageLayout.LARGE_CENTER) {
         // default to large center
-        pageDivClasses = classNames("large-page", pageDivClasses);
         outerDivClasses = classNames("justify-center", outerDivClasses);
-
-    } else if (pageLayout === PageLayout.SMALL_LEFT) {
-        // small page on the left (if page becomes too small, then it returns into the center to give more space)
-        pageDivClasses = classNames("small-page", pageDivClasses);
-        outerDivClasses = classNames("full-outermost-div items-center justify-center lg:justify-start", outerDivClasses);
+        pageMainDivClasses = classNames("large-page", pageMainDivClasses);
 
     } else if (pageLayout === PageLayout.SMALL_RIGHT) {
-        // small page on the right (if page becomes too small, then it returns into the center to give more space)
-        pageDivClasses = classNames("small-page", pageDivClasses);
+        // small page on the right (if page becomes too small, then it returns into the center to give more ui space)
         outerDivClasses = classNames("full-outermost-div items-center justify-center lg:justify-end", outerDivClasses);
+        pageMainDivClasses = classNames("small-page", pageMainDivClasses);
+
+        // has a left circular div for the visual - hides visual if screen is too small
+        pageSubDivClasses = "white-glass-base hidden lg:flex " +
+            "rounded-full h-[85vw] w-[100vw] translate-x-[-50%] fixed left-0";
 
     } else if (pageLayout === PageLayout.SMALL_CENTER) {
         // small page in the center
-        pageDivClasses = classNames("small-page", pageDivClasses);
         outerDivClasses = classNames("full-outermost-div items-center justify-center", outerDivClasses);
+        pageMainDivClasses = classNames("small-page", pageMainDivClasses);
 
     } else if (pageLayout === PageLayout.MESSAGES_PAGE) {
-        // special case: message page which splits in the middle
-        outerDivClasses = classNames("full-outermost-div items-end justify-center space-x-0 ", outerDivClasses);
+        // message page which splits in the middle
+        outerDivClasses = classNames("full-outermost-div items-end justify-center space-x-0", outerDivClasses);
+        pageMainDivClasses = classNames("message-right", pageMainDivClasses);
 
+        // has a left dark grey div for the list of contacts
+        pageSubDivClasses = "grey-glass-base standard-shadow inner-shadow message-left";
+
+    } else {
+        // all other cases if it is not covered, default to large center
+        outerDivClasses = classNames("justify-center", outerDivClasses);
+        pageMainDivClasses = classNames("large-page", pageMainDivClasses);
+    }
+
+    if (!pageSubDivClasses) {
+        // if there is no sub div, only 1 main div, then return that main one
         return (<div className={outerDivClasses}>
-                <div className={"grey-glass-base standard-shadow inner-shadow message-left"}>
+            <div {...divProps} className={pageMainDivClasses}>
+                {children}
+            </div>
+        </div>);
+    } else {
+        // there is a sub div, return the main and the sub div (main on the right)
+        return (
+            <div className={outerDivClasses}>
+                <div className={pageSubDivClasses}>
                     {children[0]}
                 </div>
 
-                <div className={"white-glass-base standard-shadow message-right"}>
+                <div className={pageMainDivClasses}>
                     {children[1]}
                 </div>
             </div>
         );
-
-    } else {
-        // all other cases if it is not covered, default to large center
-        pageDivClasses = classNames("large-page", pageDivClasses);
-        outerDivClasses = classNames("justify-center", outerDivClasses);
     }
-
-    return (<div className={outerDivClasses}>
-        <div {...divProps} className={pageDivClasses}>
-            {children}
-        </div>
-    </div>);
 };
 
 export default WhiteBackground;

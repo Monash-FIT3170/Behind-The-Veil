@@ -9,7 +9,6 @@
  */
 export enum PageLayout {
     LARGE_CENTER,
-    SMALL_LEFT,
     SMALL_RIGHT,
     SMALL_CENTER,
     MESSAGES_PAGE // special case for Messages page
