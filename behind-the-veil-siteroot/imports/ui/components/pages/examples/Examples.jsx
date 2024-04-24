@@ -9,6 +9,7 @@ import ButtonExamples from "./button-examples/ButtonExamples";
 import FontExamples from "./font-examples/FontExamples";
 import CardExamples from "./card-examples/CardExamples";
 import ServiceDetailsHeaderExamples from "./service-details-header-examples/ServiceDetailsHeaderExamples";
+import TabsExamples from "./tabs-examples/TabsExamples";
 
 /**
  * Page to showcase examples
@@ -21,6 +22,7 @@ const Examples = () => {
             <FontExamples />
             <CardExamples />
             <ServiceDetailsHeaderExamples />
+            <TabsExamples />
         </div>
     );
 };
