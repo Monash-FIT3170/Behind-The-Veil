@@ -11,6 +11,7 @@ import CardExamples from "./card-examples/CardExamples";
 import ServiceDetailsHeaderExamples from "./service-details-header-examples/ServiceDetailsHeaderExamples";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
+import TabsExamples from "./tabs-examples/TabsExamples";
 
 /**
  * Page to showcase examples
@@ -23,6 +24,7 @@ const Examples = () => {
             <FontExamples />
             <CardExamples />
             <ServiceDetailsHeaderExamples />
+            <TabsExamples />
         </WhiteBackground>
     );
 };
