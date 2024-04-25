@@ -90,7 +90,9 @@ git rebase --continue
 ✅ **You will know your rebase was successful if your terminal says rebased successfully.**
 
 If everything in your branch is working to your expectations and you are happy with you current branch then do
+```console
 git push -f
+```
 
 Keep in mind git force push will rewrite your remote branch with everything in local regardless of merge conflicts. This is not a bad thing if you are happy with everything on your local and need your remote to match!
 ----
