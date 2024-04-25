@@ -1,6 +1,6 @@
 /**
  * File Description: Examples page
- * File version: 1.2
+ * File version: 1.3
  * Contributors: Josh, Nikki
  */
 
