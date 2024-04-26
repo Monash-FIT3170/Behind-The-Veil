@@ -36,8 +36,9 @@ export const LoginPage = () => {
 
             </div>
 
-            <div style={{textAlign: "center", display: "flex", flexDirection: "column", gap: "30px", alignItems: "center"}}>
+            <div>
 
+                <div className="title-text" style={{textAlign: "center"}}>Sign In</div>
 
                 <div className="title-text" style={{textAlign: "center"}}>Sign In</div>
 
