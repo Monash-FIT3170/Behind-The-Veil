@@ -14,7 +14,7 @@ import PageLayout from "../../../enums/PageLayout";
 export const HomePage = () => {
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-            <span>Home Page to be done!!</span>
+            <div className="search-bar"><input type="search" name="home-search" id="home-search" className='search-input' onChange={(e) => setSearchQuery(e.target.value)} placeholder="Name, Description, etc ..."></input></div>
         </WhiteBackground>
     );
 };
