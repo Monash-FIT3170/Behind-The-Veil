@@ -19,6 +19,7 @@ export const LoginPage = () => {
         <WhiteBackground pageLayout={window.innerWidth <= 1024 ? PageLayout.SMALL_CENTER : PageLayout.SMALL_RIGHT}>
 
             <div className="hidden lg:flex translate-x-1/2 translate-y-[80vh]">
+                
                 {/*You might have to alter the above translation values or something to make sure that the visual
                 doesn't move when changing screen size*/}
 
@@ -29,6 +30,8 @@ export const LoginPage = () => {
                     <img src="../../images/SignIn.png" alt="SignIn"></img>
 
                 </div>
+
+                <div className="title-text">Bridal Makeup & Services</div>
 
             </div>
 
