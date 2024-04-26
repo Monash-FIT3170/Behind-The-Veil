@@ -68,4 +68,13 @@ The most common missing one is Babel, so run this if you see it say missing babe
 meteor npm install --save @babel/runtime react react-dom       
 ```
 
+### ESLint
+```console
+npx eslint <directory> <filename>
+```
+or to run for all
+```console
+npx eslint .
+```
+
 Written & tested by Neth, Josh and Nikki
