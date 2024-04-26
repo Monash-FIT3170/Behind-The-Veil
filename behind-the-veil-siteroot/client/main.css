@@ -104,6 +104,14 @@
         font-weight: 600;
         line-height: 150%;
     }
+
+    .link-text {
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 150%;
+        color: rgb(147, 112, 219);
+        cursor: pointer;
+    }
 }
 
 /* 
