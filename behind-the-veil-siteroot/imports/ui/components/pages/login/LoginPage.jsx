@@ -20,6 +20,7 @@ export const LoginPage = () => {
 
             <div className="hidden lg:flex translate-x-1/2 translate-y-[80vh]">
                 
+
                 {/*You might have to alter the above translation values or something to make sure that the visual
                 doesn't move when changing screen size*/}
 
@@ -35,7 +36,8 @@ export const LoginPage = () => {
 
             </div>
 
-            <div>
+            <div style={{textAlign: "center", display: "flex", flexDirection: "column", gap: "30px", alignItems: "center"}}>
+
 
                 <div className="title-text" style={{textAlign: "center"}}>Sign In</div>
 
@@ -74,3 +76,11 @@ export const LoginPage = () => {
 };
 
 export default LoginPage;
+
+
+<div style={{ position: 'relative' }}>
+    <span style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }}>
+        <img src="icon.png" alt="Icon" />
+    </span>
+    <input type="text" placeholder="Username" style={{ paddingLeft: '30px' }} />
+</div>
