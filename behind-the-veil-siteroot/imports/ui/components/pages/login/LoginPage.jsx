@@ -19,12 +19,16 @@ export const LoginPage = () => {
         <WhiteBackground pageLayout={window.innerWidth <= 1024 ? PageLayout.SMALL_CENTER : PageLayout.SMALL_RIGHT}>
 
             <div className="hidden lg:flex translate-x-1/2 translate-y-[80vh]">
-                
-
                 {/*You might have to alter the above translation values or something to make sure that the visual
                 doesn't move when changing screen size*/}
-                <div className="title-text text-secondary-purple-hover">Bridal Makeup & Services</div>
 
+                <div style={{display: "flex", flexDirection: "column", gap: "100px", alignItems: "center", textAlign: "center"}}>
+
+                    <div className="title-text text-secondary-purple-hover" style={{width: "400px"}}>Bridal Makeup & Services</div>
+
+                    <img src="../../images/SignIn.png" alt="SignIn"></img>
+
+                </div>
 
             </div>
 
@@ -67,11 +71,3 @@ export const LoginPage = () => {
 };
 
 export default LoginPage;
-
-
-<div style={{ position: 'relative' }}>
-    <span style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }}>
-        <img src="icon.png" alt="Icon" />
-    </span>
-    <input type="text" placeholder="Username" style={{ paddingLeft: '30px' }} />
-</div>
