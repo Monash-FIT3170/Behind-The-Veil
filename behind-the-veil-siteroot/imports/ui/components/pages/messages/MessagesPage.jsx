@@ -7,6 +7,7 @@
 import React from 'react';
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
+import MessagesPreview from './MessagesPreview.jsx';
 import Conversation from '../../message/Conversation';
 
 /**
@@ -32,6 +33,7 @@ export const MessagesPage = () => {
             {/*you MUST keep this div and put everything on the left side inside of it*/}
             <div>
                 <span>Messages Left Page to be done!!</span>
+                <MessagesPreview></MessagesPreview>
             </div>
             {/*you MUST keep this div and put everything on the right side inside of it*/}
             <div>
