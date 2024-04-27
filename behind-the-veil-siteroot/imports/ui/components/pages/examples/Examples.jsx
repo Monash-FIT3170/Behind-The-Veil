@@ -1,6 +1,6 @@
 /**
  * File Description: Examples page
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Josh, Nikki
  */
 
@@ -10,6 +10,7 @@ import ServiceDetailsHeader from "../../service-details-header/ServiceDetailsHea
 import Button from "../../button/Button.jsx";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
+import ServiceCard from "../../card/ServiceCard";
 
 /**
  * Page to showcase examples
@@ -75,6 +76,42 @@ const Examples = () => {
                     artist="Bruce Wayne"
                     price="$9999"
                 />
+            </div>
+
+            <div className="flex flex-col gap-3">
+                <div className="large-text underline">Service Details Header</div>
+                <div className={"flex flex-col lg:flex-row gap-10 items-center justify-center flex-wrap"}>
+                    <ServiceCard
+                        className=""
+                        serviceId={111111}
+                        serviceName={"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"}
+                        serviceDesc={"Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"}
+                        servicePrice={1123294}
+                        artistId={800091}
+                        artistName={"Alice Smith"}
+                        artistPhotoData={"http://localhost:8000/Background.png"}
+                    ></ServiceCard>
+                    <ServiceCard
+                        className=""
+                        serviceId={2222222}
+                        serviceName={"AAAAAAAAAAA"}
+                        serviceDesc={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n"}
+                        servicePrice={123}
+                        artistId={800092}
+                        artistName={"Bob"}
+                        artistPhotoData={"http://localhost:8000/aa.png"}
+                    ></ServiceCard>
+                    <ServiceCard
+                        className=""
+                        serviceId={1234567}
+                        serviceName={"AAAAAAAAAAA"}
+                        serviceDesc={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n"}
+                        servicePrice={123}
+                        artistId={800093}
+                        artistName={"Longnamed Jones"}
+                        artistPhotoData={""}
+                    ></ServiceCard>
+                </div>
             </div>
         </WhiteBackground>
     );
