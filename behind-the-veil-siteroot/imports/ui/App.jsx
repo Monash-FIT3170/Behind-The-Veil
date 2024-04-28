@@ -15,6 +15,7 @@ import LoginPage from './components/pages/login/LoginPage.jsx'
 import RegisterPage from './components/pages/register/RegisterPage.jsx'
 import RequestBooking from "./components/pages/request-booking/RequestBooking.jsx";
 import SpecificServicePage from "./components/pages/service/SpecificServicePage.jsx";
+import ArtistServiceArea from "./components/pages/artist/ArtistServiceArea.jsx";
 
 export const App = () => (
 
@@ -53,6 +54,7 @@ export const App = () => (
                     <Route path="/request-booking" element={<RequestBooking/>}/>
 
                     {/* Define other routes that you need*/}
+                    <Route path="/service-area" element={<ArtistServiceArea/>}/>
 
                 </Routes>
             </main>
