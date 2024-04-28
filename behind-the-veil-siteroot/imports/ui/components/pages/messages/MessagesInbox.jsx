@@ -31,7 +31,7 @@ const messagePreviews = [
 const MessagesInbox = () => {
     const messagePreviewsComponents = messagePreviews.map((messagePreview, index) => <MessagesPreview key = {index} data = {messagePreview}></MessagesPreview>);
     return (
-        <div className="flex flex-col gap-3 bg-light-grey">
+        <div className="flex flex-col gap-3 bg-light-grey w-1/2 h-full">
             {messagePreviewsComponents}
         </div>
     )
