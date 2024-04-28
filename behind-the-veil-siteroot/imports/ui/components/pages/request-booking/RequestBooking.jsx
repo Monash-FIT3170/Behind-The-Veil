@@ -48,7 +48,7 @@ const RequestBooking = () => {
     alert(`Form submitted with the following inputs: ${JSON.stringify(inputs)}`)
   }
 
-  // calculate available times that the user can select
+  // calculate available times that the user can select, based on a date
   // TODO: implement this properly instead of returning dummy data
   const getAvailableTimes = (date) => {
     const AVAILABLE_TIMES = ["10:00am", "11:00am", "12:00pm", "2:00pm", "4:00pm"]
