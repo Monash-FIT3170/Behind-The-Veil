@@ -13,13 +13,13 @@ import classNames from "classnames";
  * @param className custom classes that override the base style, e.g. background color, font, etc
  * @param cardProps encompasses all other props supplied and applies them to the card
  */
-const Card = ({children, className, ...cardProps}) => {
-    const cardClasses = classNames("card-base", className);
-    return (
-        <div {...cardProps} className={cardClasses}>
-            {children}
-        </div>
-    );
+const Card = ({ children, className, ...cardProps }) => {
+  const cardClasses = classNames("card-base", className);
+  return (
+    <div className={cardClasses} {...cardProps}>
+      {children}
+    </div>
+  );
 };
 
 export default Card;
