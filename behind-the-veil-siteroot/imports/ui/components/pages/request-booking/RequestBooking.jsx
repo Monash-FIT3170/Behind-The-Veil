@@ -22,24 +22,40 @@ const RequestBooking = () => {
     price: "$120"
   }
 
-  const AVAILABLE_TIME_SLOTS = []
-
-  // id's
-  const locationInputId = useId()
-  const dateInputId = useId()
-  const timeInputId = useId()
-
+  // form input values
   const [inputs, setInputs] = useState({
     location: "",
     date: "",
     time: ""
   })
 
-  const handleChange = (event) => {
+  // id's
+  const locationInputId = useId()
+  const dateInputId = useId()
+  const timeInputId = useId()
+
+  // form related functions
+  const handleInputChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    setInputs(i => ({...i, [name]: value}))
+    setInputs(i => ({ ...i, [name]: value }))
   }
+
+  // TODO: send this data to the next page
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    // TODO: implement validation, i.e. must have a valid time
+    alert(`Form submitted with the following inputs: ${JSON.stringify(inputs)}`)
+  }
+
+  // calculate available times that the user can select
+  // TODO: implement this properly instead of returning dummy data
+  const getAvailableTimes = (date) => {
+    const AVAILABLE_TIMES = ["10:00am", "11:00am", "12:00pm", "2:00pm", "4:00pm"]
+    return date !== "" ? AVAILABLE_TIMES : null
+  }
+
+  const availableTimes = getAvailableTimes(inputs.date)
 
   return (
     <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
@@ -48,7 +64,9 @@ const RequestBooking = () => {
         <ArrowLeftIcon className="size-6" />
         Back
       </Button>
-      <div className="flex flex-col gap-4 px-40">
+
+      {/* Main container for content */}
+      <div className="flex flex-col gap-4 xl:px-40">
         <div className="large-text">Request Booking</div>
         <ServiceDetailsHeader
           service={MOCK_SERVICE_DETAILS.service}
@@ -58,21 +76,19 @@ const RequestBooking = () => {
         />
 
         {/* input form */}
-        <form
-          // TODO: set "action = /[next page]"
-          // TODO: set "method = "POST""
-        >
+        <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4">
 
             {/* location */}
             <div className="flex flex-col gap-1">
-              <label htmlFor={locationInputId}className="main-text text-our-black">Location</label>
+              <label htmlFor={locationInputId} className="main-text text-our-black">Location</label>
               <input
                 id={locationInputId}
                 className="border-light-grey border-2 p-2 rounded main-text"
                 placeholder="Input location for service: wedding venue, address, ..."
-                name="booking-location"
+                name="location"
                 value={inputs.location || ""}
+                onChange={handleInputChange}
               />
             </div>
 
@@ -83,17 +99,52 @@ const RequestBooking = () => {
                 <div className="flex flex-col gap-1">
                   <label htmlFor={dateInputId} className="main-text text-our-black">Select Date</label>
                   <input
-                    id={dateInputId} 
+                    id={dateInputId}
                     className="border-light-grey border-2 p-2 rounded main-text"
                     placeholder="Select a date"
-                    name="booking-date"
+                    name="date"
                     value={inputs.date || ""}
+                    onChange={handleInputChange}
                   />
                 </div>
-                <div className="flex flex-col gap-1">
-                  <label htmlFor={timeInputId} className="main-text text-our-black">Select Start Time</label>
-                  {/* <input id="" className="border-light-grey border-2 p-2 rounded main-text" placeholder="Select a time" /> */}
-                </div>
+
+                {/* if there are available times, render the time input buttons */}
+                {
+                  availableTimes && (
+                    <div className="flex flex-col gap-1">
+                      <label htmlFor={timeInputId} className="main-text text-our-black">Select Start Time</label>
+                      <div id={timeInputId} className="grid grid-cols-2 gap-2">
+                        {
+                          availableTimes.map((time) => {
+                            const baseStyle = "w-full"
+                            const activeStyle = "bg-dark-grey text-white"
+                            const className = inputs.time === time ?
+                              `${baseStyle} ${activeStyle}` :
+                              baseStyle
+
+                            return (
+                              <Button
+                                key={time}
+                                className={className}
+                                onClick={() => {
+                                  setInputs((i) => {
+                                    return {
+                                      ...i,
+                                      time: time
+                                    }
+                                  })
+                                }}
+                              >
+                                {time}
+                              </Button>
+                            )
+                          })
+                        }
+                      </div>
+                    </div>
+                  )
+                }
+
                 <Button
                   className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"
                   type="submit"
@@ -104,15 +155,14 @@ const RequestBooking = () => {
               </div>
 
               {/* calendar component */}
-              <div className="flex grow bg-light-grey">
+              <div className="flex grow bg-light-grey justify-center items-center text-center">
                 CALENDAR PLACEHOLDER
               </div>
             </div>
           </div>
-        </form>
-      </div>
+        </form >
+      </div >
     </WhiteBackground>
-
   );
 };
 
