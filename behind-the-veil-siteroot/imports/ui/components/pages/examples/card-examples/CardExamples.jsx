@@ -33,32 +33,32 @@ const CardExamples = () => {
                 <ServiceCard
                     className=""
                     serviceId={111111}
-                    serviceName={"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"}
-                    serviceDesc={"Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"}
-                    servicePrice={1123294}
-                    artistId={800091}
+                    serviceName={"AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"}
+                    serviceDesc={"Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"}
+                    servicePrice={112333294}
+                    servicePhotoData={""}
+                    artistUsername={"alice_smith"}
                     artistName={"Alice Smith"}
-                    artistPhotoData={""}
                 ></ServiceCard>
                 <ServiceCard
                     className=""
                     serviceId={2222222}
-                    serviceName={"AAAAAAAAAAA"}
+                    serviceName={"Bachelorette Glam Experience"}
                     serviceDesc={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n"}
                     servicePrice={123}
-                    artistId={800092}
+                    servicePhotoData={""}
+                    artistUsername={"Bobbyyy1"}
                     artistName={"Bob"}
-                    artistPhotoData={""}
                 ></ServiceCard>
                 <ServiceCard
                     className=""
                     serviceId={1234567}
-                    serviceName={"AAAAAAAAAAA"}
+                    serviceName={"GlamourGlow Beauty"}
                     serviceDesc={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n"}
                     servicePrice={123}
-                    artistId={800093}
-                    artistName={"Longnamed Jones"}
-                    artistPhotoData={""}
+                    servicePhotoData={""}
+                    artistUsername={"ihavealonglonglongnameJones"}
+                    artistName={"LonglonglongnamedJones LongnamedDavis"}
                 ></ServiceCard>
             </div>
 

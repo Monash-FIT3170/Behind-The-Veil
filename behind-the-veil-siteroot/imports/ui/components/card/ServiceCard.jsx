@@ -12,7 +12,6 @@ import {CalendarDaysIcon} from "@heroicons/react/24/outline"
 
 import Card from "./Card";
 import Button from "../button/Button";
-import ProfilePhoto from "../profilePhoto/ProfilePhoto";
 
 /**
  * Component that displays brief service details on the Services page
@@ -22,9 +21,9 @@ import ProfilePhoto from "../profilePhoto/ProfilePhoto";
  * @param serviceName {string} name of service
  * @param serviceDesc {string} description of service
  * @param servicePrice {int} price of the service
- * @param artistId {int} Id of artist that posted the service
+ * @param servicePhotoData service's cover photo data from database
+ * @param artistUsername {string} Username (e.g. alice_tran1234) of artist that posted the service
  * @param artistName {string} name of artist that posted the service
- * @param artistPhotoData artist profile photo's data from database
  */
 export const ServiceCard = ({
                                 className,
@@ -32,33 +31,36 @@ export const ServiceCard = ({
                                 serviceName,
                                 serviceDesc,
                                 servicePrice,
-                                artistId,
+                                servicePhotoData,
+                                artistUsername,
                                 artistName,
-                                artistPhotoData,
+
 
                             }) => {
 
     // variables to handle routing
     const navigateTo = useNavigate();
 
-    const classes = classNames(className, "flex flex-col w-full min-w-60 lg:w-2/5 lg:min-w-78");
+    const classes = classNames(className, "flex flex-col justify-between w-full min-w-60 lg:w-2/5 lg:min-w-78 min-h-56");
 
     return (
         <Card className={classes}>
             <div className={"flex flex-row gap-x-8 justify-center"}>
                 <div className={"cursor-default"}>
-                    <div className="main-text text-our-black max-w-full break-all line-clamp-1 mb-3 text-center
-                    ">{serviceName}</div>
-                    <div className="small-text text-dark-grey max-h-[4.5rem] max-w-full line-clamp-4 break-all
-                    ">{serviceDesc}</div>
+                    <div className="large-text text-our-black max-w-full break-all line-clamp-1 mb-3 text-center">
+                        {serviceName}</div>
+                    <div className="small-text text-dark-grey max-h-[4.5rem] max-w-full line-clamp-4 mb-3 break-all">
+                        {serviceDesc}</div>
+                    <div className="main-text text-dark-grey max-h-[1.5rem] max-w-full line-clamp-1 break-all">
+                        Artist: {artistName} ( @{artistUsername} )</div>
                 </div>
 
-                {/* clickable to navigate to artist profile*/}
-                <div className={"hidden sm:flex flex-col items-center justify-center cursor-pointer min-w-20"}
-                     onClick={() => navigateTo('/artists/' + artistId)}
-                >
-                    <ProfilePhoto artistPhotoData={artistPhotoData}></ProfilePhoto>
-                    <div className="max-h-[4rem] large-text text-our-black line-clamp-2 text-center">{artistName}</div>
+                {/* image on the right side for service*/}
+                <div className={"hidden sm:flex flex-col items-center justify-center " +
+                    "relative min-w-40 min-h-40"}>
+                    <img className={"w-full h-3/4 object-cover absolute rounded-[20px]"}
+                         src={servicePhotoData}
+                         alt={"Service photo"}/>
                 </div>
             </div>
 
@@ -71,8 +73,7 @@ export const ServiceCard = ({
                 {/* button to specific booking detail page*/}
                 <Button className="flex flex-row gap-x-2 justify-center items-center w-4/5 md:w-1/2 min-w-40
                 bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500"
-                        onClick={() => navigateTo('/service/' + serviceId)}
-                >
+                        onClick={() => navigateTo('/service/' + serviceId)}>
                     <CalendarDaysIcon className="h-6 w-6 min-h-6 min-w-6"/>
                     View Service
                 </Button>
