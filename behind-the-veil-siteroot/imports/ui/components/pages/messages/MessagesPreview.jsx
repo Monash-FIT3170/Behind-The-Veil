@@ -11,7 +11,7 @@ import Button from "../../button/Button";
 const MessagesPreview = (props) => {
     const {userName, name, recentMessage, image, date, read} = props.data;
     return (
-        <Card className="flex flex-row gap-2">
+        <Card className="flex flex-row gap-2 w-6/7 h-1/4">
             <div className="bg-light-grey w-fit p-2 rounded">Image Placeholder</div>
             <div className="flex flex-col gap-2">
             {read ? (
