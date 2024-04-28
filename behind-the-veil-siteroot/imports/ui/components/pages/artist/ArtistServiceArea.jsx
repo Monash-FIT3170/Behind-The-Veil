@@ -8,6 +8,7 @@ import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Tabs from "../../tabs/Tabs.jsx";
 import Button from "../../button/Button.jsx";
+import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 
 /**
  * This page allows the artist to enter to enter a location as well as provide a radius in which they can travel from that location
@@ -70,6 +71,10 @@ export const ArtistServiceArea = () => {
 
   return (
     <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
+      <Button className="bg-transparent text-dark-grey flex gap-2">
+        <ArrowLeftIcon className="size-6" />
+        Back
+      </Button>
       <div className="title-text text-center">Settings</div>
       <Tabs
         tabs={["Payment Details", "Service Area"]}
