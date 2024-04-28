@@ -1,6 +1,6 @@
 /**
  * File Description: Button component
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Josh
  */
 

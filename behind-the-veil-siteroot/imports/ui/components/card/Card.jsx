@@ -1,6 +1,6 @@
 /**
  * File Description: Card component
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Josh
  */
 
