@@ -30,7 +30,7 @@
 
 .message-left {
     @apply rounded-b-none rounded-r-none; /*dont round bottom and left corners for this*/
-    @apply mt-16 p-10 w-3/12 h-fit; /*some positioning variables*/
+    @apply mt-16 p-4 w-3/12 h-fit; /*some positioning variables*/
     min-height: calc(100vh - 9rem);
 }
 

@@ -11,20 +11,21 @@ import Button from "../../button/Button";
 const MessagesPreview = (props) => {
     const {userName, name, recentMessage, image, date, read} = props.data;
     return (
-        <Card className="flex flex-row gap-2 w-6/7 h-1/4">
-            <div className="bg-light-grey w-fit p-2 rounded">Image Placeholder</div>
-            <div className="flex flex-col gap-2">
+        <Card className="flex flex-row gap-2 w-full h-full border-none">
+            <div className="bg-light-grey w-1/4 p-2 rounded">Img</div>
+            <div className="flex flex-col gap-1 w-3/4">
             {read ? (
                 <div>
                     <div className="message-name-read-text">{name}</div>
-                    <div className="message-read-text">{recentMessage}</div>
+                    <div className="message-read-text line-clamp-2 overflow-hidden">{recentMessage}</div>
                 </div>
             ) : (
                 <div>
                     <div className="message-name-unread-text">{name}</div>
-                    <div className="message-unread-text">{recentMessage}</div>
+                    <div className="message-unread-text line-clamp-2 overflow-hidden">{recentMessage}</div>
                 </div>
             )}
+            <div className="message-tag-text flex justify-end">@{userName}</div>
             </div>
         </Card>
     )
