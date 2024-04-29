@@ -8,35 +8,11 @@ import React from 'react';
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
-import { useNavigate } from "react-router-dom";
 
 /**
  * Page where user can sign up for a new account
  */
 export const RegisterPage = () => {
-    const navigate = useNavigate();
-
-    const handleAccountTypeSelection = (accountType) => {
-        console.log("Selected Type:", accountType);
-        navigate('/register/createAccount?type=${accountType}');
-    };
-
-    const AccountTypeOption = ({ accountType, label, onClick }) => {
-        return (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <Button
-                    type="button"
-                    className="bg-secondary-purple hover:bg-secondary-purple-hover outline outline-2 outline-secondary-purple"
-                    style={{ width: "120px", height: "120px", borderRadius: "50%", marginBottom: "10px" }}
-                    onClick={() => onClick(accountType)}
-                >
-                    {accountType}
-                </Button>
-                <label htmlFor={accountType} className="main-text">{label}</label>
-            </div>
-        );
-    };
-
     return (
         // if window size is SMALLER than a large screen (default variable for large in tailwind lg:1024px),
         // then use center aligned and no visuals on the left so the inputs aren't all squished
@@ -47,26 +23,127 @@ export const RegisterPage = () => {
                 doesn't move when changing screen size*/}
                 <span>Registration Page Visual here!!</span>
             </div>
+            {/*you MUST keep this div and put everything on the right side inside of it*/}
+            {/* Registration form on the right */}
+            <div>
+                <div className="title-text" style={{ textAlign: "center", marginTop: "-20px" }}>Create an account</div>
 
-            {/* Right side content */}
-            <div style={{ textAlign: "center", paddingTop: "5px" }}>
-                <div className="title-text" style={{marginBottom: "50px"}}>Choose Account Type</div>
+                <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "5px",
+                    padding: "10px"
+                }}>
+                    <div style={{width: "80%", textAlign: "left"}}>
+                        <label htmlFor="username" className="main-text">Username</label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Enter your username - Must be unique*"
+                            autoComplete="off"
+                            style={{
+                                width: "100%",
+                                height: "50px",
+                                border: "1px solid lightgrey",
+                                borderRadius: "5px",
+                                padding: "10px"
+                            }}
+                        />
 
-                {/* Buttons for account type selection */}
-                <div style={{display: "flex", justifyContent: "center", gap: "20px"}}>
-                    <AccountTypeOption
-                        accountType="Artist"
-                        label="I want to provide my services"
-                        onClick={handleAccountTypeSelection}
-                    />
+                        <label htmlFor="name" className="main-text">Name/Alias</label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Enter your name or alias"
+                            autoComplete="off"
+                            style={{
+                                width: "100%",
+                                height: "50px",
+                                border: "1px solid lightgrey",
+                                borderRadius: "5px",
+                                padding: "10px"
+                            }}
+                        />
 
-                    <AccountTypeOption
-                        accountType="Bride"
-                        label="I want to make bookings for services"
-                        onClick={handleAccountTypeSelection}
-                    />
+                        <label htmlFor="email" className="main-text">Email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            autoComplete="off"
+                            style={{
+                                width: "100%",
+                                height: "50px",
+                                border: "1px solid lightgrey",
+                                borderRadius: "5px",
+                                padding: "10px"
+                            }}
+                        />
+
+                        <label htmlFor="password" className="main-text">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            autoComplete="new-password"
+                            style={{
+                                width: "100%",
+                                height: "50px",
+                                border: "1px solid lightgrey",
+                                borderRadius: "5px",
+                                padding: "10px"
+                            }}
+                        />
+
+                        <label htmlFor="retypePassword" className="main-text">Retype Password</label>
+                        <input
+                            type="password"
+                            id="retypePassword"
+                            name="retypePassword"
+                            placeholder="Retype your password"
+                            autoComplete="new-password"
+                            style={{
+                                width: "100%",
+                                height: "50px",
+                                border: "1px solid lightgrey",
+                                borderRadius: "5px",
+                                padding: "10px"
+                            }}
+                        />
+
+                        {/* Password requirements message */}
+                        <div className="message-tag-text" style={{textAlign: "left", marginTop: "10px"}}>
+                            Please ensure your password has at least:
+                            <ul>
+                                <li>a number (0-9)</li>
+                                <li>a special character (e.g. % & ! )</li>
+                                <li>a lowercase letter (a-z)</li>
+                                <li>an uppercase letter (A-Z)</li>
+                                <li>minimum 8 characters</li>
+                            </ul>
+                        </div>
+
+                        {/* Register button */}
+                        <div style={{marginTop: "20px", width: "100%", display: "flex", justifyContent: "center"}}>
+                            <Button
+                                type="button"
+                                className="bg-secondary-purple hover:bg-secondary-purple-hover outline outline-2 outline-secondary-purple"
+                                style={{width: "40%", height: "50px"}}
+                            >
+                                Register
+                            </Button>
+                        </div>
+                    </div>
                 </div>
             </div>
+            {/*<div>*/}
+            {/*    <span>Registration Page to be done!!</span>*/}
+            {/*</div>*/}
         </WhiteBackground>
     );
 };
