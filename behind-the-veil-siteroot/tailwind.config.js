@@ -24,15 +24,6 @@ module.exports = {
                 "bg-gradient-start": "#BBCAFE",
                 "bg-gradient-end": "#E5D6FF",
             },
-            borderRadius: {
-                "4xl": "2rem",
-            },
-            height: {
-                xl: "30rem",
-            },
-            inset: {
-                "4/10": "40%",
-            },
         },
     },
     plugins: [require("@headlessui/tailwindcss")],
