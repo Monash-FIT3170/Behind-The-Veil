@@ -37,7 +37,7 @@ export const Conversation = ({ user }) => {
                         <div key={index}>
                             <div className={`${message.sender === 'me' ? 'flex  justify-end' : 'flex'}`}>
                                 <ProfilePhoto className={`${message.sender === 'me' ? 'order-last flex' : ''} `}></ProfilePhoto>
-                                <Card className={`py-2 my-2 rounded-3xl max-w-[80%] border-transparent ${message.sender === 'me' ? ' bg-main-blue' : 'bg-light-grey'} `}>
+                                <Card className={`my-2 rounded-3xl max-w-[80%] border-transparent ${message.sender === 'me' ? ' bg-main-blue' : 'bg-light-grey'} `}>
                                     {message.text}
                                 </Card>
                             </div>
@@ -48,7 +48,7 @@ export const Conversation = ({ user }) => {
                     {messages.map((message, index) => (
                         <div key={index} className="flex justify-end">
                             <ProfilePhoto className={`${message.sender === 'me' ? 'order-last' : ''} `}></ProfilePhoto>
-                            <Card className={`py-2 my-2 rounded-3xl max-w-[80%] border-transparent ${message.sender === 'me' ? ' bg-main-blue' : 'bg-light-grey'} `}>
+                            <Card className={`my-2 rounded-3xl max-w-[80%] border-transparent ${message.sender === 'me' ? ' bg-main-blue' : 'bg-light-grey'} `}>
                                 {message.text}
                             </Card>
                         </div>
