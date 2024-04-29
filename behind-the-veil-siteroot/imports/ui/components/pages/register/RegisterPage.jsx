@@ -141,9 +141,6 @@ export const RegisterPage = () => {
                     </div>
                 </div>
             </div>
-            {/*<div>*/}
-            {/*    <span>Registration Page to be done!!</span>*/}
-            {/*</div>*/}
         </WhiteBackground>
     );
 };
