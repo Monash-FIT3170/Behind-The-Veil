@@ -1,5 +1,5 @@
 {
-  "name": "behind-the-veil",
+  "name": "behind-the-veil-siteroot",
   "private": true,
   "scripts": {
     "start": "meteor run",
@@ -23,7 +23,7 @@
       "client": "client/main.jsx",
       "server": "server/main.js"
     },
-    "testModule": "tests/main.js"
+    "testModule": "tests/booking.js"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.19",

@@ -3,36 +3,32 @@
  * File version: 1.0
  * Contributors: Neth
  */
-import {Meteor} from 'meteor/meteor'
 import {BookingCollection} from "../collections/booking";
 
 Meteor.methods({
-    "add_booking": function (bookingStartDateTime, bookingEndDateTime, bookingLocation, bookingPrice, bookingStatus, brideUsername, artistUsername, serviceId) {
-
+    "add_booking": function (startDateTime, endDateTime, location, price, status, brideUsername, artistUsername, serviceId) {
         /**
          * Adds a new booking to the database.
-         * @param {Date} bookingStartDateTime - The start date and time of the booking.
-         * @param {Date} bookingEndDateTime - The end date and time of the booking.
-         * @param {string} bookingLocation - The location of the booking.
-         * @param {number} bookingPrice - The price of the booking.
-         * @param {string} bookingStatus - The status of the booking.
+         * @param {Date} startDateTime - The start date and time of the booking.
+         * @param {Date} endDateTime - The end date and time of the booking.
+         * @param {string} location - The location of the booking.
+         * @param {number} price - The price of the booking.
+         * @param {string} status - The status of the booking.
          * @param {string} brideUsername - The username of the bride associated with the booking.
          * @param {string} artistUsername - The username of the artist associated with the booking.
          * @param {string} serviceId - The ID of the service booked.
-         * @returns {string} - The unique ID of the newly created booking.
+         * @returns {string} The unique ID of the newly created booking.
          */
-        return BookingCollection.insert(
-            {
-                "bookingStartDateTime": bookingStartDateTime,
-                "bookingEndDateTime": bookingEndDateTime,
-                "bookingLocation": bookingLocation,
-                "bookingPrice": bookingPrice,
-                "bookingStatus": bookingStatus,
-                "brideUsername": brideUsername,
-                "artistUsername": artistUsername,
-                "serviceId": serviceId
-            }
-        );
+        BookingCollection.insert({
+            bookingStartDateTime: startDateTime,
+            bookingEndDateTime: endDateTime,
+            bookingLocation: location,
+            bookingPrice: price,
+            bookingStatus: status,
+            brideUsername: brideUsername,
+            artistUsername: artistUsername,
+            serviceId: serviceId
+        });
     },
 
     /**
