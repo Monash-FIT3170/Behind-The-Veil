@@ -7,6 +7,7 @@
 import React from "react";
 import Card from "../../../card/Card";
 import Button from "../../../button/Button";
+import ServiceCard from "../../../card/ServiceCard";
 
 const CardExamples = () => {
     return (
@@ -26,6 +27,42 @@ const CardExamples = () => {
                 Or buttons:
                 <Button>Hello</Button>
             </Card>
+
+            <div className="large-text underline">Service Cards:</div>
+            <div className={"flex flex-col lg:flex-row gap-10 items-center justify-center flex-wrap"}>
+                <ServiceCard
+                    className=""
+                    serviceId={111111}
+                    serviceName={"AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"}
+                    serviceDesc={"Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"}
+                    servicePrice={112333294}
+                    servicePhotoData={""}
+                    artistUsername={"alice_smith"}
+                    artistName={"Alice Smith"}
+                ></ServiceCard>
+                <ServiceCard
+                    className=""
+                    serviceId={2222222}
+                    serviceName={"Bachelorette Glam Experience"}
+                    serviceDesc={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n"}
+                    servicePrice={123}
+                    servicePhotoData={""}
+                    artistUsername={"Bobbyyy1"}
+                    artistName={"Bob"}
+                ></ServiceCard>
+                <ServiceCard
+                    className=""
+                    serviceId={1234567}
+                    serviceName={"GlamourGlow Beauty"}
+                    serviceDesc={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n"}
+                    servicePrice={123}
+                    servicePhotoData={""}
+                    artistUsername={"ihavealonglonglongnameJones"}
+                    artistName={"LonglonglongnamedJones LongnamedDavis"}
+                ></ServiceCard>
+            </div>
+
+
         </div>
     )
 }
