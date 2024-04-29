@@ -7,6 +7,7 @@
 import React, { useRef, useState } from 'react';
 import Card from '../card/Card';
 import ProfilePhoto from '../profilePhoto/profilePhoto';
+import {PaperAirplaneIcon} from '@heroicons/react/24/outline'; 
 
 export const Conversation = ({ user }) => {
 
@@ -21,9 +22,9 @@ export const Conversation = ({ user }) => {
         setFormValue('');
         let heightToScroll = conversationRef?.current.scrollHeight + 50
         setTimeout(() => {
-           conversationRef?.current.scrollTo({left:0, top: heightToScroll , behaviour: "smooth"}) 
-        }, 1)
-        
+            conversationRef?.current.scrollTo({ left: 0, top: heightToScroll, behaviour: "smooth" })
+        }, 5)
+
     };
 
     return (
@@ -36,7 +37,7 @@ export const Conversation = ({ user }) => {
                         <div key={index}>
                             <div className={`${message.sender === 'me' ? 'flex  justify-end' : 'flex'}`}>
                                 <ProfilePhoto className={`${message.sender === 'me' ? 'order-last flex' : ''} `}></ProfilePhoto>
-                                <Card className={`py-2 my-2 rounded-2xl max-w-[80%] border-transparent ${message.sender === 'me' ? ' bg-main-blue' : 'bg-light-grey'} `}>
+                                <Card className={`py-2 my-2 rounded-3xl max-w-[80%] border-transparent ${message.sender === 'me' ? ' bg-main-blue' : 'bg-light-grey'} `}>
                                     {message.text}
                                 </Card>
                             </div>
@@ -47,7 +48,7 @@ export const Conversation = ({ user }) => {
                     {messages.map((message, index) => (
                         <div key={index} className="flex justify-end">
                             <ProfilePhoto className={`${message.sender === 'me' ? 'order-last' : ''} `}></ProfilePhoto>
-                            <Card className={`py-2 my-2 rounded-2xl max-w-[80%] border-transparent ${message.sender === 'me' ? ' bg-main-blue' : 'bg-light-grey'} `}>
+                            <Card className={`py-2 my-2 rounded-3xl max-w-[80%] border-transparent ${message.sender === 'me' ? ' bg-main-blue' : 'bg-light-grey'} `}>
                                 {message.text}
                             </Card>
                         </div>
@@ -55,17 +56,19 @@ export const Conversation = ({ user }) => {
                 </div>
             </div>
 
-            <form className="w-full px-8 py-6" onSubmit={sendMessage}>
-                <div className=' relative inline-block w-full'>
+            <form className="w-full px-8 py-6 " onSubmit={sendMessage}>
+                <div className=' relative w-full flex'>
                     <input
                         value={formValue}
                         onChange={(e) => setFormValue(e.target.value)}
                         placeholder="Type a message..."
-                        className=" w-11/12 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500"
+                        className=" w-full px-4 py-3 rounded-3xl border border-gray-300 focus:outline-none focus:border-blue-500"
                     />
-                    <button type="submit" disabled={!formValue} className="absolute px-6 py-2 text-bold bg-secondary-purple hover:bg-secondary-purple-hover rounded-lg focus:outline-none">
-                        Sent
-                    </button>
+                        <button type="submit" disabled={!formValue} className=" px-6 py-2 text-bold bg-secondary-purple hover:bg-secondary-purple-hover rounded-3xl focus:outline-none flex absolute right-1 top-1/2 transform -translate-y-1/2">
+                            <PaperAirplaneIcon className='size-6'/>
+                            <span className='px-2'>Sent</span>
+                        </button>
+                   
                 </div>
             </form>
         </div>
