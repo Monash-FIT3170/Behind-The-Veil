@@ -6,6 +6,7 @@
 
 import React, { useRef, useState } from 'react';
 import Card from '../card/Card';
+import ProfilePhoto from '../profilePhoto/profilePhoto';
 
 export const Conversation = ({ user }) => {
 
@@ -18,6 +19,11 @@ export const Conversation = ({ user }) => {
         if (formValue.trim() === '') return;
         setMessages(prevMessages => [...prevMessages, { text: formValue, sender: 'me' }]);
         setFormValue('');
+        let heightToScroll = conversationRef?.current.scrollHeight + 50
+        setTimeout(() => {
+           conversationRef?.current.scrollTo({left:0, top: heightToScroll , behaviour: "smooth"}) 
+        }, 1)
+        
     };
 
     return (
@@ -27,17 +33,23 @@ export const Conversation = ({ user }) => {
                 </div>
                 <div>
                     {user.messages.map((message, index) => (
-                        <div key={index} className={`${message.sender === 'me' ? ' flex justify-end' : ''}` }>
-                            <Card className={`py-2 my-2 rounded-2xl max-w-[80%] border-transparent ${message.sender === 'me' ? ' bg-main-blue':'bg-light-grey'} `}>
-                                {message.text}
-                            </Card>
+                        <div key={index}>
+                            <div className={`${message.sender === 'me' ? 'flex  justify-end' : 'flex'}`}>
+                                <ProfilePhoto className={`${message.sender === 'me' ? 'order-last flex' : ''} `}></ProfilePhoto>
+                                <Card className={`py-2 my-2 rounded-2xl max-w-[80%] border-transparent ${message.sender === 'me' ? ' bg-main-blue' : 'bg-light-grey'} `}>
+                                    {message.text}
+                                </Card>
+                            </div>
                         </div>
 
                     ))}
 
                     {messages.map((message, index) => (
                         <div key={index} className="flex justify-end">
-                            <Card className="py-2 my-2 rounded-2xl max-w-[80%] bg-main-blue border-transparent">{message.text}</Card>
+                            <ProfilePhoto className={`${message.sender === 'me' ? 'order-last' : ''} `}></ProfilePhoto>
+                            <Card className={`py-2 my-2 rounded-2xl max-w-[80%] border-transparent ${message.sender === 'me' ? ' bg-main-blue' : 'bg-light-grey'} `}>
+                                {message.text}
+                            </Card>
                         </div>
                     ))}
                 </div>
