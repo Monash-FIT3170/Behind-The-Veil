@@ -23,17 +23,21 @@ export const Conversation = ({ user }) => {
     return (
         <div className="flex flex-col fixed top-0 bottom-0 left-0 right-0">
             <div className="flex-1 overflow-y-auto p-4" ref={conversationRef}>
-                <div className='message-receiver-name-text border-b-2 border-main-blue py-2 mb-8 pl-8'>{user.name}</div>
+                <div className='message-receiver-name-text border-b-2 py-2 mb-8 pl-8 border-main-blue'>{user.name}
+                </div>
                 <div>
                     {user.messages.map((message, index) => (
-                        <div key={index} className={message.sender === 'me' ? ' text-red-700' : 'text-blue-700'}>
-                            <Card className="py-2 my-2">{message.text}</Card>
+                        <div key={index} className={`${message.sender === 'me' ? ' flex justify-end' : ''}` }>
+                            <Card className={`py-2 my-2 rounded-2xl max-w-[80%] border-transparent ${message.sender === 'me' ? ' bg-main-blue':'bg-light-grey'} `}>
+                                {message.text}
+                            </Card>
                         </div>
+
                     ))}
 
                     {messages.map((message, index) => (
-                        <div key={index} className="text-red-700">
-                            <Card className="py-2 my-2">{message.text}</Card>
+                        <div key={index} className="flex justify-end">
+                            <Card className="py-2 my-2 rounded-2xl max-w-[80%] bg-main-blue border-transparent">{message.text}</Card>
                         </div>
                     ))}
                 </div>
