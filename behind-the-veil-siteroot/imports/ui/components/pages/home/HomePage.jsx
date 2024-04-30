@@ -44,7 +44,7 @@ export const HomePage = () => {
 
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-            <div className="inline-flex items-center justify-center h-[30rem]">
+            <div className="inline-flex items-center justify-center h-[25rem] md:h-[30rem]">
                 <div className="hidden md:flex md:items-start md:justify-center md:w-1/6">
                     <Button onClick={goToPreviousImage} className="bg-white">
                         <ChevronLeftIcon className="size-10 stroke-[4]" />
@@ -83,6 +83,18 @@ export const HomePage = () => {
                     </div>
                 </div>
                 <div className="hidden md:flex md:items-start md:justify-center md:w-1/6">
+                    <Button onClick={goToNextImage} className="bg-white">
+                        <ChevronRightIcon className="size-10 stroke-[4]" />
+                    </Button>
+                </div>
+            </div>
+            <div className="inline-flex flex-row items-center justify-center md:hidden">
+                <div className="flex items-start justify-center w-[45%]">
+                    <Button onClick={goToPreviousImage} className="bg-white">
+                        <ChevronLeftIcon className="size-10 stroke-[4]" />
+                    </Button>
+                </div>
+                <div className="flex items-end justify-center w-[45%]">
                     <Button onClick={goToNextImage} className="bg-white">
                         <ChevronRightIcon className="size-10 stroke-[4]" />
                     </Button>
