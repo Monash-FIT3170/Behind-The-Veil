@@ -10,7 +10,7 @@ import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
-import Calendar from "react-calendar";
+import RequestBookingCalendar from "./RequestBookingCalendar/RequestBookingCalendar.jsx";
 
 /**
  * Page for user to request a booking
@@ -176,7 +176,7 @@ const RequestBooking = () => {
 
               {/* calendar component */}
               <div className="flex grow bg-light-grey justify-center items-center text-center">
-                <Calendar
+              <RequestBookingCalendar
                   value={inputs.date}
                   onChange={(date) => {
                     setInputs((i) => {
