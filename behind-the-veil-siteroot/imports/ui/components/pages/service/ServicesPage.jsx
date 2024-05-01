@@ -110,17 +110,10 @@ export const ServicesPage = () => {
             </div>
 
             <Pagination
-                itemsPerPage={2}
-                displayItems={aaaa}
+                itemsPerPage={10}
+                displayItems={bbb}
             />
 
-            {/*<div className={"flex flex-col lg:flex-row gap-10 items-center justify-center flex-wrap"}>*/}
-            {/*    {aaaa}*/}
-            {/*</div>*/}
-
-
-            {/*<div className={"flex flex-col lg:flex-row gap-10 items-center justify-center flex-wrap"}>*/}
-            {/*</div>*/}
         </WhiteBackground>
     );
 };
