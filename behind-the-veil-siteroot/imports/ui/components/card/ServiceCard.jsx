@@ -63,16 +63,16 @@ export const ServiceCard = ({
                 </div>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-5 justify-center items-center">
-                <div className="border-2 border-dashed border-dark-grey py-2 px-4 rounded-full w-3/5 md:w-1/4 min-w-32
+            <div className="flex flex-col lg:flex-row gap-5 justify-center items-center">
+                <div className="border-2 border-dashed border-dark-grey py-2 px-4 rounded-full w-4/5 lg:w-1/4 min-w-32
                 flex items-center justify-center">
                     <label className="main-text font-bold text-our-black">${servicePrice}</label>
                 </div>
 
                 {/* button to specific booking detail page*/}
-                <Button className="flex flex-row gap-x-2 justify-center items-center w-4/5 md:w-1/2 min-w-40
+                <Button className="flex flex-row gap-x-2 justify-center items-center w-4/5 lg:w-1/2 min-w-40
                 bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500"
-                        onClick={() => navigateTo('/service/' + serviceId)}>
+                        onClick={() => navigateTo('/services/' + serviceId)}>
                     <CalendarDaysIcon className="h-6 w-6 min-h-6 min-w-6"/>
                     View Service
                 </Button>
