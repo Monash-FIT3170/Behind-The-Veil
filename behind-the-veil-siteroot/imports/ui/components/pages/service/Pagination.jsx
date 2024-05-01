@@ -63,8 +63,6 @@ export const Pagination = ({externalClassName, internalClassName, itemsPerPage, 
             </div>
 
             {/* This is the page number component underneath */}
-            {/*<div className={"bg-red-100"}>aaaaaaaaaa</div>*/}
-
             <div className="flex flex-col items-center">
                 <ReactPaginate
                     breakLabel="..."
@@ -75,12 +73,12 @@ export const Pagination = ({externalClassName, internalClassName, itemsPerPage, 
                     previousLabel="< Prev"
                     renderOnZeroPageCount={null}
                     className={"flex flex-row gap-x-8 items-center main-text"}
-                    pageClassName={"btn-base hover:text-hyperlink-colour transition duration-500 ease-in-out"}
-                    previousClassName={""}
-                    nextClassName={""}
-                    activeLinkClassName={"bg-red-100"}
-                    disabledClassName={""}
-
+                    pageClassName={""}
+                    pageLinkClassName={"btn-base"}
+                    previousLinkClassName={"btn-base"}
+                    nextLinkClassName={"btn-base"}
+                    activeLinkClassName={"bg-main-blue disabled pointer-events-none"}
+                    disabledClassName={"pointer-events-none text-dark-grey"}
                 />
             </div>
         </div>
