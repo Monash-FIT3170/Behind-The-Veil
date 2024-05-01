@@ -122,11 +122,8 @@ export const HomePage = () => {
                         placeholder="Name, Description, etc ..."
                     ></input>
                     <select className="border-2 border-gray-300 rounded h-8 w-1/6 main-text">
-                        <option value="all" selected>
-                            All
-                        </option>
-                        <option value="hair">Hair</option>
-                        <option value="makeup">Makeup</option>
+                        <option value="artists">Artists</option>
+                        <option value="services">Services</option>
                     </select>
                     <Button className="bg-secondary-purple hover:bg-secondary-purple-hover rounded-full h-8 w-8 px-1.5 py-0">
                         <MagnifyingGlassIcon className="size-5" />
