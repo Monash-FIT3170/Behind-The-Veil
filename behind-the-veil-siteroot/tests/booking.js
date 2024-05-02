@@ -1,4 +1,9 @@
-const assert = require('node:assert').strict;
+/**
+ * File Description: Booking database testing
+ * File version: 1.0
+ * Contributors: Neth
+ */
+const assert = require('assert');
 import {resetDatabase} from 'meteor/xolvio:cleaner';
 import "../imports/api/methods/booking";
 import BookingCollection from "../imports/api/collections/booking";
