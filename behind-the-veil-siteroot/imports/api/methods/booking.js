@@ -8,7 +8,8 @@ import {BookingCollection} from "../collections/booking";
 Meteor.methods({
     "add_booking": function (startDateTime, endDateTime, location, price, status, brideUsername, artistUsername, serviceId) {
         /**
-         * Adds a new booking to the database.
+         * Adds a new booking to the database. Keep in mind this is an async method
+         * and needs to be put in a promise if you want the value right away.
          * @param {Date} startDateTime - The start date and time of the booking.
          * @param {Date} endDateTime - The end date and time of the booking.
          * @param {string} location - The location of the booking.
@@ -19,7 +20,7 @@ Meteor.methods({
          * @param {string} serviceId - The ID of the service booked.
          * @returns {string} The unique ID of the newly created booking.
          */
-        BookingCollection.insert({
+        return BookingCollection.insert({
             bookingStartDateTime: startDateTime,
             bookingEndDateTime: endDateTime,
             bookingLocation: location,
@@ -49,13 +50,10 @@ Meteor.methods({
      * @param {any[]} updateValues - An array of new values for the updateFields.
      */
     "update_booking_details": function (bookingId, updateFields, updateValues) {
-        // Construct the update object for multiple fields
         let updateObject = {};
         for (let i = 0; i < updateFields.length; i++) {
             updateObject[updateFields[i]] = updateValues[i];
         }
-
-        // Update the booking document for multiple fields
         BookingCollection.update(
             { _id: bookingId },
             { $set: updateObject},
