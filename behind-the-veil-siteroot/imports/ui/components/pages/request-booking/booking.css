@@ -1,0 +1,7 @@
+.label {
+    width: 200px;
+    flex-direction: row;
+}
+.booking-summary-input {
+    display: flex;
+}

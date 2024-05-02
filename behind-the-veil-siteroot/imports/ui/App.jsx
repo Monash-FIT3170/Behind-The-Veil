@@ -21,6 +21,7 @@ import CancelBooking from './components/pages/cancel-booking/CancelBooking.jsx';
 import AccountActivatedPage from "./components/pages/register/AccountActivatedPage";
 import CreateAccountPage from "./components/pages/register/CreateAccountPage";
 import ActivateAccountPage from "./components/pages/register/ActivateAccountPage";
+import BookingSummary from "./components/pages/request-booking/BookingSummary";
 
 export const App = () => (
   <div>
@@ -101,6 +102,7 @@ export const App = () => (
           <Route path="/artist-profile" element={<ArtistProfilePage />} />
           {/* TODO: haven't implemented actual flow to get here yet */}
           <Route path="/request-booking" element={<RequestBooking />} />
+            <Route path="/booking-summary" element={<BookingSummary/>} />
           {/* Define other routes that you need*/}
           <Route path="/service-area" element={<ArtistServiceArea />} />
 

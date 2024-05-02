@@ -9,14 +9,17 @@ import ServiceDetailsHeader from "../../service-details-header/ServiceDetailsHea
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
-import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import Input from "../../input/Input";
 import PreviousButton from "../../button/PreviousButton";
+import { ArrowRightIcon } from '@heroicons/react/24/outline'
+import {useNavigate} from "react-router-dom";
 
 /**
  * Page for user to request a booking
  */
 const RequestBooking = () => {
+  const navigateTo = useNavigate();
+
   const MOCK_SERVICE_DETAILS = {
     service: "Bachelorette Glam Experience",
     date: "Tuesday, 12 May, 2024",
@@ -43,11 +46,14 @@ const RequestBooking = () => {
     setInputs(i => ({ ...i, [name]: value }))
   }
 
-  // TODO: send this data to the next page
   const handleSubmit = (event) => {
     event.preventDefault()
     // TODO: implement validation, i.e. must have a valid time
-    alert(`Form submitted with the following inputs: ${JSON.stringify(inputs)}`)
+
+    // pass the data to the next page via the url
+    const query = new URLSearchParams(inputs).toString();
+    navigateTo(`/booking-summary?${query}`);
+
   }
 
   // calculate available times that the user can select, based on a date
