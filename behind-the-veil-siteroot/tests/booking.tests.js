@@ -43,9 +43,9 @@ if (Meteor.isClient) {
                     }
                 );
             }).then(bookingId => {
-                assert.notEqual(bookingId, undefined);
+                assert.notStrictEqual(bookingId, undefined);
                 const booking = BookingCollection.findOne(bookingId);
-                assert.notEqual(booking, undefined);
+                assert.notStrictEqual(booking, undefined);
             }).catch(error => {
                 assert.fail("Error adding booking. Returned with error:" + error.message);
             });
@@ -82,7 +82,7 @@ if (Meteor.isClient) {
                     });
                 });
             }).then(retrievedBooking => {
-                assert.notEqual(retrievedBooking, null); // Check if a booking object is returned
+                assert.notStrictEqual(retrievedBooking, null); // Check if a booking object is returned
             }).catch(error => {
                 assert.fail("Error adding booking. Returned with error:" + error.message);
             });
@@ -101,9 +101,9 @@ if (Meteor.isClient) {
                 artistUsername: 'artist456',
                 serviceId: 'service789'
             });
-            Meteor.call('update_booking_details', bookingId, ['bookingStatus'], ['Confirmed']);
+            Meteor.call('update_booking_details', bookingId, {'bookingStatus': 'Confirmed'});
             const updatedBooking = BookingCollection.findOne(bookingId);
-            assert.equal(updatedBooking.bookingStatus, 'Confirmed');
+            assert.strictEqual(updatedBooking.bookingStatus, 'Confirmed');
         });
     });
 }

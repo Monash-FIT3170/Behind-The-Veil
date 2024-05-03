@@ -46,14 +46,9 @@ Meteor.methods({
     /**
      * Updates multiple fields of a booking instance in the database.
      * @param {string} bookingId - The ID of the booking to update.
-     * @param {string[]} updateFields - An array of field names to update.
-     * @param {any[]} updateValues - An array of new values for the updateFields.
+     * @param {object} updateObject - Field and value object of elements that need to be upgraded
      */
-    "update_booking_details": function (bookingId, updateFields, updateValues) {
-        let updateObject = {};
-        for (let i = 0; i < updateFields.length; i++) {
-            updateObject[updateFields[i]] = updateValues[i];
-        }
+    "update_booking_details": function (bookingId, updateObject) {
         BookingCollection.update(
             { _id: bookingId },
             { $set: updateObject},
