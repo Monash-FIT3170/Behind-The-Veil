@@ -4,6 +4,7 @@ import ReactPaginate from 'react-paginate';
 import classNames from "classnames";
 
 export const Pagination = ({externalClassName, internalClassName, itemsPerPage, displayItems}) => {
+    console.log("RELOAD RELOAD RELOAD RELOAD RELOAD RELOAD RELOAD")
 
     // get page from URL first, if there is
     let urlPageNum = 1;
@@ -17,6 +18,7 @@ export const Pagination = ({externalClassName, internalClassName, itemsPerPage, 
             // no proper page number
         }
     }
+    // console.log("urlPageNum: " + urlPageNum)
 
     let navigate = useNavigate();
 
