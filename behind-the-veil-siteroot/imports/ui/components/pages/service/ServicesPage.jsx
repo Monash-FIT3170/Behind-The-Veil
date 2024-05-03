@@ -4,14 +4,16 @@
  * Contributors: Nikki
  */
 
-import React, {useState, useEffect} from 'react';
-import ReactPaginate from "react-paginate"
-import axios from 'axios'
+import React, {useState} from 'react';
+import {useTracker, useSubscribe} from "meteor/react-meteor-data"
+import ServiceCollection from "/imports/api/collections/services";
+import { Promise } from "meteor/promise"
 
-import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
-import PageLayout from "../../../enums/PageLayout";
-import ServiceCard from "../../card/ServiceCard.jsx";
-import {Pagination} from "./Pagination.jsx"
+import WhiteBackground from "/imports/ui/components/whiteBackground/WhiteBackground.jsx";
+import PageLayout from "/imports/ui/enums/PageLayout";
+import {Pagination} from "/imports/ui/components/pagination/Pagination.jsx"
+import ServiceCard from "/imports/ui/components/card/ServiceCard.jsx";
+import Button from "../../button/Button";
 
 
 /**
@@ -19,86 +21,40 @@ import {Pagination} from "./Pagination.jsx"
  */
 export const ServicesPage = () => {
 
-    // TODO: replace with actual database calls when DB is set up
-    //  get the first X entries from Database, then there is a next page (?) for the next X entries
+    // set up subscription (publication is in the "publication" folder)
+    useSubscribe('all_services');
+    useSubscribe('all_artists');
 
-    const fakeData =
-        [
-            {
-                "serviceId": 12345,
-                "serviceName": "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff",
-                "serviceDesc": "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword",
-                "servicePrice": 112333294,
-                "servicePhotoData": "",
-                "artist": {
-                    "artistUsername": "alice_smith",
-                    "artistName": "Alice Smith"
-                }
-            }, {
-            "serviceId": 2222222,
-            "serviceName": "Bachelorette Glam Experience",
-            "serviceDesc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula.",
-            "servicePrice": 1203,
-            "servicePhotoData": "http://localhost:8000/aa.png",
-            "artist": {
-                "artistUsername": "Bobbyyy1",
-                "artistName": "Bob"
-            }
-        }, {
-            "serviceId": 1234567,
-            "serviceName": "GlamourGlow Beauty",
-            "serviceDesc": "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword",
-            "servicePrice": 130,
-            "servicePhotoData": "http://localhost:8000/Background.png",
-            "artist": {
-                "artistUsername": "ihavealonglonglongnameJones",
-                "artistName": "LonglonglongnamedJones LongnamedDavis"
-            }
-        }
-        ]
+    // get services data from db
+    let servicesData = useTracker(() => {
+        // return ServiceCollection.find( {"artistUsername":"cwoodrooffe0"} ).fetch();
+        return ServiceCollection.find( {} ).fetch();
 
-    // service cards currently displayed
-    const [services, setServices] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [cardsPerPage, setCardsPerPage] = useState(5);
+        // Meteor.call("get_services_whole");
+        // return Meteor.call("get_service");
 
-    // todo: change to database calls
-    useEffect(() => {
-        const fetchServices = async () => {
-            setLoading(true);
-            const res = await axios.get("https://jsonplaceholder.typicode.com/users");
-            setServices(res.data);
-            setLoading(false);
-        }
-        fetchServices();
-    }, []);
+    });
 
-    const aaaa = services.map((service) =>
+    console.log(servicesData);
+
+    const serviceCardList = servicesData.map((service) =>
         (
-            <ServiceCard
-                serviceId={service.id}
-                serviceName={service.email}
-                serviceDesc={service.phone}
-                servicePrice={service.website}
-                servicePhotoData={""}
-                artistUsername={service.username}
-                artistName={service.name}
-            ></ServiceCard>
+            <div>{1}</div>
+            // <ServiceCard
+            //     key={service._id._str}
+            //     serviceId={service._id._str}
+            //     serviceName={service.serviceName}
+            //     serviceDesc={service.serviceDesc}
+            //     servicePrice={service.servicePrice}
+            //     artistUsername={service.artistUsername}
+            //
+            //     servicePhotoData={service.servicePhotoData}
+            //     artistAlias={"place holder"}
+            // ></ServiceCard>
         ))
 
-    const bbb = fakeData.map((service) =>
-        (
-            <ServiceCard
-                serviceId={service.serviceId}
-                serviceName={service.serviceName}
-                serviceDesc={service.serviceDesc}
-                servicePrice={service.servicePrice}
-                servicePhotoData={service.servicePhotoData}
-                artistUsername={service.artist.artistUsername}
-                artistName={service.artist.artistName}
-            ></ServiceCard>
-        ))
+    // console.log("serviceCardList!!!!!!!!!!!!!");
+    // console.log(serviceCardList);
 
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
@@ -109,10 +65,36 @@ export const ServicesPage = () => {
                 <span>SEARCH BAR HERE!!!!!!</span>
             </div>
 
+            {/* Test button */}
+            <Button onClick={() => {
+                let a = Meteor.call("get_service")
+                return new Promise((resolve, reject) => {
+                    Meteor.call(
+                        "get_service",
+                        (error, retrievedRes) => {
+                            if (error) {
+                                reject(error);
+                            } else {
+                            resolve(retrievedRes)
+                            }
+                        }
+                    )})
+                    .then(
+                    retrievedRes => {
+                        a = retrievedRes;
+                        console.log(a);
+                    })
+                    .catch(error => {
+                    console.log(error)
+                });
+            }}>temp button
+            </Button>
+
             <Pagination
-                itemsPerPage={10}
-                displayItems={bbb}
+                itemsPerPage={5}
+                displayItems={serviceCardList}
             />
+
 
         </WhiteBackground>
     );

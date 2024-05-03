@@ -23,7 +23,7 @@ import Button from "../button/Button";
  * @param servicePrice {int} price of the service
  * @param servicePhotoData service's cover photo data from database
  * @param artistUsername {string} Username (e.g. alice_tran1234) of artist that posted the service
- * @param artistName {string} name of artist that posted the service
+ * @param artistAlias {string} name of artist that posted the service
  */
 export const ServiceCard = ({
                                 className,
@@ -33,7 +33,7 @@ export const ServiceCard = ({
                                 servicePrice,
                                 servicePhotoData,
                                 artistUsername,
-                                artistName,
+                                artistAlias,
                             }) => {
 
     // variables to handle routing
@@ -50,7 +50,7 @@ export const ServiceCard = ({
                     <div className="small-text text-dark-grey max-h-[4.5rem] max-w-full line-clamp-4 mb-3 break-all">
                         {serviceDesc}</div>
                     <div className="main-text text-dark-grey max-h-[1.5rem] max-w-full line-clamp-1 break-all">
-                        Artist: {artistName} ( @{artistUsername} )
+                        Artist: {artistAlias} ( @{artistUsername} )
                     </div>
                 </div>
 
