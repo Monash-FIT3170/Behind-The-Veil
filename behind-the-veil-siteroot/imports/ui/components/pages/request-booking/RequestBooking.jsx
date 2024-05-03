@@ -51,6 +51,10 @@ const RequestBooking = () => {
     );
   };
 
+  const getAvailableDates = () => {
+
+  }
+
   // calculate available times that the user can select, based on a date
   // TODO: implement this properly instead of returning dummy data
   const getAvailableTimes = (date) => {
@@ -64,6 +68,7 @@ const RequestBooking = () => {
     return date !== "" ? AVAILABLE_TIMES : null;
   };
 
+  const availableDates = getAvailableDates()
   const availableTimes = getAvailableTimes(inputs.date);
 
   return (
