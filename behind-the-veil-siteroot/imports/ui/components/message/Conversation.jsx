@@ -6,7 +6,7 @@
 
 import React, { useRef, useState } from 'react';
 import Card from '../card/Card';
-import ProfilePhoto from '../profilePhoto/profilePhoto';
+import ProfilePhoto from '../profilePhoto/ProfilePhoto';
 import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 
 export const Conversation = ({ user }) => {
