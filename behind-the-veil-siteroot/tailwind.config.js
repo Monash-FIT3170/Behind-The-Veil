@@ -5,7 +5,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        'main-bkg': "url('http://localhost:8000/Background.svg')", // host image on python server
+        'main-bkg': "url('/Background.svg')",
       },
       colors: {
         "our-black": "#282828",
