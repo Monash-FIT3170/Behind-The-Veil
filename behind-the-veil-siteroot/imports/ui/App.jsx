@@ -14,6 +14,7 @@ import MessagesPage from './components/pages/messages/MessagesPage.jsx'
 import LoginPage from './components/pages/login/LoginPage.jsx'
 import RegisterPage from './components/pages/register/RegisterPage.jsx'
 import RequestBooking from "./components/pages/request-booking/RequestBooking.jsx";
+import SpecificServicePage from "./components/pages/service/SpecificServicePage.jsx";
 
 export const App = () => (
 
@@ -27,7 +28,11 @@ export const App = () => (
 
                     {/*routes that any user can access*/}
                     <Route path="/" element={<HomePage/>}/>
+
                     <Route path="/services" element={<ServicesPage/>}/>
+                    <Route path="/service/:serviceId" element={<SpecificServicePage/>}/>
+
+
                     <Route path="/artists" element={<ArtistsPage/>}/>
 
                     {/*routes that NOT authenticated users can access*/}
