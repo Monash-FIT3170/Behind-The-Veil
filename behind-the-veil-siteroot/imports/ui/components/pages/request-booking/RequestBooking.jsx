@@ -51,9 +51,7 @@ const RequestBooking = () => {
     );
   };
 
-  const getAvailableDates = () => {
-
-  }
+  const getAvailableDates = () => {};
 
   // calculate available times that the user can select, based on a date
   // TODO: implement this properly instead of returning dummy data
@@ -68,7 +66,7 @@ const RequestBooking = () => {
     return date !== "" ? AVAILABLE_TIMES : null;
   };
 
-  const availableDates = getAvailableDates()
+  const availableDates = getAvailableDates();
   const availableTimes = getAvailableTimes(inputs.date);
 
   return (
@@ -180,19 +178,17 @@ const RequestBooking = () => {
               </div>
 
               {/* calendar component */}
-              <div className="flex grow bg-light-grey justify-center items-center text-center">
               <RequestBookingCalendar
-                  value={inputs.date}
-                  onChange={(date) => {
-                    setInputs((i) => {
-                      return {
-                        ...i,
-                        date: date,
-                      };
-                    });
-                  }}
-                />
-              </div>
+                value={inputs.date}
+                onChange={(date) => {
+                  setInputs((i) => {
+                    return {
+                      ...i,
+                      date: date,
+                    };
+                  });
+                }}
+              />
             </div>
           </div>
         </form>
