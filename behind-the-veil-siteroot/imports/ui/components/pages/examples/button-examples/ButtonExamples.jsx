@@ -6,6 +6,7 @@
 
 import React from "react";
 import Button from "../../../button/Button";
+import PreviousButton from "../../../button/PreviousButton";
 
 const ButtonExamples = () => {
     return (
@@ -21,6 +22,8 @@ const ButtonExamples = () => {
             <Button onClick={() => console.log("Hello")}>
                 Click me and look at your console
             </Button>
+
+            <PreviousButton />
         </div>
     )
 }
