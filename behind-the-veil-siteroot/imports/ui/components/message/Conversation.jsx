@@ -36,9 +36,11 @@ export const Conversation = ({ user }) => {
                     {user.messages.map((message, index) => (
                         <div key={index}>
                             <div className={`${message.sender === 'me' ? 'flex  justify-end' : 'flex'}`}>
+                                <div> {/* wrapping the profilephoto inside this div helps to keep the size consistent when smaller screen */}
                                 {message.sender !== 'me' && (
-                                    <ProfilePhoto className={`${message.sender === 'me' ? 'order-last flex' : ''} `}></ProfilePhoto>
+                                    <ProfilePhoto className={`${message.sender === 'me' ? 'order-last flex' : ''} min-win-[10%]`}></ProfilePhoto>
                                 )}
+                                </div>
                                 <Card className={`my-2 rounded-3xl max-w-[80%] border-transparent ${message.sender === 'me' ? ' bg-main-blue' : 'bg-light-grey'} `}>
                                     {message.text}
                                 </Card>
