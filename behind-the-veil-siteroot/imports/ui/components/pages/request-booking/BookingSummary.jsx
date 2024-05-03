@@ -12,28 +12,23 @@ import FormOutput from "./FormOutput";
 import "./booking.css"
 const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const BookingSummary = () => {
-    // TODO: remove mock data for hard coded details
+
     const formatDateString = (dateString, timeString, serviceDuration) => {
-        // format the time and add service duration to it
-        const [time, period] = timeString.split(/(?=[ap]m)/);
-        const [hours, minutes] = time.split(':');
-        let hoursNum = parseInt(hours, 10);
-        const minutesNum = parseInt(minutes, 10);
-        if (period === 'pm' && hoursNum !== 12) {
-            hoursNum += 12;
-        } else if (period === 'am' && hoursNum === 12) {
-            hoursNum = 0;
-        }
-        hoursNum += serviceDuration;
-        const formattedHours = String(hoursNum).padStart(2, '0');
-        const newTimeString = `${formattedHours}:${minutes}${period}`;
+        // format the time and add the duration
+        let dateTimeStr = dateString + " " + timeString;
+        let startDate = new Date(dateTimeStr);
+        let endDate = new Date(startDate.getTime() + serviceDuration * 60 * 60 * 1000);
 
-        // format the date
-        const date = new Date(dateString);
-        console.log(new Date(timeString))
-        const weekDay = days[date.getDay()];
+        const options = {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+        };
 
-        return `${weekDay} ${dateString} ${timeString} - ${newTimeString}`;
+        const startFormatted = startDate.toLocaleString('en-US', options);
+        const endFormatted = endDate.toLocaleString('en-US', options);
+
+        return `$date${startFormatted} - ${endFormatted}`;
     }
 
     let queryData = () => {
@@ -49,7 +44,7 @@ const BookingSummary = () => {
             'Artist Name': 'Alice Tran',
             'Service': 'Bachelorette Glam Experience',
             'Location': location,
-            'Date': formatDateString(date, time, 2),
+            'Date': formatDateString(date, time, 24),
             'Total Price': '$120.00',
         }
     }
