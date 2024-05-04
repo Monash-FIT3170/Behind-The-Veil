@@ -13,6 +13,7 @@ import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import TabsExamples from "./tabs-examples/TabsExamples";
 import SearchBarExamples from "./search-bar-examples/SearchBarExamples.jsx";
+import CalendarExamples from "./calendar-examples/CalendarExamples.jsx";
 
 /**
  * Page to showcase examples
@@ -27,6 +28,7 @@ const Examples = () => {
             <ServiceDetailsHeaderExamples />
             <TabsExamples />
             <SearchBarExamples />
+            <CalendarExamples />
         </WhiteBackground>
     );
 };
