@@ -5,8 +5,8 @@
  */
 
 import React from "react";
-import Map from "../../../map/Map";
 import CenteredMap from "../../../map/CenteredMap";
+import MapWithMarker from "../../../map/MarkerMap"
 
 const MapExamples = () => {
     return (
@@ -14,9 +14,12 @@ const MapExamples = () => {
             <div className="large-text underline">Map:</div>
             <CenteredMap 
                 className = {""} 
-                location ={"Melbourne, Australia"}
+                location ={"Southern Cross,Melbourne,Australia"}
             ></CenteredMap>
-            <Map></Map>
+            <MapWithMarker
+                className = {""} 
+                location ={"Southern Cross,Melbourne,Australia"}
+            ></MapWithMarker>
         </div>
     )
 }

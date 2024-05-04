@@ -8,9 +8,9 @@ import React, {useEffect, useState, useRef} from 'react';
 import mapboxgl from 'mapbox-gl';
 
 import classNames from "classnames";
-import { mapboxKey, getCoordinates } from './api';
+import { mapboxKey, getCoordinates } from './api';``
 
-export const CenteredMap = ({ className, location }) => {
+export const MarkerMap = ({ className, location }) => {
 
     mapboxgl.accessToken = mapboxKey
 
@@ -20,6 +20,7 @@ export const CenteredMap = ({ className, location }) => {
     const map = useRef(null);
     const [zoom, setZoom] = useState(14);
     const australiaBounds = [[96.8168, -43.7405], [173.0205, -9.1422]];
+    const marker = useRef(null);
 
     useEffect(() => {
         if (map.current) return;
@@ -27,20 +28,21 @@ export const CenteredMap = ({ className, location }) => {
         const loadMap = async () => {
             const coordinates = await getCoordinates(location);
             if (!coordinates) return;
-
+    
             const mapInstance = new mapboxgl.Map({
                 container: mapContainer.current,
                 style: 'mapbox://styles/mapbox/streets-v11',
                 center: [coordinates.longitude, coordinates.latitude],
                 zoom: zoom,
-                maxBounds: australiaBounds
+                maxBounds: australiaBounds,
             });
-
             map.current = mapInstance;
+    
+            new mapboxgl.Marker().setLngLat([coordinates.longitude, coordinates.latitude]).addTo(map.current);
         };
-
+    
         loadMap();
-
+    
         return () => {
             if (map.current) {
                 map.current.remove();
@@ -49,10 +51,10 @@ export const CenteredMap = ({ className, location }) => {
     }, [location, australiaBounds]);
 
     return (
-        <div className='flex h-96 w-2/5 overflow-hidden rounded-[45px]'>
+        <div className='flex h-96 w-2/5 rounded-[45px]'>
             <div className={classes} ref={mapContainer} />
         </div>
     );
 };
 
-export default CenteredMap;
+export default MarkerMap;
