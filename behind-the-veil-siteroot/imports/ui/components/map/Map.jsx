@@ -25,7 +25,7 @@ export const Map = ({ className, setMap }) => {
 
     useEffect(() => {
         if (map.current) return;
-        mapInstance = new mapboxgl.Map({
+        const mapInstance = new mapboxgl.Map({
             container: mapContainer.current,
             style: 'mapbox://styles/mapbox/streets-v11',
             center: [lng, lat],
@@ -33,8 +33,11 @@ export const Map = ({ className, setMap }) => {
             maxBounds: australiaBounds
         });
 
+        console.log('Map instance:', mapInstance);
+
         if (setMap) {
             setMap(mapInstance);
+            console.log(mapInstance);
         }
 
         map.current = mapInstance;
