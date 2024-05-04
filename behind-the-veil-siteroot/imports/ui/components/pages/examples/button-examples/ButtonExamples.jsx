@@ -7,6 +7,7 @@
 import React from "react";
 import Button from "../../../button/Button";
 import BackButton from "../../../button/BackButton";
+import PreviousButton from "../../../button/PreviousButton";
 
 const ButtonExamples = () => {
     return (
@@ -23,6 +24,8 @@ const ButtonExamples = () => {
                 Click me and look at your console
             </Button>
 
+            <div className="main-text underline">Specific Usage Buttons</div>
+            <PreviousButton />
             <BackButton />
         </div>
     )
