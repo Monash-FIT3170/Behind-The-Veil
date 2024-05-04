@@ -1,5 +1,5 @@
 /**
- * File Description: A simple map component
+ * File Description: A simple map component with hardcoded center
  * File version: 1.0
  * Contributors: Laura
  */
@@ -33,11 +33,8 @@ export const Map = ({ className, setMap }) => {
             maxBounds: australiaBounds
         });
 
-        console.log('Map instance:', mapInstance);
-
         if (setMap) {
             setMap(mapInstance);
-            console.log(mapInstance);
         }
 
         map.current = mapInstance;

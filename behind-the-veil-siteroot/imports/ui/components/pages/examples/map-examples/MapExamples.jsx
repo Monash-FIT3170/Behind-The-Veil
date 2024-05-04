@@ -6,17 +6,17 @@
 
 import React from "react";
 import Map from "../../../map/Map";
-import CenteredMap from "../../../map/Loc";
+import CenteredMap from "../../../map/CenteredMap";
 
 const MapExamples = () => {
     return (
         <div className="flex flex-col gap-3">
             <div className="large-text underline">Map:</div>
-            
-            <CenteredMap
-                className=""
-                location="Melbourne,Australia"
+            <CenteredMap 
+                className = {""} 
+                location ={"Melbourne, Australia"}
             ></CenteredMap>
+            <Map></Map>
         </div>
     )
 }

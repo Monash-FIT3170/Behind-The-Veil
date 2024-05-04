@@ -4,7 +4,7 @@
  * Contributors: Laura
  */
 
-const mapboxKey = 'pk.eyJ1IjoibHpoYTAxODEiLCJhIjoiY2x2ajl6cG0xMXA0NDJpbjFsMjg3MXRhcCJ9.O6uwgTLaLd3avXJGjJR_4A';
+export const mapboxKey = 'pk.eyJ1IjoibHpoYTAxODEiLCJhIjoiY2x2ajl6cG0xMXA0NDJpbjFsMjg3MXRhcCJ9.O6uwgTLaLd3avXJGjJR_4A';
 
 export const getCoordinates = async (location) => {
     try {
