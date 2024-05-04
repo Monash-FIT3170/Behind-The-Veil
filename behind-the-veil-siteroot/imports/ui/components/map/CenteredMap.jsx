@@ -1,39 +1,66 @@
 /**
- * File Description: Map component with a centre at given location
+ * File Description: A simple map component which accepts location as a centre
  * File version: 1.0
  * Contributors: Laura
  */
 
-import React, { useEffect, useState } from 'react';
-import Map from './Map';
-import { getCoordinates } from './api';
+import React, {useEffect, useState, useRef} from 'react';
+import mapboxgl from 'mapbox-gl';
 
-const CenteredMap = ({ className, location }) => {
-    const [map, setMap] = useState(null);
-    const [coordinates, setCoordinates] = useState(null);
+import classNames from "classnames";
+import { mapboxKey, getCoordinates } from './api';
 
-    const handleSetMap = (map) => {
-        if (map) {
-            getCoordinates(location).then(coords => {
-                setCoordinates(coords);
+export const CenteredMap = ({ className, setMap, location }) => {
+
+    mapboxgl.accessToken = mapboxKey
+
+    const classes = classNames(className, "h-96 w-full");
+
+    const mapContainer = useRef(null);
+    const map = useRef(null);
+    const [zoom, setZoom] = useState(14);
+    const australiaBounds = [[96.8168, -43.7405], [173.0205, -9.1422]];
+
+    useEffect(() => {
+        if (map.current) return;
+
+        const loadMap = async () => {
+            const coordinates = await getCoordinates(location);
+            if (!coordinates) return;
+
+            const mapInstance = new mapboxgl.Map({
+                container: mapContainer.current,
+                style: 'mapbox://styles/mapbox/streets-v11',
+                center: [coordinates.longitude, coordinates.latitude],
+                zoom: zoom,
+                maxBounds: australiaBounds
             });
-        }
-    };
 
-    useEffect(() => {
-        if (map && coordinates) {
-            map.setCenter([coordinates.longitude, coordinates.latitude]);
-        }
-    }, [map, coordinates]);
+            console.log(coordinates);
 
-    useEffect(() => {
-        handleSetMap(map);
-    }, [map]);
+            console.log('Map instance:', mapInstance);
 
-    // Render the Map component with the provided className and setMap function
-    return <Map className={className} setMap={setMap} />;
+            if (setMap) {
+                setMap(mapInstance);
+            }
+
+            map.current = mapInstance;
+        };
+
+        loadMap();
+
+        return () => {
+            if (map.current) {
+                map.current.remove();
+            }
+        };
+    }, [location, setMap, australiaBounds]);
+
+    return (
+        <div className='flex h-96 w-2/5 overflow-hidden rounded-[45px]'>
+            <div className={classes} ref={mapContainer} />
+        </div>
+    );
 };
 
 export default CenteredMap;
-
-
