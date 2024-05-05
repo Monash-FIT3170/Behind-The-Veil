@@ -16,57 +16,29 @@ import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 
 export const ArtistServiceArea = () => {
   const ServiceAreaPanel = (
-    <div className="grid grid-cols-12 gap-4">
-      <div className="col-span-4 ml-9 large-text">Location</div>
-      <div className="col-span-1 text-center large-text">Radius (Km)</div>
-      <div className="col-span-7"></div> {/* Empty div for spacing */}
-      <div className="col-span-4 ml-9 main-text text-dark-grey">
-        Melbourne CBD
-      </div>
-      <div className="col-span-1 text-center main-text text-dark-grey">15</div>
-      <div className="col-span-5 text-right">
-        {/* the delete icon would go here */}
-      </div>
-      <div className="col-span-4 ml-9 main-text text-dark-grey">
-        Melbourne Airport
-      </div>
-      <div className="col-span-1 text-center main-text text-dark-grey">3</div>
-      <div className="col-span-7 text-right">
-        {/* the delete icon would go here */}
-      </div>
-      <div className="col-span-4 ml-9">
-        <input
-          type="text"
-          style={{
-            height: "30px",
-            width: "450px",
-            paddingLeft: "10px",
-            outline: "1px solid lightgray",
-            borderRadius: "3px",
-          }}
-        />
-      </div>
-      <div className="col-span-1 text-center main-text text-dark-grey">
-        <input
-          type="text"
-          style={{
-            height: "30px",
-            width: "50px",
-            paddingLeft: "10px",
-            outline: "1px solid lightgray",
-            borderRadius: "3px",
-          }}
-        />
-      </div>
-      <div className="col-span-7 ml-2">
-        <Button>Add</Button>
-      </div>
-      <div className="col-span-4 ml-9">
+<div className="grid grid-cols-[5fr_1fr_1fr] gap-4">
+      <div className="large-text">Location</div>
+      <div className="large-text">Radius (km)</div>
+      <div></div>
+      {/* row 1 */}
+      <div className="main-text text-dark-grey">Melbourne CBD</div>
+      <div className="main-text text-dark-grey">15</div>
+      <div>TRASH ICON</div>
+      {/* inputs */}
+      <input
+        type="text"
+        className="rounded outline outline-1 outline-light-grey p-2l"
+      />
+      <input
+        type="text"
+        className="rounded outline outline-1 outline-light-grey p-2"
+      />
+      {/* use plus icon instead of + */}
+      <Button>+ Add</Button>
         <Button className="bg-secondary-purple hover:bg-secondary-purple-hover">
           Save Changes
         </Button>
       </div>
-    </div>
   );
 
   return (
