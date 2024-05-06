@@ -4,12 +4,12 @@
  * Contributors: Laura
  */
 
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css'
 
 import classNames from "classnames";
-import { mapboxKey, getCoordinates } from './api';``
+import { mapboxKey, getCoordinates } from './utils'; ``
 
 export const MarkerMap = ({ className, location }) => {
 
@@ -29,7 +29,7 @@ export const MarkerMap = ({ className, location }) => {
         const loadMap = async () => {
             const coordinates = await getCoordinates(location);
             if (!coordinates) return;
-    
+
             const mapInstance = new mapboxgl.Map({
                 container: mapContainer.current,
                 style: 'mapbox://styles/mapbox/streets-v11',
@@ -38,8 +38,8 @@ export const MarkerMap = ({ className, location }) => {
                 maxBounds: australiaBounds,
             });
             map.current = mapInstance;
-    
-            new mapboxgl.Marker({color: '#D33B3B'}).setLngLat([coordinates.longitude, coordinates.latitude]).addTo(map.current);
+
+            new mapboxgl.Marker({ color: '#D33B3B' }).setLngLat([coordinates.longitude, coordinates.latitude]).addTo(map.current);
         };
 
         loadMap();
