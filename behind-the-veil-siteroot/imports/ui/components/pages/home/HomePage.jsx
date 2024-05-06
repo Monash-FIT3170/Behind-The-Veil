@@ -19,7 +19,6 @@ import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
 import SearchBar from "../../searchBar/searchBar.jsx";
-import "./homePage.css";
 
 // This is the array of paths to the images need on the home page
 const images = [
