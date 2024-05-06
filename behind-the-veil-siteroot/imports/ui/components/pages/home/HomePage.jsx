@@ -178,10 +178,6 @@ export const HomePage = () => {
                     <Link to="/services">
                         <Button
                             className="inline-flex items-center justify-center h-10 w-64 main-text px-0 py-0 gap-x-2"
-                            onClick={() => {
-                                autoCloseMenu();
-                                setActiveTab("services");
-                            }}
                         >
                             <PaintBrushIcon className="size-5" />
                             Browse Services
@@ -191,10 +187,6 @@ export const HomePage = () => {
                     <Link to="/artists">
                         <Button
                             className="inline-flex items-center justify-center h-10 w-64 main-text px-0 py-0 gap-x-2"
-                            onClick={() => {
-                                autoCloseMenu();
-                                setActiveTab("artists");
-                            }}
                         >
                             <IdentificationIcon className="size-5" />
                             Browse Artists
