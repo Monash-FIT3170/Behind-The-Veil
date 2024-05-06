@@ -5,6 +5,7 @@
  */
 import React from 'react';
 import { Tab } from '@headlessui/react'
+import classNames from 'classnames';
 
 /**
  * Basic reusable tabs component.
@@ -14,15 +15,15 @@ import { Tab } from '@headlessui/react'
  * @param {Array} tabPanels Text/components to be rendered in the tab panel. Each tab panel should correspond to the tab of the same index in the accompanying tabs array
  * @returns tabs component
  */
-const Tabs = ({ tabs = [], tabPanels = [] }) => {
+const Tabs = ({ tabs = [], tabPanels = [], tabsClassName, tabPanelsClassName}) => {
     return (
         <Tab.Group>
-            <Tab.List className="text-dark-grey main-text border-b-2 border-light-grey">
+            <Tab.List className={classNames("text-dark-grey main-text border-b-2 border-light-grey", tabsClassName)}>
                 {tabs.map((tab) => {
                     return <Tab className="py-2 px-8 border-b-2 border-transparent ui-selected:border-b-black ui-selected:text-our-black">{tab}</Tab>
                 })}
             </Tab.List>
-            <Tab.Panels>
+            <Tab.Panels className = {tabPanelsClassName}>
                 {tabPanels.map((tabPanel) => {
                     return <Tab.Panel>{tabPanel}</Tab.Panel>
                 })}
