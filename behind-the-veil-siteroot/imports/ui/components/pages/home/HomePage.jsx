@@ -73,7 +73,7 @@ export const HomePage = () => {
             {/* Container for the images and the left and right buttons for sort through images */}
             <div className="inline-flex items-center justify-center h-[25rem] md:h-[30rem]">
                 <div className="hidden md:flex md:items-start md:justify-center md:w-1/6">
-                    <Button onClick={goToPreviousImage} className="bg-white">
+                    <Button onClick={goToPreviousImage} className="bg-transparent">
                         <ChevronLeftIcon className="size-10 stroke-[4]" />
                     </Button>
                 </div>
@@ -110,7 +110,7 @@ export const HomePage = () => {
                     </div>
                 </div>
                 <div className="hidden md:flex md:items-start md:justify-center md:w-1/6">
-                    <Button onClick={goToNextImage} className="bg-white">
+                    <Button onClick={goToNextImage} className="bg-transparent">
                         <ChevronRightIcon className="size-10 stroke-[4]" />
                     </Button>
                 </div>
@@ -118,12 +118,12 @@ export const HomePage = () => {
             {/* Container for left and right buttons to sort through images when screen is smaller than medium size*/}
             <div className="inline-flex flex-row items-center justify-center md:hidden">
                 <div className="flex items-start justify-center w-[45%]">
-                    <Button onClick={goToPreviousImage} className="bg-white">
+                    <Button onClick={goToPreviousImage} className="bg-transparent">
                         <ChevronLeftIcon className="size-10 stroke-[4]" />
                     </Button>
                 </div>
                 <div className="flex items-end justify-center w-[45%]">
-                    <Button onClick={goToNextImage} className="bg-white">
+                    <Button onClick={goToNextImage} className="bg-transparent">
                         <ChevronRightIcon className="size-10 stroke-[4]" />
                     </Button>
                 </div>
