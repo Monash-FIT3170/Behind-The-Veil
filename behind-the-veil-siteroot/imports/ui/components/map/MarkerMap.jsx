@@ -6,6 +6,7 @@
 
 import React, {useEffect, useState, useRef} from 'react';
 import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css'
 
 import classNames from "classnames";
 import { mapboxKey, getCoordinates } from './api';``
@@ -38,11 +39,11 @@ export const MarkerMap = ({ className, location }) => {
             });
             map.current = mapInstance;
     
-            new mapboxgl.Marker().setLngLat([coordinates.longitude, coordinates.latitude]).addTo(map.current);
+            new mapboxgl.Marker({color: '#D33B3B'}).setLngLat([coordinates.longitude, coordinates.latitude]).addTo(map.current);
         };
-    
+
         loadMap();
-    
+
         return () => {
             if (map.current) {
                 map.current.remove();
@@ -51,7 +52,7 @@ export const MarkerMap = ({ className, location }) => {
     }, [location, australiaBounds]);
 
     return (
-        <div className='flex h-96 w-2/5 rounded-[45px]'>
+        <div className='flex h-96 w-1/3 overflow-hidden rounded-[45px]'>
             <div className={classes} ref={mapContainer} />
         </div>
     );
