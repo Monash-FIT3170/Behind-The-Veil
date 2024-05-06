@@ -6,6 +6,8 @@
 
 import React from "react";
 import Button from "../../../button/Button";
+import BackButton from "../../../button/BackButton";
+import PreviousButton from "../../../button/PreviousButton";
 import {Cog8ToothIcon} from "@heroicons/react/24/outline"
 
 
@@ -23,6 +25,10 @@ const ButtonExamples = () => {
             <Button onClick={() => console.log("Hello")}>
                 Click me and look at your console
             </Button>
+
+            <div className="main-text underline">Specific Usage Buttons</div>
+            <PreviousButton />
+            <BackButton />
             <Button className="btn-base flex items-center"><span> Settings<Cog8ToothIcon className="min-h-4 w-4 cursor-pointer ml-1"/></span>
                 </Button>
             <Button className="settings-button"><span>Settings</span><span><Cog8ToothIcon className="min-h-4 w-4 cursor-pointer"/></span></Button>

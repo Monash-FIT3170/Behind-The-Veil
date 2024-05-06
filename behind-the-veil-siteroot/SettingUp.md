@@ -59,7 +59,10 @@ Once all your dependencies have been installed:
   meteor npm start
   ```
   Your app should automatially open on the browser. If it doesn't, the console will show you a link that the app is running on the browser from so click this.
-
+## Testing
+```console
+meteor test --driver-package meteortesting:mocha 
+```
 ## Errors
 > In the event your app is crashing or failing to run, scroll up on the error message and it will tell you if you are missing any dependencies. 
 
