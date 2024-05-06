@@ -24,22 +24,20 @@ export const ArtistServiceArea = () => {
       <div className="large-text">Radius (km)</div>
       <div></div>
       {/* row 1 */}
-      <div className="main-text text-dark-grey">Melbourne CBD</div>
-      <div className="main-text text-dark-grey">15</div>
-      <Button className="bg-transparent">
-      <TrashIcon className="size-6" />
-      </Button>
+
       {/* inputs */}
       <input
         type="text"
+        placeholder="Please enter a location"
         className="rounded outline outline-1 outline-light-grey p-2"
       />
       <input
         type="text"
-        className="rounded outline outline-1 outline-light-grey p-2 w-32"
+        placeholder="Please enter travel radius"
+        className="rounded outline outline-1 outline-light-grey p-2 w-55"
       />
       {/* use plus icon instead of + */}
-      <Button className = "flex gap-2"><PlusIcon className="size-6" /></Button>
+      <div></div>
       <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2">
         <CheckIcon className="size-6" />
         Save Changes
