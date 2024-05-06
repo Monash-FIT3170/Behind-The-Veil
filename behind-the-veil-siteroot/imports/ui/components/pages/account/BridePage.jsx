@@ -11,6 +11,8 @@ import Button from "../../button/Button.jsx";
 import {Cog8ToothIcon} from "@heroicons/react/24/outline"
 import ProfilePhoto from '../../profilePhoto/ProfilePhoto.jsx';
 import ProfileDisplay from '../../profilePhoto/ProfileDisplay.jsx';
+import BookingTab from './BookingTab.jsx';
+import Card from '../../card/Card.jsx';
 
 /**
  * Page of a list of Artist cards for users to see
@@ -32,8 +34,8 @@ export const BridePage = () => {
                 </div>
             </div>
         
-            <div>
-                div for nav bar with four tabs
+            <div className='booking-tab'>
+                <BookingTab/>
             </div>
 
 
