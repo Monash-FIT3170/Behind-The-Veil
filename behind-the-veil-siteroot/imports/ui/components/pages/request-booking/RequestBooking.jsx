@@ -169,7 +169,7 @@ const RequestBooking = () => {
                 )}
 
                 <Button
-                  className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"
+                  className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2 w-1/2 justify-center"
                   type="submit"
                 >
                   Next Step

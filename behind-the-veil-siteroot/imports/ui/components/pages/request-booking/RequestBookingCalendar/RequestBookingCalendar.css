@@ -75,7 +75,7 @@
 }
 
 .react-calendar__navigation button:enabled:hover,
-.react-calendar__navigation button:enabled:focus {
+.react-calendar__navigation button:enabled:focus-visible {
   background-color: #D4D4D4;
   /* light grey */
 }
@@ -188,7 +188,6 @@
   content: "";
   /* secondary purple */
   background-color: #BBB4E8;
-  display: block;
   position: absolute;
   width: 80%;
   height: 80%;
