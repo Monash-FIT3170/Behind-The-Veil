@@ -6,6 +6,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css'
 
 import classNames from "classnames";
 import { mapboxKey, getCoordinates } from './utils';
