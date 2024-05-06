@@ -130,4 +130,41 @@ on a case by case basis within individual JSX components.
     .service-details-header-base {
         @apply grid grid-cols-2 grid-rows-2 gap-x-10 gap-y-4 w-full;
     }
+
+    /* css for the brides profile page  */
+    .word-icon-button {
+        display: inline-block;
+        color: black;
+        font-size: small;   
+    }
+    .word-icon-button  span {
+        display: inline-block;
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+    .profile {
+        width: 100%;
+        height: 150px;
+    }
+    .profile div{
+        display: inline-block;
+        text-align: end;
+        vertical-align: text-top;
+    }
+    .profile-photo {
+        width: 60%;
+        height: 100%;
+    }
+    .profile-photo span{
+        display: block;
+        text-align: center;
+        font-size: small;
+
+    }
+    .corner-button {
+        width: 40%;
+        vertical-align: text-top;
+    }
+
+
 }

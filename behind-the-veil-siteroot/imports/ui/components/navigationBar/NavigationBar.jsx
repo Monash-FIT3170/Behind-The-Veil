@@ -153,11 +153,14 @@ export const NavigationBar = () => {
                     <NavLink to="/account"
                              onClick={() => {
                                  autoCloseMenu();
-                                 setActiveTab("account");
+                                 setActiveTab("account")
+                                 console.log("at account page");
                              }}
+                             
                              className={activeTab === "account" ?
                                  "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3 lg:p-0" :
                                  "main-text navbar-link-inactive p-3 lg:p-0"}>
+                                    
 
                         {/*profile icon appears for horizontal menu, the word "Account" appears for vertical menu*/}
                         <span className="lg:hidden">Account</span>

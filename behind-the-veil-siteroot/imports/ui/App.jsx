@@ -15,6 +15,7 @@ import LoginPage from './components/pages/login/LoginPage.jsx'
 import RegisterPage from './components/pages/register/RegisterPage.jsx'
 import RequestBooking from "./components/pages/request-booking/RequestBooking.jsx";
 import SpecificServicePage from "./components/pages/service/SpecificServicePage.jsx";
+import BridePage from "./components/pages/account/BridePage.jsx"
 
 export const App = () => (
 
@@ -47,7 +48,7 @@ export const App = () => (
 
                     {/* todo: not made account pages (bride and artist) thus, todo later*/}
                     <Route path="/account"
-                           element={<LoggedInOnlyRoute> <MessagesPage/></LoggedInOnlyRoute>}/>
+                           element={<LoggedInOnlyRoute> <BridePage/></LoggedInOnlyRoute>}/>
 
                     {/* TODO: haven't implemented actual flow to get here yet */}
                     <Route path="/request-booking" element={<RequestBooking/>}/>

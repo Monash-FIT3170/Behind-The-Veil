@@ -23,7 +23,10 @@ export const LoggedInOnlyRoute = ({children}) => {
     // todo: edit this logic once login is done
     const user = getUserAuth();
 
-    if (user === false || !user) {
+    // overiding for coding purposes
+    let overrideUser = true
+
+    if (overrideUser === false || !overrideUser) {
         // user is NOT authenticated, cannot access page, redirect to login page
         console.log("Cannot access, User is logged out"); // todo: delete after dev, for debugging/testing
         return <Navigate to="/login"/>;
