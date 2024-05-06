@@ -1,17 +1,11 @@
 /**
  * File Description: Home page
  * File version: 1.0
- * Contributors:
+ * Contributors: Lucas
  */
 
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
-import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
-import PageLayout from "../../../enums/PageLayout";
-import Button from "../../button/Button.jsx";
-import SearchBar from "../../searchBar/searchBar.jsx";
-
 import {
     ChevronRightIcon,
     ChevronLeftIcon,
@@ -20,8 +14,14 @@ import {
     IdentificationIcon,
     SparklesIcon,
 } from "@heroicons/react/24/outline";
+
+import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
+import PageLayout from "../../../enums/PageLayout";
+import Button from "../../button/Button.jsx";
+import SearchBar from "../../searchBar/searchBar.jsx";
 import "./homePage.css";
 
+// This is the array of paths to the images need on the home page
 const images = [
     "/images/pexels-zvolskiy-1721944.jpg",
     "/images/pexels-kristina-polianskaia-2617447-4241704.jpg",
@@ -29,20 +29,25 @@ const images = [
 ];
 
 /**
- * Home page which is also the landing page
+ * Home page which is also the landing page for the app.
+ * 
+ * TODO: update navigation bar when routing to different pages
  */
 export const HomePage = () => {
+    // Starts the index for the image array at 0
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     // creates a state of the input value for the search bar
     const [inputValue, setInputValue] = useState("");
 
+    // Shifts the index for the image array down 1, or to the final index (array.length - 1) if the index is at 0
     const goToPreviousImage = () => {
         setCurrentImageIndex((prevIndex) =>
             prevIndex === 0 ? images.length - 1 : prevIndex - 1
         );
     };
 
+    // Shifts the index for the image array up 1, or to 0 if the index is at array.length - 1
     const goToNextImage = () => {
         setCurrentImageIndex((prevIndex) =>
             prevIndex === images.length - 1 ? 0 : prevIndex + 1
@@ -66,6 +71,7 @@ export const HomePage = () => {
 
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
+            {/* Container for the images and the left and right buttons for sort through images */}
             <div className="inline-flex items-center justify-center h-[25rem] md:h-[30rem]">
                 <div className="hidden md:flex md:items-start md:justify-center md:w-1/6">
                     <Button onClick={goToPreviousImage} className="bg-white">
@@ -110,6 +116,7 @@ export const HomePage = () => {
                     </Button>
                 </div>
             </div>
+            {/* Container for left and right buttons to sort through images when screen is smaller than medium size*/}
             <div className="inline-flex flex-row items-center justify-center md:hidden">
                 <div className="flex items-start justify-center w-[45%]">
                     <Button onClick={goToPreviousImage} className="bg-white">
@@ -122,6 +129,7 @@ export const HomePage = () => {
                     </Button>
                 </div>
             </div>
+            {/* Container for the title text on the home page (positioned absolute) */}
             <div
                 className="absolute rounded-[2rem] bg-gradient-to-r from-purple-400/40 to-indigo-400/40 backdrop-filter backdrop-blur-md z-20 main-text text-white top-[45%] text-xl  w-[95%] left-[2.5%]
             sm:top-[50%] sm:left-[20%] sm:w-[60%] 
@@ -144,6 +152,7 @@ export const HomePage = () => {
                     />
                 </p>
             </div>
+            {/* Container for the search bar, drop down and search button */}
             <div className="container mx-auto px-20">
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                     <SearchBar
@@ -164,6 +173,7 @@ export const HomePage = () => {
                     </Button>
                 </div>
             </div>
+            {/* Container for the Browse services and Browse artists buttons */}
             <div className="container mx-auto pt-8">
                 <form className="flex items-center justify-center flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-8">
                     <Link to="/services">
