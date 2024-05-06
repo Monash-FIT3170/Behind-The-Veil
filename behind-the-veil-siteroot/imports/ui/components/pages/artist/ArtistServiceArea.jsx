@@ -9,22 +9,21 @@ import PageLayout from "../../../enums/PageLayout";
 import Tabs from "../../tabs/Tabs.jsx";
 import Button from "../../button/Button.jsx";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import { TrashIcon } from "@heroicons/react/24/outline";
-import { PlusIcon } from "@heroicons/react/24/outline";
 import { CheckIcon } from "@heroicons/react/24/outline";
 
 /**
  * This page allows the artist to enter to enter a location as well as provide a radius in which they can travel from that location
+ * The design is set up that there can only be a single service location
+ * The service location can be edited within the input field and when "Save Changes" is pressed the new service location is reflected
  */
 
 export const ArtistServiceArea = () => {
   const ServiceAreaPanel = (
     <div className="grid grid-cols-[1fr_auto_1fr] gap-4">{/* creates 3 columns with desired ratio */}
+      {/* titles */}
       <div className="large-text">Service Location</div>
       <div className="large-text">Radius (km)</div>
       <div></div>
-      {/* row 1 */}
-
       {/* inputs */}
       <input
         type="text"
@@ -36,7 +35,7 @@ export const ArtistServiceArea = () => {
         placeholder="Please enter travel radius"
         className="rounded outline outline-1 outline-light-grey p-2 w-55"
       />
-      {/* use plus icon instead of + */}
+      {/* empty div for spacing*/}
       <div></div>
       <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2">
         <CheckIcon className="size-6" />
