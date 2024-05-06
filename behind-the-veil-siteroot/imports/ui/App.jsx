@@ -15,6 +15,7 @@ import LoginPage from './components/pages/login/LoginPage.jsx'
 import RegisterPage from './components/pages/register/RegisterPage.jsx'
 import RequestBooking from "./components/pages/request-booking/RequestBooking.jsx";
 import SpecificServicePage from "./components/pages/service/SpecificServicePage.jsx";
+import CancelBooking from './components/pages/cancel-booking/CancelBooking.jsx';
 
 export const App = () => (
 
@@ -51,6 +52,10 @@ export const App = () => (
 
                     {/* TODO: haven't implemented actual flow to get here yet */}
                     <Route path="/request-booking" element={<RequestBooking/>}/>
+
+                    {/* TODO:.... */}
+                    <Route path="/cancel-booking" element={<CancelBooking/>}/>
+
 
                     {/* Define other routes that you need*/}
 
