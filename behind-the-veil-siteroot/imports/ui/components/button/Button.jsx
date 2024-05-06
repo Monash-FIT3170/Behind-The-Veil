@@ -1,6 +1,6 @@
 /**
  * File Description: Button component
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Josh
  */
 
@@ -17,7 +17,7 @@ import classNames from "classnames";
 const Button = forwardRef(({ children, className, ...buttonProps }, ref) => {
   const buttonClasses = classNames("btn-base", className);
   return (
-    <button ref={ref} {...buttonProps} className={buttonClasses} type="button">
+    <button ref={ref} className={buttonClasses} type="button" {...buttonProps}>
       {children}
     </button>
   );
