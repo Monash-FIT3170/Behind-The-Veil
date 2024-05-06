@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Button from "../../../button/Button";
-import ServiceCard from "../../../card/ServiceCard";
 import CalendarPopup from "../../../calendar/CalendarPopup";
+import { BookingStatus } from "../../../../enums/BookingStatus"
 
 const CardExamples = () => {
     const [isPopupOpen, setPopupOpen] = useState(false);
@@ -21,6 +21,27 @@ const CardExamples = () => {
                 brideName={"Jane Doe"}
                 bookingTime={"Thu 21/03/23 10:00AM - 12:00PM"}
                 bookingLocation={"123 Arts Studio, Painting Avenue 555, NSW"}
+                bookingStatus={BookingStatus.PENDING}
+                ></CalendarPopup>
+            <CalendarPopup 
+                isOpen={isPopupOpen} 
+                onClose={closePopup}
+                className=""
+                bookingId={111111}
+                brideName={"Jane Doe"}
+                bookingTime={"Thu 21/03/23 10:00AM - 12:00PM"}
+                bookingLocation={"123 Arts Studio, Painting Avenue 555, NSW"}
+                bookingStatus={BookingStatus.CONFIRMED}
+                ></CalendarPopup>
+            <CalendarPopup 
+                isOpen={isPopupOpen} 
+                onClose={closePopup}
+                className=""
+                bookingId={111111}
+                brideName={"Jane Doe"}
+                bookingTime={"Thu 21/03/23 10:00AM - 12:00PM"}
+                bookingLocation={"123 Arts Studio, Painting Avenue 555, NSW"}
+                bookingStatus={BookingStatus.PENDING_CANCELLATION}
                 ></CalendarPopup>
         </div>
     )

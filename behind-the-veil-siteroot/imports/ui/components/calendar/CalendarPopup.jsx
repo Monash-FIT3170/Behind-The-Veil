@@ -8,10 +8,11 @@ import React from 'react';
 import classNames from "classnames";
 import {useNavigate} from "react-router-dom";
 
-import {XCircleIcon} from "@heroicons/react/24/outline"
+import {XCircleIcon, ClockIcon, MapPinIcon, DocumentMagnifyingGlassIcon, CheckCircleIcon} from "@heroicons/react/24/outline"
 
 import Card from "../../components/card/Card";
 import Button from "../../components/button/Button";
+import { BookingStatus } from "../../enums/BookingStatus"
 
 export const CalendarPopup = ({
                                 isOpen, 
@@ -20,13 +21,16 @@ export const CalendarPopup = ({
                                 bookingId,
                                 brideName,
                                 bookingTime,
-                                bookingLocation
+                                bookingLocation,
+                                bookingStatus
                             }) => {
 
     // variables to handle routing
     const navigateTo = useNavigate();
 
     const classes = classNames(className, "flex flex-col justify-between w-full min-w-60 lg:w-2/5 lg:min-w-78 min-h-56");
+    
+    console.log(bookingStatus)
 
     if (!isOpen) return null;
     return (
@@ -43,20 +47,82 @@ export const CalendarPopup = ({
                 <div className={"cursor-default"}>
                     <div className="large-text text-our-black max-w-full break-all line-clamp-1 mb-3 text-center">
                         {brideName}</div>
-                    <div className="small-text text-dark-grey max-h-[4.5rem] max-w-full line-clamp-4 mb-3 break-all">
-                        {bookingTime}</div>
                 </div>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-5 justify-center items-center">
-                {/* button to specific booking detail page*/}
-                <Button className="flex flex-row gap-x-2 justify-center items-center w-4/5 md:w-1/2 min-w-40
-                bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500"
-                        onClick={() => navigateTo('/service/' + bookingId)}>
-                    <XCircleIcon className="h-6 w-6 min-h-6 min-w-6"/>
-                    View Service
-                </Button>
+            <hr />
+
+            <div className={"flex flex-col gap-x-8 justify-center items-center"}>
+                <div className={"cursor-default flex items-center gap-x-2"}>
+                    <ClockIcon className="h-6 w-6 min-h-6 min-w-6"></ClockIcon>
+                    <div className="large-text text-our-black max-w-full break-all line-clamp-1 mb-3 text-center">
+                        {bookingTime}
+                    </div>
+                </div>
+                <div className={"cursor-default flex items-center gap-x-2"}>
+                    <MapPinIcon className="h-6 w-6 min-h-6 min-w-6"></MapPinIcon>
+                    <div className="large-text text-our-black max-w-full break-all line-clamp-1 mb-3 text-center">
+                        {bookingLocation}
+                    </div>
+                </div>
             </div>
+
+            {bookingStatus === BookingStatus.PENDING && (
+                <div className="flex flex-col md:flex-row gap-5 justify-center items-center">
+                    {/* button to specific booking detail page*/}
+                    <Button className="flex flex-row gap-x-2 justify-center items-center
+                    bg-light-gray hover:bg-secondary-purple-hover transition duration-500"
+                            onClick={() => navigateTo('/service/' + bookingId)}>
+                        <CheckCircleIcon className="h-6 w-6 min-h-6 min-w-6"/>
+                        Confirm
+                    </Button>
+                    {/* button to specific booking detail page*/}
+                    <Button className="flex flex-row gap-x-2 justify-center items-center
+                    bg-white hover:bg-light-gray-hover border-light-gray border-2 transition duration-500"
+                            onClick={() => navigateTo('/service/' + bookingId)}>
+                        <XCircleIcon className="h-6 w-6 min-h-6 min-w-6"/>
+                        Reject
+                    </Button>
+                    {/* button to specific booking detail page*/}
+                    <Button className="flex flex-row gap-x-2 justify-center items-center
+                    bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500"
+                            onClick={() => navigateTo('/service/' + bookingId)}>
+                        <DocumentMagnifyingGlassIcon className="h-6 w-6 min-h-6 min-w-6"/>
+                        View Details
+                    </Button>
+                </div>
+            )}
+
+            {bookingStatus === BookingStatus.CONFIRMED && (
+                <div className="flex flex-col md:flex-row gap-5 justify-center items-center">
+                    {/* button to specific booking detail page*/}
+                    <Button className="flex flex-row gap-x-2 justify-center items-center
+                    bg-white hover:bg-secondary-purple-hover border-light-gray border-2 transition duration-500"
+                            onClick={() => navigateTo('/service/' + bookingId)}>
+                        <XCircleIcon className="h-6 w-6 min-h-6 min-w-6"/>
+                        Cancel Booking
+                    </Button>
+                    {/* button to specific booking detail page*/}
+                    <Button className="flex flex-row gap-x-2 justify-center items-center
+                    bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500"
+                            onClick={() => navigateTo('/service/' + bookingId)}>
+                        <DocumentMagnifyingGlassIcon className="h-6 w-6 min-h-6 min-w-6"/>
+                        View Details
+                    </Button>
+                </div>
+            )}
+
+            {bookingStatus === BookingStatus.PENDING_CANCELLATION && (
+                <div className="flex flex-col md:flex-row gap-5 justify-center items-center">
+                    {/* button to specific booking detail page*/}
+                    <Button className="flex flex-row gap-x-2 justify-center items-center
+                    bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500"
+                            onClick={() => navigateTo('/service/' + bookingId)}>
+                        <DocumentMagnifyingGlassIcon className="h-6 w-6 min-h-6 min-w-6"/>
+                        View Details
+                    </Button>
+                </div>
+            )}
         </Card>
         
 
