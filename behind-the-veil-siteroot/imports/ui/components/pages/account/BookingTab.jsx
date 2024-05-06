@@ -14,7 +14,7 @@ import Button from "../../button/Button";
  */
 const BookingTab = () => {
     const confirmBookingPanel = (
-        <div className="p-4 flex gap-4 h-40 border-light-grey border-2 mt-2 rounded-3xl">
+        <div className="p-4 flex gap-4 h-ful">
             <Button className="h-fit">{":)"}</Button>
             <Button className="h-fit">{":|"}</Button>
             <Button className="h-fit">{":("}</Button>
@@ -22,7 +22,12 @@ const BookingTab = () => {
     )
 
     const pendingBookingPanel = (
-        <div className="p-4 flex gap-4 h-40 border-light-grey border-2 mt-2 rounded-3xl">
+        <div className="h-full p-4 gap-4 flex">
+            <div className="bg-secondary-purple w-5 h-5"></div>
+            <div className="bg-secondary-purple w-5 h-5"></div>
+            <div className="bg-secondary-purple w-5 h-5"></div>
+            <div className="bg-secondary-purple w-5 h-5"></div>
+            <div className="bg-secondary-purple w-5 h-5"></div>
             <div className="bg-secondary-purple w-5 h-5"></div>
             <div className="bg-secondary-purple w-5 h-5"></div>
             <div className="bg-secondary-purple w-5 h-5"></div>
@@ -32,7 +37,7 @@ const BookingTab = () => {
     )
 
     const pastBookingPanel = (
-        <div className="p-4 flex gap-4 h-40 border-light-grey border-2 mt-2 rounded-3xl">
+        <div className="h-full p-4 gap-4 flex">
             <div className="bg-our-black w-7 h-2"></div>
             <div className="bg-our-black w-7 h-2"></div>
             <div className="bg-our-black w-7 h-2"></div>
@@ -40,7 +45,7 @@ const BookingTab = () => {
     )
 
     const archivedBookingPanel = (
-        <div className="p-4 flex gap-4 h-40 border-light-grey border-2 mt-2 rounded-3xl">
+        <div className="h-full p-4 gap-4 flex">
             <div className="bg-our-black w-7 h-2"></div>
             <div className="bg-our-black w-7 h-2"></div>
             <div className="bg-our-black w-7 h-2"></div>
@@ -48,7 +53,7 @@ const BookingTab = () => {
     )
 
     return (
-        <div className="flex flex-col gap-3">
+        <div className="h-full">
                 <Tabs
                     tabs={['Confirmed Bookings', 'Pending Bookings', 'Past Bookings', 'Archived Bookings']}
                     tabPanels={[confirmBookingPanel, pendingBookingPanel, pastBookingPanel, archivedBookingPanel]}
