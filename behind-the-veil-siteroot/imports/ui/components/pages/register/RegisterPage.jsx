@@ -29,6 +29,22 @@ export const RegisterPage = () => {
             <PaintBrushIcon className="h-12 w-12 mb-1 mx-auto my-1" /> :
             <SparklesIcon className="h-12 w-12 mb-1 mx-auto my-1" />;
 
+    const handleActivation = () => {
+        console.log("Activating account...");
+        setShowCompleted(true);
+        setShowActivation(false);
+        setShowAccountCreation(false);
+    };
+
+    const flexContainerStyle = {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '10px',
+        padding: '10px',
+    };
+
+    const AccountTypeOption = ({ type, label, onClick }) => {
         return (
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <Button
