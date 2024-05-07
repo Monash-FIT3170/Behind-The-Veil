@@ -24,11 +24,11 @@ const BookingSummary = () => {
             minute: '2-digit',
             hour12: true
         };
-
+        const day = days[startDate.getDay()];
         const startFormatted = startDate.toLocaleString('en-US', options);
         const endFormatted = endDate.toLocaleString('en-US', options);
 
-        return `$date${startFormatted} - ${endFormatted}`;
+        return `${day} ${dateString} ${startFormatted} - ${endFormatted}`;
     }
 
     let queryData = () => {
@@ -44,7 +44,7 @@ const BookingSummary = () => {
             'Artist Name': 'Alice Tran',
             'Service': 'Bachelorette Glam Experience',
             'Location': location,
-            'Date': formatDateString(date, time, 24),
+            'Date': formatDateString(date, time, 2), // hardcoded to be 2 hour duration can be dynamic
             'Total Price': '$120.00',
         }
     }
