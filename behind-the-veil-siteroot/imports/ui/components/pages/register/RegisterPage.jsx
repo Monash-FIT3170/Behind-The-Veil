@@ -5,38 +5,94 @@
  */
 
 import React, { useState } from 'react';
+import { Accounts } from 'meteor/accounts-base';
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
+import {useNavigate} from "react-router-dom";
 
 /**
  * Page where user can sign up for a new account
  */
 export const RegisterPage = () => {
+    const [accountType, setAccountType] = useState(null); // State to track selected account type
+
     const [showAccountCreation, setShowAccountCreation] = useState(false);
     const [showActivation, setShowActivation] = useState(false); // State to track activation phase
     const [showCompleted, setShowCompleted] = useState(false); // Track activation completion
 
-    const handleAccountTypeSelection = () => {
-        // Update state to show account creation section
+    const navigate = useNavigate();
+
+
+    const handleAccountTypeSelection = (type) => {
+        setAccountType(type);
         console.log("Selected Type");
+        console.log(type);
         setShowAccountCreation(true);
-        setShowCompleted(false);
-        setShowActivation(false);
     };
 
     const handleRegister = () => {
-        console.log("Registered account...");
+        const username = document.getElementById('username').value.trim();
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const retypePassword = document.getElementById('retypePassword').value;
+
+        if (!username || !name || !email || !password || !retypePassword) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+
+        // Password validation criteria
+        const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+        if (!passwordRegex.test(password)) {
+            alert('Password must contain at least one number, one special character, one lowercase letter, one uppercase letter, and be at least 8 characters long.');
+            return;
+        }
+
+        // Check if retypePassword matches password
+        if (password !== retypePassword) {
+            alert('Passwords do not match.');
+            return;
+        }
+
+        const newUser = {
+            username: username,
+            email: email,
+            password: password,
+            profile: {
+                name: name,
+                type: accountType
+            }
+        };
+
+        Accounts.createUser(newUser, (error) => {
+            if (error) {
+                alert(`Account creation failed: ${error.message}`);
+            } else {
+                console.log('User created successfully!');
+                setShowActivation(true);
+                setShowAccountCreation(false);
+            }
+        });
+
+        console.log("Registered account");
+        console.log(newUser);
         setShowActivation(true);
         setShowAccountCreation(false);
-        setShowCompleted(false);
     };
 
     const handleActivation = () => {
-        console.log("Activating account...");
+        const activationCode = document.getElementById('activationCode').value.trim();
+
+        if (!activationCode) {
+            alert('Please enter the activation code.');
+            return;
+        }
+
+        console.log("Activated account");
         setShowCompleted(true);
         setShowActivation(false);
-        setShowAccountCreation(false);
     };
 
     const flexContainerStyle = {
@@ -77,6 +133,19 @@ export const RegisterPage = () => {
     );
 
     const TextInput = ({ label, id, name, placeholder, type = 'text', autoComplete = 'off' }) => {
+        const [value, setValue] = useState('');
+        const [isValid, setIsValid] = useState(true); // Track input validity
+
+        const handleChange = (e) => {
+            const inputValue = e.target.value;
+            setValue(inputValue);
+            setIsValid(true); // Reset validity on change
+        };
+
+        const handleBlur = () => {
+            setIsValid(!!value.trim()); // Check if input value is not empty on blur
+        };
+
         return (
             <div>
                 <label htmlFor={id} className="main-text">{label}</label>
@@ -86,15 +155,23 @@ export const RegisterPage = () => {
                     name={name}
                     placeholder={placeholder}
                     autoComplete={autoComplete}
+                    value={value}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                     style={{
                         marginBottom: '5px',
                         width: '100%',
                         height: '50px',
-                        border: '1px solid lightgrey',
+                        border: `1px solid ${isValid ? 'lightgrey' : 'red'}`, // Change border color on invalid
                         borderRadius: '5px',
                         padding: '10px'
                     }}
                 />
+                {!isValid && (
+                    <p style={{ color: 'red', fontSize: '0.8em', marginTop: '5px' }}>
+                        This field is required.
+                    </p>
+                )}
             </div>
         );
     };
@@ -130,7 +207,7 @@ export const RegisterPage = () => {
                             {/* Password requirements message */}
                             <div className="message-tag-text" style={{ textAlign: "left", marginTop: "-10px", width: "80%" }}>
                                 Please ensure your password has at least:
-                                <ul>
+                                <ul className={"list-disc list-inside"}>
                                     <li>a number (0-9)</li>
                                     <li>a special character (e.g. % & ! )</li>
                                     <li>a lowercase letter (a-z)</li>
@@ -153,7 +230,7 @@ export const RegisterPage = () => {
 
                         <div style={flexContainerStyle}>
                             <div style={{ width: "80%", textAlign: "center", marginTop: "20px"}}>
-                            <TextInput label="Please enter the 6-digit code sent to your email" id="activationCode" name="activationCode" placeholder="Enter activation code" />
+                                <TextInput label="Please enter the 6-digit code sent to your email" id="activationCode" name="activationCode" placeholder="Enter activation code" />
                             </div>
 
                             <ActionButton
@@ -176,7 +253,7 @@ export const RegisterPage = () => {
                             <ActionButton
                                 marginTop="40px"
                                 label="Sign In"
-                                onClick={() => console.log("Navigate to sign in page")} // TODO: Implement sign in navigation
+                                onClick={() => navigate('/login') }
                             />
                         </div>
                     </>
