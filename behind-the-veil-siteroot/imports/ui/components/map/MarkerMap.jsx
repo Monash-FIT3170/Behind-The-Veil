@@ -9,7 +9,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css'
 
 import classNames from "classnames";
-import { mapboxKey, getCoordinates } from './utils'; 
+import { mapboxKey, getCoordinates } from './mapUtils';
 
 export const MarkerMap = ({ className, location }) => {
 
@@ -22,13 +22,16 @@ export const MarkerMap = ({ className, location }) => {
     const [zoom, setZoom] = useState(14);
     const australiaBounds = [[96.8168, -43.7405], [173.0205, -9.1422]];
 
+    // Load map
     useEffect(() => {
         if (map.current) return;
 
         const loadMap = async () => {
+            // Get coordinates of location (using utility funcion)
             const coordinates = await getCoordinates(location);
             if (!coordinates) return;
 
+            // Create map
             const mapInstance = new mapboxgl.Map({
                 container: mapContainer.current,
                 style: 'mapbox://styles/mapbox/streets-v11',
@@ -38,6 +41,7 @@ export const MarkerMap = ({ className, location }) => {
             });
             map.current = mapInstance;
 
+            // Add marker to the location coordinates
             new mapboxgl.Marker({ color: '#D33B3B' }).setLngLat([coordinates.longitude, coordinates.latitude]).addTo(map.current);
         };
 
