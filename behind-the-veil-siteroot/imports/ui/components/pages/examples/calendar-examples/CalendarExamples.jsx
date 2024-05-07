@@ -12,19 +12,21 @@ const CardExamples = () => {
     return (
         <div className="flex flex-col gap-3">
             <div className="large-text underline">Calendar:</div>
-            <Button onClick={openPopup}>Open Popup</Button>
-            <CalendarPopup 
-                isOpen={isPopupOpen} 
-                onClose={closePopup}
-                className=""
-                bookingId={111111}
-                brideName={"Jane Doe"}
-                bookingTime={"Thu 21/03/23 10:00AM - 12:00PM"}
-                bookingLocation={"123 Arts Studio, Painting Avenue 555, NSW"}
-                bookingStatus={BookingStatus.PENDING}
+            <div className='relative'>
+                <Button onClick={openPopup}>Open Popup</Button>
+                <CalendarPopup
+                    isOpen={isPopupOpen}
+                    onClose={closePopup}
+                    className="absolute left-2"
+                    bookingId={111111}
+                    brideName={"Jane Doe"}
+                    bookingTime={"Thu 21/03/23 10:00AM - 12:00PM"}
+                    bookingLocation={"123 Arts Studio, Painting Avenue 555, NSW"}
+                    bookingStatus={BookingStatus.PENDING}
                 ></CalendarPopup>
-            <CalendarPopup 
-                isOpen={isPopupOpen} 
+            </div>
+            {/* <CalendarPopup
+                isOpen={isPopupOpen}
                 onClose={closePopup}
                 className=""
                 bookingId={111111}
@@ -32,9 +34,9 @@ const CardExamples = () => {
                 bookingTime={"Thu 21/03/23 10:00AM - 12:00PM"}
                 bookingLocation={"123 Arts Studio, Painting Avenue 555, NSW"}
                 bookingStatus={BookingStatus.CONFIRMED}
-                ></CalendarPopup>
-            <CalendarPopup 
-                isOpen={isPopupOpen} 
+            ></CalendarPopup>
+            <CalendarPopup
+                isOpen={isPopupOpen}
                 onClose={closePopup}
                 className=""
                 bookingId={111111}
@@ -42,7 +44,7 @@ const CardExamples = () => {
                 bookingTime={"Thu 21/03/23 10:00AM - 12:00PM"}
                 bookingLocation={"123 Arts Studio, Painting Avenue 555, NSW"}
                 bookingStatus={BookingStatus.PENDING_CANCELLATION}
-                ></CalendarPopup>
+            ></CalendarPopup> */}
         </div>
     )
 }
