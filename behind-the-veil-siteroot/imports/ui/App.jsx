@@ -15,6 +15,9 @@ import LoginPage from './components/pages/login/LoginPage.jsx'
 import RegisterPage from './components/pages/register/RegisterPage.jsx'
 import RequestBooking from "./components/pages/request-booking/RequestBooking.jsx";
 import SpecificServicePage from "./components/pages/service/SpecificServicePage.jsx";
+import AccountActivatedPage from "./components/pages/register/AccountActivatedPage";
+import CreateAccountPage from "./components/pages/register/CreateAccountPage";
+import ActivateAccountPage from "./components/pages/register/ActivateAccountPage";
 
 export const App = () => (
 
@@ -40,6 +43,9 @@ export const App = () => (
                            element={<LoggedOutOnlyRoute><LoginPage/></LoggedOutOnlyRoute>}/>
 
                     <Route path="/register" element={<LoggedOutOnlyRoute><RegisterPage/></LoggedOutOnlyRoute>}/>
+                    <Route path="/register/createAccount/" element={<LoggedOutOnlyRoute><CreateAccountPage/></LoggedOutOnlyRoute>}/>
+                    <Route path="/register/activateAccount" element={<LoggedOutOnlyRoute><ActivateAccountPage/></LoggedOutOnlyRoute>}/>
+                    <Route path="/register/accountActivated" element={<LoggedOutOnlyRoute><AccountActivatedPage/></LoggedOutOnlyRoute>}/>
 
                     {/*routes that ONLY authenticated users can access*/}
                     <Route path="/messages"
