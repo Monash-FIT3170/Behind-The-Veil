@@ -1,5 +1,5 @@
 /**
- * File Description: Registration page
+ * File Description: Create Account page
  * File version: 1.0
  * Contributors: Ryan
  */
