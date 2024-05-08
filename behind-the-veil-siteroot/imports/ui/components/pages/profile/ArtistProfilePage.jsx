@@ -15,15 +15,16 @@ import { PlusIcon, Cog8ToothIcon } from "@heroicons/react/24/outline";
  * Page for artist profile
  */
 export const ArtistProfilePage = () => {
+  //import plusIcon from heroicons for "add photo" button
   const plusIcon = <PlusIcon className="w-6 h-6" />;
 
-  //import
+  //import gearIcon from heroicons for "settings" button.
   const gearIcon = <Cog8ToothIcon className="w-6 h-6" />;
 
-  // Photos: https://www.material-tailwind.com/docs/react/gallery
-  // Probably a good idea to make this a component?
+  // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
+  // When completing the dynamic version for this page, probably a good idea to setup the photos as components and importing them in.
   const galleryTab = (
-    <div>
+    <div className="relative">
       <div className="sticky top-20 z-20 flex justify-end">
         <Button className="absolute top-5 flex bg-secondary-purple hover:bg-secondary-purple-hover">
           {plusIcon} Add Photo
@@ -121,6 +122,7 @@ export const ArtistProfilePage = () => {
     </div>
   );
 
+  //Utilise Tab components to create page schematics.
   return (
     <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
       <div className="flex justify-end">
@@ -139,7 +141,6 @@ export const ArtistProfilePage = () => {
           "Reviews Panel",
         ]}
         tabsClassName="flex justify-between"
-        tabPanelsClassName="relative flex justify-around"
       />
     </WhiteBackground>
   );
