@@ -171,7 +171,7 @@ const CreateAccountPage = () => {
                 </div>
             </div>
         </WhiteBackground>
-);
+    );
 };
 
 export default CreateAccountPage;

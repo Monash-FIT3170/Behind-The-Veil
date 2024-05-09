@@ -69,7 +69,7 @@ const AccountActivatedPage = () => {
                 </div>
             </div>
         </WhiteBackground>
-);
+    );
 };
 
 export default AccountActivatedPage;
