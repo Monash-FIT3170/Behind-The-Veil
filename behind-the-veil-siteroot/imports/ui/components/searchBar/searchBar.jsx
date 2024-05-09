@@ -46,7 +46,7 @@ const SearchBar = ({
                 onChange={onChange}
             />
         {/* The reset button which resets the value of the search input field to an empty string */}
-            <button type="button" className="flex justify-center items-center bg-white main-text border-2 border-gray-300 border-l-0 rounded rounded-l-none h-8 w-[33px] hover:bg-gray-300 active:bg-gray-400" onClick={handleReset}>
+            <button type="button" className="flex justify-center items-center bg-white main-text border-2 border-gray-300 border-l-0 rounded rounded-l-none h-8 w-[33px] pl-0.5 hover:bg-gray-300 active:bg-gray-400" onClick={handleReset}>
                 <XMarkIcon className="size-5 stroke-2"></XMarkIcon>
             </button>
         </form>
