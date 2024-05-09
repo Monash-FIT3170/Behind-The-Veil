@@ -127,6 +127,10 @@ on a case by case basis within individual JSX components.
         @apply white-glass-base border-main-blue border-2 w-fit rounded-[45px] p-6;
     }
 
+    .input-base {
+        @apply border-2 p-2 border-gray-300 rounded-[6px] main-text h-12 w-[60vw] sm:w-[361px] ;
+    }
+
     .service-details-header-base {
         @apply grid grid-cols-2 grid-rows-2 gap-x-10 gap-y-4 w-full;
     }

@@ -13,7 +13,7 @@ import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import TabsExamples from "./tabs-examples/TabsExamples";
 import MapExamples from "./map-examples/MapExamples.jsx";
-import SearchBarExamples from "./search-bar-examples/SearchBarExamples.jsx";
+import InputExamples from "./input-examples/InputExamples.jsx";
 
 /**
  * Page to showcase examples
@@ -22,12 +22,12 @@ const Examples = () => {
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
             <div className="title-text">Examples</div>
-            <ButtonExamples />
-            <FontExamples />
-            <CardExamples />
-            <ServiceDetailsHeaderExamples />
-            <TabsExamples />
-            <SearchBarExamples />
+            <ButtonExamples/>
+            <FontExamples/>
+            <CardExamples/>
+            <ServiceDetailsHeaderExamples/>
+            <TabsExamples/>
+            <InputExamples />
             <MapExamples />
         </WhiteBackground>
     );
