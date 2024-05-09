@@ -4,7 +4,6 @@ import ReactPaginate from 'react-paginate';
 import classNames from "classnames";
 
 export const Pagination = ({externalClassName, internalClassName, itemsPerPage, displayItems}) => {
-    console.log("RELOAD RELOAD RELOAD RELOAD RELOAD RELOAD RELOAD")
 
     // get page from URL first, if there is
     let urlPageNum = 1;
@@ -18,33 +17,20 @@ export const Pagination = ({externalClassName, internalClassName, itemsPerPage, 
             // no proper page number
         }
     }
-    // console.log("urlPageNum: " + urlPageNum)
 
     let navigate = useNavigate();
 
+    // Current page number: from 1...n
     const [pageNum, setPageNum] = useState(urlPageNum);
-    // console.log("pageNum1: " +  pageNum)
 
     // index of first item to be shown, depends on how many items have already been passed
-    // console.log("(pageNum-1) * itemsPerPage: " + (pageNum-1) * itemsPerPage)
-    const [startIndex, setStartIndex] = useState(((pageNum-1) * itemsPerPage));
-
-    // console.log("pageNum2: " + pageNum)
-    // console.log("startIndex: " + startIndex)
+    const [startIndex, setStartIndex] = useState(((pageNum - 1) * itemsPerPage));
 
     // last item to be shown
     const endIndex = startIndex + itemsPerPage;
 
-    console.log(`Loading items from ${startIndex} to ${endIndex}`);
-
     // splice only required items
     const currentItems = displayItems.slice(startIndex, endIndex);
-
-    // console.log("displayItems!!!!!!!!!!!!");
-    // console.log(displayItems);
-    //
-    // console.log("currentItems!!!!!!!!!!!!");
-    // console.log(currentItems);
 
     // getting TOTAL page count
     const pageCount = Math.ceil(displayItems.length / itemsPerPage);
@@ -52,16 +38,12 @@ export const Pagination = ({externalClassName, internalClassName, itemsPerPage, 
     // handler to change "page", by changing start index
     const handlePageClick = (event) => {
         const newOffset = (event.selected * itemsPerPage) % displayItems.length;
-        // console.log("event.selected="+event.selected);
-        // console.log("displayItems.length="+displayItems.length);
 
-        console.log(
-            `User requested page number ${event.selected}, which is offset ${newOffset}`
-        );
         setStartIndex(newOffset);
         setPageNum(event.selected + 1)
     };
 
+    // Effect of clicking any of the page number buttons navigate the user
     useEffect(() => {
         // click on button
         navigate("#" + pageNum)
@@ -80,7 +62,10 @@ export const Pagination = ({externalClassName, internalClassName, itemsPerPage, 
             </div>
 
             {/* This is the page number component underneath */}
+            {/*This is the page number that appears on smaller screens*/}
             <div className={"flex flex-col items-center md:hidden main-text"}>Page: {pageNum}  </div>
+
+            {/*The main page number component here*/}
             <div className="flex flex-col items-center">
                 <ReactPaginate
                     breakLabel="..."
@@ -91,7 +76,7 @@ export const Pagination = ({externalClassName, internalClassName, itemsPerPage, 
                     pageCount={pageCount}
                     previousLabel="< Prev"
                     renderOnZeroPageCount={null}
-                    initialPage={urlPageNum-1}
+                    initialPage={urlPageNum - 1}
 
                     className={"flex flex-row gap-x-2 items-center main-text"}
                     pageClassName={"hidden md:flex"}
@@ -105,6 +90,6 @@ export const Pagination = ({externalClassName, internalClassName, itemsPerPage, 
                     disabledClassName={"hidden"}
                 />
             </div>
-        </div>
-    );
+
+        </div>);
 }
