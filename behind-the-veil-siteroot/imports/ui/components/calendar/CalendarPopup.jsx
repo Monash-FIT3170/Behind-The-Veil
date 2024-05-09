@@ -22,19 +22,18 @@ export const CalendarPopup = ({
                                 brideName,
                                 bookingTime,
                                 bookingLocation,
-                                bookingStatus
+                                bookingStatus,
+                                buttonRef
                             }) => {
 
     // variables to handle routing
     const navigateTo = useNavigate();
 
-    const classes = classNames(className, "flex flex-col justify-between w-full min-w-60 lg:w-2/5 lg:min-w-78 min-h-56");
-    
-    console.log(bookingStatus)
+    const classes = classNames(className, "flex flex-col justify-between");
 
     if (!isOpen) return null;
     return (
-        <Card className={classes}>
+        <Card className={classes} style={{ position: "absolute", top: buttonRef.current.offsetTop + buttonRef.current.offsetHeight / 2, left: buttonRef.current.offsetLeft + buttonRef.current.getBoundingClientRect().width + 10 }}>
             {/* close button */}
             <div
                 className="fixed top-4 right-4 cursor-pointer transform hover:scale-110 transition-transform"
@@ -45,7 +44,7 @@ export const CalendarPopup = ({
 
             <div className={"flex flex-row gap-x-8 justify-center"}>
                 <div className={"cursor-default"}>
-                    <div className="large-text text-our-black max-w-full break-all line-clamp-1 mb-3 text-center">
+                    <div className="large-text text-our-black max-w-full break-all line-clamp-1 text-center">
                         {brideName}</div>
                 </div>
             </div>
@@ -54,14 +53,14 @@ export const CalendarPopup = ({
 
             <div className={"flex flex-col gap-x-8 justify-center items-center"}>
                 <div className={"cursor-default flex items-center gap-x-2"}>
-                    <ClockIcon className="h-6 w-6 min-h-6 min-w-6"></ClockIcon>
-                    <div className="large-text text-our-black max-w-full break-all line-clamp-1 mb-3 text-center">
+                    <ClockIcon className="h-6 w-6 min-h-6 min-w-6 mb-3"></ClockIcon>
+                    <div className="main-text text-our-black max-w-full break-all line-clamp-1 mb-3 text-center">
                         {bookingTime}
                     </div>
                 </div>
                 <div className={"cursor-default flex items-center gap-x-2"}>
-                    <MapPinIcon className="h-6 w-6 min-h-6 min-w-6"></MapPinIcon>
-                    <div className="large-text text-our-black max-w-full break-all line-clamp-1 mb-3 text-center">
+                    <MapPinIcon className="h-6 w-6 min-h-6 min-w-6 mb-3"></MapPinIcon>
+                    <div className="main-text text-our-black max-w-full break-all line-clamp-1 mb-3 text-center">
                         {bookingLocation}
                     </div>
                 </div>
