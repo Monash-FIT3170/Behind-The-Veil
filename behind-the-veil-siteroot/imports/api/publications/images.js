@@ -1,7 +1,29 @@
-import {Meteor} from 'meteor/meteor'
-import {ServiceCollection} from "/imports/api/collections/services";
+/**
+ * File Description: Image database entity
+ * File version: 1.0
+ * Contributors: Nikki
+ */
 
-// name of what you want to publish to frontend (consistency)
-Meteor.publish('all_services', function() {
-    return ServiceCollection.find();
+import {Meteor} from 'meteor/meteor'
+import {ImageCollection} from "/imports/api/collections/images";
+
+/**
+ * Publishes images for services.
+ */
+Meteor.publish('service_images', function() {
+    return ImageCollection.find({"imageType":"service"});
+});
+
+/**
+ * Publishes profile picture images.
+ */
+Meteor.publish('profile_images', function() {
+    return ImageCollection.find({"imageType":"profile"});
+});
+
+/**
+ * Publishes artist gallery post images.
+ */
+Meteor.publish('post_images', function() {
+    return ImageCollection.find({"imageType":"post"});
 });
