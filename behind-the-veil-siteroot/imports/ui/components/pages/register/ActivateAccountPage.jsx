@@ -9,6 +9,10 @@ import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
 import { useNavigate } from "react-router-dom";
+import {
+    ArrowRightIcon,
+    EnvelopeIcon,
+} from "@heroicons/react/24/outline";
 
 // TODO: Match code to one sent via email, then update user's activation attribute to True
 const ActivateAccountPage = () => {
@@ -100,7 +104,13 @@ const ActivateAccountPage = () => {
                 <div className="title-text" style={{textAlign: "center", marginTop: "10px"}}>Activate Your Account</div>
 
                 <div style={flexContainerStyle}>
-                    <div style={{width: "80%", textAlign: "center", marginTop: "20px"}}>
+                    <div
+                        style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                        <ArrowRightIcon className="text-green-500 h-10 w-10 mr-1"/>
+                        <EnvelopeIcon className="h-12 w-12"/>
+                    </div>
+
+                    <div style={{width: "80%", textAlign: "center", marginTop: "5px"}}>
                         <TextInput label="Please enter the 6-digit code sent to your email" id="activationCode"
                                    name="activationCode" placeholder="Enter activation code"/>
                     </div>
@@ -110,7 +120,7 @@ const ActivateAccountPage = () => {
                     </div>
 
                     <ActionButton
-                        marginTop="30px"
+                        marginTop="10px"
                         label="Activate"
                         onClick={handleActivation}
                     />

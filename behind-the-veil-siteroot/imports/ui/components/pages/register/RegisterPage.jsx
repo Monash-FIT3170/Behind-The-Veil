@@ -9,7 +9,10 @@ import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
 import { useNavigate } from "react-router-dom";
-
+import {
+    PaintBrushIcon,
+    SparklesIcon,
+} from "@heroicons/react/24/outline";
 /**
  * Page where user can sign up for a new account
  */
@@ -22,17 +25,22 @@ export const RegisterPage = () => {
     };
 
     const AccountTypeOption = ({ accountType, label, onClick }) => {
+        const icon = accountType === 'Artist' ?
+            <PaintBrushIcon className="h-12 w-12 mb-1 mx-auto my-1" /> :
+            <SparklesIcon className="h-12 w-12 mb-1 mx-auto my-1" />;
+
         return (
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <Button
                     type="button"
                     className="bg-secondary-purple hover:bg-secondary-purple-hover outline outline-2 outline-secondary-purple"
-                    style={{ width: "120px", height: "120px", borderRadius: "50%", marginBottom: "10px" }}
+                    style={{ width: "120px", height: "120px", borderRadius: "50%", marginBottom: "10px"}}
                     onClick={() => onClick(accountType)}
                 >
                     {accountType}
+                    {icon}
                 </Button>
-                <label htmlFor={accountType} className="main-text">{label}</label>
+                <label htmlFor={accountType} className="main-text" style={{ width: "70%" }}>{label}</label>
             </div>
         );
     };

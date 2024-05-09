@@ -9,6 +9,9 @@ import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
 import { useNavigate } from "react-router-dom";
+import {
+    CheckCircleIcon,
+} from "@heroicons/react/24/outline";
 
 const AccountActivatedPage = () => {
     const navigate = useNavigate();
@@ -47,15 +50,19 @@ const AccountActivatedPage = () => {
 
             {/* Right side content */}
             <div style={{textAlign: "center", paddingTop: "5px"}}>
-                <div className="title-text" style={{textAlign: "center", marginTop: "40px"}}>Account Activated!</div>
+                <div className="title-text" style={{textAlign: "center", marginTop: "20px"}}>Account Activated!</div>
+
+                <div style={{marginTop: "10px"}}>
+                    <CheckCircleIcon className="text-green-500 h-20 w-20 mx-auto"/>
+                </div>
 
                 <div style={flexContainerStyle}>
-                    <div style={{marginTop: "20px"}}>
-                        <label className="main-text">Please return to the sign in page</label>
+                    <div style={{marginTop: "10px"}}>
+                    <label className="main-text">Please return to the sign in page</label>
                     </div>
 
                     <ActionButton
-                        marginTop="40px"
+                        marginTop="20px"
                         label="Sign In"
                         onClick={() => navigate('/login')}
                     />
