@@ -10,9 +10,9 @@ import ServiceCollection from "/imports/api/collections/services";
 import UserCollection from "/imports/api/collections/users";
 import ImageCollection from "/imports/api/collections/images";
 
-import WhiteBackground from "/imports/ui/components/whiteBackground/WhiteBackground.jsx";
 import PageLayout from "/imports/ui/enums/PageLayout";
-import {Pagination} from "/imports/ui/components/pagination/Pagination.jsx"
+import WhiteBackground from "/imports/ui/components/whiteBackground/WhiteBackground.jsx";
+import Pagination from "/imports/ui/components/pagination/Pagination.jsx"
 import ServiceCard from "/imports/ui/components/card/ServiceCard.jsx";
 import SearchBar from "../../searchBar/searchBar.jsx";
 
@@ -22,11 +22,12 @@ import SearchBar from "../../searchBar/searchBar.jsx";
  */
 export const ServicesPage = () => {
 
+    // default number of items on each page
     const [itemsPerPage, setItemsPerPage] = React.useState(10);
 
     // set up subscription (publication is in the "publication" folder)
     useSubscribe('active_services');
-    useSubscribe('add_artist');
+    useSubscribe('all_artists');
     useSubscribe('service_images');
 
     // get data from db
@@ -39,15 +40,6 @@ export const ServicesPage = () => {
     let imagesData = useTracker(() => {
         return ImageCollection.find().fetch();
     });
-
-    console.log("servicesData");
-    console.log(servicesData);
-
-    console.log("usersData");
-    console.log(usersData);
-
-    console.log("imagesData");
-    console.log(imagesData);
 
     // manual aggregation
     let combined = servicesData;
@@ -71,25 +63,19 @@ export const ServicesPage = () => {
         }
     }
 
-    console.log(combined);
-
-    const serviceCardList = combined.map((service) =>
-        (
-            <ServiceCard
-                key={service._id._str}
-                serviceId={service._id._str}
-                serviceName={service.serviceName}
-                serviceDesc={service.serviceDesc}
-                servicePrice={service.servicePrice}
-                artistUsername={service.artistUsername}
-                serviceImageData={service.serviceImageData}
-                artistAlias={service.artistAlias}
-            ></ServiceCard>
-        ))
+    const serviceCardList = combined.map((service) => (<ServiceCard
+            key={service._id._str}
+            serviceId={service._id._str}
+            serviceName={service.serviceName}
+            serviceDesc={service.serviceDesc}
+            servicePrice={service.servicePrice}
+            artistUsername={service.artistUsername}
+            serviceImageData={service.serviceImageData}
+            artistAlias={service.artistAlias}
+        ></ServiceCard>))
 
     if (document.readyState === "complete") {
-        return (
-            <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
+        return (<WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
 
                 <span className={"title-text text-center"}>Services</span>
 
@@ -122,12 +108,8 @@ export const ServicesPage = () => {
                         />
                     </div>
                 </div>
-
-
-            </WhiteBackground>
-        );
+            </WhiteBackground>);
     }
-
 };
 
 export default ServicesPage;
