@@ -52,6 +52,25 @@ export const App = () => (
               </LoggedOutOnlyRoute>
             }
           />
+          <Route
+            path="/register/createAccount/"
+            element={
+              <LoggedOutOnlyRoute>
+                <CreateAccountPage/>
+              </LoggedOutOnlyRoute>}/>
+          <Route
+            path="/register/activateAccount"
+            element={
+              <LoggedOutOnlyRoute>
+                <ActivateAccountPage/>
+              </LoggedOutOnlyRoute>}/>
+          <Route
+            path="/register/accountActivated"
+            element={
+              <LoggedOutOnlyRoute>
+                <AccountActivatedPage/>
+              </LoggedOutOnlyRoute>}/>
+
           {/*routes that ONLY authenticated users can access*/}
           <Route
             path="/messages"
