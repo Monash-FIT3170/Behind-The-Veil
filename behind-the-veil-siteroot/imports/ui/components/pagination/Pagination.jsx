@@ -1,10 +1,23 @@
+/**
+ * File Description: Pagination component
+ * File version: 1.0
+ * Contributors: Nikki
+ */
+
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useLocation} from "react-router-dom";
 import ReactPaginate from 'react-paginate';
 import classNames from "classnames";
 
+/**
+ * Pagination component that separates a list of JSX elements into multiple "pages" on a single webpage.
+ *
+ * @param {string} externalClassName - custom classes that override the base outer container style
+ * @param {string} internalClassName - custom classes that override the inner pagination style
+ * @param {number} itemsPerPage - number of items per "page" of the pagination
+ * @param {JSX.Element} displayItems - the list items to display (an array of JSX.Element such as <Div>s)
+ */
 export const Pagination = ({externalClassName, internalClassName, itemsPerPage, displayItems}) => {
-    console.log("RELOAD RELOAD RELOAD RELOAD RELOAD RELOAD RELOAD")
 
     // get page from URL first, if there is
     let urlPageNum = 1;
@@ -18,7 +31,6 @@ export const Pagination = ({externalClassName, internalClassName, itemsPerPage, 
             // no proper page number
         }
     }
-    // console.log("urlPageNum: " + urlPageNum)
 
     let navigate = useNavigate();
 
@@ -92,6 +104,7 @@ export const Pagination = ({externalClassName, internalClassName, itemsPerPage, 
                     disabledClassName={"hidden"}
                 />
             </div>
-
         </div>);
 }
+
+export default Pagination;

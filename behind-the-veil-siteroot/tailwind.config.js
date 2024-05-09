@@ -5,7 +5,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        'main-bkg': "url('/Background.svg')",
+        'main-bkg': "url('/Background.svg')"
       },
       colors: {
         "our-black": "#282828",
@@ -25,5 +25,5 @@ module.exports = {
         "bg-gradient-end": "#E5D6FF"
       },
     },
-    plugins: [require("@headlessui/tailwindcss")],
-};
+    plugins: [require("@headlessui/tailwindcss")]
+}};
