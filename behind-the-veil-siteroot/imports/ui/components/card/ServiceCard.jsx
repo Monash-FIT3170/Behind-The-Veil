@@ -21,7 +21,7 @@ import Button from "../button/Button";
  * @param serviceName {string} name of service
  * @param serviceDesc {string} description of service
  * @param servicePrice {int} price of the service
- * @param servicePhotoData service's cover photo data from database
+ * @param serviceImageData service's cover image data from database
  * @param artistUsername {string} Username (e.g. alice_tran1234) of artist that posted the service
  * @param artistAlias {string} name of artist that posted the service
  */
@@ -31,7 +31,7 @@ export const ServiceCard = ({
                                 serviceName,
                                 serviceDesc,
                                 servicePrice,
-                                servicePhotoData,
+                                serviceImageData,
                                 artistUsername,
                                 artistAlias,
                             }) => {
@@ -58,8 +58,8 @@ export const ServiceCard = ({
                 <div className={"hidden sm:flex flex-col items-center justify-center " +
                     "relative min-w-40 min-h-40"}>
                     <img className={"w-full h-3/4 object-cover absolute rounded-[20px]"}
-                         src={servicePhotoData}
-                         alt={"Service photo"}/>
+                         src={serviceImageData}
+                         alt={"Service's cover image"}/>
                 </div>
             </div>
 
