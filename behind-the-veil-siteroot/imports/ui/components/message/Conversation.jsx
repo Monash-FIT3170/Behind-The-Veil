@@ -1,12 +1,13 @@
 /**
  * File Description: Direct Message Conversation Component of Messages Page
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Nishan
  */
 
 import React, { useRef, useState } from 'react';
 import Card from '../card/Card';
 import ProfilePhoto from '../profilePhoto/ProfilePhoto';
+import Input from "../input/Input";
 import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 
 export const Conversation = ({ user }) => {
@@ -24,7 +25,6 @@ export const Conversation = ({ user }) => {
         setTimeout(() => {
             conversationRef?.current.scrollTo({ left: 0, top: heightToScroll, behaviour: "smooth" })
         }, 5)
-
     };
 
     return (
@@ -59,17 +59,16 @@ export const Conversation = ({ user }) => {
 
             <form className="w-full px-8 py-6 " onSubmit={sendMessage}>
                 <div className=' relative w-full flex'>
-                    <input
+                    <Input
                         value={formValue}
                         onChange={(e) => setFormValue(e.target.value)}
                         placeholder="Type a message..."
-                        className=" w-full px-4 py-3 rounded-3xl border border-gray-300 focus:outline-none focus:border-blue-500 pr-40"
+                        className=" w-full rounded-3xl focus:outline-none focus:border-main-purple pr-40"
                     />
                     <button type="submit" disabled={!formValue} className=" px-6 py-2 text-bold bg-secondary-purple hover:bg-secondary-purple-hover rounded-3xl focus:outline-none flex absolute right-1 top-1/2 transform -translate-y-1/2">
                         <PaperAirplaneIcon className='size-6' />
-                        <span className='px-2'>Sent</span>
+                        <span className='px-2'>Send</span>
                     </button>
-
                 </div>
             </form>
         </div>
