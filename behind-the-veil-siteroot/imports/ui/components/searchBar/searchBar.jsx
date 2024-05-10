@@ -1,13 +1,14 @@
 /**
  * File Description: Search Bar React component
- * File version: 1.0
- * Contributors: Lucas
+ * File version: 1.1
+ * Contributors: Lucas, Nikki
  */
 
 import React from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import "./searchBar.css";
+import Input from "../input/Input";
 
 /**
  * General Search Bar component for all required instances of the searching in the app.
@@ -35,19 +36,22 @@ const SearchBar = ({
 
     return (
         // The form which holds the search input field and the reset button
-        <form className="flex h-8" onSubmit={handleSubmit}> 
+        <form className="flex h-12" onSubmit={handleSubmit}>
         {/* The search input field (i.e. the search bar) */}
-            <input
+            <Input
                 {...searchBarProps}
                 type="search"
-                className={classNames("border-2 border-gray-300 border-r-0 rounded rounded-r-none main-text align-top h-8 w-[60vw] sm:w-[361px] pl-[10px]", className)}
+                className={classNames("rounded-r-none border-r-0 w-[250px] sm:w-[35vw] ", className)}
                 placeholder={placeholderName}
                 value={value}
                 onChange={onChange}
             />
         {/* The reset button which resets the value of the search input field to an empty string */}
-            <button type="button" className="flex justify-center items-center bg-white main-text border-2 border-gray-300 border-l-0 rounded rounded-l-none h-8 w-[33px] pl-0.5 hover:bg-gray-300 active:bg-gray-400" onClick={handleReset}>
-                <XMarkIcon className="size-5 stroke-2"></XMarkIcon>
+            <button type="button"
+                    className={"input-base flex justify-center items-center w-12 border-l-0 rounded-l-none"}
+                    onClick={handleReset}>
+                <XMarkIcon className="size-7 stroke-2 rounded-full p-1
+                hover:bg-white-hover active:bg-light-grey-hover transition duration-200 ease-in-out"></XMarkIcon>
             </button>
         </form>
     );
