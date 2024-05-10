@@ -113,7 +113,7 @@ on a case by case basis within individual JSX components.
 */
 @layer components {
     .btn-base {
-        @apply bg-light-grey hover:bg-light-grey-hover transition duration-500
+        @apply bg-light-grey hover:bg-light-grey-hover transition duration-500 ease-in-out
         main-text font-bold py-2 px-4 rounded-full w-fit;
     }
 
@@ -128,7 +128,8 @@ on a case by case basis within individual JSX components.
     }
 
     .input-base {
-        @apply border-2 p-2 border-gray-300 rounded-[6px] main-text h-12 w-[60vw] sm:w-[361px] ;
+        @apply bg-white border-2 p-2 rounded-[6px] h-12 main-text
+        border-light-grey hover:border-secondary-purple transition duration-500 ease-in-out;
     }
 
     .service-details-header-base {

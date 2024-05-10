@@ -4,7 +4,7 @@
  * Contributors: Josh
  */
 
-import React, { forwardRef } from "react";
+import React from "react";
 import classNames from "classnames";
 
 /**
@@ -12,14 +12,15 @@ import classNames from "classnames";
  * forwardRef allows a component to accept a ref from a higher level component and assign it to a child component, see https://react.dev/reference/react/forwardRef
  * @param children children of the button component, e.g. text, icons, other components. See https://react.dev/learn/passing-props-to-a-component#passing-jsx-as-children
  * @param className custom classes that override the base button style, e.g. background color, font, etc
- * @param buttonProps encompasses all other props supplied and applies them to the button
+ * @param type
+ * @param inputProps encompasses all other props supplied to the input, such as type, placeholder, etc
  */
-const Input = ({ children, className, ...buttonProps }) => {
-    const buttonClasses = classNames("btn-base", className);
+const Input = ({ children, className, ...inputProps }) => {
+    const buttonClasses = classNames("input-base", className);
     return (
-        <button ref={ref} className={buttonClasses} type="button" {...buttonProps}>
+        <input className={buttonClasses} {...inputProps}>
             {children}
-        </button>
+        </input>
     );
 };
 
