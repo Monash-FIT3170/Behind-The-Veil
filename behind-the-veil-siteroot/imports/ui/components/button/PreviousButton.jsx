@@ -20,7 +20,7 @@ import {ChevronLeftIcon} from "@heroicons/react/24/outline";
  */
 const PreviousButton = (className) => {
     const buttonClasses = classNames("flex flex-row items-center gap-x-2 " +
-        "bg-transparent hover:bg-transparent text-dark-grey hover:text-our-black", className);
+        "bg-transparent hover:bg-transparent hover:bg-white-hover text-dark-grey hover:text-our-black", className);
     let navigate = useNavigate();
 
     return (
