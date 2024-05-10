@@ -4,7 +4,7 @@
  * Contributors: Laura
  */
 
-import React from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import classNames from "classnames";
 import {useNavigate} from "react-router-dom";
 
@@ -23,19 +23,47 @@ export const CalendarPopup = ({
                                 bookingTime,
                                 bookingLocation,
                                 bookingStatus,
-                                buttonRef
+                                buttonRef,
+                                isPopupOnRight
                             }) => {
 
     // variables to handle routing
     const navigateTo = useNavigate();
+    const ref = useRef(null)
+    const [height, setHeight] = useState(0)
+    const [left, setLeft] = useState(0);
 
     const classes = classNames(className, "flex flex-col justify-between");
 
+    const [isButtonOnRight, setIsButtonOnRight] = useState(false);
+
+    useEffect(() => {
+        if (buttonRef.current) {
+            setIsButtonOnRight(buttonRef.current.offsetLeft > window.innerWidth / 2);
+        }
+    }, [buttonRef]);
+
+    useEffect(() => {
+        console.log(buttonRef.current)
+        console.log(ref.current)
+        if (buttonRef.current && ref.current) {
+            const left = isPopupOnRight
+                ? buttonRef.current.offsetLeft - ref.current.offsetWidth - 10
+                : buttonRef.current.offsetLeft - ref.current.offsetWidth - 10;
+            setLeft(left);
+            console.log("werw")
+        }
+    }, [buttonRef, isPopupOnRight, ref]);
+
     if (!isOpen) return null;
     return (
-        <Card className={classes} style={{ position: "absolute", top: buttonRef.current.offsetTop + buttonRef.current.offsetHeight / 2, left: buttonRef.current.offsetLeft + buttonRef.current.getBoundingClientRect().width + 10 }}>
+        <Card ref={ref} className={classes} style={{ 
+            position: "absolute",
+            top: buttonRef.current ? buttonRef.current.offsetTop + buttonRef.current.offsetHeight / 2 - height / 2 : 0,
+            left: left
+        }}>
             {/* close button */}
-            <div
+            <div    
                 className="fixed top-4 right-4 cursor-pointer transform hover:scale-110 transition-transform"
                 onClick={onClose}
             >
@@ -71,14 +99,14 @@ export const CalendarPopup = ({
                     {/* button to specific booking detail page*/}
                     <Button className="flex flex-row gap-x-2 justify-center items-center
                     bg-light-gray hover:bg-secondary-purple-hover transition duration-500"
-                            onClick={() => navigateTo('/service/' + bookingId)}>
+                            onClick={""}>
                         <CheckCircleIcon className="h-6 w-6 min-h-6 min-w-6"/>
                         Confirm
                     </Button>
                     {/* button to specific booking detail page*/}
                     <Button className="flex flex-row gap-x-2 justify-center items-center
                     bg-white hover:bg-light-gray-hover border-light-gray border-2 transition duration-500"
-                            onClick={() => navigateTo('/service/' + bookingId)}>
+                            onClick={""}>
                         <XCircleIcon className="h-6 w-6 min-h-6 min-w-6"/>
                         Reject
                     </Button>
@@ -97,7 +125,7 @@ export const CalendarPopup = ({
                     {/* button to specific booking detail page*/}
                     <Button className="flex flex-row gap-x-2 justify-center items-center
                     bg-white hover:bg-secondary-purple-hover border-light-gray border-2 transition duration-500"
-                            onClick={() => navigateTo('/service/' + bookingId)}>
+                            onClick={""}>
                         <XCircleIcon className="h-6 w-6 min-h-6 min-w-6"/>
                         Cancel Booking
                     </Button>
