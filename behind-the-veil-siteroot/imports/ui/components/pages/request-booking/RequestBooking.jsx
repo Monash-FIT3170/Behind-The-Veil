@@ -9,7 +9,7 @@ import ServiceDetailsHeader from "../../service-details-header/ServiceDetailsHea
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
-import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
+import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import Input from "../../input/Input";
 import PreviousButton from "../../button/PreviousButton";
 
@@ -147,7 +147,7 @@ const RequestBooking = () => {
                   type="submit"
                 >
                   Next Step
-                  <ArrowRightIcon className="size-6" />
+                  <ArrowRightIcon className="size-6 stroke-2"/>
                 </Button>
               </div>
 

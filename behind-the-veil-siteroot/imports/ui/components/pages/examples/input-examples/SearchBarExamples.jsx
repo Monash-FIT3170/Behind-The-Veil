@@ -37,10 +37,10 @@ const SearchBarExamples = () => {
                 placeholderName="Basic Search Bar"
             ></SearchBar>
             <Button
-                className="bg-secondary-purple hover:bg-secondary-purple-hover rounded-full h-8 w-8 px-1.5 py-0"
-                onClick={handleButtonClickOrSubmit}
-            >
-                <MagnifyingGlassIcon className="size-5 stroke-[3]"/>
+                className="flex justify-center items-center rounded-full h-12 w-12 p-2
+                            bg-secondary-purple hover:bg-secondary-purple-hover"
+                onClick={handleButtonClickOrSubmit}>
+                <MagnifyingGlassIcon className="size-6 stroke-2"/>
             </Button>
         </div>
     );
