@@ -165,7 +165,7 @@ export const HomePage = () => {
                 {/*Background blur*/}
                 <div className="absolute rounded-full z-[19] blur-md
                     border-main-blue border-2
-                    bg-gradient-to-r from-bg-gradient-end/75 to-bg-gradient-start/75
+                    bg-gradient-to-r from-bg-gradient-end/85 to-bg-gradient-start/85
                     left-[16%] top-[42.5%] w-[68%] h-[12%]
                     sm:top-[54%] sm:h-[12%] sm:blur-md
                     md:top-[52.5%] md:h-[15%] md:blur-lg

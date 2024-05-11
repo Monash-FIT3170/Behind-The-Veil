@@ -24,6 +24,9 @@
         padding: 0;
         margin: 0;
     }
+    *:focus {
+        @apply outline-secondary-purple;
+    }
 
     /* base font styles */
     .main-text {
