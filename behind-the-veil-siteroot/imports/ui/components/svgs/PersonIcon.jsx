@@ -1,3 +1,9 @@
+/**
+ * File Description: person icon SVG
+ * File version: 1.0
+ * Contributors: Kyle
+ */
+
 import React from 'react';
 
 const PersonIcon = () => {

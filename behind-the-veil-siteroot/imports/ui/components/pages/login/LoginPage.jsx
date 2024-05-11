@@ -11,6 +11,7 @@ import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
 import PersonIcon from "../../svgs/PersonIcon.jsx";
 import KeyIcon from "../../svgs/KeyIcon.jsx";
+import SignInImage from '../../images/SignInImage.jsx';
 
 /**
  * Page where user can sign in to their account
@@ -31,7 +32,7 @@ export const LoginPage = () => {
 
                     <div className="title-text text-secondary-purple-hover" style={{width: "400px"}}>Bridal Makeup & Services</div>
 
-                    <img src="../../images/SignIn.png" alt="SignIn"></img>
+                    <SignInImage></SignInImage>
 
                 </div>
 
