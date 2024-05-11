@@ -8,6 +8,7 @@ import React from "react";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout.tsx";
 import Tabs from "../../tabs/Tabs.jsx";
+import ProfilePhoto from "../../profilePhoto/ProfilePhoto.jsx";
 import Button from "../../button/Button.jsx";
 import { PlusIcon, Cog8ToothIcon } from "@heroicons/react/24/outline";
 /**
