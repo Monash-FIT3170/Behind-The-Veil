@@ -11,6 +11,7 @@ import PageLayout from "../../../enums/PageLayout";
 //import Card from "../card/Card";
 import Button from "../../button/Button";
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
+import {CheckIcon} from "@heroicons/react/24/outline"
 
 /**
  * Page for user to cancel a booking
@@ -51,7 +52,11 @@ const CancelBooking = () => {
         <div className="flex gap-10">
           {/* button */}
           <div className="flex flex-col gap-4 grow">
-            <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2">Cancel Booking</Button>
+            <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2">
+                <CheckIcon className="h-6 w-6 min-h-6 min-w-6"/>
+                Confirm Cancellation
+            </Button>
+
           </div>
         </div>
 
