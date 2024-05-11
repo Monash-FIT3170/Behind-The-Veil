@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import FormOutput from "./FormOutput";
 import "./booking.css";
-
 // Array of days for date formatting
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -19,7 +18,7 @@ const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
  * Component for displaying booking summary and allowing continuation to the next step.
  */
 const BookingSummary = () => {
-
+    const tipText = "Full deposit for a service is required. If the booking is cancelled or rejected, the full fee will be refunded.";
     /**
      * Function to calculate start and end dates based on input date, time, and service duration.
      * @param {string} dateString - Date string in format 'YYYY-MM-DD'.
@@ -99,10 +98,14 @@ const BookingSummary = () => {
                 <div className="large-text">Booking Summary</div>
                 {/* Display booking details */}
                 {Object.keys(queryData()).map((key, index) => {
-                    return <FormOutput key={index} textColor="text-dark-grey" haveHelpText={false} label={key} input={queryData()[key]}></FormOutput>;
+                    let value = queryData()[key]
+                    if (key === 'Date') {
+                        value = value[2]
+                    }
+                    return <FormOutput key={index} textColor="text-dark-grey" haveHelpText={false} label={key} input={value}></FormOutput>;
                 })}
                 {/* Display deposit required */}
-                <FormOutput className='deposit-input' key={queryData().length} label='Deposit Required' input='$60.00' textColor="text-cancelled-colour" haveHelpText={true}/>
+                <FormOutput className='deposit-input' key={queryData().length} label='Deposit Required' input='$60.00' textColor="text-cancelled-colour" haveHelpText={true} tipText={tipText}/>
                 <br />
                 {/* Continue button */}
                 <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2" type="submit" onClick={handleSubmit}>

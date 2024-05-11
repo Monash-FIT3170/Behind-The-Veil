@@ -1,30 +1,34 @@
 /**
- * File Description: Booking form component
+ * File Description: Form output component
  * File version: 1.0
  * Contributors: Neth
  */
 
 import React from "react";
 import QuestionMarkCircleIcon from "@heroicons/react/16/solid/QuestionMarkCircleIcon";
+import ToolTip from "../../toolTip/ToolTip";
 
-const FormOutput = ({ label, input, textColor, haveHelpText}) => {
-
-    if (label === 'Date') {
-        input = input[2]
-    }
-
+/**
+ * FormOutput component displays a label and input field, with an optional tooltip.
+ * @param {string} label - The label for the input field.
+ * @param {string} input - The input value.
+ * @param {string} textColor - The color of the label text.
+ * @param {boolean} haveHelpText - Indicates if the tooltip should be displayed.
+ * @param {string} tipText - The text to be displayed in the tooltip.
+ * @returns {JSX.Element} - The rendered FormOutput component.
+ */
+const FormOutput = ({ label, input, textColor, haveHelpText, tipText}) => {
     return (
         <div className="booking-summary-input text">
-            <span className={`label ${textColor}`}>
+            <span className={`label ${textColor} font-semibold`}>
                 {label}
             </span>
-            <span className="input">
+            <span className="input font-semibold">
                 {input}
             </span>
             {haveHelpText && (
                 <span className="tooltip content-center">
-                    <QuestionMarkCircleIcon className="tooltip-icon size-4 text-hyperlink-colour"/>
-                    <div className="booking-tooltip border border-main-blue rounded-lg mt-1 px-4 py-2 bg-glass-panel-background shadow-lg absolute w-96">Full deposit for a service is required. If the booking is cancelled or rejected, the full fee will be refunded.</div>
+                    <ToolTip tipText={tipText} tipIcon={QuestionMarkCircleIcon}  type="tooltip"/>
                 </span>
             )}
         </div>
