@@ -85,5 +85,4 @@ export const App = () => (
       </main>
     </Router>
   </div>
->>>>>>> develop
 );
