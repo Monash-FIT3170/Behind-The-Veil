@@ -14,6 +14,7 @@ import {
     PaintBrushIcon,
     SparklesIcon,
 } from "@heroicons/react/24/outline";
+import "./home.css";
 
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
@@ -144,34 +145,27 @@ export const HomePage = () => {
             </div>
 
             {/* Container for the title text on the home page (positioned absolute) */}
-            <div className={"flex flex-row items-center justify-center w-full"}>
-                <div
-                    className={"absolute z-30 main-text text-white text-xl md:text-2xl lg:text-3xl xl:text-5xl " +
-                        "left-[16%] top-[45%] w-[68%] " +
-                        "sm:left-[16%] sm:top-[56.5%] sm:w-[68%] " +
-                        "md:left-[16%] md:top-[56%] md:w-[68%] " +
-                        "lg:left-[16%] lg:top-[52.5%] lg:w-[68%] " +
-                        "xl:left-[20%] xl:top-[54%] xl:w-[60%] "
-                    }>
-                    <p className="text-center"> Make Yourself Perfect</p>
-                    <p className="inline-flex items-center justify-center text-center gap-x-5 h-1/2 w-full">
-                        <SparklesIcon
-                            className="size-6 md:size-8 lg:size-10 xl:size-14 text-anything-yellow fill-anything-yellow"/>
-                        Behind The Veil
-                        <SparklesIcon
-                            className="size-6 md:size-8 lg:size-10 xl:size-14 text-anything-yellow fill-anything-yellow"/>
-                    </p>
-                </div>
-                {/*Background blur*/}
-                <div className="absolute rounded-full z-[19] blur-md
-                    border-main-blue border-2
-                    bg-gradient-to-r from-bg-gradient-end/85 to-bg-gradient-start/85
-                    left-[16%] top-[42.5%] w-[68%] h-[12%]
-                    sm:top-[54%] sm:h-[12%] sm:blur-md
-                    md:top-[52.5%] md:h-[15%] md:blur-lg
-                    lg:top-[46.5%] lg:h-[22%] lg:blur-xl
-                    xl:top-[47.5%] xl:h-[25%] xl:blur-2xl">
-                </div>
+            <div
+                className="absolute rounded-[2rem] z-20 main-text text-white top-[45%] text-xl  w-[95%] left-[2.5%]
+            sm:top-[50%] sm:left-[20%] sm:w-[60%] 
+            md:top-[55%] md:text-2xl
+            lg:h-[15%] lg:text-3xl lg:top-[50%]
+            xl:left-[25%] xl:w-[50%] xl:h-[20%] xl:text-5xl blur-effect"
+            >
+                <p className="text-center h-1/2 pt-2 lg:pt-4">
+                    Make Yourself Perfect
+                </p>
+                <p className="inline-flex items-center justify-center text-center gap-x-5 h-1/2 w-full bottom-0 pb-2 lg:pb-4">
+                    <SparklesIcon
+                        className="size-6 md:size-8 lg:size-10 xl:size-14"
+                        fill="white"
+                    />
+                    Behind The Veil
+                    <SparklesIcon
+                        className="size-6 md:size-8 lg:size-10 xl:size-14"
+                        fill="white"
+                    />
+                </p>
             </div>
 
             {/* Container for the search bar, drop down and search button */}

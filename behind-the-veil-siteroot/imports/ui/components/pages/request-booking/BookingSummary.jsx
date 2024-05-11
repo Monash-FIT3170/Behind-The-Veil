@@ -58,11 +58,13 @@ const BookingSummary = () => {
             <div className="flex flex-col gap-6 xl:px-40">
                 <div className="large-text">Booking Summary</div>
                 {
+                    // key and key value
                     Object.keys(queryData()).map((key, index) => {
-                        return <FormOutput key={index} label={key} input={queryData()[key]}></FormOutput>
-                    })
+                        // key = "bride name" and input = "jane doe"
+                        return <FormOutput key={index} textColor="text-dark-grey" label={key} input={queryData()[key]}></FormOutput>
+                    }) // <div class="some-name" id="id2" style="display: none;"></div>
                 }
-                <FormOutput className='deposit-input' key={queryData().length} label='Deposit Required' input='$60.00' deposit="text-cancelled-colour" />
+                <FormOutput className='deposit-input' key={queryData().length} label='Deposit Required' input='$60.00' textColor="text-cancelled-colour" />
                 <br></br>
                 <Button
                 className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"

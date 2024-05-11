@@ -6,10 +6,10 @@
 
 import React from "react";
 
-const FormOutput = ({ label, input, deposit}) => {
+const FormOutput = ({ label, input, textColor}) => {
     return (
         <div className="booking-summary-input text">
-            <span className={`label ${deposit} text-dark-grey`}>
+            <span className={`label ${textColor}`}>
                 {label}
             </span>
             <span className="input">

@@ -1,0 +1,6 @@
+.blur-effect {
+    border-radius: 86px;
+    opacity: 0.9;
+    background: var(--background-gradient, linear-gradient(90deg, #BBCAFE 41.37%, #E5D6FF 100%));
+    filter: blur(20.799999237060547px);
+}
