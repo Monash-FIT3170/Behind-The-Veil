@@ -48,7 +48,7 @@ export const ArtistServiceArea = () => {
 
             {/* Save changes button*/}
             <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2">
-                <CheckIcon className="size-6"/>
+                <CheckIcon className="size-6 stroke-2"/>
                 Save Changes
             </Button>
         </div>

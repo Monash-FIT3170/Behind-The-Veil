@@ -73,7 +73,7 @@ export const ServiceCard = ({
                 <Button className="flex flex-row gap-x-2 justify-center items-center w-4/5 md:w-1/2 min-w-40
                 bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500"
                         onClick={() => navigateTo('/service/' + serviceId)}>
-                    <CalendarDaysIcon className="h-6 w-6 min-h-6 min-w-6"/>
+                    <CalendarDaysIcon className="size-6 stroke-2"/>
                     View Service
                 </Button>
             </div>

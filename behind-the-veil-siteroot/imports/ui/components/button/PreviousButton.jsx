@@ -25,7 +25,7 @@ const PreviousButton = (className) => {
 
     return (
         <Button className={buttonClasses} type="button" onClick={() => navigate(-1)}>
-            <ChevronLeftIcon className={"h-7 w-7 cursor-pointer"}/> Prev
+            <ChevronLeftIcon className={"size-7 stroke-2 cursor-pointer"}/> Prev
         </Button>
     );
 };
