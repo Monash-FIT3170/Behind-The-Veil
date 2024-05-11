@@ -44,7 +44,7 @@ const CancelBooking = () => {
 
         {/* cancellation reason */}
         <div className="flex flex-col gap-1">
-          <label for="cancellation-input" className="main-text text-our-black">Reason of cancellation</label>
+          <label htmlFor="cancellation-input" className="main-text text-our-black">Reason of cancellation</label>
             <textarea id="cancellation-input" className="border-light-grey border-2 p-2 rounded main-text" placeholder="Enter Your Reason" rows={4} cols={40} />
         </div>
 
@@ -53,7 +53,7 @@ const CancelBooking = () => {
           {/* button */}
           <div className="flex flex-col gap-4 grow">
             <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2">
-                <CheckIcon className="h-6 w-6 min-h-6 min-w-6"/>
+                <CheckIcon className="size-6 stroke-2"/>
                 Confirm Cancellation
             </Button>
 
