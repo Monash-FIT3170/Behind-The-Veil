@@ -16,7 +16,6 @@ import Pagination from "/imports/ui/components/pagination/Pagination.jsx"
 import ServiceCard from "/imports/ui/components/card/ServiceCard.jsx";
 import SearchBar from "../../searchBar/searchBar.jsx";
 
-
 /**
  * Page of a list of Service cards for users to see
  */
