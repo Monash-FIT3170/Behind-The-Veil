@@ -5,3 +5,6 @@
 .booking-summary-input {
     display: flex;
 }
+.tooltip-icon {
+    margin-left: 8px;
+}

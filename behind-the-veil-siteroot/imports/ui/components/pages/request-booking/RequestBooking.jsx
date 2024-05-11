@@ -53,7 +53,6 @@ const RequestBooking = () => {
     // pass the data to the next page via the url
     const query = new URLSearchParams(inputs).toString();
     navigateTo(`/booking-summary?${query}`);
-
   }
 
   // calculate available times that the user can select, based on a date
