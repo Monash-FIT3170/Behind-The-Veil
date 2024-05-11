@@ -22,9 +22,9 @@ const FormOutput = ({ label, input, textColor, haveHelpText}) => {
                 {input}
             </span>
             {haveHelpText && (
-                <span className="tooltip-icon content-center" title="Tooltip text">
-                    <QuestionMarkCircleIcon className="size-4 text-hyperlink-colour"/>
-                    <span></span>
+                <span className="tooltip content-center">
+                    <QuestionMarkCircleIcon className="tooltip-icon size-4 text-hyperlink-colour"/>
+                    <div className="booking-tooltip border border-main-blue rounded-lg mt-1 px-4 py-2 bg-glass-panel-background shadow-lg absolute w-96">Full deposit for a service is required. If the booking is cancelled or rejected, the full fee will be refunded.</div>
                 </span>
             )}
         </div>
