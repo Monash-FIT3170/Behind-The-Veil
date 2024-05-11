@@ -17,8 +17,8 @@ export const Conversation = ({user}) => {
     const [messages, setMessages] = useState([]);
     const conversationRef = useRef(null);
 
-    const sendMessage = (e) => {
-        e.preventDefault();
+    const sendMessage = (event) => {
+        event.preventDefault();
         if (formValue.trim() === '') return;
         setMessages(prevMessages => [...prevMessages, {text: formValue, sender: 'me'}]);
         setFormValue('');
@@ -66,7 +66,7 @@ export const Conversation = ({user}) => {
                 <div className='relative w-full flex'>
                     <Input
                         value={formValue}
-                        onChange={(e) => setFormValue(e.target.value)}
+                        onChange={(event) => setFormValue(event.target.value)}
                         placeholder="Type a message..."
                         className="w-full rounded-3xl focus:outline-none focus:border-main-purple pr-40"
                     />

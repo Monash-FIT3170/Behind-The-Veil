@@ -59,8 +59,8 @@ export const HomePage = () => {
      * this function is used when the user wants to submit the value in the search bar, either by enter key or a button
      * Alter this function with whatever data manipulation is needed to be done with the input value
      */
-    const handleButtonClickOrSubmit = (e) => {
-        e.preventDefault(); // This line is important as it prevents the automatic submit for forms which reloads the page
+    const handleButtonClickOrSubmit = (event) => {
+        event.preventDefault(); // This line is important as it prevents the automatic submit for forms which reloads the page
         if (searchType === "services") {
             navigate("/services")
         } else if (searchType === "artists") {
@@ -69,12 +69,12 @@ export const HomePage = () => {
     };
 
     // this function updates the state when input changes
-    const handleInputChange = (e) => {
-        setInputValue(e.target.value);
+    const handleInputChange = (event) => {
+        setInputValue(event.target.value);
     };
 
-    const handleSearchTypeChange = (e) => {
-        setSearchType(e.target.value);
+    const handleSearchTypeChange = (event) => {
+        setSearchType(event.target.value);
     };
 
     return (

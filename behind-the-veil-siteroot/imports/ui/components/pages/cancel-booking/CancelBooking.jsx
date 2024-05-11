@@ -4,14 +4,13 @@
  * Contributors: Anusha Yadav
  */
 
-import React from "react";
+import React, {useState} from "react";
 import ServiceDetailsHeader from "../../service-details-header/ServiceDetailsHeader";
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
-//import Card from "../card/Card";
 import Button from "../../button/Button";
-import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import {CheckIcon} from "@heroicons/react/24/outline"
+import BackButton from "../../button/BackButton";
 
 /**
  * Page for user to cancel a booking
@@ -25,12 +24,20 @@ const CancelBooking = () => {
     price: "$120"
   }
 
+  const [inputReason, setInputReason] = useState("");
+
+  function handleInputChange(event) {
+      setInputReason(event.target.value);
+  }
+
+  function handleCancelBooking(event) {
+      event.preventDefault()
+      alert("Cancelling booking for reason: " + inputReason);
+  }
+
   return (
     <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-      <Button className="bg-transparent text-dark-grey flex gap-2">
-        <ArrowLeftIcon className="size-6" />
-        Back
-      </Button>
+      <BackButton />
 
       {/* Main container for content */}
       <div className="flex flex-col gap-4 xl:px-40">
@@ -45,21 +52,23 @@ const CancelBooking = () => {
         {/* cancellation reason */}
         <div className="flex flex-col gap-1">
           <label htmlFor="cancellation-input" className="main-text text-our-black">Reason of cancellation</label>
-            <textarea id="cancellation-input" className="border-light-grey border-2 p-2 rounded main-text" placeholder="Enter Your Reason" rows={4} cols={40} />
+            <textarea id="cancellation-input"
+                      className="input-base h-48"
+                      placeholder="Enter Your Reason"
+                      onChange={handleInputChange}
+                      rows={4} cols={40} />
         </div>
 
         {/* button */}
         <div className="flex gap-10">
           {/* button */}
           <div className="flex flex-col gap-4 grow">
-            <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2">
+            <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2" onClick={handleCancelBooking}>
                 <CheckIcon className="size-6 stroke-2"/>
-                Confirm Cancellation
+                Cancel Booking
             </Button>
-
           </div>
         </div>
-
       </div>
 
     </WhiteBackground>

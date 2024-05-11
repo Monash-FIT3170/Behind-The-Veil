@@ -31,8 +31,9 @@ export const LoginPage = () => {
         setInputs(i => ({...i, [name]: value}))
     }
 
-    function handleSubmit(e) {
+    function handleSubmit(event) {
         // todo: authentication
+        event.preventDefault();
         alert("login with email: " + inputs.username + " and password: " + inputs.password);
 
     }

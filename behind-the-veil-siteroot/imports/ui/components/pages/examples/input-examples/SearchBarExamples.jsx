@@ -18,14 +18,14 @@ const SearchBarExamples = () => {
      * Alter this function  with whatever data manipulation is needed to be done with the input value
      */
 
-    const handleButtonClickOrSubmit = (e) => {
-        e.preventDefault(); // This line is important as it prevents the automatic submit for forms which reloads the page
+    const handleButtonClickOrSubmit = (event) => {
+        event.preventDefault(); // This line is important as it prevents the automatic submit for forms which reloads the page
         console.log(inputValue);
     };
 
     // this function updates the inputValue state when input changes
-    const handleInputChange = (e) => {
-        setInputValue(e.target.value);
+    const handleInputChange = (event) => {
+        setInputValue(event.target.value);
     };
 
     return (
