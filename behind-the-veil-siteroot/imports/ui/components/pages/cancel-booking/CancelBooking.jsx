@@ -51,7 +51,7 @@ const CancelBooking = () => {
         <div className="flex gap-10">
           {/* button */}
           <div className="flex flex-col gap-4 grow">
-            <Button className="bg-gradient-to-r from-bg-gradient-start to-bg-gradient-end">Cancel Booking</Button>
+            <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2">Cancel Booking</Button>
           </div>
         </div>
 
