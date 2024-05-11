@@ -25,7 +25,7 @@
         margin: 0;
     }
     *:focus {
-        @apply outline-secondary-purple;
+        @apply outline-secondary-purple-hover;
     }
 
     /* base font styles */
