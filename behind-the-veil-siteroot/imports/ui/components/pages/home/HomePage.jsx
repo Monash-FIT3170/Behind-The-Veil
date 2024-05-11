@@ -14,7 +14,6 @@ import {
     PaintBrushIcon,
     SparklesIcon,
 } from "@heroicons/react/24/outline";
-import "./home.css";
 
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
@@ -146,11 +145,11 @@ export const HomePage = () => {
 
             {/* Container for the title text on the home page (positioned absolute) */}
             <div
-                className="absolute rounded-[2rem] z-20 main-text text-white top-[45%] text-xl  w-[95%] left-[2.5%]
-            sm:top-[50%] sm:left-[20%] sm:w-[60%] 
+                className="absolute rounded-[2rem] bg-gradient-to-r from-purple-400/40 to-indigo-400/40 backdrop-filter backdrop-blur-md z-20 main-text text-white top-[45%] text-xl  w-[95%] left-[2.5%]
+            sm:top-[50%] sm:left-[20%] sm:w-[60%]
             md:top-[55%] md:text-2xl
             lg:h-[15%] lg:text-3xl lg:top-[50%]
-            xl:left-[25%] xl:w-[50%] xl:h-[20%] xl:text-5xl blur-effect"
+            xl:left-[25%] xl:w-[50%] xl:h-[20%] xl:text-5xl"
             >
                 <p className="text-center h-1/2 pt-2 lg:pt-4">
                     Make Yourself Perfect
