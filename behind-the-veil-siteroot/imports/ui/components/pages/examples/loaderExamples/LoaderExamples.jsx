@@ -26,42 +26,53 @@ import Loader21 from "react-spinners/SyncLoader";
  * Contributors: Nikki
  */
 import React from "react";
+import Loader from "/imports/ui/components/loader/Loader";
 
 /**
  * General loader component.
  */
 const LoaderExamples = () => {
     return (<div className="flex flex-col gap-3">
-            <div className="large-text underline">Example Loaders (we should pick one/two):</div>
-            <div className={"flex flex-row items-center justify-center flex-wrap gap-x-48 gap-y-32"}>
-                <Loader1/>
-                <Loader2/>
-                <div className={"flex flex-col items-center justify-center"}>
-                    <Loader3/>
-                    <div className={"w-56"}>
-                        used for service page loading
-                    </div>
+        <div className="large-text underline">Example Loaders:</div>
+
+        <div className="main-text underline">Our current loader:</div>
+        <Loader
+            loadingText={"any custom text here . . ."}
+            isLoading={true}
+            size={100}
+            speed={1.5}
+        />
+
+        <div className="main-text underline">All Loader types (we should pick one/two):</div>
+        <div className={"flex flex-row items-center justify-center flex-wrap gap-x-48 gap-y-32"}>
+            <Loader1/>
+            <Loader2/>
+            <div className={"flex flex-col items-center justify-center"}>
+                <Loader3/>
+                <div className={"w-56"}>
+                    used for service page loading
                 </div>
-                <Loader4/>
-                <Loader5/>
-                <Loader6/>
-                <Loader7/>
-                <Loader8/>
-                <Loader9/>
-                <Loader10/>
-                <Loader11/>
-                <Loader12/>
-                <Loader13/>
-                <Loader14/>
-                <Loader15/>
-                <Loader16/>
-                <Loader17/>
-                <Loader18/>
-                <Loader19/>
-                <Loader20/>
-                <Loader21/>
             </div>
-        </div>);
+            <Loader4/>
+            <Loader5/>
+            <Loader6/>
+            <Loader7/>
+            <Loader8/>
+            <Loader9/>
+            <Loader10/>
+            <Loader11/>
+            <Loader12/>
+            <Loader13/>
+            <Loader14/>
+            <Loader15/>
+            <Loader16/>
+            <Loader17/>
+            <Loader18/>
+            <Loader19/>
+            <Loader20/>
+            <Loader21/>
+        </div>
+    </div>);
 };
 
 export default LoaderExamples;

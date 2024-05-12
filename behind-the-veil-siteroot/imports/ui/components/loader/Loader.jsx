@@ -18,17 +18,10 @@ import classNames from "classnames";
  * @param {number} speed - speed of the loader's animation
  * @param loaderProps - other properties to pass into the loader
  */
-const Loader = ({className, loadingText, isLoading, size, speed,...loaderProps}) => {
+const Loader = ({className, loadingText, isLoading, size, speed, ...loaderProps}) => {
 
     const loaderClasses = classNames("flex flex-col items-center justify-center gap-y-10", className);
 
-    // text that is displayed under the moving loading icon
-    const [text, setText] = React.useState(loadingText);
-
-    if (!loadingText) {
-        // if not given a loader text, put in default loader text
-        setText("Loading . . .");
-    }
     return (<div className={loaderClasses}>
             <LoaderComponent
                 speedMultiplier={speed}
@@ -37,7 +30,7 @@ const Loader = ({className, loadingText, isLoading, size, speed,...loaderProps})
                 size={size}
                 {...loaderProps}
             />
-            <div className={"main-text"}> {text}</div>
+            <div className={"main-text"}> {loadingText ? loadingText : "Loading . . ."}</div>
         </div>
     );
 };

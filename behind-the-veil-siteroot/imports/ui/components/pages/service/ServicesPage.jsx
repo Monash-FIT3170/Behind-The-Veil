@@ -4,7 +4,7 @@
  * Contributors: Nikki
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {useSubscribe, useTracker} from "meteor/react-meteor-data"
 
 import ServiceCollection from "/imports/api/collections/services";
@@ -31,6 +31,7 @@ export const ServicesPage = () => {
     const isLoadingService = useSubscribe('active_services');
     const isLoadingArtists = useSubscribe('all_artists');
     const isLoadingImages = useSubscribe('service_images');
+    const isLoading = isLoadingService() || isLoadingArtists() || isLoadingImages();
 
     // get data from db
     let servicesData = useTracker(() => {
@@ -75,12 +76,6 @@ export const ServicesPage = () => {
         serviceImageData={service.serviceImageData}
         artistAlias={service.artistAlias}
     ></ServiceCard>))
-
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        setIsLoading(isLoadingService() || isLoadingArtists() || isLoadingImages());
-    }, [isLoadingService, isLoadingArtists, isLoadingImages]);
 
     if (document.readyState === "complete" && !isLoading) {
         return (
