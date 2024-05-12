@@ -13,6 +13,7 @@ import {XCircleIcon, ClockIcon, MapPinIcon, DocumentMagnifyingGlassIcon, CheckCi
 import Card from "../../components/card/Card";
 import Button from "../../components/button/Button";
 import { BookingStatus } from "../../enums/BookingStatus"
+import { useFloating, useInteractions } from "@floating-ui/react";
 
 export const CalendarPopup = ({
                                 isOpen, 
@@ -23,8 +24,7 @@ export const CalendarPopup = ({
                                 bookingTime,
                                 bookingLocation,
                                 bookingStatus,
-                                buttonRef,
-                                isPopupOnRight
+                                buttonRef
                             }) => {
 
     // variables to handle routing
@@ -32,35 +32,43 @@ export const CalendarPopup = ({
     const ref = useRef(null)
     const [height, setHeight] = useState(0)
     const [left, setLeft] = useState(0);
-
+    const [top, setTop] = useState(0);
     const classes = classNames(className, "flex flex-col justify-between");
 
-    const [isButtonOnRight, setIsButtonOnRight] = useState(false);
+    const { floatingStyles, context } = useFloating({
+        open: isOpen,
+        onOpenChange: onClose
+    });
 
+    const {
+        getReferenceProps,
+        getFloatingProps
+    } = useInteractions([context]);
+    
     useEffect(() => {
-        if (buttonRef.current) {
-            setIsButtonOnRight(buttonRef.current.offsetLeft > window.innerWidth / 2);
-        }
+    if (buttonRef.current) {
+        const buttonRect = buttonRef.current.getBoundingClientRect();
+        setLeft(buttonRect.left);
+        setTop(buttonRect.bottom);
+    }
     }, [buttonRef]);
 
     useEffect(() => {
-        console.log(buttonRef.current)
-        console.log(ref.current)
-        if (buttonRef.current && ref.current) {
-            const left = isPopupOnRight
-                ? buttonRef.current.offsetLeft - ref.current.offsetWidth - 10
-                : buttonRef.current.offsetLeft - ref.current.offsetWidth - 10;
-            setLeft(left);
-            console.log("werw")
-        }
-    }, [buttonRef, isPopupOnRight, ref]);
+    if (buttonRef.current && ref.current) {
+        const left = isPopupOnRight 
+        ? buttonRef.current.offsetLeft - ref.current.offsetWidth - 10
+        : buttonRef.current.offsetLeft - ref.current.offsetWidth - 10;
+        setLeft(left);
+    }
+    }, [buttonRef]);
 
     if (!isOpen) return null;
     return (
-        <Card ref={ref} className={classes} style={{ 
+        <Card className={classes} style={{ 
+            ...floatingStyles,
             position: "absolute",
-            top: buttonRef.current ? buttonRef.current.offsetTop + buttonRef.current.offsetHeight / 2 - height / 2 : 0,
-            left: left
+            left: left,
+            top: top
         }}>
             {/* close button */}
             <div    
@@ -99,14 +107,14 @@ export const CalendarPopup = ({
                     {/* button to specific booking detail page*/}
                     <Button className="flex flex-row gap-x-2 justify-center items-center
                     bg-light-gray hover:bg-secondary-purple-hover transition duration-500"
-                            onClick={""}>
+                        onClick={() => {}}>
                         <CheckCircleIcon className="h-6 w-6 min-h-6 min-w-6"/>
                         Confirm
                     </Button>
                     {/* button to specific booking detail page*/}
                     <Button className="flex flex-row gap-x-2 justify-center items-center
                     bg-white hover:bg-light-gray-hover border-light-gray border-2 transition duration-500"
-                            onClick={""}>
+                            onClick={() => {}}>
                         <XCircleIcon className="h-6 w-6 min-h-6 min-w-6"/>
                         Reject
                     </Button>
@@ -125,7 +133,7 @@ export const CalendarPopup = ({
                     {/* button to specific booking detail page*/}
                     <Button className="flex flex-row gap-x-2 justify-center items-center
                     bg-white hover:bg-secondary-purple-hover border-light-gray border-2 transition duration-500"
-                            onClick={""}>
+                            onClick={() => {}}>
                         <XCircleIcon className="h-6 w-6 min-h-6 min-w-6"/>
                         Cancel Booking
                     </Button>

@@ -52,7 +52,6 @@ const CardExamples = () => {
                     isPopupOnRight={false}
                 ></CalendarPopup>
             </div>
-
         </div>
     )
 }
