@@ -4,10 +4,9 @@
  * Contributors: Kyle, Nikki
  */
 
-import React from 'react';
-import { NavLink } from "react-router-dom";
+import React, {useState} from 'react';
+import {NavLink, useNavigate} from "react-router-dom";
 import { Meteor } from 'meteor/meteor';
-import { useNavigate } from "react-router-dom";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
@@ -106,8 +105,11 @@ export const LoginPage = () => {
                             <input type="password" placeholder="Password" name="password" id="password" style={{ height: "30px", width: "300px", paddingLeft: '40px', outline: "1px solid lightgray", borderRadius: "3px" }} />
                         </div>
 
-                        <div className="text-hyperlink-colour underline" style={{ cursor: "pointer", marginLeft: "auto", marginRight: "75px" }}>Forgot password?</div>
-
+                        <NavLink
+                            className="text-hyperlink-colour underline cursor-pointer ml-auto mr-[10%] right-0"
+                            to={"/forgot-password/email-verify"}>
+                            Forgot password?
+                        </NavLink>
                     </div>
                     <div style={{ alignItems: "center", display: "flex", flexDirection: "column", gap: "10px", marginTop: "50px" }}>
 

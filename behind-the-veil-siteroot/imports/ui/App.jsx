@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 
 import NavigationBar from "./components/navigationBar/NavigationBar.jsx";
 import LoggedInOnlyRoute from "./components/protectedRoute/LoggedInOnlyRoute.jsx";
@@ -18,6 +18,9 @@ import SpecificServicePage from "./components/pages/service/SpecificServicePage.
 import ArtistServiceArea from "./components/pages/artist/ArtistServiceArea.jsx";
 import ArtistProfilePage from "./components/pages/profile/ArtistProfilePage.jsx";
 import CancelBooking from './components/pages/cancel-booking/CancelBooking.jsx';
+import ForgotPasswordPage from "./components/pages/forgotPassword/ForgotPasswordPage";
+import ResetPasswordPage from "./components/pages/forgotPassword/ResetPasswordPage";
+import ResetCompletePage from "./components/pages/forgotPassword/ResetCompletePage";
 import AccountActivatedPage from "./components/pages/register/AccountActivatedPage";
 import CreateAccountPage from "./components/pages/register/CreateAccountPage";
 import ActivateAccountPage from "./components/pages/register/ActivateAccountPage";
@@ -104,11 +107,55 @@ export const App = () => (
           {/* Define other routes that you need*/}
           <Route path="/service-area" element={<ArtistServiceArea />} />
 
-          {/* TODO:.... */}
-          <Route path="/cancel-booking" element={<CancelBooking/>}/>
+                    <Route path="/services" element={<ServicesPage/>}/>
+                    <Route path="/service/:serviceId" element={<SpecificServicePage/>}/>
 
-        </Routes>
-      </main>
-    </Router>
-  </div>
+                    <Route path="/artists" element={<ArtistsPage/>}/>
+
+                    {/*routes that NOT authenticated users can access*/}
+                    <Route
+                        path="/login"
+                        element={<LoggedOutOnlyRoute><LoginPage/></LoggedOutOnlyRoute>}
+                    />
+                    <Route
+                        path="/forgot-password/email-verify"
+                        element={<LoggedOutOnlyRoute><ForgotPasswordPage/></LoggedOutOnlyRoute>}
+                    />
+                    <Route
+                        path="/forgot-password/reset-password"
+                        element={<LoggedOutOnlyRoute><ResetPasswordPage/></LoggedOutOnlyRoute>}
+                    />
+
+                    <Route
+                        path="/forgot-password/reset-complete"
+                        element={<LoggedOutOnlyRoute><ResetCompletePage/></LoggedOutOnlyRoute>}
+                    />
+
+                    <Route
+                        path="/register"
+                        element={<LoggedOutOnlyRoute><RegisterPage/></LoggedOutOnlyRoute>}
+                    />
+
+                    {/*routes that ONLY authenticated users can access*/}
+                    <Route
+                        path="/messages"
+                        element={<LoggedInOnlyRoute><MessagesPage/></LoggedInOnlyRoute>}
+                    />
+
+                    {/* todo: not made account pages (bride and artist) thus, todo later*/}
+                    <Route
+                        path="/account"
+                        element={<LoggedInOnlyRoute><MessagesPage/></LoggedInOnlyRoute>}
+                    />
+                    <Route path="/artist-profile" element={<ArtistProfilePage/>}/>
+
+                    {/* TODO: haven't implemented actual flow to get here yet */}
+                    <Route path="/request-booking" element={<RequestBooking/>}/>
+                    <Route path="/service-area" element={<ArtistServiceArea/>}/>
+                    <Route path="/cancel-booking" element={<CancelBooking/>}/>
+
+                </Routes>
+            </main>
+        </Router>
+    </div>
 );
