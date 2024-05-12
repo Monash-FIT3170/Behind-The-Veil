@@ -9,9 +9,12 @@ import {NavLink} from "react-router-dom";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
-import PersonIcon from "../../svgs/PersonIcon.jsx";
-import KeyIcon from "../../svgs/KeyIcon.jsx";
 import SignInImage from '../../images/SignInImage.jsx';
+
+import {
+    UserIcon,
+    KeyIcon
+} from "@heroicons/react/24/outline";
 
 /**
  * Page where user can sign in to their account
@@ -45,15 +48,15 @@ export const LoginPage = () => {
                 <div style={{alignItems: "center", display: "flex", flexDirection: "column", gap: "10px", marginTop: "50px"}}>
                     <div style={{position: 'relative'}}>
                         <span style={{position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)'}}>
-                        <PersonIcon></PersonIcon>
+                        <UserIcon className="size-6 stroke-[2]" color="gray"/>
                         </span>
                         <input type="text" placeholder="Username" style={{height: "30px", width: "300px", paddingLeft: '40px', outline: "1px solid lightgray", borderRadius: "3px"}} />
                     </div>
 
                     <div style={{position: 'relative'}}>
                         <span style={{position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)'}}>
-                        <KeyIcon></KeyIcon>
-                        </span>
+                        <KeyIcon className="size-6 stroke-[2]" color="gray"/>
+                       </span>
                         <input type="text" placeholder="Password" style={{height: "30px", width: "300px", paddingLeft: '40px', outline: "1px solid lightgray", borderRadius: "3px"}} />
                     </div>
                     
@@ -81,3 +84,5 @@ export default LoginPage;
     </span>
     <input type="text" placeholder="Username" style={{ paddingLeft: '30px' }} />
 </div>
+
+
