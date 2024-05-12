@@ -16,7 +16,7 @@ Meteor.methods({
      * @param imageData - the data of the image todo: data this is currently treated as a url to the image,
      *                                                but maybe should be changed to BSON/actual data
      */
-    "add_service": function (type, targetId, imageData) {
+    "add_image": function (type, targetId, imageData) {
         ImageCollection.insert(
             {
                 "imageType": type,
