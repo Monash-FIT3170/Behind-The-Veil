@@ -7,11 +7,11 @@
 import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {
-    ChevronRightIcon,
     ChevronLeftIcon,
+    ChevronRightIcon,
+    IdentificationIcon,
     MagnifyingGlassIcon,
     PaintBrushIcon,
-    IdentificationIcon,
     SparklesIcon,
 } from "@heroicons/react/24/outline";
 
@@ -202,15 +202,18 @@ export const HomePage = () => {
 
             {/* Container for the Browse services and Browse artists buttons */}
             <div className="container mx-auto pt-8">
-                <form className="flex items-center justify-center flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-8">
+                <form
+                    className="flex items-center justify-center flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-8">
                     <Link to="/services">
-                        <Button className="inline-flex items-center justify-center h-10 w-64 main-text px-0 py-0 gap-x-2">
+                        <Button
+                            className="inline-flex items-center justify-center h-10 w-64 main-text px-0 py-0 gap-x-2">
                             <PaintBrushIcon className="size-6 stroke-2"/>
                             Browse Services
                         </Button>
                     </Link>
                     <Link to="/artists">
-                        <Button className="inline-flex items-center justify-center h-10 w-64 main-text px-0 py-0 gap-x-2">
+                        <Button
+                            className="inline-flex items-center justify-center h-10 w-64 main-text px-0 py-0 gap-x-2">
                             <IdentificationIcon className="size-6 stroke-2"/>
                             Browse Artists
                         </Button>
