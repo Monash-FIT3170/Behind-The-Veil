@@ -51,11 +51,8 @@ const CreateAccountPage = () => {
             username: username,
             email: email,
             password: password,
-            activated: true, // TODO: Change to false once email activation has been implemented
-            profile: {
-                name: name,
-                type: accountType
-            }
+            type: accountType,
+            name: name
         };
 
         Accounts.createUser(newUser, (error) => {

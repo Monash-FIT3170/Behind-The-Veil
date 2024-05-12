@@ -14,7 +14,7 @@ import {
     EnvelopeIcon,
 } from "@heroicons/react/24/outline";
 
-// TODO: Match code to one sent via email, then update user's activation attribute to True
+// TODO: Match code to one sent via email, then activate users account
 const ActivateAccountPage = () => {
     const navigate = useNavigate();
 
@@ -113,6 +113,9 @@ const ActivateAccountPage = () => {
                     <div style={{width: "80%", textAlign: "center", marginTop: "5px"}}>
                         <TextInput label="Please enter the 6-digit code sent to your email" id="activationCode"
                                    name="activationCode" placeholder="Enter activation code"/>
+                    </div>
+                    <div style={{width: "90%", fontSize: '10px', color: 'grey', marginTop: '-15px'}}>
+                        If you leave this page without entering the code, account will not be created
                     </div>
                     {/* TODO: Remove this div below once email activation has been implemented */}
                     <div style={{fontSize: '14px', color: 'grey', marginTop: '5px'}}>
