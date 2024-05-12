@@ -15,6 +15,7 @@ import TabsExamples from "./tabs-examples/TabsExamples";
 import MapExamples from "./map-examples/MapExamples.jsx";
 import PaginationExample from "./pagination-example/PaginationExample";
 import InputExamples from "./input-examples/InputExamples.jsx";
+import LoaderExamples from "./loaderExamples/LoaderExamples";
 
 /**
  * Page to showcase examples
@@ -31,6 +32,7 @@ const Examples = () => {
             <InputExamples />
             <MapExamples />
             <PaginationExample/>
+            <LoaderExamples />
         </WhiteBackground>
     );
 };
