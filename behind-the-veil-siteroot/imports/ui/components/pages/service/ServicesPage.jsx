@@ -4,7 +4,7 @@
  * Contributors: Nikki
  */
 
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSubscribe, useTracker} from "meteor/react-meteor-data"
 
 import ServiceCollection from "/imports/api/collections/services";
@@ -25,7 +25,7 @@ import Loader from "/imports/ui/components/loader/Loader";
 export const ServicesPage = () => {
 
     // default number of items on each page
-    const [itemsPerPage, setItemsPerPage] = React.useState(10);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
 
     // set up subscription (publication is in the "publication" folder)
     const isLoadingService = useSubscribe('active_services');
@@ -76,7 +76,7 @@ export const ServicesPage = () => {
         artistAlias={service.artistAlias}
     ></ServiceCard>))
 
-    const [isLoading, setIsLoading] = React.useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         setIsLoading(isLoadingService() || isLoadingArtists() || isLoadingImages());
