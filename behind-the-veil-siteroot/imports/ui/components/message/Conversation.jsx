@@ -68,12 +68,12 @@ export const Conversation = ({user}) => {
                         value={formValue}
                         onChange={(event) => setFormValue(event.target.value)}
                         placeholder="Type a message..."
-                        className="w-full rounded-3xl focus:outline-none focus:border-main-purple pr-40"
+                        className="w-full rounded-3xl pr-40"
                     />
                     <Button type="submit" disabled={!formValue}
                             className="bg-secondary-purple hover:bg-secondary-purple-hover focus:outline-none cursor-pointer
                             flex absolute right-1 top-1/2 transform -translate-y-1/2">
-                        <PaperAirplaneIcon className='size-6 stroke-2'/>
+                        <PaperAirplaneIcon className='icon-base'/>
                         <span className='px-2'>Send</span>
                     </Button>
                 </div>

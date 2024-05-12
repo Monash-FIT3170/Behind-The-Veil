@@ -5,7 +5,7 @@
  */
 
 import React from "react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import {XMarkIcon} from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import "./searchBar.css";
 import Input from "../input/Input";
@@ -18,26 +18,26 @@ import Input from "../input/Input";
  * @param value the value of the input field (whatever the customer inputs)
  * @param onChange the function that occurs when the search input field changes
  * @param handleSubmit the function which dictates what happens when a user submits the value in the search input field
- * @param searchBarProps encompasses all other props supplied and applies them to the search input field 
+ * @param searchBarProps encompasses all other props supplied and applies them to the search input field
  */
 const SearchBar = ({
-    className,
-    placeholderName,
-    value,
-    onChange,
-    handleSubmit,
-    ...searchBarProps
-}) => {
+                       className,
+                       placeholderName,
+                       value,
+                       onChange,
+                       handleSubmit,
+                       ...searchBarProps
+                   }) => {
 
     // Function that resets the input value of the search bar
     const handleReset = () => {
-        onChange({ target: { value: '' } });
+        onChange({target: {value: ''}});
     };
 
     return (
         // The form which holds the search input field and the reset button
         <form className="flex h-12" onSubmit={handleSubmit}>
-        {/* The search input field (i.e. the search bar) */}
+            {/* The search input field (i.e. the search bar) */}
             <Input
                 {...searchBarProps}
                 type="search"
@@ -46,7 +46,7 @@ const SearchBar = ({
                 value={value}
                 onChange={onChange}
             />
-        {/* The reset button which resets the value of the search input field to an empty string */}
+            {/* The reset button which resets the value of the search input field to an empty string */}
             <button type="button"
                     className={"input-base flex justify-center items-center w-12 border-l-0 rounded-l-none"}
                     onClick={handleReset}>

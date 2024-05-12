@@ -194,7 +194,7 @@ export const HomePage = () => {
                             className="flex justify-center items-center rounded-full h-12 w-12 p-2
                             bg-secondary-purple hover:bg-secondary-purple-hover"
                             onClick={handleButtonClickOrSubmit}>
-                            <MagnifyingGlassIcon className="size-6 stroke-2"/>
+                            <MagnifyingGlassIcon className="icon-base"/>
                         </Button>
                     </div>
                 </div>
@@ -207,14 +207,14 @@ export const HomePage = () => {
                     <Link to="/services">
                         <Button
                             className="inline-flex items-center justify-center h-10 w-64 main-text px-0 py-0 gap-x-2">
-                            <PaintBrushIcon className="size-6 stroke-2"/>
+                            <PaintBrushIcon className="icon-base"/>
                             Browse Services
                         </Button>
                     </Link>
                     <Link to="/artists">
                         <Button
                             className="inline-flex items-center justify-center h-10 w-64 main-text px-0 py-0 gap-x-2">
-                            <IdentificationIcon className="size-6 stroke-2"/>
+                            <IdentificationIcon className="icon-base"/>
                             Browse Artists
                         </Button>
                     </Link>

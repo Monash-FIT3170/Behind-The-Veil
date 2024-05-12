@@ -16,10 +16,10 @@ import { PlusIcon, Cog8ToothIcon } from "@heroicons/react/24/outline";
  */
 export const ArtistProfilePage = () => {
   //import plusIcon from heroicons for "add photo" button
-  const plusIcon = <PlusIcon className="size-6 stroke-2" />;
+  const plusIcon = <PlusIcon className="icon-base" />;
 
   //import gearIcon from heroicons for "settings" button.
-  const gearIcon = <Cog8ToothIcon className="size-6 stroke-2" />;
+  const gearIcon = <Cog8ToothIcon className="icon-base" />;
 
   // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
   // When completing the dynamic version for this page, probably a good idea to setup the photos as components and importing them in.

@@ -147,7 +147,7 @@ const RequestBooking = () => {
                   type="submit"
                 >
                   Next Step
-                  <ArrowRightIcon className="size-6 stroke-2"/>
+                  <ArrowRightIcon className="icon-base"/>
                 </Button>
               </div>
 

@@ -40,7 +40,7 @@ const SearchBarExamples = () => {
                 className="flex justify-center items-center rounded-full h-12 w-12 p-2
                             bg-secondary-purple hover:bg-secondary-purple-hover"
                 onClick={handleButtonClickOrSubmit}>
-                <MagnifyingGlassIcon className="size-6 stroke-2"/>
+                <MagnifyingGlassIcon className="icon-base"/>
             </Button>
         </div>
     );
