@@ -8,7 +8,7 @@ import React from 'react';
 
 const SignInImage = () => {
   return (
-    <img src="/SignIn.png" alt="SignIn" />
+    <img src='../images/SignIn.jpg' alt="SignIn" />
   );
 }
 

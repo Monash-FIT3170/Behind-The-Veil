@@ -24,3 +24,4 @@ react-meteor-data       # React higher-order component for reactively tracking M
 xolvio:cleaner
 peerlibrary:assert
 meteortesting:mocha
+accounts-password
