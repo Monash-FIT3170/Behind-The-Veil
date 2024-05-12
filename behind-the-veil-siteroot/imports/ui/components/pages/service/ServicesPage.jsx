@@ -5,56 +5,110 @@
  */
 
 import React from 'react';
-import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
-import PageLayout from "../../../enums/PageLayout";
-import ServiceCard from "../../card/ServiceCard.jsx";
+import {useTracker, useSubscribe} from "meteor/react-meteor-data"
+import ServiceCollection from "/imports/api/collections/services";
+import UserCollection from "/imports/api/collections/users";
+import ImageCollection from "/imports/api/collections/images";
+
+import PageLayout from "/imports/ui/enums/PageLayout";
+import WhiteBackground from "/imports/ui/components/whiteBackground/WhiteBackground.jsx";
+import Pagination from "/imports/ui/components/pagination/Pagination.jsx"
+import ServiceCard from "/imports/ui/components/card/ServiceCard.jsx";
+import SearchBar from "../../searchBar/searchBar.jsx";
 
 /**
  * Page of a list of Service cards for users to see
  */
 export const ServicesPage = () => {
-    return (
-        <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-            <span>Services Page to be done!!</span>
-            <span>SEARCH BAR HERE</span>
 
-            {/* TODO: replace with actual database calls when DB is set up
-                 get the first X entries from Database, then there is a next page (?) for the next X entries */}
+    // default number of items on each page
+    const [itemsPerPage, setItemsPerPage] = React.useState(10);
 
-            <div className={"flex flex-col lg:flex-row gap-10 items-center justify-center flex-wrap"}>
-                <ServiceCard
-                    className=""
-                    serviceId={111111}
-                    serviceName={"AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"}
-                    serviceDesc={"Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"}
-                    servicePrice={112333294}
-                    servicePhotoData={""}
-                    artistUsername={"alice_smith"}
-                    artistName={"Alice Smith"}
-                ></ServiceCard>
-                <ServiceCard
-                    className=""
-                    serviceId={2222222}
-                    serviceName={"Bachelorette Glam Experience"}
-                    serviceDesc={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n"}
-                    servicePrice={123}
-                    servicePhotoData={"http://localhost:8000/aa.png"}
-                    artistUsername={"Bobbyyy1"}
-                    artistName={"Bob"}
-                ></ServiceCard>
-                <ServiceCard
-                    className=""
-                    serviceId={1234567}
-                    serviceName={"GlamourGlow Beauty"}
-                    serviceDesc={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n"}
-                    servicePrice={123}
-                    servicePhotoData={"http://localhost:8000/Background.png"}
-                    artistUsername={"ihavealonglonglongnameJones"}
-                    artistName={"LonglonglongnamedJones LongnamedDavis"}
-                ></ServiceCard>
-            </div>
-        </WhiteBackground>
-    );
+    // set up subscription (publication is in the "publication" folder)
+    useSubscribe('active_services');
+    useSubscribe('all_artists');
+    useSubscribe('service_images');
+
+    // get data from db
+    let servicesData = useTracker(() => {
+        return ServiceCollection.find({"serviceActive": true}).fetch();
+    });
+    let usersData = useTracker(() => {
+        return UserCollection.find({"userType": "artist"}).fetch();
+    });
+    let imagesData = useTracker(() => {
+        return ImageCollection.find().fetch();
+    });
+
+    // manual aggregation
+    let combined = servicesData;
+    for (let i = 0; i < servicesData.length; i++) {
+
+        // aggregate with artist first
+        for (let j = 0; j < usersData.length; j++) {
+            // find matching artist and add their name
+            if (servicesData[i].artistUsername === usersData[j]._id) {
+                servicesData[i].artistAlias = usersData[j].userAlias;
+                break;
+            }
+        }
+        // then aggregate with the FIRST image (cover)
+        for (let j = 0; j < imagesData.length; j++) {
+            // find matching image for the service
+            if (imagesData[j].imageType === "service" && servicesData[i]._id._str === imagesData[j].target_id) {
+                servicesData[i].serviceImageData = imagesData[j].imageData;
+                break;
+            }
+        }
+    }
+
+    const serviceCardList = combined.map((service) => (<ServiceCard
+            key={service._id._str}
+            serviceId={service._id._str}
+            serviceName={service.serviceName}
+            serviceDesc={service.serviceDesc}
+            servicePrice={service.servicePrice}
+            artistUsername={service.artistUsername}
+            serviceImageData={service.serviceImageData}
+            artistAlias={service.artistAlias}
+        ></ServiceCard>))
+
+    if (document.readyState === "complete") {
+        return (<WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
+
+                <span className={"title-text text-center"}>Services</span>
+
+                {/*todo: functional search bar*/}
+                <div className="flex flex-col items-center mb-10">
+                    <SearchBar/>
+                </div>
+
+                <div className="flex flex-col items-center justify-center gap-y-5">
+
+                    <Pagination
+                        itemsPerPage={itemsPerPage}
+                        displayItems={serviceCardList}
+                    />
+
+                    <div className="flex flex-row items-center justify-center gap-x-2">
+                        Items per page:
+                        <input type={"number"}
+                               value={itemsPerPage}
+                               className="border-2 p-2 border-light-grey rounded-[6px] main-text h-12 max-w-20 sm:w-[361px]"
+                               onChange={(event) => {
+                                   // ensure no negative pages
+                                   const newValue = Number(event.target.value);
+                                   if (newValue > 0) {
+                                       setItemsPerPage(newValue);
+                                   }
+                               }}
+                               min={1}
+                               max={100}
+                        />
+                    </div>
+                </div>
+            </WhiteBackground>);
+    }
 };
 
 export default ServicesPage;

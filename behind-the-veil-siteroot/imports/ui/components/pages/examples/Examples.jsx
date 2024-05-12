@@ -1,6 +1,6 @@
 /**
  * File Description: Examples page
- * File version: 1.2
+ * File version: 1.3
  * Contributors: Josh, Nikki
  */
 
@@ -14,6 +14,7 @@ import PageLayout from "../../../enums/PageLayout";
 import TabsExamples from "./tabs-examples/TabsExamples";
 import MapExamples from "./map-examples/MapExamples.jsx";
 import SearchBarExamples from "./search-bar-examples/SearchBarExamples.jsx";
+import PaginationExample from "./pagination-example/PaginationExample";
 
 /**
  * Page to showcase examples
@@ -29,6 +30,7 @@ const Examples = () => {
             <TabsExamples />
             <SearchBarExamples />
             <MapExamples />
+            <PaginationExample/>
         </WhiteBackground>
     );
 };
