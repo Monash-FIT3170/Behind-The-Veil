@@ -48,11 +48,14 @@ const messagePreviews = [
 
 export const MessagesPage = () => {
     const messagePreviewsComponents = messagePreviews.map((messagePreview, index) => <MessagesPreview key = {index} data = {messagePreview}></MessagesPreview>);
+    const messagePreviewsComponents = messagePreviews.map((messagePreview, index) => <MessagesPreview key = {index} data = {messagePreview}></MessagesPreview>);
     return (
         // if window size is SMALLER than a medium screen (default variable for medium in tailwind sm:768px),
         // then have the contacts/list of people on separate screens than the conversation
         <WhiteBackground pageLayout={window.innerWidth <= 768 ? PageLayout.SMALL_CENTER : PageLayout.MESSAGES_PAGE}>
             {/*you MUST keep this div and put everything on the left side inside of it*/}
+            <div className="flex flex-col gap-3">
+                {messagePreviewsComponents}
             <div className="flex flex-col gap-3">
                 {messagePreviewsComponents}
             </div>
