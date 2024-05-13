@@ -72,7 +72,7 @@ const CardExamples = () => {
                     serviceDesc={"Indulge in the ultimate pampering experience with our exclusive Bachelorette Makeup Service! Elevate your pre-wedding festivities with a touch of glamour and sophistication."}
                     servicePrice={123}
                     servicePhotoData={""}
-                    bookingTime={"Tuesday, 12 May, 2024"}
+                    bookingStartDateTime={"Tuesday, 12 May, 2024"}
                     bookingStatus={BookingStatus.CONFIRMED}
                 ></BookingCard>
             </div>

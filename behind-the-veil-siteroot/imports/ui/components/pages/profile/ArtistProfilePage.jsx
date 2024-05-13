@@ -11,6 +11,7 @@ import Tabs from "../../tabs/Tabs.jsx";
 import ProfilePhoto from "../../profilePhoto/ProfilePhoto.jsx";
 import Button from "../../button/Button.jsx";
 import { PlusIcon, Cog8ToothIcon } from "@heroicons/react/24/outline";
+import BookingListView from "../../booking/BookingListView.jsx";
 /**
  * Page for artist profile
  */
@@ -20,6 +21,12 @@ export const ArtistProfilePage = () => {
 
   //import gearIcon from heroicons for "settings" button.
   const gearIcon = <Cog8ToothIcon className="icon-base" />;
+
+  const bookingTab = (
+    <div>
+      <BookingListView></BookingListView>
+    </div>
+  )
 
   // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
   // When completing the dynamic version for this page, probably a good idea to setup the photos as components and importing them in.
@@ -135,7 +142,7 @@ export const ArtistProfilePage = () => {
         tabs={["Dashboard", "Bookings", "My Services", "Gallery", "Reviews"]}
         tabPanels={[
           "Dashboard Panel",
-          "Bookings Panel",
+          bookingTab,
           "My Services Panel",
           galleryTab,
           "Reviews Panel",

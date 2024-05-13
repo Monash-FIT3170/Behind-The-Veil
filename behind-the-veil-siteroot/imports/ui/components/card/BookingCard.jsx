@@ -32,7 +32,7 @@ export const BookingCard = ({
                                 serviceDesc,
                                 servicePrice,
                                 serviceImageData,
-                                bookingTime,
+                                bookingStartDateTime,
                                 bookingStatus
                             }) => {
 
@@ -51,7 +51,7 @@ export const BookingCard = ({
                         {bookingStatus}</div>
                         <div className="flex">
                             <div className="medium-text text-our-black max-w-full break-all line-clamp-1 mb-3">
-                                {bookingTime}
+                                {bookingStartDateTime}
                             </div>
                             <div className="medium-text text-our-black max-w-full break-all line-clamp-1 mb-3 ml-auto">
                                 {"$"}{servicePrice}
