@@ -126,66 +126,28 @@ export const ArtistProfilePage = () => {
   );
 
   const dashboardTab = (
-    <div className="flex-auto grid grid-cols-2 gap-8 justify-items-center">
-      <Card className="size-full">
-        <div className="flex-auto grid grid-cols-3">
-          <div className="col-span-2">
-            <div className="large-text text-our-black max-w-full line-clamp-1 mb-3 text-center">
-              Total Customers - Lifetime
-            </div>
-            <div className="small-text text-dark-grey max-h-[4.5rem] max-w-full line-clamp-4 mb-3 text-center">
-              Celebrate your achievement in helping brides with their special
-              day!
-            </div>
-          </div>
-          <div className="large-number-text text-out-black text-center">
-            273
-          </div>
-        </div>
-      </Card>
-      <Card className="size-full">
-        <div className="flex-auto grid grid-cols-3">
-          <div className="col-span-2">
-            <div className="large-text text-our-black max-w-full line-clamp-1 mb-3 text-center">
-              Total Customers - This Month
-            </div>
-            <div className="small-text text-dark-grey max-h-[4.5rem] max-w-full line-clamp-4 mb-3 text-center">
-              People you have glowed up this month!
-            </div>
-          </div>
-          <div className="large-number-text text-out-black text-center">5</div>
-        </div>
-      </Card>
-      <Card className="size-full">
-        <div className="flex-auto grid grid-cols-3">
-          <div className="col-span-2">
-            <div className="large-text text-our-black max-w-full line-clamp-1 mb-3 text-center">
-              Total Earnings
-            </div>
-            <div className="small-text text-dark-grey max-h-[4.5rem] max-w-full line-clamp-4 mb-3 text-center">
-              Count your dollars!
-            </div>
-          </div>
-          <div className="large-number-text text-out-black text-center">
-            $32,760
-          </div>
-        </div>
-      </Card>
-      <Card className="size-full">
-        <div className="flex-auto grid grid-cols-3">
-          <div className="col-span-2">
-            <div className="large-text text-our-black max-w-full line-clamp-1 mb-3 text-center">
-              Pending Earnings
-            </div>
-            <div className="small-text text-dark-grey max-h-[4.5rem] max-w-full line-clamp-4 mb-3 text-center">
-              Cash in transit!
-            </div>
-          </div>
-          <div className="large-number-text text-out-black text-center">
-            $480
-          </div>
-        </div>
-      </Card>
+    <div className="flex-auto grid grid-cols-auto grid-cols-2 gap-8 justify-items-center">
+      <DashboardCard
+        dashboardCardTitle="Total Customers - Lifetime"
+        dashboardCardDesc="Celebrate your achievement in helping brides with their special
+              day!"
+        dashboardCardValue="273"
+      ></DashboardCard>
+      <DashboardCard
+        dashboardCardTitle="Total Customers - This Month"
+        dashboardCardDesc="People you have glowed up this month!"
+        dashboardCardValue="5"
+      ></DashboardCard>
+      <DashboardCard
+        dashboardCardTitle="Total Earnings"
+        dashboardCardDesc="Count your dollars!"
+        dashboardCardValue="$32,760"
+      ></DashboardCard>
+      <DashboardCard
+        dashboardCardTitle="Pending Earnings"
+        dashboardCardDesc="Cash currently in transit!!"
+        dashboardCardValue="$480"
+      ></DashboardCard>
     </div>
   );
 

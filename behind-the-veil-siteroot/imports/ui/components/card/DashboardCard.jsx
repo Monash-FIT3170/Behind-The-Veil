@@ -30,10 +30,7 @@ export const DashboardCard = ({
   // variables to handle routing
   const navigateTo = useNavigate();
 
-  const classes = classNames(
-    className,
-    "flex flex-col justify-between w-full min-w-60 lg:w-2/5 lg:min-w-78 min-h-56"
-  );
+  const classes = classNames(className, "w-5/6");
 
   return (
     <Card className={classes}>
