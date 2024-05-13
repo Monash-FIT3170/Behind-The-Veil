@@ -8,6 +8,8 @@ import React from "react";
 import Card from "../../../card/Card";
 import Button from "../../../button/Button";
 import ServiceCard from "../../../card/ServiceCard";
+import BookingCard from "../../../card/BookingCard";
+import { BookingStatus } from '../../../../enums/BookingStatus'
 
 const CardExamples = () => {
     return (
@@ -61,8 +63,19 @@ const CardExamples = () => {
                     artistName={"LonglonglongnamedJones LongnamedDavis"}
                 ></ServiceCard>
             </div>
-
-
+            <div className="large-text underline">Booking Cards:</div>
+            <div className={"flex flex-col lg:flex-row gap-10 items-center justify-center flex-wrap"}>
+                <BookingCard
+                    className=""
+                    bookingId={1234567}
+                    serviceName={"Bachelorette Glam Experience"}
+                    serviceDesc={"Indulge in the ultimate pampering experience with our exclusive Bachelorette Makeup Service! Elevate your pre-wedding festivities with a touch of glamour and sophistication."}
+                    servicePrice={123}
+                    servicePhotoData={""}
+                    bookingTime={"Tuesday, 12 May, 2024"}
+                    bookingStatus={BookingStatus.CONFIRMED}
+                ></BookingCard>
+            </div>
         </div>
     )
 }

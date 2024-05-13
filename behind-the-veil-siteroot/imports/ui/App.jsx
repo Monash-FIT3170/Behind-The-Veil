@@ -20,7 +20,7 @@ import ArtistProfilePage from "./components/pages/profile/ArtistProfilePage.jsx"
 import CancelBooking from './components/pages/cancel-booking/CancelBooking.jsx';
 
 
-export const App = () => (
+export const App = () => (  
   <div>
     {/*This is the navigation bar on every Page*/}
     <Router>
