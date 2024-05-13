@@ -6,12 +6,13 @@
 import React from "react";
 import Card from "../card/Card";
 import Button from "../button/Button";
+import ProfilePhoto from '../profilePhoto/ProfilePhoto';
 
 const MessagesPreview = (props) => {
     const {userName, name, recentMessage, image, date, read} = props.data;
     return (
         <Card className="flex flex-row gap-2 w-full h-full border-none">
-        <div className="bg-light-grey w-1/4 p-2 rounded">Img</div>
+        <ProfilePhoto className={`min-win-[10%] shrink-0`}></ProfilePhoto>
         <div className="flex flex-col gap-1 w-3/4">
         {read ? (
             <div>

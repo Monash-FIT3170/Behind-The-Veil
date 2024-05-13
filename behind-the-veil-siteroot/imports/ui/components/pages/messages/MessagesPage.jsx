@@ -1,7 +1,7 @@
 /**
  * File Description: Messages page
  * File version: 1.0
- * Contributors:
+ * Contributors: Vicky
  */
 
 import React from 'react';
@@ -31,7 +31,7 @@ const messagePreviews = [
         userName: 'titan1',
         name: 'Annie',
         recentMessage: 'Hi, I was wondering if you were the amazing artist that he recommended?',
-        image: '',
+        image: 'url/to/profile/pic',
         date: new Date(2024, 4, 20),
         read: true
     },
@@ -39,7 +39,7 @@ const messagePreviews = [
         userName: 'ackmn',
         name: 'Mikasa',
         recentMessage: 'Hi Alice, I was wondering if you have experience with bridesmaid makeup?',
-        image: '',
+        image: 'url/to/profile/pic',
         date: new Date(2024, 3, 15),
         read: false
     }
