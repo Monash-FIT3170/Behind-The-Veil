@@ -42,9 +42,8 @@ export const LoginPage = () => {
         // Using a built-in Meteor method to attempt to sign the user in.
         Meteor.loginWithPassword(username, password, (error) => {
             if (error) {
-                console.log('Login failed');
+                alert('Login Failed.')
             } else {
-                console.log('Login successful');
                 // If the user type is artist, redirect to the artist landing page.
                 if (accountType == 'Artist') {
                     navigate('/artist-profile/:username');
