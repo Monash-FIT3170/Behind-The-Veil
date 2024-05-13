@@ -13,10 +13,8 @@ import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import RequestBookingCalendar from "./RequestBookingCalendar/RequestBookingCalendar.jsx";
 import Input from "../../input/Input";
 import PreviousButton from "../../button/PreviousButton";
-import { useSubscribe, useTracker } from "meteor/react-meteor-data"
-import BookingCollection from "../../../../api/collections/booking.js";
 import mockBookings from './mockBookings.json'
-import { addHours, areIntervalsOverlapping, eachHourOfInterval, getHours, isEqual, set, format } from "date-fns";
+import { addHours, areIntervalsOverlapping, eachHourOfInterval, isEqual, set, format } from "date-fns";
 import { BookingStatus } from "../../../enums/BookingStatus.ts";
 
 
@@ -76,7 +74,6 @@ const RequestBooking = () => {
   };
 
   // calculate available times that the user can select, based on a date
-  // TODO: implement this properly instead of returning dummy data
   // date: day at which we want the available time slots
   // duration: integer corresponding to service duration in hours
   // bookings: array of booking objects
@@ -191,7 +188,6 @@ const RequestBooking = () => {
                             key={time}
                             className={className}
                             onClick={() => {
-                              console.log(time)
                               setInputs((i) => {
                                 return {
                                   ...i,

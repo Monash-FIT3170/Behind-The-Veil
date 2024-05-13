@@ -1,5 +1,6 @@
 /* base styling taken from https://github.com/wojtekmaj/react-calendar/blob/main/packages/react-calendar/src/Calendar.css */
 .react-calendar {
+  height: fit-content;
   width: 350px;
   max-width: 100%;
   background: white;
