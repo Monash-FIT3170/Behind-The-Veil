@@ -74,7 +74,7 @@ export const Conversation = ({user}) => {
                             className="bg-secondary-purple hover:bg-secondary-purple-hover focus:outline-none cursor-pointer
                             flex absolute right-1 top-1/2 transform -translate-y-1/2">
                         <PaperAirplaneIcon className='icon-base'/>
-                        <span className='px-2'>Send</span>
+                        <span className='hidden sm:inline px-2'>Send</span>
                     </Button>
                 </div>
             </form>
