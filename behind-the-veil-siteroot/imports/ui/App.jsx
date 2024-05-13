@@ -55,10 +55,11 @@ export const App = () => (
           <Route
             path="/messages"
             element={
-              <LoggedInOnlyRoute>
-                {" "}
-                <MessagesPage />
-              </LoggedInOnlyRoute>
+              <MessagesPage/>
+              // <LoggedInOnlyRoute>
+              //   {" "}
+              //   <MessagesPage />
+              // </LoggedInOnlyRoute>
             }
           />
           {/* todo: not made account pages (bride and artist) thus, todo later*/}
