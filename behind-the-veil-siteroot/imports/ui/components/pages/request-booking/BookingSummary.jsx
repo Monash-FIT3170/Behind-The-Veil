@@ -10,7 +10,6 @@ import Button from "../../button/Button";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import FormOutput from "./FormOutput";
-import "./booking.css";
 // Array of days for date formatting
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 

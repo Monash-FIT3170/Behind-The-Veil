@@ -6,7 +6,7 @@
 
 import React from "react";
 import QuestionMarkCircleIcon from "@heroicons/react/16/solid/QuestionMarkCircleIcon";
-import ToolTip from "../../toolTip/ToolTip";
+import Tippy from '@tippyjs/react/headless';
 
 /**
  * FormOutput component displays a label and input field, with an optional tooltip.
@@ -19,16 +19,23 @@ import ToolTip from "../../toolTip/ToolTip";
  */
 const FormOutput = ({ label, input, textColor, haveHelpText, tipText}) => {
     return (
-        <div className="booking-summary-input text">
-            <span className={`label ${textColor} font-semibold`}>
+        <div className="flex text">
+            <span className={`label min-w-[150px] lg:w-[200px] ${textColor} font-semibold`}>
                 {label}
             </span>
             <span className="input font-semibold">
                 {input}
             </span>
             {haveHelpText && (
-                <span className="tooltip content-center">
-                    <ToolTip tipText={tipText} tipIcon={QuestionMarkCircleIcon}  type="tooltip"/>
+                <span className="tooltip content-center left-1 ml-2">
+                    <Tippy
+                        render={attrs => (
+                            <div className="box border border-main-blue rounded-lg mt-1 px-4 py-2 bg-glass-panel-background shadow-lg w-80" tabIndex="-1" {...attrs}>
+                                {tipText}
+                            </div>
+                        )}>
+                        <QuestionMarkCircleIcon className="tooltip-icon size-4 text-hyperlink-colour"/>
+                    </Tippy>
                 </span>
             )}
         </div>
