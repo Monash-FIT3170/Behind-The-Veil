@@ -18,7 +18,9 @@ import SpecificServicePage from "./components/pages/service/SpecificServicePage.
 import ArtistServiceArea from "./components/pages/artist/ArtistServiceArea.jsx";
 import ArtistProfilePage from "./components/pages/profile/ArtistProfilePage.jsx";
 import CancelBooking from './components/pages/cancel-booking/CancelBooking.jsx';
-
+import AccountActivatedPage from "./components/pages/register/AccountActivatedPage";
+import CreateAccountPage from "./components/pages/register/CreateAccountPage";
+import ActivateAccountPage from "./components/pages/register/ActivateAccountPage";
 
 export const App = () => (  
   <div>
@@ -48,6 +50,30 @@ export const App = () => (
             element={
               <LoggedOutOnlyRoute>
                 <RegisterPage />
+              </LoggedOutOnlyRoute>
+            }
+          />
+          <Route
+            path="/register/createAccount/"
+            element={
+              <LoggedOutOnlyRoute>
+                <CreateAccountPage/>
+              </LoggedOutOnlyRoute>
+            }
+          />
+          <Route
+            path="/register/activateAccount"
+            element={
+              <LoggedOutOnlyRoute>
+                <ActivateAccountPage/>
+              </LoggedOutOnlyRoute>
+            }
+          />
+          <Route
+            path="/register/accountActivated"
+            element={
+              <LoggedOutOnlyRoute>
+                <AccountActivatedPage/>
               </LoggedOutOnlyRoute>
             }
           />

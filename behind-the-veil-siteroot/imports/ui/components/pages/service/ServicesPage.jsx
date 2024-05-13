@@ -1,11 +1,12 @@
 /**
  * File Description: Services page
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Nikki
  */
 
-import React from 'react';
-import {useTracker, useSubscribe} from "meteor/react-meteor-data"
+import React, {useState} from 'react';
+import {useSubscribe, useTracker} from "meteor/react-meteor-data"
+
 import ServiceCollection from "/imports/api/collections/services";
 import UserCollection from "/imports/api/collections/users";
 import ImageCollection from "/imports/api/collections/images";
@@ -14,7 +15,9 @@ import PageLayout from "/imports/ui/enums/PageLayout";
 import WhiteBackground from "/imports/ui/components/whiteBackground/WhiteBackground.jsx";
 import Pagination from "/imports/ui/components/pagination/Pagination.jsx"
 import ServiceCard from "/imports/ui/components/card/ServiceCard.jsx";
-import SearchBar from "../../searchBar/searchBar.jsx";
+import SearchBar from "/imports/ui/components/searchBar/searchBar.jsx";
+import Loader from "/imports/ui/components/loader/Loader";
+
 
 /**
  * Page of a list of Service cards for users to see
@@ -22,24 +25,25 @@ import SearchBar from "../../searchBar/searchBar.jsx";
 export const ServicesPage = () => {
 
     // default number of items on each page
-    const [itemsPerPage, setItemsPerPage] = React.useState(10);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
 
     // set up subscription (publication is in the "publication" folder)
-    useSubscribe('active_services');
-    useSubscribe('all_artists');
-    useSubscribe('service_images');
+    const isLoadingService = useSubscribe('active_services');
+    const isLoadingArtists = useSubscribe('all_artists');
+    const isLoadingImages = useSubscribe('service_images');
+    const isLoading = isLoadingService() || isLoadingArtists() || isLoadingImages();
 
     // get data from db
     let servicesData = useTracker(() => {
         return ServiceCollection.find({"serviceActive": true}).fetch();
     });
     let usersData = useTracker(() => {
-        return UserCollection.find({"userType": "artist"}).fetch();
+        return UserCollection.find({"profile.type": "artist"}).fetch();
     });
     let imagesData = useTracker(() => {
         return ImageCollection.find().fetch();
     });
-
+    console.log(usersData)
     // manual aggregation
     let combined = servicesData;
     for (let i = 0; i < servicesData.length; i++) {
@@ -63,18 +67,19 @@ export const ServicesPage = () => {
     }
 
     const serviceCardList = combined.map((service) => (<ServiceCard
-            key={service._id._str}
-            serviceId={service._id._str}
-            serviceName={service.serviceName}
-            serviceDesc={service.serviceDesc}
-            servicePrice={service.servicePrice}
-            artistUsername={service.artistUsername}
-            serviceImageData={service.serviceImageData}
-            artistAlias={service.artistAlias}
-        ></ServiceCard>))
+        key={service._id._str}
+        serviceId={service._id._str}
+        serviceName={service.serviceName}
+        serviceDesc={service.serviceDesc}
+        servicePrice={service.servicePrice}
+        artistUsername={service.artistUsername}
+        serviceImageData={service.serviceImageData}
+        artistAlias={service.artistAlias}
+    ></ServiceCard>))
 
-    if (document.readyState === "complete") {
-        return (<WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
+    if (document.readyState === "complete" && !isLoading) {
+        return (
+            <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
 
                 <span className={"title-text text-center"}>Services</span>
 
@@ -107,7 +112,27 @@ export const ServicesPage = () => {
                         />
                     </div>
                 </div>
-            </WhiteBackground>);
+            </WhiteBackground>
+        );
+    } else {
+        // is loader, display loader
+        return (
+            <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
+                <span className={"title-text text-center"}>Services</span>
+
+                {/*todo: functional search bar*/}
+                <div className="flex flex-col items-center mb-10">
+                    <SearchBar/>
+                </div>
+
+                <Loader
+                    loadingText={"Services are loading . . ."}
+                    isLoading={isLoading}
+                    size={100}
+                    speed={1.5}
+                />
+            </WhiteBackground>
+        );
     }
 };
 
