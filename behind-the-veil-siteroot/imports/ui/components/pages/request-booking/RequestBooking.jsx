@@ -13,6 +13,12 @@ import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import RequestBookingCalendar from "./RequestBookingCalendar/RequestBookingCalendar.jsx";
 import Input from "../../input/Input";
 import PreviousButton from "../../button/PreviousButton";
+import { useSubscribe, useTracker } from "meteor/react-meteor-data"
+import BookingCollection from "../../../../api/collections/booking.js";
+import mockBookings from './mockBookings.json'
+import { addHours, areIntervalsOverlapping, eachHourOfInterval, endOfHour, set } from "date-fns";
+import { BookingStatus } from "../../../enums/BookingStatus.ts";
+
 
 /**
  * Page for user to request a booking
@@ -20,10 +26,26 @@ import PreviousButton from "../../button/PreviousButton";
 const RequestBooking = () => {
   const MOCK_SERVICE_DETAILS = {
     service: "Bachelorette Glam Experience",
-    date: "Tuesday, 12 May, 2024",
     artist: "Alice Tran",
     price: "$120",
   };
+
+  // TODO: this function might not be needed once we use real bookings b/c I think start time is stored as date object
+  // converting json datetimes to js datetimes
+  const parseBookings = (bookings) => {
+    return bookings.map((booking) => {
+      return {
+        ...booking,
+        bookingStartDateTime: new Date(booking.bookingStartDateTime)
+      }
+    })
+  }
+
+  // TODO: make actual database call to get all bookings for this artist id
+  const bookings = parseBookings(mockBookings)
+
+  // TODO: get actual duration from this service
+  const duration = 2
 
   // form input values
   const [inputs, setInputs] = useState({
@@ -53,11 +75,24 @@ const RequestBooking = () => {
     );
   };
 
-  const getAvailableDates = () => {};
+  const getAvailableDates = () => { };
 
   // calculate available times that the user can select, based on a date
   // TODO: implement this properly instead of returning dummy data
-  const getAvailableTimes = (date) => {
+  // date: day at which we want the available time slots
+  // duration: integer corresponding to service duration in hours
+  // bookings: array of booking objects
+  const getAvailableTimes = ({ date, duration, bookings }) => {
+    // TODO: properly validate date
+    if (date === "") {
+      console.warn('invalid date')
+      return
+    }
+    if (!Array.isArray(bookings)) {
+      console.warn('bookings is not an array')
+      return
+    }
+
     const AVAILABLE_TIMES = [
       "10:00am",
       "11:00am",
@@ -65,16 +100,48 @@ const RequestBooking = () => {
       "2:00pm",
       "4:00pm",
     ];
-    return date !== "" ? AVAILABLE_TIMES : null;
+
+    const hours = eachHourOfInterval({
+      // TODO: for now, assume that artists can work 6am to 7pm every day
+      start: set(date, { hours: 6, minutes: 0, seconds: 0 }),
+      end: set(date, { hours: (19 - duration), minutes: 0, seconds: 0 })
+    })
+
+    const confirmedBookings = bookings.filter((booking) => {
+      return booking.bookingStatus === BookingStatus.CONFIRMED
+    })
+
+    // for each hour, check if that hour is 'free'
+    // an hour is 'available' if the start of the hour + service duration doesn't overlap with any existing confirmed booking
+    const availableTimes = hours.filter((hour) => {
+
+      // check every booking and see if they overlap with this hour + service duration
+      // if there are no overlapping bookings, then this hour is available
+      return !confirmedBookings.some((booking) => {
+        const confirmedBookingStart = booking.bookingStartDateTime
+        const confirmedBookingEnd = addHours(confirmedBookingStart, booking.bookingDuration)
+
+        return areIntervalsOverlapping(
+          { start: hour, end: addHours(hour, duration) }, // time slot interval
+          { start: confirmedBookingStart, end: confirmedBookingEnd } // confirmed booking interval
+        )
+      })
+    })
+
+    console.log(availableTimes)
+
+    return AVAILABLE_TIMES
+
   };
 
+
   const availableDates = getAvailableDates();
-  const availableTimes = getAvailableTimes(inputs.date);
+  const availableTimes = getAvailableTimes({ date: inputs.date, duration: duration, bookings: bookings });
 
   return (
     <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
       {/* TODO: implement back button functionality when implementing the actual work flow to get to this page */}
-      <PreviousButton/>
+      <PreviousButton />
 
       {/* Main container for content */}
       <div className="flex flex-col gap-4 xl:px-40">
@@ -109,9 +176,9 @@ const RequestBooking = () => {
                   <label htmlFor={dateInputId} className="main-text text-our-black">Select Date</label>
                   <Input
                     id={dateInputId}
-                    placeholder="Select a date"
+                    placeholder="DD-MM-YYYY"
                     name="date"
-                    value={inputs.date || ""}
+                    value={inputs.date || ""} // TODO: date input needs to be transformed/validated
                     onChange={handleInputChange}
                   />
                 </div>
@@ -123,7 +190,7 @@ const RequestBooking = () => {
                       htmlFor={timeInputId}
                       className="main-text text-our-black"
                     >
-                      Select Start Time
+                      Select Start Time (Duration: {duration}hr)
                     </label>
                     <div id={timeInputId} className="grid grid-cols-2 gap-2">
                       {availableTimes.map((time) => {
@@ -160,7 +227,7 @@ const RequestBooking = () => {
                   type="submit"
                 >
                   Next Step
-                  <ArrowRightIcon className="icon-base"/>
+                  <ArrowRightIcon className="icon-base" />
                 </Button>
               </div>
 
