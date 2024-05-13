@@ -7,7 +7,7 @@
 import {Mongo} from "meteor/mongo";
 
 // to set up user collection
-export const UserCollection = new Mongo.Collection("users");
+export const UserCollection = new Mongo.Collection("users_temp");
 
 export default UserCollection;
 
