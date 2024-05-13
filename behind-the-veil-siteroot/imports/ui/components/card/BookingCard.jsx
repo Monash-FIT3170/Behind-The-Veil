@@ -39,12 +39,12 @@ export const BookingCard = ({
     // variables to handle routing
     const navigateTo = useNavigate();
 
-    const classes = classNames(className, "flex flex-col justify-between w-full min-w-60 lg:w-2/5 lg:min-w-78 min-h-56");
+    const classes = classNames(className, "flex flex-col justify-between w-full min-w-60 lg:w-1/2 lg:min-w-78 min-h-56");
 
     return (
         <Card className={classes}>
             <div className={"flex flex-row gap-x-8 justify-center"}>
-                <div className={"cursor-default"}>
+                <div className={"cursor-default px-4"}>
                     <div className="large-text text-our-black max-w-full break-all line-clamp-1 mb-3">
                         {serviceName}</div>
                     <div className="large-text text-our-black max-w-full break-all line-clamp-1 mb-3">
@@ -61,7 +61,7 @@ export const BookingCard = ({
                         {serviceDesc}</div>
                     <div className="flex flex-col lg:flex-row gap-5 justify-center items-center">
                         {/* button to specific booking detail page*/}
-                        <Button className="flex flex-row gap-x-2 justify-center items-center w-4/5 lg:w-1/2 min-w-40
+                        <Button className="flex flex-row gap-x-2 justify-center items-center w-4/5 lg:w-1/2 min-w-40 mt-6
                         bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500"
                                 onClick={() => navigateTo('/booking/' + bookingId)}>
                             <DocumentMagnifyingGlassIcon className="icon-base"/>
