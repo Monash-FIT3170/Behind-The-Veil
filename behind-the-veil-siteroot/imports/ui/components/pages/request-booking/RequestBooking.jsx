@@ -1,7 +1,7 @@
 /**
  * File Description: Request Booking page
- * File version: 1.0
- * Contributors: Josh
+ * File version: 1.1
+ * Contributors: Josh, Nikki
  */
 
 import React, { useId, useState } from "react";
@@ -9,8 +9,10 @@ import ServiceDetailsHeader from "../../service-details-header/ServiceDetailsHea
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import RequestBookingCalendar from "./RequestBookingCalendar/RequestBookingCalendar.jsx";
+import Input from "../../input/Input";
+import PreviousButton from "../../button/PreviousButton";
 
 /**
  * Page for user to request a booking
@@ -72,10 +74,7 @@ const RequestBooking = () => {
   return (
     <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
       {/* TODO: implement back button functionality when implementing the actual work flow to get to this page */}
-      <Button className="bg-transparent text-dark-grey flex gap-2">
-        <ArrowLeftIcon className="size-6" />
-        Back
-      </Button>
+      <PreviousButton/>
 
       {/* Main container for content */}
       <div className="flex flex-col gap-4 xl:px-40">
@@ -92,15 +91,9 @@ const RequestBooking = () => {
           <div className="flex flex-col gap-4">
             {/* location */}
             <div className="flex flex-col gap-1">
-              <label
-                htmlFor={locationInputId}
-                className="main-text text-our-black"
-              >
-                Location
-              </label>
-              <input
+              <label htmlFor={locationInputId} className="main-text text-our-black">Location</label>
+              <Input
                 id={locationInputId}
-                className="border-light-grey border-2 p-2 rounded main-text"
                 placeholder="Input location for service: wedding venue, address, ..."
                 name="location"
                 value={inputs.location || ""}
@@ -113,15 +106,9 @@ const RequestBooking = () => {
               {/* input fields */}
               <div className="flex flex-col gap-4 grow">
                 <div className="flex flex-col gap-1">
-                  <label
-                    htmlFor={dateInputId}
-                    className="main-text text-our-black"
-                  >
-                    Select Date
-                  </label>
-                  <input
+                  <label htmlFor={dateInputId} className="main-text text-our-black">Select Date</label>
+                  <Input
                     id={dateInputId}
-                    className="border-light-grey border-2 p-2 rounded main-text"
                     placeholder="Select a date"
                     name="date"
                     value={inputs.date || ""}
@@ -173,7 +160,7 @@ const RequestBooking = () => {
                   type="submit"
                 >
                   Next Step
-                  <ArrowRightIcon className="size-6" />
+                  <ArrowRightIcon className="icon-base"/>
                 </Button>
               </div>
 
