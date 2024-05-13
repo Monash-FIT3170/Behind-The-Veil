@@ -19,13 +19,13 @@ import {ChevronLeftIcon} from "@heroicons/react/24/outline";
  */
 const BackButton = ({className}) => {
 
-    const buttonClasses = "flex flex-row items-center gap-x-2 py-2 px-4 " +
-        "main-text font-bold text-dark-grey hover:text-our-black transition duration-500"
+    const buttonClasses = "flex flex-row items-center justify-start gap-x-2 py-2 px-4 full w-fit rounded-full " +
+        "main-text font-bold text-dark-grey hover:bg-white-hover hover:text-our-black transition duration-500"
     const classes = classNames(buttonClasses, className);
 
     return (
         <Link className={classes} to={".."}>
-            <ChevronLeftIcon className={"h-7 w-7 cursor-pointer"}/> Back
+            <ChevronLeftIcon className={"size-7 stroke-2 cursor-pointer"}/> Back
         </Link>
     );
 };

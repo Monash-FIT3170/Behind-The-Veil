@@ -1,7 +1,7 @@
 /**
  * File Description: Sign-in page
  * File version: 1.0
- * Contributors: Kyle
+ * Contributors: Kyle, Nikki
  */
 
 import React from 'react';

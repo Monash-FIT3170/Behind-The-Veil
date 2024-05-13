@@ -16,17 +16,17 @@ import { PlusIcon, Cog8ToothIcon } from "@heroicons/react/24/outline";
  */
 export const ArtistProfilePage = () => {
   //import plusIcon from heroicons for "add photo" button
-  const plusIcon = <PlusIcon className="w-6 h-6" />;
+  const plusIcon = <PlusIcon className="icon-base" />;
 
   //import gearIcon from heroicons for "settings" button.
-  const gearIcon = <Cog8ToothIcon className="w-6 h-6" />;
+  const gearIcon = <Cog8ToothIcon className="icon-base" />;
 
   // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
   // When completing the dynamic version for this page, probably a good idea to setup the photos as components and importing them in.
   const galleryTab = (
     <div className="relative">
       <div className="sticky top-20 z-20 flex justify-end">
-        <Button className="absolute top-5 flex bg-secondary-purple hover:bg-secondary-purple-hover">
+        <Button className="absolute top-5 flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover">
           {plusIcon} Add Photo
         </Button>
       </div>
@@ -126,7 +126,7 @@ export const ArtistProfilePage = () => {
   return (
     <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
       <div className="flex justify-end">
-        <Button className="flex"> {gearIcon} Settings</Button>
+        <Button className="flex flex-row gap-x-1.5"> {gearIcon} Settings</Button>
       </div>
       <ProfilePhoto className="flex container mx-auto" />
       <div className="text-center main-text">Name</div>
