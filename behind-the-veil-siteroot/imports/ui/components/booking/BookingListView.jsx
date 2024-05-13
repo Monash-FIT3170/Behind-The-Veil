@@ -20,7 +20,7 @@ const BookingListView = () => {
             serviceName: "Bachelorette Glam Experience",
             serviceDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n",
             servicePrice: 123,
-            serviceImageData: "",
+            serviceImageData: "/images/unsplash-amir-seilsepour.png",
             bookingStartDateTime: "Tuesday, 12 May, 2024",
             bookingStatus: BookingStatus.COMPLETED
         },
@@ -29,7 +29,7 @@ const BookingListView = () => {
             serviceName: "GlamourGlow Beauty",
             serviceDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n",
             servicePrice: 123,
-            serviceImageData: "",
+            serviceImageData: "/images/pexels-christian-diokno-1666462-3260852.jpg",
             bookingStartDateTime: "Thursday, 14 May, 2024",
             bookingStatus: BookingStatus.COMPLETED
         },
@@ -38,7 +38,7 @@ const BookingListView = () => {
             serviceName: "Bridal Glam Affair",
             serviceDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n",
             servicePrice: 123,
-            serviceImageData: "",
+            serviceImageData: "/images/unsplash-valerie-elash-bI8Yv7AH6b0.jpg",
             bookingStartDateTime: "Friday, 15 May, 2024",
             bookingStatus: BookingStatus.CONFIRMED
         },
@@ -47,7 +47,7 @@ const BookingListView = () => {
             serviceName: "Bachelorette Glam Experience",
             serviceDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n",
             servicePrice: 123,
-            serviceImageData: "",
+            serviceImageData: "/images/unsplash-amir-seilsepour.png",
             bookingStartDateTime: "Saturday, 16 May, 2024",
             bookingStatus: BookingStatus.PENDING
         },
@@ -56,7 +56,7 @@ const BookingListView = () => {
             serviceName: "GlamourGlow Beauty",
             serviceDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n",
             servicePrice: 123,
-            serviceImageData: "",
+            serviceImageData: "/images/pexels-christian-diokno-1666462-3260852.jpg",
             bookingStartDateTime: "Monday, 18 May, 2024",
             bookingStatus: BookingStatus.REJECTED
         },
@@ -65,7 +65,7 @@ const BookingListView = () => {
             serviceName: "Bridal Glam Affair",
             serviceDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n",
             servicePrice: 123,
-            serviceImageData: "",
+            serviceImageData: "/images/unsplash-valerie-elash-bI8Yv7AH6b0.jpg",
             bookingStartDateTime: "Tuesday, 19 May, 2024",
             bookingStatus: BookingStatus.CANCELLED
         }]
@@ -106,16 +106,17 @@ const BookingListView = () => {
                 })}
             </div>
         <div className="mt-6">
-            <div className="flex flex-col">
+            <div className="flex flex-col lg:flex-row gap-8 flex-wrap">
                 {filteredBookings.map((booking) => {
+                    console.log(booking.serviceImageData)
                 return (
                     <BookingCard
-                        className="mb-4"
+                        className=""
                         bookingId={booking.bookingId}
                         serviceName={booking.serviceName}
                         serviceDesc={booking.serviceDesc}
                         servicePrice={booking.servicePrice}
-                        servicePhotoData={""}
+                        serviceImageData={booking.serviceImageData}
                         bookingStartDateTime={booking.bookingStartDateTime}
                         bookingStatus={booking.bookingStatus}
                     ></BookingCard>

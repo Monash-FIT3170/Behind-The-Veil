@@ -9,7 +9,6 @@ import classNames from "classnames";
 import {useNavigate} from "react-router-dom";
 
 import Card from "./Card";
-import { BookingStatus } from '../../enums/BookingStatus';
 import Button from '../button/Button';
 import {DocumentMagnifyingGlassIcon} from "@heroicons/react/24/outline"
 
@@ -39,10 +38,12 @@ export const BookingCard = ({
     // variables to handle routing
     const navigateTo = useNavigate();
 
-    const classes = classNames(className, "flex flex-col justify-between w-full min-w-60 lg:w-1/2 lg:min-w-78 min-h-56");
+    const classes = classNames(className, "flex flex-col overflow-hidden justify-between w-full min-w-60 lg:w-2/5 lg:min-w-78 min-h-56");
+
+    console.log(serviceImageData)
 
     return (
-        <Card className={classes}>
+        <Card className={classes} style={{ paddingRight: 0 }}>
             <div className={"flex flex-row gap-x-8 justify-center"}>
                 <div className={"cursor-default px-4"}>
                     <div className="large-text text-our-black max-w-full break-all line-clamp-1 mb-3">
@@ -71,9 +72,8 @@ export const BookingCard = ({
                 </div>
 
                 {/* image on the right side for service*/}
-                <div className={"hidden sm:flex flex-col items-center justify-center " +
-                    "relative min-w-60 min-h-40"}>
-                    <img className={"w-full h-3/4 object-cover absolute rounded-[20px]"}
+                <div className={"hidden sm:flex flex-col justify-center relative min-w-64 min-h-40"}>
+                    <img className={"w-full object-cover absolute"}
                         src={serviceImageData}
                         alt={"Service's cover image"}/>
                 </div>
