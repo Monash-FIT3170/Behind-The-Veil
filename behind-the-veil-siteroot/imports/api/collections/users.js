@@ -1,13 +1,12 @@
 /**
  * File Description: User database entity
- * File version: 1.0
- * Contributors: Nikki, Neth
+ * File version: 1.1
+ * Contributors: Nikki, Neth, Ryan
  */
 
-import {Mongo} from "meteor/mongo";
+import { Meteor } from "meteor/meteor";
 
 // to set up user collection
-export const UserCollection = new Mongo.Collection("users_temp");
+export const UserCollection = Meteor.users
 
 export default UserCollection;
-
