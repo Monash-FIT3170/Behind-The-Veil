@@ -9,16 +9,11 @@ import classNames from "classnames";
 import {useNavigate} from "react-router-dom";
 
 import { BookingStatus } from '../../enums/BookingStatus';
-import { BookingFilter } from '../booking/BookingsFiltersEnum'
+import { BookingFilter } from './BookingsFilterEnum'
 import Button from '../button/Button';
 import BookingCard from '../card/BookingCard';
 
 const BookingListView = () => {
-
-    //filters
-    const availableFilters = Object.values(BookingFilter);
-    const [selectedFilter, setSelectedFilter] = useState(BookingFilter.ALL);
-
     const MOCK_BOOKINGS = [
         {
             bookingId: "1",
@@ -27,7 +22,7 @@ const BookingListView = () => {
             servicePrice: 123,
             serviceImageData: "",
             bookingStartDateTime: "Tuesday, 12 May, 2024",
-            bookingStatus: BookingStatus.CONFIRMED
+            bookingStatus: BookingStatus.COMPLETED
         },
         {
             bookingId: "2",
@@ -36,8 +31,61 @@ const BookingListView = () => {
             servicePrice: 123,
             serviceImageData: "",
             bookingStartDateTime: "Thursday, 14 May, 2024",
+            bookingStatus: BookingStatus.COMPLETED
+        },
+        {
+            bookingId: "3",
+            serviceName: "Bridal Glam Affair",
+            serviceDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n",
+            servicePrice: 123,
+            serviceImageData: "",
+            bookingStartDateTime: "Friday, 15 May, 2024",
             bookingStatus: BookingStatus.CONFIRMED
+        },
+        {
+            bookingId: "4",
+            serviceName: "Bachelorette Glam Experience",
+            serviceDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n",
+            servicePrice: 123,
+            serviceImageData: "",
+            bookingStartDateTime: "Saturday, 16 May, 2024",
+            bookingStatus: BookingStatus.PENDING
+        },
+        {
+            bookingId: "5",
+            serviceName: "GlamourGlow Beauty",
+            serviceDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n",
+            servicePrice: 123,
+            serviceImageData: "",
+            bookingStartDateTime: "Monday, 18 May, 2024",
+            bookingStatus: BookingStatus.REJECTED
+        },
+        {
+            bookingId: "6",
+            serviceName: "Bridal Glam Affair",
+            serviceDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n",
+            servicePrice: 123,
+            serviceImageData: "",
+            bookingStartDateTime: "Tuesday, 19 May, 2024",
+            bookingStatus: BookingStatus.CANCELLED
         }]
+
+    //filters
+    const availableFilters = Object.values(BookingFilter);
+    const [selectedFilter, setSelectedFilter] = useState(BookingFilter.ALL);
+
+    const filterOptions = {
+        [BookingFilter.ALL]: Object.values(BookingStatus),
+        [BookingFilter.CONFIRMED]: [BookingStatus.CONFIRMED],
+        [BookingFilter.PENDING]: [BookingStatus.PENDING],
+        [BookingFilter.COMPLETED]: [BookingStatus.COMPLETED],
+        [BookingFilter.CLOSED]: [BookingStatus.REJECTED,BookingStatus.CANCELLED,BookingStatus.PENDING_CANCELLATION,BookingStatus.OVERDUE]
+    };
+    
+    // Filtered bookings based on the selected filter
+    const filteredBookings = MOCK_BOOKINGS.filter((booking) => {
+        return filterOptions[selectedFilter].includes(booking.bookingStatus);
+    });
 
     return (
         <div className="mt-2">
@@ -59,7 +107,7 @@ const BookingListView = () => {
             </div>
         <div className="mt-6">
             <div className="flex flex-col">
-                {MOCK_BOOKINGS.map((booking) => {
+                {filteredBookings.map((booking) => {
                 return (
                     <BookingCard
                         className="mb-4"
