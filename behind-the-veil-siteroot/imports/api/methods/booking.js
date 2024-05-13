@@ -3,15 +3,15 @@
  * File version: 1.0
  * Contributors: Neth
  */
-import {BookingCollection} from "../collections/booking";
+import { BookingCollection } from "../collections/booking";
 
 Meteor.methods({
-    "add_booking": function (startDateTime, endDateTime, location, price, status, brideUsername, artistUsername, serviceId) {
+    "add_booking": function (startDateTime, duration, location, price, status, brideUsername, artistUsername, serviceId) {
         /**
          * Adds a new booking to the database. Keep in mind this is an async method
          * and needs to be put in a promise if you want the value right away.
          * @param {Date} startDateTime - The start date and time of the booking.
-         * @param {Date} endDateTime - The end date and time of the booking.
+         * @param {number} duration - The duration of the booking as an integer
          * @param {string} location - The location of the booking.
          * @param {number} price - The price of the booking.
          * @param {string} status - The status of the booking.
@@ -22,7 +22,7 @@ Meteor.methods({
          */
         return BookingCollection.insert({
             bookingStartDateTime: startDateTime,
-            bookingEndDateTime: endDateTime,
+            bookingDuration: duration,
             bookingLocation: location,
             bookingPrice: price,
             bookingStatus: status,
@@ -39,7 +39,7 @@ Meteor.methods({
      */
     "get_booking": function (bookingId) {
         return BookingCollection.findOne(
-            {_id: bookingId},
+            { _id: bookingId },
         )
     },
 
@@ -51,7 +51,7 @@ Meteor.methods({
     "update_booking_details": function (bookingId, updateObject) {
         BookingCollection.update(
             { _id: bookingId },
-            { $set: updateObject},
+            { $set: updateObject },
         );
     }
 })
