@@ -7,11 +7,7 @@
 import React from "react";
 import classNames from "classnames";
 import { useNavigate } from "react-router-dom";
-
-import { CalendarDaysIcon } from "@heroicons/react/24/outline";
-
 import Card from "./Card";
-import Button from "../button/Button";
 
 /**
  * Component that displays brief service details on the Services page

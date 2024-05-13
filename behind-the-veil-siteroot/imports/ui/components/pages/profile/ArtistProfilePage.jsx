@@ -125,6 +125,7 @@ export const ArtistProfilePage = () => {
     </div>
   );
 
+  //The dashboardCardValue will have to be dynamic. Title and Desc can be static given it's the same across all accounts.
   const dashboardTab = (
     <div className="flex-auto grid grid-cols-auto grid-cols-2 gap-8 justify-items-center">
       <DashboardCard
@@ -151,6 +152,15 @@ export const ArtistProfilePage = () => {
     </div>
   );
 
+  const reviewTab = (
+    <div>
+      <div className="columns-2">
+        <div>1</div>
+        <div>2</div>
+      </div>
+      <div>h</div>
+    </div>
+  );
   //Utilise Tab components to create page schematics.
   return (
     <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
@@ -170,7 +180,7 @@ export const ArtistProfilePage = () => {
           "Bookings Panel",
           "My Services Panel",
           galleryTab,
-          "Reviews Panel",
+          reviewTab,
         ]}
         tabsClassName="flex justify-between"
       />
