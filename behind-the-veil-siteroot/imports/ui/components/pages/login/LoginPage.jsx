@@ -48,9 +48,9 @@ export const LoginPage = () => {
                 // If the user type is artist, redirect to the artist landing page.
                 if (accountType == 'Artist') {
                     navigate('/artist-profile/:username');
-                // TODO: If the user type is bride, redirect to the bride landing page.
+                // If the user type is bride, redirect to the bride landing page.
                 } else {
-                    navigate('/profile/:username');
+                    navigate('/bride-profile/:username');
                 }
             }
         });
@@ -67,12 +67,12 @@ export const LoginPage = () => {
                 {/*You might have to alter the above translation values or something to make sure that the visual
                 doesn't move when changing screen size*/}
 
-                <div style={{display: "flex", flexDirection: "column", gap: "100px", alignItems: "center", textAlign: "center"}}>
+                <div style={{display: "flex", flexDirection: "column", gap: "20px", alignItems: "center", textAlign: "center", marginTop: "-275px", marginLeft: "50px"}}>
 
-                    <div className="title-text text-secondary-purple-hover" style={{width: "400px"}}>Bridal Makeup & Services</div>
+                    <div className="title-text text-secondary-purple-hover" style={{width: "450px"}}>Bridal Makeup & Services</div>
 
                     {/* The image displayed on the left-hand side of the screen. */}
-                    <img src="/images/SignIn.jpg" width="650px"></img>
+                    <img src="/images/SignIn.png" width="500px"></img>
                 </div>
             </div>
 
