@@ -10,7 +10,10 @@ import PageLayout from "../../../enums/PageLayout.tsx";
 import Tabs from "../../tabs/Tabs.jsx";
 import ProfilePhoto from "../../profilePhoto/ProfilePhoto.jsx";
 import Button from "../../button/Button.jsx";
+import Card from "../../card/Card.jsx";
+import DashboardCard from "../../card/DashboardCard.jsx";
 import { PlusIcon, Cog8ToothIcon } from "@heroicons/react/24/outline";
+
 /**
  * Page for artist profile
  */
@@ -122,11 +125,78 @@ export const ArtistProfilePage = () => {
     </div>
   );
 
+  const dashboardTab = (
+    <div className="flex-auto grid grid-cols-2 gap-8 justify-items-center">
+      <Card className="size-full">
+        <div className="flex-auto grid grid-cols-3">
+          <div className="col-span-2">
+            <div className="large-text text-our-black max-w-full line-clamp-1 mb-3 text-center">
+              Total Customers - Lifetime
+            </div>
+            <div className="small-text text-dark-grey max-h-[4.5rem] max-w-full line-clamp-4 mb-3 text-center">
+              Celebrate your achievement in helping brides with their special
+              day!
+            </div>
+          </div>
+          <div className="large-number-text text-out-black text-center">
+            273
+          </div>
+        </div>
+      </Card>
+      <Card className="size-full">
+        <div className="flex-auto grid grid-cols-3">
+          <div className="col-span-2">
+            <div className="large-text text-our-black max-w-full line-clamp-1 mb-3 text-center">
+              Total Customers - This Month
+            </div>
+            <div className="small-text text-dark-grey max-h-[4.5rem] max-w-full line-clamp-4 mb-3 text-center">
+              People you have glowed up this month!
+            </div>
+          </div>
+          <div className="large-number-text text-out-black text-center">5</div>
+        </div>
+      </Card>
+      <Card className="size-full">
+        <div className="flex-auto grid grid-cols-3">
+          <div className="col-span-2">
+            <div className="large-text text-our-black max-w-full line-clamp-1 mb-3 text-center">
+              Total Earnings
+            </div>
+            <div className="small-text text-dark-grey max-h-[4.5rem] max-w-full line-clamp-4 mb-3 text-center">
+              Count your dollars!
+            </div>
+          </div>
+          <div className="large-number-text text-out-black text-center">
+            $32,760
+          </div>
+        </div>
+      </Card>
+      <Card className="size-full">
+        <div className="flex-auto grid grid-cols-3">
+          <div className="col-span-2">
+            <div className="large-text text-our-black max-w-full line-clamp-1 mb-3 text-center">
+              Pending Earnings
+            </div>
+            <div className="small-text text-dark-grey max-h-[4.5rem] max-w-full line-clamp-4 mb-3 text-center">
+              Cash in transit!
+            </div>
+          </div>
+          <div className="large-number-text text-out-black text-center">
+            $480
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
+
   //Utilise Tab components to create page schematics.
   return (
     <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
       <div className="flex justify-end">
-        <Button className="flex flex-row gap-x-1.5"> {gearIcon} Settings</Button>
+        <Button className="flex flex-row gap-x-1.5">
+          {" "}
+          {gearIcon} Settings
+        </Button>
       </div>
       <ProfilePhoto className="flex container mx-auto" />
       <div className="text-center main-text">Name</div>
@@ -134,7 +204,7 @@ export const ArtistProfilePage = () => {
       <Tabs
         tabs={["Dashboard", "Bookings", "My Services", "Gallery", "Reviews"]}
         tabPanels={[
-          "Dashboard Panel",
+          dashboardTab,
           "Bookings Panel",
           "My Services Panel",
           galleryTab,
