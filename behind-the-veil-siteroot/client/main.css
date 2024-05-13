@@ -24,6 +24,9 @@
         padding: 0;
         margin: 0;
     }
+    *:focus {
+        @apply outline-secondary-purple-hover;
+    }
 
     /* base font styles */
     .main-text {
@@ -113,7 +116,7 @@ on a case by case basis within individual JSX components.
 */
 @layer components {
     .btn-base {
-        @apply bg-light-grey hover:bg-light-grey-hover transition duration-500
+        @apply bg-light-grey hover:bg-light-grey-hover transition duration-500 ease-in-out
         main-text font-bold py-2 px-4 rounded-full w-fit;
     }
 
@@ -125,6 +128,15 @@ on a case by case basis within individual JSX components.
 
     .card-base {
         @apply white-glass-base border-main-blue border-2 w-fit rounded-[45px] p-6;
+    }
+
+    .input-base {
+        @apply bg-white border-2 p-2 rounded-[6px] h-12 main-text
+        border-light-grey hover:border-secondary-purple transition duration-500 ease-in-out;
+    }
+
+    .icon-base {
+        @apply size-6 stroke-2;
     }
 
     .service-details-header-base {

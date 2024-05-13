@@ -1,6 +1,6 @@
 /**
  * File Description: Examples page
- * File version: 1.2
+ * File version: 1.3
  * Contributors: Josh, Nikki
  */
 
@@ -12,7 +12,10 @@ import ServiceDetailsHeaderExamples from "./service-details-header-examples/Serv
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import TabsExamples from "./tabs-examples/TabsExamples";
-import SearchBarExamples from "./search-bar-examples/SearchBarExamples.jsx";
+import MapExamples from "./map-examples/MapExamples.jsx";
+import PaginationExample from "./pagination-example/PaginationExample";
+import InputExamples from "./input-examples/InputExamples.jsx";
+import LoaderExamples from "./loaderExamples/LoaderExamples";
 
 /**
  * Page to showcase examples
@@ -21,12 +24,15 @@ const Examples = () => {
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
             <div className="title-text">Examples</div>
-            <ButtonExamples />
-            <FontExamples />
-            <CardExamples />
-            <ServiceDetailsHeaderExamples />
-            <TabsExamples />
-            <SearchBarExamples />
+            <ButtonExamples/>
+            <FontExamples/>
+            <CardExamples/>
+            <ServiceDetailsHeaderExamples/>
+            <TabsExamples/>
+            <InputExamples />
+            <MapExamples />
+            <PaginationExample/>
+            <LoaderExamples />
         </WhiteBackground>
     );
 };

@@ -1,33 +1,109 @@
 /**
- * File Description: Login page
- * File version: 1.0
- * Contributors:
+ * File Description: Sign-in page
+ * File version: 1.2
+ * Contributors: Kyle, Nikki
  */
 
-import React from 'react';
+import React, {useState} from 'react';
+import {useNavigate} from "react-router-dom";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
+import Button from "../../button/Button.jsx";
+import {KeyIcon, UserIcon} from "@heroicons/react/24/outline";
+
+import SignInImage from '../../images/SignInImage.jsx';
+import Input from "../../input/Input";
 
 /**
  * Page where user can sign in to their account
  */
 export const LoginPage = () => {
-    return (
-        // if window size is SMALLER than a large screen (default variable for large in tailwind lg:1024px),
+    const navigate = useNavigate();
+
+    const [inputs, setInputs] = useState({
+        "username": "", "password": ""
+    });
+
+    // form related functions
+    const handleInputChange = (event) => {
+        const name = event.target.name;
+        const value = event.target.value;
+        setInputs(i => ({...i, [name]: value}))
+    }
+
+    function handleSubmit(event) {
+        // todo: authentication
+        event.preventDefault();
+        alert("login with email: " + inputs.username + " and password: " + inputs.password);
+    }
+
+    return (// if window size is SMALLER than a large screen (default variable for large in tailwind lg:1024px),
         // then use center aligned and no visuals on the left so the inputs aren't all squished
         <WhiteBackground pageLayout={window.innerWidth <= 1024 ? PageLayout.SMALL_CENTER : PageLayout.SMALL_RIGHT}>
-            {/*you MUST keep this div and put everything on the left side (e.g. the visual) of it*/}
+
+            {/*Left div*/}
             <div className="hidden lg:flex translate-x-1/2 translate-y-[80vh]">
                 {/*You might have to alter the above translation values or something to make sure that the visual
                 doesn't move when changing screen size*/}
-                <span>Sign In Page Visual here!!</span>
+
+                <div className={"flex flex-col gap-24 items-center text-center"}>
+                    <div className="title-text text-secondary-purple-hover w-[400px]">
+                        Bridal Makeup & Services
+                    </div>
+                    <SignInImage></SignInImage>
+                </div>
             </div>
-            {/*you MUST keep this div and put everything on the right side inside of it*/}
+
+            {/*Right Div*/}
             <div>
-                <span>Sign In Page to be done!!</span>
+                <div className="title-text text-center">Sign In</div>
+
+                <form>
+                    <div className={"flex flex-col items-center gap-2.5 mt-12"}>
+                        <div className={"relative"}>
+                        <span className={"absolute left-2.5 top-1/2 -translate-y-1/2"}>
+                        <UserIcon className={"icon-base text-dark-grey"}/>
+                        </span>
+                            <Input type="text"
+                                   placeholder="Username"
+                                   className={"pl-12 w-64 sm:w-96 lg:w-64 xl:w-96"}
+                                   name="username"
+                                   onChange={handleInputChange}/>
+                        </div>
+
+                        <div className={"relative"}>
+                        <span className={"absolute left-2.5 top-1/2 -translate-y-1/2"}>
+                        <KeyIcon className={"icon-base text-dark-grey"}/>
+                        </span>
+                            <Input type="password"
+                                   placeholder="Password"
+                                   className={"pl-12 w-64 sm:w-96 lg:w-64 xl:w-96 "}
+                                   name="password"
+                                   onChange={handleInputChange}
+                            />
+                        </div>
+
+                        <div className="text-hyperlink-colour underline cursor-pointer ml-auto mr-[10%] right-0">
+                            Forgot password?
+                        </div>
+                    </div>
+
+                    <div className={"flex flex-col items-center gap-2.5 mt-12"}>
+                        <Button type={"submit"}
+                                className="bg-secondary-purple hover:bg-secondary-purple-hover w-1/2 min-w-40"
+                                onClick={handleSubmit}>
+                            Sign in
+                        </Button>
+                        <Button className="w-1/2 min-w-40"
+                                onClick={() => {
+                                    navigate("/register");
+                                }}>
+                            Register
+                        </Button>
+                    </div>
+                </form>
             </div>
-        </WhiteBackground>
-    );
+        </WhiteBackground>);
 };
 
 export default LoginPage;

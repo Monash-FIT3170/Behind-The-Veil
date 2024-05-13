@@ -5,13 +5,14 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        'main-bkg': "url('http://localhost:8000/Background.svg')", // host image on python server
+        'main-bkg': "url('/Background.svg')"
       },
       colors: {
         "our-black": "#282828",
         "dark-grey": "#757575",
         "light-grey": "#D4D4D4",
         "light-grey-hover": "#b2b2b2",
+        "white-hover": "#e5e5e5",
         "main-blue": "#BBCAFE",
         "main-blue-hover": "#818FF8",
         "secondary-purple": "#BBB4E8",
@@ -25,8 +26,5 @@ module.exports = {
         "bg-gradient-end": "#E5D6FF"
       },
     },
-  },
-  plugins: [
-    require('@headlessui/tailwindcss')
-  ],
-};
+    plugins: [require("@headlessui/tailwindcss")]
+}};
