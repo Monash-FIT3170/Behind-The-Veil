@@ -8,6 +8,7 @@ import React from "react";
 import Tabs from "../../tabs/Tabs";
 import Card from "../../card/Card";
 import Button from "../../button/Button";
+import BridesBookingCards from "./BridesBookingCards";
 
 /**
  * Examples of simple tabs. Tabs component uses headless UI: https://headlessui.com/react/tabs
@@ -18,6 +19,7 @@ const BookingTab = () => {
             <Button className="h-fit">{":)"}</Button>
             <Button className="h-fit">{":|"}</Button>
             <Button className="h-fit">{":("}</Button>
+            <BridesBookingCards/>
         </div>
     )
 
