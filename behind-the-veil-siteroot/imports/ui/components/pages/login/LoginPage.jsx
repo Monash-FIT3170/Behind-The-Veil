@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
-import SignInImage from '../../images/SignInImage.jsx';
 
 import {
     UserIcon,
@@ -46,12 +45,12 @@ export const LoginPage = () => {
                 console.log('Login failed');
             } else {
                 console.log('Login successful');
-                // TODO: If the user type is artist, redirect to the artist landing page.
+                // If the user type is artist, redirect to the artist landing page.
                 if (accountType == 'Artist') {
-                    navigate('/');
+                    navigate('/artist-profile/:username');
                 // TODO: If the user type is bride, redirect to the bride landing page.
                 } else {
-                    navigate('/');
+                    navigate('/profile/:username');
                 }
             }
         });
@@ -73,7 +72,7 @@ export const LoginPage = () => {
                     <div className="title-text text-secondary-purple-hover" style={{width: "400px"}}>Bridal Makeup & Services</div>
 
                     {/* The image displayed on the left-hand side of the screen. */}
-                    <SignInImage></SignInImage>
+                    <img src="/images/SignIn.jpg" width="650px"></img>
                 </div>
             </div>
 
