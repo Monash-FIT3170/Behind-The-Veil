@@ -1,14 +1,12 @@
 /**
  * File Description: User database entity
- * File version: 1.0
- * Contributors: Nikki, Neth
+ * File version: 1.1
+ * Contributors: Nikki, Neth, Ryan
  */
 
-import {Mongo} from "meteor/mongo";
+import { Meteor } from "meteor/meteor";
 
 // to set up user collection
-export const UserCollection = new Mongo.Collection("users_temp");
-// This is no longer needed, just kept here for reference as the accounts package already initiates it.
+export const UserCollection = Meteor.users
 
 export default UserCollection;
-

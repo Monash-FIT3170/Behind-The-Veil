@@ -21,7 +21,7 @@ export const RegisterPage = () => {
 
     const handleAccountTypeSelection = (accountType) => {
         console.log("Selected Type:", accountType);
-        navigate(`/register/createAccount?type=${accountType}`);
+        navigate("/register/createAccount?type=" + accountType);
     };
 
     const AccountTypeOption = ({ accountType, label, onClick }) => {
@@ -65,13 +65,13 @@ export const RegisterPage = () => {
                 {/* Buttons for account type selection */}
                 <div style={{display: "flex", justifyContent: "center", gap: "20px"}}>
                     <AccountTypeOption
-                        accountType="Artist"
+                        accountType="artist"
                         label="I want to provide my services"
                         onClick={handleAccountTypeSelection}
                     />
 
                     <AccountTypeOption
-                        accountType="Bride"
+                        accountType="bride"
                         label="I want to make bookings for services"
                         onClick={handleAccountTypeSelection}
                     />

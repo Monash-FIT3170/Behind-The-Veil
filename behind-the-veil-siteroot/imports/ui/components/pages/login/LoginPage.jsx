@@ -45,7 +45,7 @@ export const LoginPage = () => {
                 alert('Login Failed.')
             } else {
                 // If the user type is artist, redirect to the artist landing page.
-                if (accountType == 'Artist') {
+                if (accountType === 'artist') {
                     navigate('/artist-profile/:username');
                 // If the user type is bride, redirect to the bride landing page.
                 } else {

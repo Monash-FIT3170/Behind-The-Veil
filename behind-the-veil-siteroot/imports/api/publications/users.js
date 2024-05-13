@@ -1,7 +1,7 @@
 /**
  * File Description: User database entity
- * File version: 1.0
- * Contributors: Nikki
+ * File version: 1.1
+ * Contributors: Nikki, Ryan
  */
 
 import {Meteor} from 'meteor/meteor'
@@ -18,5 +18,5 @@ Meteor.publish('all_users', function() {
  * Publishes artists.
  */
 Meteor.publish('all_artists', function() {
-    return UserCollection.find({"userType":"artist"});
+    return UserCollection.find({"profile.type":"artist"});
 });
