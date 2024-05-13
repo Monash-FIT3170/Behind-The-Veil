@@ -53,9 +53,9 @@ const CreateAccountPage = () => {
             username: username,
             email: email,
             password: password,
-            type: accountType,
             profile: {
-                alias: alias
+                alias: alias,
+                type: accountType
             }
         };
 
