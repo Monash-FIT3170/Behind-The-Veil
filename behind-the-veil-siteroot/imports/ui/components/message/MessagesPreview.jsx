@@ -1,31 +1,37 @@
 /**
  * File Description: Messages Preview
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Vicky
  */
 import React from "react";
 import Card from "../card/Card";
-import Button from "../button/Button";
 import ProfilePhoto from '../profilePhoto/ProfilePhoto';
 
 const MessagesPreview = (props) => {
     const {userName, name, recentMessage, image, date, read} = props.data;
     return (
-        <Card className="flex flex-row gap-2 w-full h-full border-none">
-        <ProfilePhoto className={`min-win-[10%] shrink-0`}></ProfilePhoto>
-        <div className="flex flex-col gap-1 w-3/4">
-        {read ? (
-            <div>
-                <div className="message-name-read-text">{name}</div>
-                <div className="message-read-text line-clamp-2 overflow-hidden">{recentMessage}</div>
+        <Card className="flex flex-row justify-center items-center w-full h-full border-none lg:flex-center">
+            {/* Only show the profile photo on small screens */}
+            <div className="lg:hidden">
+                <ProfilePhoto className="min-w-[10%] h-auto"></ProfilePhoto>
+            </div>
+            <div className="hidden lg:flex lg:gap-1 lg:items-center">
+                {/* Show profile photos and message preview on larger screens */}
+                <ProfilePhoto className="min-win-[10%] shrink-0"></ProfilePhoto>
+                <div className="hidden lg:flex lg:flex-col lg:gap-1 lg:w-3/4 ">
+                    {read ? (
+                        <div>
+                            <div className="message-name-read-text">{name}</div>
+                            <div className="message-read-text line-clamp-2 overflow-hidden">{recentMessage}</div>
+                        </div>
+                    ) : (
+                        <div>
+                            <div className="message-name-unread-text">{name}</div>
+                            <div className="message-unread-text line-clamp-2 overflow-hidden">{recentMessage}</div>
+                        </div>
+                    )}
+                    <div className="message-tag-text flex justify-end">@{userName}</div>
                 </div>
-            ) : (
-                <div>
-                    <div className="message-name-unread-text">{name}</div>
-                    <div className="message-unread-text line-clamp-2 overflow-hidden">{recentMessage}</div>
-                </div>
-            )}
-            <div className="message-tag-text flex justify-end">@{userName}</div>
             </div>
         </Card>
     )
