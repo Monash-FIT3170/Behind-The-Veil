@@ -1,6 +1,6 @@
 /**
  * File Description: Request Booking page
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Josh, Nikki
  */
 
@@ -16,7 +16,7 @@ import PreviousButton from "../../button/PreviousButton";
 import { useSubscribe, useTracker } from "meteor/react-meteor-data"
 import BookingCollection from "../../../../api/collections/booking.js";
 import mockBookings from './mockBookings.json'
-import { addHours, areIntervalsOverlapping, eachHourOfInterval, endOfHour, set } from "date-fns";
+import { addHours, areIntervalsOverlapping, eachHourOfInterval, getHours, isEqual, set, format } from "date-fns";
 import { BookingStatus } from "../../../enums/BookingStatus.ts";
 
 
@@ -75,8 +75,6 @@ const RequestBooking = () => {
     );
   };
 
-  const getAvailableDates = () => { };
-
   // calculate available times that the user can select, based on a date
   // TODO: implement this properly instead of returning dummy data
   // date: day at which we want the available time slots
@@ -92,14 +90,6 @@ const RequestBooking = () => {
       console.warn('bookings is not an array')
       return
     }
-
-    const AVAILABLE_TIMES = [
-      "10:00am",
-      "11:00am",
-      "12:00pm",
-      "2:00pm",
-      "4:00pm",
-    ];
 
     const hours = eachHourOfInterval({
       // TODO: for now, assume that artists can work 6am to 7pm every day
@@ -128,14 +118,9 @@ const RequestBooking = () => {
       })
     })
 
-    console.log(availableTimes)
-
-    return AVAILABLE_TIMES
-
+    return availableTimes
   };
 
-
-  const availableDates = getAvailableDates();
   const availableTimes = getAvailableTimes({ date: inputs.date, duration: duration, bookings: bookings });
 
   return (
@@ -197,7 +182,7 @@ const RequestBooking = () => {
                         const baseStyle = "w-full";
                         const activeStyle = "bg-dark-grey text-white";
                         const className =
-                          inputs.time === time
+                          isEqual(inputs.time, time)
                             ? `${baseStyle} ${activeStyle}`
                             : baseStyle;
 
@@ -206,6 +191,7 @@ const RequestBooking = () => {
                             key={time}
                             className={className}
                             onClick={() => {
+                              console.log(time)
                               setInputs((i) => {
                                 return {
                                   ...i,
@@ -214,7 +200,7 @@ const RequestBooking = () => {
                               });
                             }}
                           >
-                            {time}
+                            {format(time, 'p')}
                           </Button>
                         );
                       })}
