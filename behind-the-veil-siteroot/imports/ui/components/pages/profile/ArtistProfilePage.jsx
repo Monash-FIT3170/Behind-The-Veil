@@ -10,9 +10,13 @@ import PageLayout from "../../../enums/PageLayout.tsx";
 import Tabs from "../../tabs/Tabs.jsx";
 import ProfilePhoto from "../../profilePhoto/ProfilePhoto.jsx";
 import Button from "../../button/Button.jsx";
-import Card from "../../card/Card.jsx";
 import DashboardCard from "../../card/DashboardCard.jsx";
-import { PlusIcon, Cog8ToothIcon } from "@heroicons/react/24/outline";
+import {
+  PlusIcon,
+  Cog8ToothIcon,
+  StarIcon as OutStarIcon,
+} from "@heroicons/react/24/outline";
+import { StarIcon as SolStarIcon } from "@heroicons/react/24/solid";
 
 /**
  * Page for artist profile
@@ -23,6 +27,12 @@ export const ArtistProfilePage = () => {
 
   //import gearIcon from heroicons for "settings" button.
   const gearIcon = <Cog8ToothIcon className="icon-base" />;
+
+  const outlineStarIcon = <OutStarIcon className="size-20 stroke-1" />;
+
+  const solidStarIcon = <SolStarIcon className="size-20 stroke-1" />;
+
+  const smallSolidStarIcon = <SolStarIcon className="size-10 strok-1" />;
 
   // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
   // When completing the dynamic version for this page, probably a good idea to setup the photos as components and importing them in.
@@ -136,7 +146,10 @@ export const ArtistProfilePage = () => {
       ></DashboardCard>
       <DashboardCard
         dashboardCardTitle="Total Customers - This Month"
-        dashboardCardDesc="People you have glowed up this month!"
+        dashboardCardDesc="People you have glowed 
+        
+        
+         up this month!"
         dashboardCardValue="5"
       ></DashboardCard>
       <DashboardCard
@@ -154,9 +167,21 @@ export const ArtistProfilePage = () => {
 
   const reviewTab = (
     <div>
-      <div className="columns-2">
-        <div>1</div>
-        <div>2</div>
+      <div className="grid grid-cols-2 ">
+        <div className="columns-5">
+          {solidStarIcon}
+          {solidStarIcon}
+          {solidStarIcon}
+          {solidStarIcon}
+          {solidStarIcon}
+        </div>
+        <div>
+          {smallSolidStarIcon}
+          {smallSolidStarIcon}
+          {smallSolidStarIcon}
+          {smallSolidStarIcon}
+          {smallSolidStarIcon}
+        </div>
       </div>
       <div>h</div>
     </div>
@@ -165,10 +190,7 @@ export const ArtistProfilePage = () => {
   return (
     <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
       <div className="flex justify-end">
-        <Button className="flex flex-row gap-x-1.5">
-          {" "}
-          {gearIcon} Settings
-        </Button>
+        <Button className="flex flex-row gap-x-1.5">{gearIcon} Settings</Button>
       </div>
       <ProfilePhoto className="flex container mx-auto" />
       <div className="text-center main-text">Name</div>
