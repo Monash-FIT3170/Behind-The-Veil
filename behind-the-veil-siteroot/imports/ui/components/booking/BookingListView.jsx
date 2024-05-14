@@ -1,12 +1,10 @@
 /**
- * File Description: Service card component based on the generic "Card" component
+ * File Description: Bookings list view for Artist's profile
  * File version: 1.0
- * Contributors: Nikki
+ * Contributors: Laura
  */
 
 import React, {useState} from 'react';
-import classNames from "classnames";
-import {useNavigate} from "react-router-dom";
 
 import { BookingStatus } from '../../enums/BookingStatus';
 import { BookingFilter } from './BookingsFilterEnum'
@@ -14,6 +12,7 @@ import Button from '../button/Button';
 import BookingCard from '../card/BookingCard';
 
 const BookingListView = () => {
+    //mock bookings
     const MOCK_BOOKINGS = [
         {
             bookingId: "1",
@@ -81,7 +80,7 @@ const BookingListView = () => {
         [BookingFilter.CLOSED]: [BookingStatus.COMPLETED,BookingStatus.REJECTED,BookingStatus.CANCELLED,BookingStatus.PENDING_CANCELLATION,BookingStatus.OVERDUE]
     };
     
-    // Filtered bookings based on the selected filter
+    //filtered bookings array based on the selected filter
     const filteredBookings = MOCK_BOOKINGS.filter((booking) => {
         return filterOptions[selectedFilter].includes(booking.bookingStatus);
     });
@@ -89,6 +88,7 @@ const BookingListView = () => {
     return (
         <div className="mt-2">
             <div className="w-full sm:w-2/5 flex flex-wrap sm:flex-nowrap gap-5">
+                {/* rendering buttons for filters*/}
                 {availableFilters.map((filter) => {
                 const baseStyle = "w-1/2 rounded-md p-2 hover:bg-secondary-purple";
                 const activeStyle = "bg-secondary-purple";
@@ -106,6 +106,7 @@ const BookingListView = () => {
             </div>
         <div className="mt-6">
             <div className="flex flex-col lg:flex-row gap-8 flex-wrap">
+                {/* rendering filtered bookigns based on the applied filter */}
                 {filteredBookings.map((booking) => {
                     console.log(booking.serviceImageData)
                 return (
@@ -124,11 +125,6 @@ const BookingListView = () => {
             </div>
         </div>
         </div>
-
-        
-
-    )
-    };
+    )};
     
     export default BookingListView;
-    

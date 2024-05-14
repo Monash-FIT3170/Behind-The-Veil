@@ -23,7 +23,7 @@ export const LoggedOutOnlyRoute = ({children}) => {
     // todo: edit this logic once login is done
     const user = getUserAuth();
 
-    if (false) {
+    if (user === true) {
         // user IS authenticated, cannot access the given page, redirect to home page
         console.log("Cannot access, User is logged in"); // todo: delete after dev, for debugging/testing
         return <Navigate to="/"/>;

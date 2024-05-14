@@ -22,7 +22,7 @@ import AccountActivatedPage from "./components/pages/register/AccountActivatedPa
 import CreateAccountPage from "./components/pages/register/CreateAccountPage";
 import ActivateAccountPage from "./components/pages/register/ActivateAccountPage";
 
-export const App = () => (  
+export const App = () => (
   <div>
     {/*This is the navigation bar on every Page*/}
     <Router>

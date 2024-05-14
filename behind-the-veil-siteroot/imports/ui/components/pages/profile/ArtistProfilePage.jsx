@@ -1,7 +1,7 @@
 /**
  * File Description: Artist Profile
- * File version: 1.0
- * Contributors: Kefei (Phillip) Li
+ * File version: 1.1
+ * Contributors: Kefei (Phillip) Li, Laura
  */
 
 import React from "react";
@@ -22,6 +22,7 @@ export const ArtistProfilePage = () => {
   //import gearIcon from heroicons for "settings" button.
   const gearIcon = <Cog8ToothIcon className="icon-base" />;
 
+  // Booking tab with the list view only (for now)
   const bookingTab = (
     <div>
       <BookingListView></BookingListView>
