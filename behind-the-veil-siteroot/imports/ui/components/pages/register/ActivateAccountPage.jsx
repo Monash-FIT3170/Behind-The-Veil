@@ -1,6 +1,6 @@
 /**
  * File Description: Activate Account page
- * File version: 1..1
+ * File version: 1.1
  * Contributors: Ryan, Nikki
  */
 
@@ -46,7 +46,10 @@ const ActivateAccountPage = () => {
                     **The email API has not been completed yet**
                 </div>
 
-                <Button className={"bg-secondary-purple hover:bg-secondary-purple-hover  w-1/3 min-w-40"} onClick={() => {navigate("/login")}}>
+                <Button className={"bg-secondary-purple hover:bg-secondary-purple-hover  w-1/3 min-w-40"}
+                        onClick={() => {
+                            navigate("/login")
+                        }}>
                     Return to Login
                 </Button>
             </div>

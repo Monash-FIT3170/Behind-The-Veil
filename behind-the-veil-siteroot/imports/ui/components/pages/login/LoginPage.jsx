@@ -45,7 +45,7 @@ export const LoginPage = () => {
                 alert('Username or password incorrect')
             } else {
                 // logged in, get the account type
-                const accountType= UserCollection.find({"username":username}).fetch()[0].profile.type;
+                const accountType = UserCollection.find({"username": username}).fetch()[0].profile.type;
 
                 // If the user type is artist, redirect to the artist landing page.
                 if (accountType === 'artist') {
@@ -67,7 +67,7 @@ export const LoginPage = () => {
             <div className="hidden lg:flex translate-x-1/2 translate-y-[80vh]">
                 {/*You might have to alter the above translation values or something to make sure that the visual
                 doesn't move when changing screen size*/}
-                <LoginRegisterVisual />
+                <LoginRegisterVisual/>
             </div>
 
             {/*Right Div*/}

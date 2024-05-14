@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {PaintBrushIcon, SparklesIcon} from "@heroicons/react/24/outline";
 
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
@@ -35,13 +35,13 @@ export const RegisterPage = () => {
      * @param {string} description - the description text under the button
      * @returns {JSX.Element} - the output button with the text under it styled
      */
-    const AccountTypeOption = ({ accountType, description }) => {
+    const AccountTypeOption = ({accountType, description}) => {
         const iconClasses = "size-8 sm:size-12 mb-1 mx-auto my-1 stroke-1.5 text-our-black";
 
         // icon for artist or bride
         const icon = accountType === 'artist' ?
-            <PaintBrushIcon className={iconClasses} /> :
-            <SparklesIcon className={iconClasses} />;
+            <PaintBrushIcon className={iconClasses}/> :
+            <SparklesIcon className={iconClasses}/>;
 
         // button label
         const label = accountType === 'artist' ? "Artist" : "Bride";
@@ -73,7 +73,7 @@ export const RegisterPage = () => {
             <div className="hidden lg:flex translate-x-1/2 translate-y-[80vh]">
                 {/*You might have to alter the above translation values or something to make sure that the visual
                 doesn't move when changing screen size*/}
-                <LoginRegisterVisual />
+                <LoginRegisterVisual/>
             </div>
 
             {/* Right side content */}

@@ -1,6 +1,6 @@
 /**
  * File Description: Forget password: Email page
- * File version: 1.1
+ * File version: 1.0
  * Contributors: Nikki
  */
 

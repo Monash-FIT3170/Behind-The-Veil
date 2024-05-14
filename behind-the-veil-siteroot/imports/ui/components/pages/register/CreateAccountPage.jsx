@@ -1,7 +1,7 @@
 /**
  * File Description: Create Account page
- * File version: 1.0
- * Contributors: Ryan
+ * File version: 1.1
+ * Contributors: Ryan, Nikki
  */
 
 import React, {useState} from 'react';
@@ -145,7 +145,8 @@ const CreateAccountPage = () => {
                         </ul>
                     </div>
 
-                    <Button className={"bg-secondary-purple hover:bg-secondary-purple-hover w-1/3 min-w-40"} onClick={handleRegister}>
+                    <Button className={"bg-secondary-purple hover:bg-secondary-purple-hover w-1/3 min-w-40"}
+                            onClick={handleRegister}>
                         Register
                     </Button>
                 </div>

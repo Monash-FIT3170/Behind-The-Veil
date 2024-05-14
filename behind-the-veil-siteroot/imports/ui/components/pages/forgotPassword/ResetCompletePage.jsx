@@ -30,9 +30,10 @@ export const ResetCompletePage = () => {
                 Your password has been successfully changed!
             </span>
                 <Button className={"bg-secondary-purple hover:bg-secondary-purple-hover w-1/3 min-w-40 mt-5"}
-                    onClick={() => {
-                        navigate('/login')}
-                }>Return to Login</Button>
+                        onClick={() => {
+                            navigate('/login')
+                        }
+                        }>Return to Login</Button>
             </div>
         </WhiteBackground>
     );
