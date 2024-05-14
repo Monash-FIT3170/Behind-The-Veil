@@ -63,15 +63,9 @@ Your terminal will tell you which files are having a conflict. However you can a
 
 A merge conflict typically looked like this:
 ```javascript
-<<<<<<< HEAD
     /**
     * This comment is from your working branch
     */
-=======
-    /**
-    * This comment is from the rebase and it going to overwrite your working branch comment
-    */
->>>>>>> feature/some-feature-branch-from-develop
 ```
 The way to resolve this is to select from the middle '=====' and either delete everything above it or below it. Make sure you delete the remaining >>> or <<< as well.
 

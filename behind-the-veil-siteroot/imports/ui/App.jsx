@@ -17,6 +17,11 @@ import RequestBooking from "./components/pages/request-booking/RequestBooking.js
 import SpecificServicePage from "./components/pages/service/SpecificServicePage.jsx";
 import ArtistServiceArea from "./components/pages/artist/ArtistServiceArea.jsx";
 import ArtistProfilePage from "./components/pages/profile/ArtistProfilePage.jsx";
+import CancelBooking from './components/pages/cancel-booking/CancelBooking.jsx';
+import AccountActivatedPage from "./components/pages/register/AccountActivatedPage";
+import CreateAccountPage from "./components/pages/register/CreateAccountPage";
+import ActivateAccountPage from "./components/pages/register/ActivateAccountPage";
+import BookingSummary from "./components/pages/request-booking/BookingSummary";
 import AccountActivatedPage from "./components/pages/register/AccountActivatedPage";
 import CreateAccountPage from "./components/pages/register/CreateAccountPage";
 import ActivateAccountPage from "./components/pages/register/ActivateAccountPage";
@@ -57,20 +62,25 @@ export const App = () => (
             element={
               <LoggedOutOnlyRoute>
                 <CreateAccountPage/>
-              </LoggedOutOnlyRoute>}/>
+              </LoggedOutOnlyRoute>
+            }
+          />
           <Route
             path="/register/activateAccount"
             element={
               <LoggedOutOnlyRoute>
                 <ActivateAccountPage/>
-              </LoggedOutOnlyRoute>}/>
+              </LoggedOutOnlyRoute>
+            }
+          />
           <Route
             path="/register/accountActivated"
             element={
               <LoggedOutOnlyRoute>
                 <AccountActivatedPage/>
-              </LoggedOutOnlyRoute>}/>
-
+              </LoggedOutOnlyRoute>
+            }
+          />
           {/*routes that ONLY authenticated users can access*/}
           <Route
             path="/messages"
@@ -95,8 +105,13 @@ export const App = () => (
           <Route path="/artist-profile" element={<ArtistProfilePage />} />
           {/* TODO: haven't implemented actual flow to get here yet */}
           <Route path="/request-booking" element={<RequestBooking />} />
+            <Route path="/booking-summary" element={<BookingSummary/>} />
           {/* Define other routes that you need*/}
           <Route path="/service-area" element={<ArtistServiceArea />} />
+
+          {/* TODO:.... */}
+          <Route path="/cancel-booking" element={<CancelBooking/>}/>
+
         </Routes>
       </main>
     </Router>

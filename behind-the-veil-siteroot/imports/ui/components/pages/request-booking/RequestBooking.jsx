@@ -1,7 +1,7 @@
 /**
  * File Description: Request Booking page
- * File version: 1.0
- * Contributors: Josh
+ * File version: 1.1
+ * Contributors: Josh, Nikki
  */
 
 import React, { useId, useState } from "react";
@@ -9,12 +9,17 @@ import ServiceDetailsHeader from "../../service-details-header/ServiceDetailsHea
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
-import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
+import Input from "../../input/Input";
+import PreviousButton from "../../button/PreviousButton";
+import { ArrowRightIcon } from '@heroicons/react/24/outline'
+import {useNavigate} from "react-router-dom";
 
 /**
  * Page for user to request a booking
  */
 const RequestBooking = () => {
+  const navigateTo = useNavigate();
+
   const MOCK_SERVICE_DETAILS = {
     service: "Bachelorette Glam Experience",
     date: "Tuesday, 12 May, 2024",
@@ -41,17 +46,19 @@ const RequestBooking = () => {
     setInputs(i => ({ ...i, [name]: value }))
   }
 
-  // TODO: send this data to the next page
   const handleSubmit = (event) => {
     event.preventDefault()
     // TODO: implement validation, i.e. must have a valid time
-    alert(`Form submitted with the following inputs: ${JSON.stringify(inputs)}`)
+
+    // pass the data to the next page via the url
+    const query = new URLSearchParams(inputs).toString();
+    navigateTo(`/booking-summary?${query}`);
   }
 
   // calculate available times that the user can select, based on a date
   // TODO: implement this properly instead of returning dummy data
   const getAvailableTimes = (date) => {
-    const AVAILABLE_TIMES = ["10:00am", "11:00am", "12:00pm", "2:00pm", "4:00pm"]
+    const AVAILABLE_TIMES = ["10:00 AM", "11:00 AM", "12:00 PM", "2:00 PM", "4:00 PM"]
     return date !== "" ? AVAILABLE_TIMES : null
   }
 
@@ -60,10 +67,7 @@ const RequestBooking = () => {
   return (
     <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
       {/* TODO: implement back button functionality when implementing the actual work flow to get to this page */}
-      <Button className="bg-transparent text-dark-grey flex gap-2">
-        <ArrowLeftIcon className="size-6" />
-        Back
-      </Button>
+      <PreviousButton/>
 
       {/* Main container for content */}
       <div className="flex flex-col gap-4 xl:px-40">
@@ -82,9 +86,8 @@ const RequestBooking = () => {
             {/* location */}
             <div className="flex flex-col gap-1">
               <label htmlFor={locationInputId} className="main-text text-our-black">Location</label>
-              <input
+              <Input
                 id={locationInputId}
-                className="border-light-grey border-2 p-2 rounded main-text"
                 placeholder="Input location for service: wedding venue, address, ..."
                 name="location"
                 value={inputs.location || ""}
@@ -98,9 +101,8 @@ const RequestBooking = () => {
               <div className="flex flex-col gap-4 grow">
                 <div className="flex flex-col gap-1">
                   <label htmlFor={dateInputId} className="main-text text-our-black">Select Date</label>
-                  <input
+                  <Input
                     id={dateInputId}
-                    className="border-light-grey border-2 p-2 rounded main-text"
                     placeholder="Select a date"
                     name="date"
                     value={inputs.date || ""}
@@ -150,7 +152,7 @@ const RequestBooking = () => {
                   type="submit"
                 >
                   Next Step
-                  <ArrowRightIcon className="size-6" />
+                  <ArrowRightIcon className="icon-base"/>
                 </Button>
               </div>
 

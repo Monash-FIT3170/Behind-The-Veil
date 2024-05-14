@@ -18,14 +18,14 @@ import {ChevronLeftIcon} from "@heroicons/react/24/outline";
  *
  * @param className custom classes that override the base button style, e.g. background color, font, etc
  */
-const PreviousButton = (className) => {
+const PreviousButton = ({className}) => {
     const buttonClasses = classNames("flex flex-row items-center gap-x-2 " +
-        "bg-transparent hover:bg-transparent text-dark-grey hover:text-our-black", className);
+        "bg-transparent hover:bg-transparent hover:bg-white-hover text-dark-grey hover:text-our-black", className);
     let navigate = useNavigate();
 
     return (
         <Button className={buttonClasses} type="button" onClick={() => navigate(-1)}>
-            <ChevronLeftIcon className={"h-7 w-7 cursor-pointer"}/> Prev
+            <ChevronLeftIcon className={"size-7 stroke-2 cursor-pointer"}/> Prev
         </Button>
     );
 };

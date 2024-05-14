@@ -58,7 +58,7 @@ const AccountActivatedPage = () => {
 
                 <div style={flexContainerStyle}>
                     <div style={{marginTop: "10px"}}>
-                    <label className="main-text">Please return to the sign in page</label>
+                        <label className="main-text">Please return to the sign in page</label>
                     </div>
 
                     <ActionButton

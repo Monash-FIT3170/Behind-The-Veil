@@ -9,26 +9,28 @@ import { Accounts } from 'meteor/accounts-base';
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import URLSearchParams from '@ungap/url-search-params'
 
 const CreateAccountPage = () => {
     const navigate = useNavigate();
-    const { accountType } = useParams(); // Retrieve accountType from URL params
+    const accountType = new URLSearchParams(useLocation().search).get("type");
+    console.log(accountType);
 
     const handleRegister = () => {
         const username = document.getElementById('username').value.trim();
-        const name = document.getElementById('name').value.trim();
+        const alias = document.getElementById('name').value.trim();
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
         const retypePassword = document.getElementById('retypePassword').value;
 
-        if (!username || !name || !email || !password || !retypePassword) {
+        if (!username || !alias || !email || !password || !retypePassword) {
             alert('Please fill in all required fields.');
             return;
         }
 
         // Password validation criteria
-        const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+        const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&+/,|<>{})(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
         if (!passwordRegex.test(password)) {
             alert('Password must contain at least one number, one special character, one lowercase letter, one uppercase letter, and be at least 8 characters long.');
             return;
@@ -51,9 +53,8 @@ const CreateAccountPage = () => {
             username: username,
             email: email,
             password: password,
-            activated: true, // TODO: Change to false once email activation has been implemented
             profile: {
-                name: name,
+                alias: alias,
                 type: accountType
             }
         };
@@ -66,7 +67,7 @@ const CreateAccountPage = () => {
                 console.log('User created successfully!');
                 console.log(newUser);
                 // After successful activation, navigate to activation completed page
-                navigate('/register/activateAccount?type=${username}');
+                navigate(`/register/activateAccount`);
             }
         });
     };
