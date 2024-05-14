@@ -78,8 +78,7 @@ const BookingListView = () => {
         [BookingFilter.ALL]: Object.values(BookingStatus),
         [BookingFilter.CONFIRMED]: [BookingStatus.CONFIRMED],
         [BookingFilter.PENDING]: [BookingStatus.PENDING],
-        [BookingFilter.COMPLETED]: [BookingStatus.COMPLETED],
-        [BookingFilter.CLOSED]: [BookingStatus.REJECTED,BookingStatus.CANCELLED,BookingStatus.PENDING_CANCELLATION,BookingStatus.OVERDUE]
+        [BookingFilter.CLOSED]: [BookingStatus.COMPLETED,BookingStatus.REJECTED,BookingStatus.CANCELLED,BookingStatus.PENDING_CANCELLATION,BookingStatus.OVERDUE]
     };
     
     // Filtered bookings based on the selected filter
@@ -89,9 +88,9 @@ const BookingListView = () => {
 
     return (
         <div className="mt-2">
-            <div className="w-1/2 grid grid-cols-5 gap-5">
+            <div className="w-full sm:w-2/5 flex flex-wrap sm:flex-nowrap gap-5">
                 {availableFilters.map((filter) => {
-                const baseStyle = "w-full rounded-md p-2 hover:bg-secondary-purple";
+                const baseStyle = "w-1/2 rounded-md p-2 hover:bg-secondary-purple";
                 const activeStyle = "bg-secondary-purple";
                 const className = selectedFilter === filter ? `${baseStyle} ${activeStyle}` : baseStyle;
 

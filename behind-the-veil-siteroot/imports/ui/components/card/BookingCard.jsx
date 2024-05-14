@@ -60,9 +60,9 @@ export const BookingCard = ({
                         </div>
                     <div className="small-text text-dark-grey max-h-[4.5rem] max-w-full line-clamp-4 mb-3 break-all">
                         {serviceDesc}</div>
-                    <div className="flex flex-col lg:flex-row gap-5 justify-center items-center">
+                    <div className="flex flex-col lg:flex-row gap-5 items-center">
                         {/* button to specific booking detail page*/}
-                        <Button className="flex flex-row gap-x-2 justify-center items-center w-4/5 lg:w-1/2 min-w-40 mt-6
+                        <Button className="flex flex-row gap-x-2 justify-center items-center w-4/5 lg:w-1/2 min-w-40 mt-5
                         bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500"
                                 onClick={() => navigateTo('/booking/' + bookingId)}>
                             <DocumentMagnifyingGlassIcon className="icon-base"/>
