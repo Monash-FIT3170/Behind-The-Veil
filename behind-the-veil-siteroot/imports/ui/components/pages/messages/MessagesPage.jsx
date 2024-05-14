@@ -55,11 +55,7 @@ export const MessagesPage = () => {
             </div>
             {/*you MUST keep this div and put everything on the right side inside of it*/}
             <div>
-<<<<<<< HEAD
                 <Conversation user={users[selectedConversationIndex]}/>
-=======
-                <Conversation user={users[0]}/>
->>>>>>> eb32979 (feature/86cv686va-combine-message-conversation-and-inbox-components: Modified the dummy data so that the message preview and conversation components use the same dummy data. Modified message preview to use that dummy data)
             </div>
         </WhiteBackground>
     );
