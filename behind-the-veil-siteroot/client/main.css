@@ -30,36 +30,42 @@
 
     /* base font styles */
     .main-text {
+        @apply text-our-black;
         font-size: 16px;
         font-weight: 600;
         line-height: 150%;
     }
 
     .large-text {
+        @apply text-our-black;
         font-size: 20px;
         font-weight: 600;
         line-height: 150%;
     }
 
     .medium-text {
-        font-size: 14px;
+        @apply text-our-black;
+        font-size: 16px;
         font-weight: 600;
         line-height: 150%;
     }
 
     .small-text {
-        font-size: 12px;
+        @apply text-our-black;
+        font-size: 14px;
         font-weight: 600;
         line-height: 150%;
     }
 
     .title-text {
+        @apply text-our-black;
         font-size: 40px;
         font-weight: 600;
         line-height: 150%;
     }
 
     .large-number-text {
+        @apply text-our-black;
         font-size: 48px;
         font-weight: 400;
         line-height: 150%;
@@ -67,42 +73,49 @@
 
     .logo-text {
         /* TODO: font should be poppins */
+        @apply text-our-black;
         font-size: 25px;
         font-weight: 400;
         line-height: 150%;
     }
 
     .message-tag-text {
+        @apply text-our-black;
         font-size: 12px;
         font-weight: 300;
         line-height: 150%;
     }
 
     .message-receiver-name-text {
+        @apply text-our-black;
         font-size: 32px;
         font-weight: 500;
         line-height: 150%;
     }
 
     .message-read-text {
+        @apply text-our-black;
         font-size: 12px;
         font-weight: 300;
         line-height: 150%;
     }
 
     .message-unread-text {
+        @apply text-our-black;
         font-size: 12px;
         font-weight: 500;
         line-height: 150%;
     }
 
     .message-name-read-text {
+        @apply text-our-black;
         font-size: 16px;
         font-weight: 400;
         line-height: 150%;
     }
 
     .message-name-unread-text {
+        @apply text-our-black;
         font-size: 16px;
         font-weight: 600;
         line-height: 150%;
