@@ -5,14 +5,15 @@
  */
 
 import React from 'react';
+import {useNavigate} from "react-router-dom";
 import {CheckCircleIcon} from "@heroicons/react/24/outline";
 
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
-import {useNavigate} from "react-router-dom";
 import Button from "../../button/Button";
 
 /**
+ * Page that confirms user their password has been changed
  */
 export const ResetCompletePage = () => {
 
@@ -28,7 +29,7 @@ export const ResetCompletePage = () => {
                 <span className="text-center large-text text-dark-grey">
                 Your password has been successfully changed!
             </span>
-                <Button className={"bg-secondary-purple hover:bg-secondary-purple-hover mt-5"}
+                <Button className={"bg-secondary-purple hover:bg-secondary-purple-hover w-1/3 min-w-40 mt-5"}
                     onClick={() => {
                         navigate('/login')}
                 }>Return to Login</Button>

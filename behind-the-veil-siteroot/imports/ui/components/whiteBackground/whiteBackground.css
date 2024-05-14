@@ -7,7 +7,7 @@
 .small-page {
     @apply h-fit min-h-[30rem];
     /* margin top and bottom difference account for navbar margin overlap of 1rem=4 */
-    @apply mt-10 mb-6 mx-8 p-16 w-4/5; /*positioning variables for smaller screens*/
+    @apply mt-10 mb-6 mx-8 px-8 py-16 lg:p-16 w-4/5; /*positioning variables for smaller screens*/
     @apply lg:mt-16 lg:mb-12 lg:mx-14 lg:p-16 lg:w-2/5 ; /*positioning variables for large screens*/
 }
 
