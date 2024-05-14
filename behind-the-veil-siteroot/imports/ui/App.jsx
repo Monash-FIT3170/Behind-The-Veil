@@ -21,6 +21,7 @@ import CancelBooking from './components/pages/cancel-booking/CancelBooking.jsx';
 import AccountActivatedPage from "./components/pages/register/AccountActivatedPage";
 import CreateAccountPage from "./components/pages/register/CreateAccountPage";
 import ActivateAccountPage from "./components/pages/register/ActivateAccountPage";
+import ArtistAddPost from "./components/pages/profile/ArtistAddPost.jsx";
 
 export const App = () => (
   <div>
@@ -103,10 +104,11 @@ export const App = () => (
           <Route path="/request-booking" element={<RequestBooking />} />
           {/* Define other routes that you need*/}
           <Route path="/service-area" element={<ArtistServiceArea />} />
-
+            
           {/* TODO:.... */}
           <Route path="/cancel-booking" element={<CancelBooking/>}/>
 
+          <Route path="/add-post" element={<ArtistAddPost />} />
         </Routes>
       </main>
     </Router>
