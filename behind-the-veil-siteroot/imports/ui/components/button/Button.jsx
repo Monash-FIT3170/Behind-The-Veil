@@ -1,10 +1,10 @@
 /**
  * File Description: Button component
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Josh
  */
 
-import React, { forwardRef } from "react";
+import React, {forwardRef} from "react";
 import classNames from "classnames";
 
 /**
@@ -14,13 +14,13 @@ import classNames from "classnames";
  * @param className custom classes that override the base button style, e.g. background color, font, etc
  * @param buttonProps encompasses all other props supplied and applies them to the button
  */
-const Button = forwardRef(({ children, className, ...buttonProps }, ref) => {
-  const buttonClasses = classNames("btn-base", className);
-  return (
-    <button ref={ref} {...buttonProps} className={buttonClasses} type="button">
-      {children}
-    </button>
-  );
+const Button = forwardRef(({children, className, ...buttonProps}, ref) => {
+    const buttonClasses = classNames("btn-base", className);
+    return (
+        <button ref={ref} className={buttonClasses} type="button" {...buttonProps}>
+            {children}
+        </button>
+    );
 });
 
 export default Button;
