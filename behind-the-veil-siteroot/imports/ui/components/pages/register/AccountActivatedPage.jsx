@@ -8,20 +8,18 @@ import React from 'react';
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
-import { useNavigate } from "react-router-dom";
-import {
-    CheckCircleIcon,
-} from "@heroicons/react/24/outline";
+import {useNavigate} from "react-router-dom";
+import {CheckCircleIcon} from "@heroicons/react/24/outline";
 
 const AccountActivatedPage = () => {
     const navigate = useNavigate();
 
-    const ActionButton = ({ marginTop, label, onClick }) => (
-        <div style={{ marginTop: marginTop, width: "80%", display: "flex", justifyContent: "center" }}>
+    const ActionButton = ({marginTop, label, onClick}) => (
+        <div style={{marginTop: marginTop, width: "80%", display: "flex", justifyContent: "center"}}>
             <Button
                 type="button"
                 className="bg-secondary-purple hover:bg-secondary-purple-hover outline outline-2 outline-secondary-purple"
-                style={{ width: "40%", height: "50px" }}
+                style={{width: "40%", height: "50px"}}
                 onClick={onClick}
             >
                 {label}

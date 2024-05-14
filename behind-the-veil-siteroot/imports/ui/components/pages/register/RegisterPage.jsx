@@ -1,48 +1,66 @@
 /**
  * File Description: Registration page
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Nikki, Ryan
  */
 
 import React from 'react';
+import {useNavigate} from "react-router-dom";
+import {PaintBrushIcon, SparklesIcon} from "@heroicons/react/24/outline";
+
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
+import LoginRegisterVisual from "../../visuals/LoginRegisterVisual";
 import Button from "../../button/Button.jsx";
-import { useNavigate } from "react-router-dom";
-import {
-    PaintBrushIcon,
-    SparklesIcon,
-} from "@heroicons/react/24/outline";
+
 /**
- * Page where user can sign up for a new account
+ * Page where user can choose to sign up for an artist or bride account
  */
 export const RegisterPage = () => {
     const navigate = useNavigate();
 
+    /**
+     * Handler function for choosing account type
+     * @param {string} accountType - artist or bride account to create
+     */
     const handleAccountTypeSelection = (accountType) => {
         console.log("Selected Type:", accountType);
         navigate("/register/createAccount?type=" + accountType);
     };
 
-    const AccountTypeOption = ({ accountType, label, onClick }) => {
-        const iconClasses = "h-12 w-12 mb-1 mx-auto my-1 stroke-1.5";
+    /**
+     * a multi use button/text for the choosing account type button for artist/bride
+     *
+     * @param {string} accountType - either bride or artist
+     * @param {string} description - the description text under the button
+     * @returns {JSX.Element} - the output button with the text under it styled
+     */
+    const AccountTypeOption = ({accountType, description}) => {
+        const iconClasses = "size-8 sm:size-12 mb-1 mx-auto my-1 stroke-1.5 text-our-black";
 
-        const icon = accountType === 'Artist' ?
-            <PaintBrushIcon className={iconClasses} /> :
-            <SparklesIcon className={iconClasses} />;
+        // icon for artist or bride
+        const icon = accountType === 'artist' ?
+            <PaintBrushIcon className={iconClasses}/> :
+            <SparklesIcon className={iconClasses}/>;
+
+        // button label
+        const label = accountType === 'artist' ? "Artist" : "Bride";
 
         return (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <div className={"flex flex-col items-center justify-center gap-y-3"}>
                 <Button
                     type="button"
-                    className="bg-secondary-purple hover:bg-secondary-purple-hover outline outline-2 outline-secondary-purple"
-                    style={{ width: "120px", height: "120px", borderRadius: "50%", marginBottom: "10px"}}
-                    onClick={() => onClick(accountType)}
-                >
-                    {accountType}
+                    className="bg-secondary-purple hover:bg-secondary-purple-hover size-24 sm:size-32 mb-2.5"
+                    onClick={() => {
+                        console.log("Selected Type:", accountType);
+                        navigate("/register/createAccount?type=" + accountType);
+                    }}>
+                    {label}
                     {icon}
                 </Button>
-                <label htmlFor={accountType} className="main-text" style={{ width: "70%" }}>{label}</label>
+
+                {/*description under button*/}
+                <span className="main-text w-[70%]">{description}</span>
             </div>
         );
     };
@@ -55,24 +73,26 @@ export const RegisterPage = () => {
             <div className="hidden lg:flex translate-x-1/2 translate-y-[80vh]">
                 {/*You might have to alter the above translation values or something to make sure that the visual
                 doesn't move when changing screen size*/}
-                <span>Registration Page Visual here!!</span>
+                <LoginRegisterVisual/>
             </div>
 
             {/* Right side content */}
-            <div style={{ textAlign: "center", paddingTop: "5px" }}>
-                <div className="title-text" style={{marginBottom: "50px"}}>Choose Account Type</div>
+            <div className={"text-center pt-1"}>
+                <div className="title-text mb-6 sm:mb-12">Choose Account Type</div>
 
                 {/* Buttons for account type selection */}
-                <div style={{display: "flex", justifyContent: "center", gap: "20px"}}>
+                <div className={"flex justify-center items-start gap-2"}>
+                    {/*artist button*/}
                     <AccountTypeOption
                         accountType="artist"
-                        label="I want to provide my services"
+                        description="I want to provide my services"
                         onClick={handleAccountTypeSelection}
                     />
 
+                    {/*bride button*/}
                     <AccountTypeOption
                         accountType="bride"
-                        label="I want to make bookings for services"
+                        description="I want to make bookings for services"
                         onClick={handleAccountTypeSelection}
                     />
                 </div>
