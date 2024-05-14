@@ -26,20 +26,20 @@ export const DashboardCard = ({
   // variables to handle routing
   const navigateTo = useNavigate();
 
-  const classes = classNames(className, "w-5/6");
+  const classes = classNames(className, "w-full lg:w-5/6");
 
   return (
     <Card className={classes}>
-      <div className="flex-auto grid grid-cols-3">
+      <div className="flex flex-col grid grid-cols-3 place-items-center">
         <div className="col-span-2">
-          <div className="large-text text-our-black max-w-full line-clamp-1 mb-3 text-center">
+          <div className="large-text text-xs md:large-text text-sm 2xl:large-text text-wrap text-our-black max-w-full mb-3 text-center">
             {dashboardCardTitle}
           </div>
           <div className="small-text text-dark-grey max-h-[4.5rem] max-w-full line-clamp-4 mb-3 text-center">
             {dashboardCardDesc}
           </div>
         </div>
-        <div className="large-number-text text-out-black text-center">
+        <div className="large-text text-out-black text-center place-items-center 2xl:large-number-text">
           {dashboardCardValue}
         </div>
       </div>

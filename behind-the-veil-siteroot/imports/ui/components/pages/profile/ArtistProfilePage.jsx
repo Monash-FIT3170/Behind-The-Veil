@@ -137,7 +137,7 @@ export const ArtistProfilePage = () => {
 
   //The dashboardCardValue will have to be dynamic. Title and Desc can be static given it's the same across all accounts.
   const dashboardTab = (
-    <div className="flex-auto grid grid-cols-auto grid-cols-2 gap-8 justify-items-center">
+    <div className="grid lg:grid-cols-2 gap-8 justify-items-center">
       <DashboardCard
         dashboardCardTitle="Total Customers - Lifetime"
         dashboardCardDesc="Celebrate your achievement in helping brides with their special
@@ -147,8 +147,6 @@ export const ArtistProfilePage = () => {
       <DashboardCard
         dashboardCardTitle="Total Customers - This Month"
         dashboardCardDesc="People you have glowed 
-        
-        
          up this month!"
         dashboardCardValue="5"
       ></DashboardCard>
@@ -159,7 +157,7 @@ export const ArtistProfilePage = () => {
       ></DashboardCard>
       <DashboardCard
         dashboardCardTitle="Pending Earnings"
-        dashboardCardDesc="Cash currently in transit!!"
+        dashboardCardDesc="Cash currently in transit!"
         dashboardCardValue="$480"
       ></DashboardCard>
     </div>
