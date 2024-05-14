@@ -34,13 +34,17 @@ if (Meteor.isClient) {
                     'bride123',
                     'artist456',
                     'service789',
+                    // up to here it knows these are its args - it (somehow) also knows that you get back
+                    // either an error or a value that is stuffed into bookingID (this can be any name).
                     (error, bookingId) => {
                         if (error) {
                             reject(error);
                         } else {
                             resolve(bookingId);
                         }
-                    }
+                    } // this something that comes with promises. If reject and resolve are
+                    // not present the promise doesn't understand its finished and will keep powering
+                    // thru the method until it finds an end (there is none)
                 );
             }).then(bookingId => {
                 assert.notStrictEqual(bookingId, undefined);

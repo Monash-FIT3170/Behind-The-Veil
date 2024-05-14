@@ -16,12 +16,14 @@ import PreviousButton from "../../button/PreviousButton";
 import mockBookings from './mockBookings.json'
 import { addHours, areIntervalsOverlapping, eachHourOfInterval, isEqual, set, format, isValid, isDate, parse, isWithinInterval, startOfDay, addYears, startOfHour, isAfter } from "date-fns";
 import { BookingStatus } from "../../../enums/BookingStatus.ts";
-
+import { useNavigate } from "react-router-dom";
 
 /**
  * Page for user to request a booking
  */
 const RequestBooking = () => {
+  const navigateTo = useNavigate();
+
   const MOCK_SERVICE_DETAILS = {
     service: "Bachelorette Glam Experience",
     artist: "Alice Tran",
@@ -64,14 +66,14 @@ const RequestBooking = () => {
     setInputs((i) => ({ ...i, [name]: value }));
   };
 
-  // TODO: send this data to the next page
   const handleSubmit = (event) => {
     event.preventDefault();
     // TODO: implement validation, i.e. must have a valid time
-    alert(
-      `Form submitted with the following inputs: ${JSON.stringify(inputs)}`
-    );
-  };
+
+    // pass the data to the next page via the url
+    const query = new URLSearchParams(inputs).toString();
+    navigateTo(`/booking-summary?${query}`);
+  }
 
   const handleManualDateInput = (event) => {
     const dateInput = event.target.value;
