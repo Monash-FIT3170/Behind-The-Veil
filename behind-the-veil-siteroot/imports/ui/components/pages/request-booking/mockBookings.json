@@ -108,5 +108,82 @@
         "brideUsername": "7510e2a5-a310-4922-a3b7-150855959323",
         "artistUsername": "aboydon5",
         "serviceId": "571db9a8-46ef-494d-9b74-554e92fe4fda"
+    },
+    {
+        "_id": "a206bfee-2f3a-4323-8b68-20159c74fa61",
+        "bookingStartDateTime": "2024-05-31T06:00:00+10:00",
+        "bookingDuration": 13,
+        "bookingLocation": "222 Colorado Circle",
+        "bookingPrice": 99.34,
+        "bookingStatus": "Confirmed",
+        "brideUsername": "7510e2a5-a310-4922-a3b7-150855959323",
+        "artistUsername": "aboydon5",
+        "serviceId": "571db9a8-46ef-494d-9b74-554e92fe4fda"
+    },
+    {
+        "_id": "d3672a3b-6217-47c0-8742-6e6eb738f27a",
+        "bookingStartDateTime": "2024-06-01T06:00:00+10:00",
+        "bookingDuration": 13,
+        "bookingLocation": "222 Colorado Circle",
+        "bookingPrice": 99.34,
+        "bookingStatus": "Confirmed",
+        "brideUsername": "7510e2a5-a310-4922-a3b7-150855959323",
+        "artistUsername": "aboydon5",
+        "serviceId": "571db9a8-46ef-494d-9b74-554e92fe4fda"
+    },
+    {
+        "_id": "8ae2f2a8-985d-4091-8358-dd82cbe49188",
+        "bookingStartDateTime": "2024-06-02T06:00:00+10:00",
+        "bookingDuration": 13,
+        "bookingLocation": "222 Colorado Circle",
+        "bookingPrice": 99.34,
+        "bookingStatus": "Confirmed",
+        "brideUsername": "7510e2a5-a310-4922-a3b7-150855959323",
+        "artistUsername": "aboydon5",
+        "serviceId": "571db9a8-46ef-494d-9b74-554e92fe4fda"
+    },
+    {
+        "_id": "3e46a84e-dd68-4d0d-a6f4-4afef6a35bfb",
+        "bookingStartDateTime": "2024-06-03T06:00:00+10:00",
+        "bookingDuration": 13,
+        "bookingLocation": "222 Colorado Circle",
+        "bookingPrice": 99.34,
+        "bookingStatus": "Confirmed",
+        "brideUsername": "7510e2a5-a310-4922-a3b7-150855959323",
+        "artistUsername": "aboydon5",
+        "serviceId": "571db9a8-46ef-494d-9b74-554e92fe4fda"
+    },
+    {
+        "_id": "aa71a00a-b5db-4e6d-86fc-d1d11ea5838e",
+        "bookingStartDateTime": "2024-06-04T06:00:00+10:00",
+        "bookingDuration": 13,
+        "bookingLocation": "222 Colorado Circle",
+        "bookingPrice": 99.34,
+        "bookingStatus": "Confirmed",
+        "brideUsername": "7510e2a5-a310-4922-a3b7-150855959323",
+        "artistUsername": "aboydon5",
+        "serviceId": "571db9a8-46ef-494d-9b74-554e92fe4fda"
+    },
+    {
+        "_id": "4cd97d02-880c-4992-bf08-d506691eac68",
+        "bookingStartDateTime": "2024-06-05T06:00:00+10:00",
+        "bookingDuration": 13,
+        "bookingLocation": "222 Colorado Circle",
+        "bookingPrice": 99.34,
+        "bookingStatus": "Confirmed",
+        "brideUsername": "7510e2a5-a310-4922-a3b7-150855959323",
+        "artistUsername": "aboydon5",
+        "serviceId": "571db9a8-46ef-494d-9b74-554e92fe4fda"
+    },
+    {
+        "_id": "c8a0546e-7dd9-4cfe-966c-f0bc6f25c92a",
+        "bookingStartDateTime": "2024-06-06T06:00:00+10:00",
+        "bookingDuration": 13,
+        "bookingLocation": "222 Colorado Circle",
+        "bookingPrice": 99.34,
+        "bookingStatus": "Confirmed",
+        "brideUsername": "7510e2a5-a310-4922-a3b7-150855959323",
+        "artistUsername": "aboydon5",
+        "serviceId": "571db9a8-46ef-494d-9b74-554e92fe4fda"
     }
 ]

@@ -110,14 +110,25 @@
 }
 
 .react-calendar__month-view__days__day {
+  position: relative;
   aspect-ratio: 1;
   abbr {
     position: relative;
   }
 }
 
-.react-calendar__month-view__days__day--weekend {
-  /* color: #d10000; */
+/* grey circle styling for dates that have available time slots */
+.react-calendar__month-view__days__day.available:not(:disabled)::before{
+  content: "";
+  /* light grey */
+  background-color: #D4D4D4;
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  margin: 10%;
+  left: 0px;
+  top: 0px;
+  border-radius: 50%;
 }
 
 .react-calendar__month-view__days__day--neighboringMonth,

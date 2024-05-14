@@ -81,11 +81,11 @@ const RequestBooking = () => {
     // TODO: properly validate date
     if (date === "") {
       console.warn('invalid date')
-      return
+      return []
     }
     if (!Array.isArray(bookings)) {
       console.warn('bookings is not an array')
-      return
+      return []
     }
 
     const hours = eachHourOfInterval({
@@ -223,6 +223,15 @@ const RequestBooking = () => {
                       date: date,
                     };
                   });
+                }}
+                tileClassName={({ date, view }) => {
+                  const availableTimes = getAvailableTimes({ date: new Date(date), duration: duration, bookings: bookings })
+                  if (
+                    view === 'month' &&
+                    availableTimes.length > 0
+                  ) {
+                    return 'available'
+                  }
                 }}
               />
             </div>
