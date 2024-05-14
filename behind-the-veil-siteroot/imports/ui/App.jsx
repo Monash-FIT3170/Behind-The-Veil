@@ -33,7 +33,6 @@ export const App = () => (
             <NavigationBar/>
             <main className="main-content">
                 <Routes>
-            <Route path="/booking-summary" element={<BookingSummary/>} />
 
                     {/* removed once dev is finished*/}
                     <Route path="/examples" element={<Examples/>}/>
@@ -131,6 +130,7 @@ export const App = () => (
                     <Route path="/request-booking" element={<RequestBooking/>}/>
                     <Route path="/service-area" element={<ArtistServiceArea/>}/>
                     <Route path="/cancel-booking" element={<CancelBooking/>}/>
+                    <Route path="/booking-summary" element={<BookingSummary/>} />
 
                 </Routes>
             </main>
