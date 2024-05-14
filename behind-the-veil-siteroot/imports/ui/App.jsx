@@ -93,12 +93,12 @@ export const App = () => (
                         element={<LoggedOutOnlyRoute><ForgotPasswordPage/></LoggedOutOnlyRoute>}
                     />
                     <Route
-                        path="/forgot-password/reset-password"
+                        path="/reset-password/:token"
                         element={<LoggedOutOnlyRoute><ResetPasswordPage/></LoggedOutOnlyRoute>}
                     />
 
                     <Route
-                        path="/forgot-password/reset-complete"
+                        path="/reset-complete"
                         element={<LoggedOutOnlyRoute><ResetCompletePage/></LoggedOutOnlyRoute>}
                     />
 

@@ -7,6 +7,7 @@
 import React, {useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import {useSubscribe, useTracker} from "meteor/react-meteor-data";
+import {Accounts} from "meteor/accounts-base";
 import UserCollection from "../../../../api/collections/users";
 
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
@@ -53,9 +54,16 @@ export const ForgotPasswordPage = () => {
             console.log(usersEmailData);
             console.log(usersEmailData.includes(emailInput))
 
+            if (usersEmailData.includes(emailInput)) {
+                // send the email to reset password
+                Accounts.forgotPassword({"email": emailInput});
+            }
+
+            // todo: change to navigate to home page later after demo
             alert("(to be implemented) Sending email to: " + emailInput);
             alert("navigating to change password page for demonstration purposes");
-            navigate('/forgot-password/reset-password')
+            navigate('/reset-password/demodemodemo')
+
         }
     }
 

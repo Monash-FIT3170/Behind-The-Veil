@@ -47,7 +47,7 @@ export const ResetPasswordPage = () => {
             // if matching, test for criteria
             if (passwordRegex.test(passwordInputs.initial)) {
                 // password passed
-                navigate('/forgot-password/reset-complete')
+                navigate('/reset-complete')
             } else {
                 // password criteria failed
                 alert('Password must contain at least one number, one special character, one lowercase letter, one uppercase letter, and be at least 8 characters long.');
