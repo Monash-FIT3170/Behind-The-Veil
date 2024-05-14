@@ -10,6 +10,9 @@ import PageLayout from "../../../enums/PageLayout";
 import Input from "../../input/Input";
 import Button from "../../button/Button";
 import {useNavigate} from "react-router-dom";
+import UserCollection from "../../../../api/collections/users";
+import {useSubscribe, useTracker} from "meteor/react-meteor-data";
+import ServiceCard from "../../card/ServiceCard";
 
 
 /**
@@ -18,6 +21,19 @@ import {useNavigate} from "react-router-dom";
 export const ForgotPasswordPage = () => {
 
     const navigate = useNavigate();
+    const isLoadingUsers = useSubscribe('all_users');
+
+    // get user data from meteor
+    let usersEmailData = useTracker(() => {
+        // an array of email arrays (one for each user even though each user only has 1 email)
+        const emailArrays = UserCollection.find({}, {
+            fields: { "emails": 1 }
+        }).fetch();
+
+        return emailArrays.map((emailArray) => (
+            emailArray.emails[0].address
+        ))
+    });
 
     // form input values
     const [emailInput, setEmailInput] = useState("")
@@ -33,7 +49,19 @@ export const ForgotPasswordPage = () => {
 
     const handleSendEmail = (event) => {
         event.preventDefault();
-        alert("Email sent to " + emailInput);
+        // check that this email is valid email or not
+        if (!emailInput) {
+            alert("Please enter a valid email");
+        } else {
+            console.log(usersEmailData);
+
+            // check if email belongs to valid user
+            if (usersEmailData.includes(emailInput)) {
+                alert("Existing email, email sent to " + emailInput);
+            } else {
+                alert("non-existing:" + emailInput);
+            }
+        }
     }
 
     // TODO: send this data to the next page

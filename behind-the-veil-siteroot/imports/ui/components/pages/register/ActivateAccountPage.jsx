@@ -1,133 +1,54 @@
 /**
  * File Description: Activate Account page
- * File version: 1.0
- * Contributors: Ryan
+ * File version: 1..1
+ * Contributors: Ryan, Nikki
  */
 
-import React, { useState } from 'react';
+import React from 'react';
+import {useLocation, useNavigate} from "react-router-dom";
+import {ArrowRightIcon, EnvelopeIcon} from "@heroicons/react/24/outline";
+
+import URLSearchParams from "@ungap/url-search-params";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
-import { useNavigate } from "react-router-dom";
-import {
-    ArrowRightIcon,
-    EnvelopeIcon,
-} from "@heroicons/react/24/outline";
 
 // TODO: Match code to one sent via email, then activate users account
 const ActivateAccountPage = () => {
     const navigate = useNavigate();
+    const username = new URLSearchParams(useLocation().search).get("username");
 
-    const handleActivation = () => {
-        const activationCode = document.getElementById('activationCode').value.trim();
-
-        if (!activationCode) {
-            alert('Please enter the activation code.');
-            return;
-        }
-        if (activationCode.length !== 6) {
-            alert('Ensure the activation code is six digits.');
-            return;
-        }
-
-        // user.activated = true
-        console.log("Activated account");
-        navigate('/register/accountActivated');
-    };
-
-    const flexContainerStyle = {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '10px',
-        padding: '10px',
-    };
-
-    const ActionButton = ({ marginTop, label, onClick }) => (
-        <div style={{ marginTop: marginTop, width: "80%", display: "flex", justifyContent: "center" }}>
-            <Button
-                type="button"
-                className="bg-secondary-purple hover:bg-secondary-purple-hover outline outline-2 outline-secondary-purple"
-                style={{ width: "40%", height: "50px" }}
-                onClick={onClick}
-            >
-                {label}
-            </Button>
-        </div>
-    );
-
-    const TextInput = ({ label, id, name, placeholder, type = 'text', autoComplete = 'off' }) => {
-        const [value, setValue] = useState('');
-
-        const handleChange = (e) => {
-            const inputValue = e.target.value;
-            setValue(inputValue);
-        };
-
-        return (
-            <div>
-                <label htmlFor={id} className="main-text">{label}</label>
-                <input
-                    type={type}
-                    id={id}
-                    name={name}
-                    placeholder={placeholder}
-                    autoComplete={autoComplete}
-                    value={value}
-                    onChange={handleChange}
-                    style={{
-                        marginBottom: '5px',
-                        width: '100%',
-                        height: '50px',
-                        border: '1px solid lightgrey',
-                        borderRadius: '5px',
-                        padding: '10px'
-                    }}
-                />
-            </div>
-        );
-    };
+    // method called to email user verification email
+    Meteor.call("verify_email", username);
 
     return (
-        // if window size is SMALLER than a large screen (default variable for large in tailwind lg:1024px),
-        // then use center aligned and no visuals on the left so the inputs aren't all squished
-        <WhiteBackground pageLayout={window.innerWidth <= 1024 ? PageLayout.SMALL_CENTER : PageLayout.SMALL_RIGHT}>
-            {/*you MUST keep this div and put everything on the left side (e.g. the visual) of it*/}
-            <div className="hidden lg:flex translate-x-1/2 translate-y-[80vh]">
-                {/*You might have to alter the above translation values or something to make sure that the visual
-                doesn't move when changing screen size*/}
-                <span>Registration Page Visual here!!</span>
-            </div>
+        <WhiteBackground pageLayout={PageLayout.SMALL_CENTER}>
 
-            {/* Right side content */}
-            <div style={{textAlign: "center", paddingTop: "5px"}}>
-                <div className="title-text" style={{textAlign: "center", marginTop: "10px"}}>Activate Your Account</div>
+            <div className="title-text text-center">Activate Your Account</div>
 
-                <div style={flexContainerStyle}>
-                    <div
-                        style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                        <ArrowRightIcon className="text-green-500 h-10 w-10 mr-1"/>
-                        <EnvelopeIcon className="h-12 w-12"/>
-                    </div>
-
-                    <div style={{width: "80%", textAlign: "center", marginTop: "5px"}}>
-                        <TextInput label="Please enter the 6-digit code sent to your email" id="activationCode"
-                                   name="activationCode" placeholder="Enter activation code"/>
-                    </div>
-                    <div style={{width: "90%", fontSize: '10px', color: 'grey', marginTop: '-15px'}}>
-                        If you leave this page without entering the code, account will not be created
-                    </div>
-                    {/* TODO: Remove this div below once email activation has been implemented */}
-                    <div style={{fontSize: '14px', color: 'grey', marginTop: '5px'}}>
-                        **Input any 6-digit number for now - email api to be implemented**
-                    </div>
-
-                    <ActionButton
-                        marginTop="10px"
-                        label="Activate"
-                        onClick={handleActivation}
-                    />
+            <div className={"flex flex-col items-center justify-center gap-y-3 p-2.5"}>
+                <div className={"flex items-center justify-center"}>
+                    <ArrowRightIcon className="text-confirmed-colour h-16 w-16 stroke-[1.5] mr-1"/>
+                    <EnvelopeIcon className="h-28 w-28 stroke-[1.2] text-dark-grey"/>
+                    <ArrowRightIcon className="invisible  h-16 w-16 stroke-[1.5] ml-1"/>
                 </div>
+
+                <div className={"w-4/5 text-center mt-1.5"}>
+                    <div className={"main-text"}>
+                        Please access the
+                        <span className={"text-pending-colour"}> link </span>
+                        sent to your email to activate your account!
+                    </div>
+                </div>
+
+                {/* TODO: Remove this div below once email activation has been implemented */}
+                <div className={"main-text text-dark-grey mb-2.5"}>
+                    **The email API has not been completed yet**
+                </div>
+
+                <Button className={"bg-secondary-purple hover:bg-secondary-purple-hover  w-1/3 min-w-40"} onClick={() => {navigate("/login")}}>
+                    Return to Login
+                </Button>
             </div>
         </WhiteBackground>
     );
