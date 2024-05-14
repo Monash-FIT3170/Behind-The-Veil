@@ -5,12 +5,12 @@
  */
 
 import React, {useState} from 'react';
+import {useNavigate} from "react-router-dom";
+
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Input from "../../input/Input";
 import Button from "../../button/Button";
-import {useNavigate} from "react-router-dom";
-
 
 /**
  * Page to change passwords

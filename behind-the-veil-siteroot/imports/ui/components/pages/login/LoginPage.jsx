@@ -110,7 +110,7 @@ export const LoginPage = () => {
 
                         <NavLink
                             className="text-hyperlink-colour underline cursor-pointer ml-auto mr-[10%] right-0"
-                            to={"/forgot-password/email-verify"}>
+                            to={"/forgot-password"}>
                             Forgot password?
                         </NavLink>
                     </div>

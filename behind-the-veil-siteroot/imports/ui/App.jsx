@@ -37,7 +37,6 @@ export const App = () => (
                     {/* removed once dev is finished*/}
                     <Route path="/examples" element={<Examples/>}/>
 
-
                     {/*routes that any user can access*/}
                     <Route path="/" element={<HomePage/>}/>
 
@@ -89,7 +88,7 @@ export const App = () => (
                     />
 
                     <Route
-                        path="/forgot-password/email-verify"
+                        path="/forgot-password"
                         element={<LoggedOutOnlyRoute><ForgotPasswordPage/></LoggedOutOnlyRoute>}
                     />
                     <Route
@@ -107,7 +106,6 @@ export const App = () => (
                         path="/messages"
                         element={
                             <LoggedInOnlyRoute>
-                                {" "}
                                 <MessagesPage/>
                             </LoggedInOnlyRoute>
                         }
@@ -117,14 +115,12 @@ export const App = () => (
                         path="/account"
                         element={
                             <LoggedInOnlyRoute>
-                                {" "}
                                 <MessagesPage/>
                             </LoggedInOnlyRoute>
                         }
                     />
 
                     <Route path="/artist-profile/:username" element={<ArtistProfilePage/>}/>
-
 
                     {/* TODO: haven't implemented actual flow to get here yet */}
                     <Route path="/request-booking" element={<RequestBooking/>}/>
