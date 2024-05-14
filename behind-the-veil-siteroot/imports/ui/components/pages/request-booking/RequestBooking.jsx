@@ -14,7 +14,7 @@ import RequestBookingCalendar from "./RequestBookingCalendar/RequestBookingCalen
 import Input from "../../input/Input";
 import PreviousButton from "../../button/PreviousButton";
 import mockBookings from './mockBookings.json'
-import { addHours, areIntervalsOverlapping, eachHourOfInterval, isEqual, set, format } from "date-fns";
+import { addHours, areIntervalsOverlapping, eachHourOfInterval, isEqual, set, format, isValid, isDate, parse, isWithinInterval, startOfDay, addYears, startOfHour, isAfter } from "date-fns";
 import { BookingStatus } from "../../../enums/BookingStatus.ts";
 
 
@@ -73,13 +73,42 @@ const RequestBooking = () => {
     );
   };
 
+  const handleManualDateInput = (event) => {
+    const dateInput = event.target.value;
+
+    // if manual input is a valid date within the allowable interval
+    // convert it to a date object and store it
+    const dateFormat = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(19|20)\d{2}$/
+    if (dateFormat.test(dateInput)) {
+      const parsedDate = parse(dateInput, 'dd-MM-yyyy', new Date())
+      if (
+        isValid(parsedDate) &&
+        isWithinInterval(parsedDate, { start: startOfDay(new Date()), end: startOfDay(addYears(new Date(), 3)) })
+      ) {
+        setInputs((i) => ({ ...i, date: parsedDate }));
+        return
+      }
+    }
+
+    // else, just update date input with the raw value
+    setInputs((i) => ({ ...i, date: dateInput }));
+    return
+  }
+
+  // for representing date object as DD-MM-YYYY in the date input
+  const formatDateInput = (dateInput) => {
+    // if the input is a valid date and a date object, format it 
+    if (isValid(dateInput) && isDate(dateInput)) return format(dateInput, 'dd-MM-yyyy')
+
+    return dateInput
+  }
+
   // calculate available times that the user can select, based on a date
   // date: day at which we want the available time slots
   // duration: integer corresponding to service duration in hours
   // bookings: array of booking objects
   const getAvailableTimes = ({ date, duration, bookings }) => {
-    // TODO: properly validate date
-    if (date === "") {
+    if (!(isValid(date) && isDate(date))) {
       console.warn('invalid date')
       return []
     }
@@ -101,6 +130,7 @@ const RequestBooking = () => {
     // for each hour, check if that hour is 'free'
     // an hour is 'available' if the start of the hour + service duration doesn't overlap with any existing confirmed booking
     const availableTimes = hours.filter((hour) => {
+      if (!isAfter(startOfHour(hour), new Date())) return false
 
       // check every booking and see if they overlap with this hour + service duration
       // if there are no overlapping bookings, then this hour is available
@@ -160,8 +190,8 @@ const RequestBooking = () => {
                     id={dateInputId}
                     placeholder="DD-MM-YYYY"
                     name="date"
-                    value={inputs.date || ""} // TODO: date input needs to be transformed/validated
-                    onChange={handleInputChange}
+                    value={formatDateInput(inputs.date) || ""}
+                    onChange={handleManualDateInput}
                   />
                 </div>
 
@@ -215,7 +245,7 @@ const RequestBooking = () => {
 
               {/* calendar component */}
               <RequestBookingCalendar
-                value={inputs.date}
+                value={isValid(inputs.date) && isDate(inputs.date) ? inputs.date : null}
                 onChange={(date) => {
                   setInputs((i) => {
                     return {

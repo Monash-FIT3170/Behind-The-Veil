@@ -118,7 +118,7 @@
 }
 
 /* grey circle styling for dates that have available time slots */
-.react-calendar__month-view__days__day.available:not(:disabled)::before{
+.react-calendar__month-view__days__day.available:not(:disabled):not(.react-calendar__tile--active)::before{
   content: "";
   /* light grey */
   background-color: #D4D4D4;
