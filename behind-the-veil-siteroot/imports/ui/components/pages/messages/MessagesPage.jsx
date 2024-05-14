@@ -4,7 +4,7 @@
  * Contributors: Vicky
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Conversation from '../../message/Conversation';
@@ -39,7 +39,12 @@ const users = [
 ]
 
 export const MessagesPage = () => {
-    const newMsgPreviewsComponents = users.map((user, index) => <MessagesPreview key = {index} data = {user}></MessagesPreview>);
+    const [selectedConversationIndex, setSelectedConversationIndex] = useState(0);  // track the conversation selected, initially 0
+    const handlePreviewClick = (index) => {
+        setSelectedConversationIndex(index);
+        console.log("hello from the messages page");
+    };
+    const newMsgPreviewsComponents = users.map((user, index) => <MessagesPreview key = {index} data = {user} onClick={() => handlePreviewClick(index)}></MessagesPreview>);
     return (
         // if window size is SMALLER than a medium screen (default variable for medium in tailwind sm:768px),
         // then have the contacts/list of people on separate screens than the conversation
@@ -50,7 +55,7 @@ export const MessagesPage = () => {
             </div>
             {/*you MUST keep this div and put everything on the right side inside of it*/}
             <div>
-                <Conversation user={users[0]}/>
+                <Conversation user={users[selectedConversationIndex]}/>
             </div>
         </WhiteBackground>
     );
