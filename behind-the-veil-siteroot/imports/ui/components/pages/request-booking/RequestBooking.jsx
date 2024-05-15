@@ -12,6 +12,9 @@ import Button from "../../button/Button";
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import Input from "../../input/Input";
 import PreviousButton from "../../button/PreviousButton";
+import { AddressAutofill } from '@mapbox/search-js-react';
+
+
 
 /**
  * Page for user to request a booking
@@ -42,6 +45,7 @@ const RequestBooking = () => {
     const value = event.target.value;
     setInputs(i => ({ ...i, [name]: value }))
   }
+
 
   // TODO: send this data to the next page
   const handleSubmit = (event) => {
@@ -81,13 +85,17 @@ const RequestBooking = () => {
             {/* location */}
             <div className="flex flex-col gap-1">
               <label htmlFor={locationInputId} className="main-text text-our-black">Location</label>
-              <Input
-                id={locationInputId}
-                placeholder="Input location for service: wedding venue, address, ..."
-                name="location"
-                value={inputs.location || ""}
-                onChange={handleInputChange}
-              />
+              <AddressAutofill accessToken="pk.eyJ1IjoibWFzdGVyY2hpZWYwIiwiYSI6ImNsdzdtMXAyZzBtdWgyc280Z2wycHlzZXEifQ.X3CmBWszdI4h1y0vri5KsA">
+                <Input
+                  id={locationInputId}
+                  placeholder="Input location for service: wedding venue, address, ..."
+                  name="location"
+                  value={inputs.location || ""}
+                  onChange={handleInputChange}
+                  className="input mb12"
+                  autoComplete="address-line1"
+                />
+              </AddressAutofill>
             </div>
 
             {/* date/time */}
