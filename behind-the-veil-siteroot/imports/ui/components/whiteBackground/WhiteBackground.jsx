@@ -9,6 +9,7 @@ import classNames from "classnames";
 
 import PageLayout from "../../enums/PageLayout";
 import "./whiteBackground.css"
+import LoginRegisterVisual from "../visuals/LoginRegisterVisual";
 
 /**
  * Depending on the given pageLayout, returns a <div> which serves as the outermost component of any PAGE.
@@ -74,14 +75,28 @@ export const WhiteBackground = ({children, className, pageLayout, ...divProps}) 
                 {children}
             </div>
         </div>);
+    } else if (pageLayout === PageLayout.SMALL_RIGHT) {
+        // sub-div, on the right with visual on the left
+        return (
+            <div className={outerDivClasses}>
+
+                {/*left white semicircle*/}
+                <div className={pageSubDivClasses}></div>
+                {/*left visual*/}
+                <LoginRegisterVisual/>
+
+                <div className={pageMainDivClasses}>
+                    {children[1]}
+                </div>
+            </div>
+        );
     } else {
-        // there is a sub div, return the main and the sub div (main on the right)
+        // sub-div, Message or Small Center
         return (
             <div className={outerDivClasses}>
                 <div className={pageSubDivClasses}>
                     {children[0]}
                 </div>
-
                 <div className={pageMainDivClasses}>
                     {children[1]}
                 </div>

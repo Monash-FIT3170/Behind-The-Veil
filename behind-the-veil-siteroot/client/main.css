@@ -11,12 +11,8 @@
     body {
         /*padding on top for nav bar room*/
         padding-top: 5rem;
-
-        /*Background with bubbles: (requires hosting of the background image on a Python server)*/
-        /*@apply bg-main-bkg bg-no-repeat bg-cover bg-fixed;*/
-
-        /*Background without bubbles: (if you dont want to host Python server)*/
-        @apply bg-gradient-to-r from-bg-gradient-start to-bg-gradient-end;
+        /*the background*/
+        @apply bg-main-bkg bg-no-repeat bg-cover bg-fixed;
     }
 
     * {

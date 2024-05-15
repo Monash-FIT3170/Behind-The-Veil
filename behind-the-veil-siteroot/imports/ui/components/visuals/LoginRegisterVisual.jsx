@@ -18,7 +18,7 @@ export const LoginRegisterVisual = () => {
 
             {/* The image displayed on the left-hand side of the screen. */}
             <img src="/images/SignIn.png"
-                 className={"lg:h-[300px] xl:h-[400px] 2xl:h-[450px]"}
+                 className={" hidden lg:flex translate-x-[10%] fixed left-0 lg:h-[300px] xl:h-[400px] 2xl:h-[450px]"}
                  alt={"Makeup image"}></img>
         </div>
     );
