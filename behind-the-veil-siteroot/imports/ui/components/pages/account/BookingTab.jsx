@@ -65,7 +65,7 @@ const BookingTab = ({confirm, pending, past, archived}) => {
         <ul className="p-4 flex gap-4 block">
             <li className="w-full">
             {confirm.map((booking, index) => (   
-                <BridesBookingCards className={"m-4"} key={index} status={booking} elements={statusConfirm} />  
+                <BridesBookingCards key={index} status={booking} elements={statusConfirm} />  
             ))}
             </li>
             </ul>

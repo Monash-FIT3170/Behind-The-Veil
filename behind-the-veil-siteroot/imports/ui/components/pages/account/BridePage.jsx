@@ -15,8 +15,9 @@ import BookingTab from './BookingTab.jsx';
 import Card from '../../card/Card.jsx';
 
 const mockBrides =   {
-        "username": "andsj",
-        "type":"bride"
+        username: "sarah price",
+        tag: "@thisbride34",
+        type:"bride"
 
     }
 
@@ -80,7 +81,20 @@ const bookingMock = [
         artistUserName: "bob_ross333",
         serviceID: "serving"
 
+    },
+    {
+        bookingID: "some string",
+        bookingStartDate: "01/02/2022",
+        bookingDuration: "1 hour",
+        bookingLocation: "ringwood",
+        bookingPrice: "$300",
+        bookingStatus: "archived",
+        brideUserName: "looking_fint555",
+        artistUserName: "bob_ross333",
+        serviceID: "serving"
+
     }
+
 ]
 let confirmedBookings = [];
 let pendingBookings = [];
@@ -120,7 +134,7 @@ export const BridePage = () => {
             <div className="profile">
                 {/* <!-- profile picture --> */}
                 <div className="profile-photo">
-                    <ProfileDisplay className="h-full w-1/2"></ProfileDisplay>
+                    <ProfileDisplay className={"h-full w-1/2"} profileData={mockBrides} ></ProfileDisplay>
                 </div>
                 {/* <!-- settings --> */}
                 <div className="corner-button">

@@ -23,8 +23,8 @@ export const ProfileDisplay = ({className, profileData}) => {
             // make up how it would be coded with the data
             <div className={classes}>
                 <span ><ProfilePhoto ></ProfilePhoto></span>
-                <span className='text-sm'>Brides Name</span>
-                <span>@ tag</span>
+                <span className='text-sm'>{profileData.username}</span>
+                <span>{profileData.tag}</span>
             </div>
         );
     }
