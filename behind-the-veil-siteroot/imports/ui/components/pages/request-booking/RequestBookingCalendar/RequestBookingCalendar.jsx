@@ -1,14 +1,17 @@
 import React from "react";
 import Calendar from "react-calendar";
 import "./RequestBookingCalendar.css";
-import { addYears } from "date-fns";
+import { addYears, startOfDay } from "date-fns";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+
+// min date = today, max date = 3 yrs from now
+export const VALID_INTERVAL = { start: startOfDay(new Date()), end: startOfDay(addYears(new Date(), 3)) }
 
 const RequestBookingCalendar = ({ ...props }) => {
   return (
     <Calendar
-      minDate={new Date()} // min date = today
-      maxDate={addYears(new Date(), 3)} // max date = 3 yrs from now
+      minDate={VALID_INTERVAL.start} 
+      maxDate={VALID_INTERVAL.end} 
       prevLabel={<ChevronLeftIcon className="size-4" />}
       prev2Label={null}
       nextLabel={<ChevronRightIcon className="size-4" />}

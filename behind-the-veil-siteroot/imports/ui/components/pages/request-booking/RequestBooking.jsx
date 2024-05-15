@@ -10,13 +10,58 @@ import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
-import RequestBookingCalendar from "./RequestBookingCalendar/RequestBookingCalendar.jsx";
+import RequestBookingCalendar, { VALID_INTERVAL } from "./RequestBookingCalendar/RequestBookingCalendar.jsx";
 import Input from "../../input/Input";
 import PreviousButton from "../../button/PreviousButton";
 import mockBookings from './mockBookings.json'
-import { addHours, areIntervalsOverlapping, eachHourOfInterval, isEqual, set, format, isValid, isDate, parse, isWithinInterval, startOfDay, addYears, startOfHour, isAfter } from "date-fns";
+import { addHours, areIntervalsOverlapping, eachHourOfInterval, isEqual, set, format, isValid, isDate, parse, isWithinInterval, startOfDay, addYears, startOfHour, isAfter, eachDayOfInterval, nextDay, isSameDay, addDays } from "date-fns";
 import { BookingStatus } from "../../../enums/BookingStatus.ts";
 import { useNavigate } from "react-router-dom";
+
+// calculate available times that the user can select, based on a date
+// date: day at which we want the available time slots
+// duration: integer corresponding to service duration in hours
+// bookings: array of booking objects
+const getAvailableTimes = ({ date, duration, bookings }) => {
+  if (!(isValid(date) && isDate(date))) {
+    console.warn('invalid date')
+    return []
+  }
+  if (!Array.isArray(bookings)) {
+    console.warn('bookings is not an array')
+    return []
+  }
+
+  const hours = eachHourOfInterval({
+    // TODO: for now, assume that artists can work 6am to 7pm every day
+    start: set(date, { hours: 6, minutes: 0, seconds: 0 }),
+    end: set(date, { hours: (19 - duration), minutes: 0, seconds: 0 })
+  })
+
+  const confirmedBookings = bookings.filter((booking) => {
+    return booking.bookingStatus === BookingStatus.CONFIRMED
+  })
+
+  // for each hour, check if that hour is 'free'
+  // an hour is 'available' if the start of the hour + service duration doesn't overlap with any existing confirmed booking
+  const availableTimes = hours.filter((hour) => {
+    if (!isAfter(startOfHour(hour), new Date())) return false
+
+    // check every booking and see if they overlap with this hour + service duration
+    // if there are no overlapping bookings, then this hour is available
+    return !confirmedBookings.some((booking) => {
+      const confirmedBookingStart = booking.bookingStartDateTime
+      const confirmedBookingEnd = addHours(confirmedBookingStart, booking.bookingDuration)
+
+      return areIntervalsOverlapping(
+        { start: hour, end: addHours(hour, duration) }, // time slot interval
+        { start: confirmedBookingStart, end: confirmedBookingEnd } // confirmed booking interval
+      )
+    })
+  })
+
+  return availableTimes
+};
 
 /**
  * Page for user to request a booking
@@ -47,10 +92,22 @@ const RequestBooking = () => {
   // TODO: get actual duration from this service
   const duration = 2
 
+  // initialise date input to the first day with availabilities
+  const initDateInput = () => {
+    // starting with today, iterate until we find a day with available times
+    let day = startOfDay(new Date())
+    while (getAvailableTimes({ date: day, duration: duration, bookings: bookings }).length === 0) {
+      day = startOfDay(addDays(day, 1))
+      if (isAfter(day, VALID_INTERVAL.end)) return '' // beyond valid interval
+    }
+
+    return day
+  }
+
   // form input values
   const [inputs, setInputs] = useState({
     location: "",
-    date: "",
+    date: initDateInput(),
     time: "",
   });
 
@@ -85,7 +142,7 @@ const RequestBooking = () => {
       const parsedDate = parse(dateInput, 'dd-MM-yyyy', new Date())
       if (
         isValid(parsedDate) &&
-        isWithinInterval(parsedDate, { start: startOfDay(new Date()), end: startOfDay(addYears(new Date(), 3)) })
+        isWithinInterval(parsedDate, VALID_INTERVAL)
       ) {
         setInputs((i) => ({ ...i, date: parsedDate }));
         return
@@ -104,51 +161,6 @@ const RequestBooking = () => {
 
     return dateInput
   }
-
-  // calculate available times that the user can select, based on a date
-  // date: day at which we want the available time slots
-  // duration: integer corresponding to service duration in hours
-  // bookings: array of booking objects
-  const getAvailableTimes = ({ date, duration, bookings }) => {
-    if (!(isValid(date) && isDate(date))) {
-      console.warn('invalid date')
-      return []
-    }
-    if (!Array.isArray(bookings)) {
-      console.warn('bookings is not an array')
-      return []
-    }
-
-    const hours = eachHourOfInterval({
-      // TODO: for now, assume that artists can work 6am to 7pm every day
-      start: set(date, { hours: 6, minutes: 0, seconds: 0 }),
-      end: set(date, { hours: (19 - duration), minutes: 0, seconds: 0 })
-    })
-
-    const confirmedBookings = bookings.filter((booking) => {
-      return booking.bookingStatus === BookingStatus.CONFIRMED
-    })
-
-    // for each hour, check if that hour is 'free'
-    // an hour is 'available' if the start of the hour + service duration doesn't overlap with any existing confirmed booking
-    const availableTimes = hours.filter((hour) => {
-      if (!isAfter(startOfHour(hour), new Date())) return false
-
-      // check every booking and see if they overlap with this hour + service duration
-      // if there are no overlapping bookings, then this hour is available
-      return !confirmedBookings.some((booking) => {
-        const confirmedBookingStart = booking.bookingStartDateTime
-        const confirmedBookingEnd = addHours(confirmedBookingStart, booking.bookingDuration)
-
-        return areIntervalsOverlapping(
-          { start: hour, end: addHours(hour, duration) }, // time slot interval
-          { start: confirmedBookingStart, end: confirmedBookingEnd } // confirmed booking interval
-        )
-      })
-    })
-
-    return availableTimes
-  };
 
   const availableTimes = getAvailableTimes({ date: inputs.date, duration: duration, bookings: bookings });
 
@@ -188,78 +200,78 @@ const RequestBooking = () => {
               <div className="flex flex-col flex-grow gap-1 md:max-w-[350px] lg:max-w-[420px] xl:lg:max-w-[490px]">
                 <label htmlFor={dateInputId} className="main-text text-our-black">Select Date</label>
                 <div className="flex flex-col gap-4">
-                <Input
-                  id={dateInputId}
-                  placeholder="DD-MM-YYYY"
-                  name="date"
-                  value={formatDateInput(inputs.date) || ""}
-                  onChange={handleManualDateInput}
-                />
-                {/* calendar component */}
-                <RequestBookingCalendar
-                  value={isValid(inputs.date) && isDate(inputs.date) ? inputs.date : null}
-                  onChange={(date) => {
-                    setInputs((i) => {
-                      return {
-                        ...i,
-                        date: date,
-                      };
-                    });
-                  }}
-                  tileClassName={({ date, view }) => {
-                    const availableTimes = getAvailableTimes({ date: new Date(date), duration: duration, bookings: bookings })
-                    if (
-                      view === 'month' &&
-                      availableTimes.length > 0
-                    ) {
-                      return 'available'
-                    }
-                  }}
-                />
+                  <Input
+                    id={dateInputId}
+                    placeholder="DD-MM-YYYY"
+                    name="date"
+                    value={formatDateInput(inputs.date) || ""}
+                    onChange={handleManualDateInput}
+                  />
+                  {/* calendar component */}
+                  <RequestBookingCalendar
+                    value={isValid(inputs.date) && isDate(inputs.date) ? inputs.date : null}
+                    onChange={(date) => {
+                      setInputs((i) => {
+                        return {
+                          ...i,
+                          date: date,
+                        };
+                      });
+                    }}
+                    tileClassName={({ date, view }) => {
+                      const availableTimes = getAvailableTimes({ date: new Date(date), duration: duration, bookings: bookings })
+                      if (
+                        view === 'month' &&
+                        availableTimes.length > 0
+                      ) {
+                        return 'available'
+                      }
+                    }}
+                  />
                 </div>
               </div>
 
               {/* available time buttons */}
               {/* <div className="flex sm:flex-grow sm:justify-center"> */}
-                <div className="flex flex-col flex-grow gap-1">
-                  <label
-                    htmlFor={timeInputId}
-                    className="main-text text-our-black"
-                  >
-                    Select Start Time (Duration: {duration}hr)
-                  </label>
-                  <div id={timeInputId} className="grid grid-cols-2 gap-2">
+              <div className="flex flex-col flex-grow gap-1">
+                <label
+                  htmlFor={timeInputId}
+                  className="main-text text-our-black"
+                >
+                  Select Start Time (Duration: {duration}hr)
+                </label>
+                <div id={timeInputId} className="grid grid-cols-2 gap-2">
 
-                    {/* if there are available times, render the time input buttons */}
-                    {!Array.isArray(availableTimes) || availableTimes.length === 0 ?
-                      "No available times" :
-                      availableTimes.map((time) => {
-                        const baseStyle = "w-full";
-                        const activeStyle = "bg-dark-grey text-white";
-                        const className =
-                          isEqual(inputs.time, time)
-                            ? `${baseStyle} ${activeStyle}`
-                            : baseStyle;
+                  {/* if there are available times, render the time input buttons */}
+                  {!Array.isArray(availableTimes) || availableTimes.length === 0 ?
+                    "No available times" :
+                    availableTimes.map((time) => {
+                      const baseStyle = "w-full";
+                      const activeStyle = "bg-dark-grey text-white";
+                      const className =
+                        isEqual(inputs.time, time)
+                          ? `${baseStyle} ${activeStyle}`
+                          : baseStyle;
 
-                        return (
-                          <Button
-                            key={time}
-                            className={className}
-                            onClick={() => {
-                              setInputs((i) => {
-                                return {
-                                  ...i,
-                                  time: time,
-                                };
-                              });
-                            }}
-                          >
-                            {format(time, 'p')}
-                          </Button>
-                        );
-                      })}
-                  </div>
+                      return (
+                        <Button
+                          key={time}
+                          className={className}
+                          onClick={() => {
+                            setInputs((i) => {
+                              return {
+                                ...i,
+                                time: time,
+                              };
+                            });
+                          }}
+                        >
+                          {format(time, 'p')}
+                        </Button>
+                      );
+                    })}
                 </div>
+              </div>
               {/* </div> */}
 
             </div>
