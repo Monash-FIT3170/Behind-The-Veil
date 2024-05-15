@@ -1,3 +1,9 @@
+/**
+ * File Description: Request Booking calendar component
+ * File version: 1.0
+ * Contributors: Josh
+ */
+
 import React from "react";
 import Calendar from "react-calendar";
 import "./RequestBookingCalendar.css";
