@@ -1,6 +1,6 @@
 /**
  * File Description: White background for almost all pages
- * File version: 1.0
+ * File version: 2.0
  * Contributors: Nikki
  */
 
@@ -86,12 +86,12 @@ export const WhiteBackground = ({children, className, pageLayout, ...divProps}) 
                 <LoginRegisterVisual/>
 
                 <div className={pageMainDivClasses}>
-                    {children[1]}
+                    {children}
                 </div>
             </div>
         );
     } else {
-        // sub-div, Message or Small Center
+        // sub-div, for Messages page
         return (
             <div className={outerDivClasses}>
                 <div className={pageSubDivClasses}>

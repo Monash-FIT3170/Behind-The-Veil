@@ -12,7 +12,6 @@ import URLSearchParams from '@ungap/url-search-params'
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
-import LoginRegisterVisual from "../../visuals/LoginRegisterVisual";
 import Input from "../../input/Input";
 
 const CreateAccountPage = () => {
@@ -20,7 +19,6 @@ const CreateAccountPage = () => {
 
     // get the chosen account type from last page
     const accountType = new URLSearchParams(useLocation().search).get("type");
-
 
     const handleRegister = (event) => {
         event.preventDefault();
@@ -106,18 +104,12 @@ const CreateAccountPage = () => {
         // if window size is SMALLER than a large screen (default variable for large in tailwind lg:1024px),
         // then use center aligned and no visuals on the left so the inputs aren't all squished
         <WhiteBackground pageLayout={window.innerWidth <= 1024 ? PageLayout.SMALL_CENTER : PageLayout.SMALL_RIGHT}>
-            {/*you MUST keep this div and put everything on the left side (e.g. the visual) of it*/}
-            <div className="hidden lg:flex translate-x-1/2 translate-y-[80vh]">
-                {/*You might have to alter the above translation values or something to make sure that the visual
-                doesn't move when changing screen size*/}
-                <LoginRegisterVisual/>
-            </div>
 
             {/* Right side content */}
             <div className={"text-center pt-1"}>
                 <div className="title-text mb-3 sm:mb-8">Create an Account</div>
 
-                <div className={"flex flex-col items-center gap-4 p-2.5"}>
+                <form className={"flex flex-col items-center gap-4 p-2.5"}>
                     {/* Input fields for account creation */}
 
                     <div className={"flex flex-col gap-y-3 w-4/5 text-left"}>
@@ -145,11 +137,12 @@ const CreateAccountPage = () => {
                         </ul>
                     </div>
 
-                    <Button className={"bg-secondary-purple hover:bg-secondary-purple-hover w-1/3 min-w-40"}
+                    <Button type={"submit"}
+                            className={"bg-secondary-purple hover:bg-secondary-purple-hover w-1/3 min-w-40"}
                             onClick={handleRegister}>
                         Register
                     </Button>
-                </div>
+                </form>
             </div>
         </WhiteBackground>
     );
