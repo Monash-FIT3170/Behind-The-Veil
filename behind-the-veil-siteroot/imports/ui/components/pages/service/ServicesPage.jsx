@@ -4,8 +4,8 @@
  * Contributors: Nikki
  */
 
-import React, {useState} from 'react';
-import {useSubscribe, useTracker} from "meteor/react-meteor-data"
+import React, { useState } from 'react';
+import { useSubscribe, useTracker } from "meteor/react-meteor-data"
 
 import ServiceCollection from "/imports/api/collections/services";
 import UserCollection from "/imports/api/collections/users";
@@ -18,6 +18,9 @@ import ServiceCard from "/imports/ui/components/card/ServiceCard.jsx";
 import SearchBar from "/imports/ui/components/searchBar/searchBar.jsx";
 import Loader from "/imports/ui/components/loader/Loader";
 
+import Button from '../../button/Button';
+import Card from '../../card/Card';
+import { CheckIcon } from '@heroicons/react/24/solid'
 
 /**
  * Page of a list of Service cards for users to see
@@ -35,10 +38,10 @@ export const ServicesPage = () => {
 
     // get data from db
     let servicesData = useTracker(() => {
-        return ServiceCollection.find({"serviceActive": true}).fetch();
+        return ServiceCollection.find({ "serviceActive": true }).fetch();
     });
     let usersData = useTracker(() => {
-        return UserCollection.find({"profile.type": "artist"}).fetch();
+        return UserCollection.find({ "profile.type": "artist" }).fetch();
     });
     let imagesData = useTracker(() => {
         return ImageCollection.find().fetch();
@@ -77,6 +80,19 @@ export const ServicesPage = () => {
         artistAlias={service.artistAlias}
     ></ServiceCard>))
 
+    const [overlayVisible, setOverlayVisible] = useState(false);
+    const handleSaveChangesOverlay = () => {
+        setOverlayVisible(true);
+    };
+
+    const handleSaveChanges = () => {
+        // setOverlayVisible(false);
+    };
+
+    const handleCloseOverlay = () => {
+        setOverlayVisible(false);
+    };
+
     if (document.readyState === "complete" && !isLoading) {
         return (
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
@@ -85,9 +101,35 @@ export const ServicesPage = () => {
 
                 {/*todo: functional search bar*/}
                 <div className="flex flex-col items-center mb-10">
-                    <SearchBar/>
+                    <SearchBar />
                 </div>
+                <Button className="flex bg-secondary-purple hover:bg-secondary-purple-hover" onClick={handleSaveChangesOverlay}>
+                    <CheckIcon className='icon-base mr-1'></CheckIcon>
+                    Save Changes
+                </Button>
+                {overlayVisible && (
+                    <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50">
 
+                        <Card className="bg-white p-20 rounded-md">
+                            {/* Content of the card */}
+                            <div className='text-center'>
+                                <p className='title-text'>Save Changes?</p>
+                                <p className='medium-text my-4 '>Press cancel to keep editing</p>
+                            </div>
+                            <div className='flex justify-between'>
+                                <Button onClick={handleSaveChanges} className="flex bg-secondary-purple px-8 hover:bg-secondary-purple-hover">
+                                    <CheckIcon className='icon-base mr-1'></CheckIcon>
+                                    Yes
+                                </Button>
+                                <Button onClick={handleCloseOverlay}
+                                    className="flex px-8 hover:bg-secondary-purple-hover">
+                                    Cancel
+                                </Button>
+                            </div>
+                        </Card>
+
+                    </div>
+                )}
                 <div className="flex flex-col items-center justify-center gap-y-5">
 
                     <Pagination
@@ -98,17 +140,17 @@ export const ServicesPage = () => {
                     <div className="flex flex-row items-center justify-center gap-x-2">
                         Items per page:
                         <input type={"number"}
-                               value={itemsPerPage}
-                               className="border-2 p-2 border-light-grey rounded-[6px] main-text h-12 max-w-20 sm:w-[361px]"
-                               onChange={(event) => {
-                                   // ensure no negative pages
-                                   const newValue = Number(event.target.value);
-                                   if (newValue > 0) {
-                                       setItemsPerPage(newValue);
-                                   }
-                               }}
-                               min={1}
-                               max={100}
+                            value={itemsPerPage}
+                            className="border-2 p-2 border-light-grey rounded-[6px] main-text h-12 max-w-20 sm:w-[361px]"
+                            onChange={(event) => {
+                                // ensure no negative pages
+                                const newValue = Number(event.target.value);
+                                if (newValue > 0) {
+                                    setItemsPerPage(newValue);
+                                }
+                            }}
+                            min={1}
+                            max={100}
                         />
                     </div>
                 </div>
@@ -122,7 +164,7 @@ export const ServicesPage = () => {
 
                 {/*todo: functional search bar*/}
                 <div className="flex flex-col items-center mb-10">
-                    <SearchBar/>
+                    <SearchBar />
                 </div>
 
                 <Loader
