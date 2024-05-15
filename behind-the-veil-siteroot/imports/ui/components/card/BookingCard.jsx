@@ -47,7 +47,7 @@ export const BookingCard = ({
                     {/* displaying booking information */}
                     <div className="large-text text-our-black max-w-full break-all line-clamp-1 mb-3">
                         {serviceName}</div>
-                    <div className="large-text text-our-black max-w-full break-all line-clamp-1 mb-3">
+                    <div className="medium-text text-our-black max-w-full break-all line-clamp-1 mb-3">
                         {bookingStatus}</div>
                         <div className="flex">
                             <div className="medium-text text-our-black max-w-full break-all line-clamp-1 mb-3">
