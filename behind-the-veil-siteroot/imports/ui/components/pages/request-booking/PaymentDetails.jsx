@@ -1,16 +1,20 @@
+
 /**
  * File Description: Payment details page
  * File version: 1.0
  * Contributors: Neth
  */
 
-import React, { useId, useState } from "react";
+import React, {useId, useState} from "react";
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
-import { CurrencyDollarIcon } from '@heroicons/react/24/outline'
+import {CheckIcon, CurrencyDollarIcon, NoSymbolIcon} from '@heroicons/react/24/outline'
 import Input from "../../input/Input";
 import BackButton from "../../button/BackButton";
+import 'react-responsive-modal/styles.css';
+import { Modal } from 'react-responsive-modal';
+import {useNavigate} from "react-router-dom";
 
 /**
  * Component for handling payment details.
@@ -22,10 +26,10 @@ import BackButton from "../../button/BackButton";
  * @returns {JSX.Element} PaymentDetails component.
  */
 const PaymentDetails = () => {
-    // Error messages for input fields
-    const errorMsg = ["card number", "card holder name", "expiry date", "CVV"];
+    const navigateTo = useNavigate();
 
-    // Generate unique IDs for input fields
+    const errorMsg = ["card number", "card holder name", "expiry date", "CVV"]
+
     const cardNumberId = useId();
     const cardNameId = useId();
     const expDateId = useId();
@@ -47,6 +51,11 @@ const PaymentDetails = () => {
     });
 
     // Handler for input change
+    const [open, setOpen] = useState(false);
+
+    const onOpenModal = () => setOpen(true);
+    const onCloseModal = () => setOpen(false);
+
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setInputs({ ...inputs, [name]: value });
@@ -59,8 +68,9 @@ const PaymentDetails = () => {
         let newErrors = {};
         let isError = false;
 
-        // Check for empty fields in each input field
+        // Check for empty fields in each field. Make sure nothing is empty
         Object.keys(inputs).forEach((key, index) => {
+            // TODO: CHECK VALIDITY might use Square API
             if (!inputs[key].trim()) {
                 newErrors[key] = `Please input valid ${errorMsg[index]}.`;
                 isError = true;
@@ -72,8 +82,12 @@ const PaymentDetails = () => {
 
         // Proceed if there are no errors
         if (!isError) {
-            // TODO: Proceed with payment confirmation logic
+            onOpenModal()
         }
+    }
+
+    const confirmPayment = () => {
+        navigateTo(`/booking-confirmation`);
     }
 
     return (
@@ -135,6 +149,31 @@ const PaymentDetails = () => {
                             <CurrencyDollarIcon className="icon-base" />
                             Pay
                         </Button>
+                        <Modal classNames={{
+                            modal: "w-[480px] h-[300px] rounded-[45px] bg-glass-panel-background border border-main-blue"
+                        }} open={open} onClose={onCloseModal} center showCloseIcon={false}>
+                            <div className="flex justify-center items-center h-full">
+                                <div className="flex flex-col">
+                                    <h2 className="text-center title-text">
+                                        Confirm Payment
+                                    </h2>
+                                    {/*TODO: Add price to the modal*/}
+                                        <p className="text-center medium-text">You are about make a payment of
+                                            $120.00.</p>
+                                        <p className="text-center medium-text">Are you sure?</p>
+                                    <div className="flex justify-center space-x-6 mt-5">
+                                        <Button className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[25px] pe-[25px] flex gap-1" onClick={confirmPayment}>
+                                            <CheckIcon className="icon-base" />
+                                            Confirm
+                                        </Button>
+                                        <Button className="btn-base ps-[25px] pe-[25px] flex gap-1" onClick={onCloseModal}>
+                                            <NoSymbolIcon className="icon-base" />
+                                            Cancel
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </Modal>
                     </div>
                 </form>
             </div>
