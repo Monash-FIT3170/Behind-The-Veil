@@ -25,7 +25,7 @@ export const ArtistProfilePage = () => {
   // Booking tab with the list view only (for now)
   const bookingTab = (
     <div className="relative">
-      <div className="sticky top-20 z-20 flex justify-end">
+      <div className="top-20 z-20 flex justify-end">
         <Button className="absolute top-2 flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover">
           {plusIcon} Add Availability
         </Button>
