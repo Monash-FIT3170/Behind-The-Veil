@@ -183,92 +183,94 @@ const RequestBooking = () => {
             </div>
 
             {/* date/time */}
-            <div className="flex gap-10">
-              {/* input fields */}
-              <div className="flex flex-col gap-4 grow">
-                <div className="flex flex-col gap-1">
-                  <label htmlFor={dateInputId} className="main-text text-our-black">Select Date</label>
-                  <Input
-                    id={dateInputId}
-                    placeholder="DD-MM-YYYY"
-                    name="date"
-                    value={formatDateInput(inputs.date) || ""}
-                    onChange={handleManualDateInput}
-                  />
+            <div className="flex flex-col md:flex-row gap-4 md:gap-10">
+              {/* date input + calendar */}
+              <div className="flex flex-col flex-grow gap-1 md:max-w-[350px] lg:max-w-[420px] xl:lg:max-w-[490px]">
+                <label htmlFor={dateInputId} className="main-text text-our-black">Select Date</label>
+                <div className="flex flex-col gap-4">
+                <Input
+                  id={dateInputId}
+                  placeholder="DD-MM-YYYY"
+                  name="date"
+                  value={formatDateInput(inputs.date) || ""}
+                  onChange={handleManualDateInput}
+                />
+                {/* calendar component */}
+                <RequestBookingCalendar
+                  value={isValid(inputs.date) && isDate(inputs.date) ? inputs.date : null}
+                  onChange={(date) => {
+                    setInputs((i) => {
+                      return {
+                        ...i,
+                        date: date,
+                      };
+                    });
+                  }}
+                  tileClassName={({ date, view }) => {
+                    const availableTimes = getAvailableTimes({ date: new Date(date), duration: duration, bookings: bookings })
+                    if (
+                      view === 'month' &&
+                      availableTimes.length > 0
+                    ) {
+                      return 'available'
+                    }
+                  }}
+                />
                 </div>
-
-                {/* if there are available times, render the time input buttons */}
-                {availableTimes && (
-                  <div className="flex flex-col gap-1">
-                    <label
-                      htmlFor={timeInputId}
-                      className="main-text text-our-black"
-                    >
-                      Select Start Time (Duration: {duration}hr)
-                    </label>
-                    <div id={timeInputId} className="grid grid-cols-2 gap-2">
-                      {!Array.isArray(availableTimes) || availableTimes.length === 0 ?
-                        "No available times" :
-                        availableTimes.map((time) => {
-                          const baseStyle = "w-full";
-                          const activeStyle = "bg-dark-grey text-white";
-                          const className =
-                            isEqual(inputs.time, time)
-                              ? `${baseStyle} ${activeStyle}`
-                              : baseStyle;
-
-                          return (
-                            <Button
-                              key={time}
-                              className={className}
-                              onClick={() => {
-                                setInputs((i) => {
-                                  return {
-                                    ...i,
-                                    time: time,
-                                  };
-                                });
-                              }}
-                            >
-                              {format(time, 'p')}
-                            </Button>
-                          );
-                        })}
-                    </div>
-                  </div>
-                )}
-
-                <Button
-                  className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2 w-1/2 justify-center"
-                  type="submit"
-                >
-                  Next Step
-                  <ArrowRightIcon className="icon-base" />
-                </Button>
               </div>
 
-              {/* calendar component */}
-              <RequestBookingCalendar
-                value={isValid(inputs.date) && isDate(inputs.date) ? inputs.date : null}
-                onChange={(date) => {
-                  setInputs((i) => {
-                    return {
-                      ...i,
-                      date: date,
-                    };
-                  });
-                }}
-                tileClassName={({ date, view }) => {
-                  const availableTimes = getAvailableTimes({ date: new Date(date), duration: duration, bookings: bookings })
-                  if (
-                    view === 'month' &&
-                    availableTimes.length > 0
-                  ) {
-                    return 'available'
-                  }
-                }}
-              />
+              {/* available time buttons */}
+              {/* <div className="flex sm:flex-grow sm:justify-center"> */}
+                <div className="flex flex-col flex-grow gap-1">
+                  <label
+                    htmlFor={timeInputId}
+                    className="main-text text-our-black"
+                  >
+                    Select Start Time (Duration: {duration}hr)
+                  </label>
+                  <div id={timeInputId} className="grid grid-cols-2 gap-2">
+
+                    {/* if there are available times, render the time input buttons */}
+                    {!Array.isArray(availableTimes) || availableTimes.length === 0 ?
+                      "No available times" :
+                      availableTimes.map((time) => {
+                        const baseStyle = "w-full";
+                        const activeStyle = "bg-dark-grey text-white";
+                        const className =
+                          isEqual(inputs.time, time)
+                            ? `${baseStyle} ${activeStyle}`
+                            : baseStyle;
+
+                        return (
+                          <Button
+                            key={time}
+                            className={className}
+                            onClick={() => {
+                              setInputs((i) => {
+                                return {
+                                  ...i,
+                                  time: time,
+                                };
+                              });
+                            }}
+                          >
+                            {format(time, 'p')}
+                          </Button>
+                        );
+                      })}
+                  </div>
+                </div>
+              {/* </div> */}
+
             </div>
+
+            <Button
+              className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2 w-fit justify-center"
+              type="submit"
+            >
+              Next Step
+              <ArrowRightIcon className="icon-base" />
+            </Button>
           </div>
         </form>
       </div>
