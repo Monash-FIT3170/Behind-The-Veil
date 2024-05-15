@@ -13,7 +13,6 @@ const MessagesPreview = (props) => {
     const recentMessageObj = messages[messages.length - 1];
     const read = recentMessageObj.read;
     const recentMessage = recentMessageObj.text;
-    console.log(onClick);
     return (
         <Card className="flex flex-row justify-center items-center w-full h-full border-none lg:flex-center cursor-pointer" onClick={onClick}>
             {/* Only show the profile photo on small screens */}
