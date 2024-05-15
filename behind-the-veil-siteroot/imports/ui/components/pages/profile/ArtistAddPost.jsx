@@ -20,7 +20,8 @@ export const ArtistAddPost = () => {
 
   const navigate = useNavigate();
 
-  const fileInputRef = useRef(null);
+
+  const fileInputRef = useRef(null);   // used since the file classname is hidden to ensure that ui is in specific format
 
   function handleInputChange(event) {
     const description = event.target.value;
@@ -38,14 +39,20 @@ export const ArtistAddPost = () => {
     }
   }
 
+  // main function to handle whats entered on the page when "save" is entered
   function handleAddPost(event) {
     event.preventDefault();
     let hasError = false;
+    // file errors
     if (!inputFile) {
       setFileError("Please provide a file.");
       hasError = true;
+    } else if (inputFile.type !== "image/png") {
+      setFileError("Please upload a .png file.");
+      hasError = true;
     } else {
       setFileError("");
+    // description errors
     }
     if (!inputReason) {
       setDescriptionError("Please provide a description.");
