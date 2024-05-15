@@ -38,12 +38,12 @@ export const ServicesPage = () => {
         return ServiceCollection.find({"serviceActive": true}).fetch();
     });
     let usersData = useTracker(() => {
-        return UserCollection.find({"userType": "artist"}).fetch();
+        return UserCollection.find({"profile.type": "artist"}).fetch();
     });
     let imagesData = useTracker(() => {
         return ImageCollection.find().fetch();
     });
-
+    console.log(usersData)
     // manual aggregation
     let combined = servicesData;
     for (let i = 0; i < servicesData.length; i++) {
