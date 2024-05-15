@@ -18,51 +18,6 @@ import { addHours, areIntervalsOverlapping, eachHourOfInterval, isEqual, set, fo
 import { BookingStatus } from "../../../enums/BookingStatus.ts";
 import { useNavigate } from "react-router-dom";
 
-// calculate available times that the user can select, based on a date
-// date: day at which we want the available time slots
-// duration: integer corresponding to service duration in hours
-// bookings: array of booking objects
-const getAvailableTimes = ({ date, duration, bookings }) => {
-  if (!(isValid(date) && isDate(date))) {
-    console.warn('invalid date')
-    return []
-  }
-  if (!Array.isArray(bookings)) {
-    console.warn('bookings is not an array')
-    return []
-  }
-
-  const hours = eachHourOfInterval({
-    // TODO: for now, assume that artists can work 6am to 7pm every day
-    start: set(date, { hours: 6, minutes: 0, seconds: 0 }),
-    end: set(date, { hours: (19 - duration), minutes: 0, seconds: 0 })
-  })
-
-  const confirmedBookings = bookings.filter((booking) => {
-    return booking.bookingStatus === BookingStatus.CONFIRMED
-  })
-
-  // for each hour, check if that hour is 'free'
-  // an hour is 'available' if the start of the hour + service duration doesn't overlap with any existing confirmed booking
-  const availableTimes = hours.filter((hour) => {
-    if (!isAfter(startOfHour(hour), new Date())) return false
-
-    // check every booking and see if they overlap with this hour + service duration
-    // if there are no overlapping bookings, then this hour is available
-    return !confirmedBookings.some((booking) => {
-      const confirmedBookingStart = booking.bookingStartDateTime
-      const confirmedBookingEnd = addHours(confirmedBookingStart, booking.bookingDuration)
-
-      return areIntervalsOverlapping(
-        { start: hour, end: addHours(hour, duration) }, // time slot interval
-        { start: confirmedBookingStart, end: confirmedBookingEnd } // confirmed booking interval
-      )
-    })
-  })
-
-  return availableTimes
-};
-
 /**
  * Page for user to request a booking
  */
@@ -73,6 +28,54 @@ const RequestBooking = () => {
     service: "Bachelorette Glam Experience",
     artist: "Alice Tran",
     price: "$120",
+  };
+
+  /**
+   * Calculate available times that the user can select, based on date, duration, and existing bookings
+   * @param {Date} date day at which we want the available time slots
+   * @param {number} duration integer corresponding to service duration in hours
+   * @param {Array} bookings array of booking objects
+   * @returns array of date objects that correspond to available times, on the hour
+   */
+  const getAvailableTimes = ({ date, duration, bookings }) => {
+    if (!(isValid(date) && isDate(date))) {
+      console.warn('invalid date')
+      return []
+    }
+    if (!Array.isArray(bookings)) {
+      console.warn('bookings is not an array')
+      return []
+    }
+
+    const hours = eachHourOfInterval({
+      // TODO: for now, assume that artists can work 6am to 7pm every day
+      start: set(date, { hours: 6, minutes: 0, seconds: 0 }),
+      end: set(date, { hours: (19 - duration), minutes: 0, seconds: 0 })
+    })
+
+    const confirmedBookings = bookings.filter((booking) => {
+      return booking.bookingStatus === BookingStatus.CONFIRMED
+    })
+
+    // for each hour, check if that hour is 'free'
+    // an hour is 'available' if the start of the hour + service duration doesn't overlap with any existing confirmed booking
+    const availableTimes = hours.filter((hour) => {
+      if (!isAfter(startOfHour(hour), new Date())) return false
+
+      // check every booking and see if they overlap with this hour + service duration
+      // if there are no overlapping bookings, then this hour is available
+      return !confirmedBookings.some((booking) => {
+        const confirmedBookingStart = booking.bookingStartDateTime
+        const confirmedBookingEnd = addHours(confirmedBookingStart, booking.bookingDuration)
+
+        return areIntervalsOverlapping(
+          { start: hour, end: addHours(hour, duration) }, // time slot interval
+          { start: confirmedBookingStart, end: confirmedBookingEnd } // confirmed booking interval
+        )
+      })
+    })
+
+    return availableTimes
   };
 
   // TODO: this function might not be needed once we use real bookings b/c I think start time is stored as date object
