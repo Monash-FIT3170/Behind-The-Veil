@@ -207,31 +207,33 @@ const RequestBooking = () => {
                       Select Start Time (Duration: {duration}hr)
                     </label>
                     <div id={timeInputId} className="grid grid-cols-2 gap-2">
-                      {availableTimes.map((time) => {
-                        const baseStyle = "w-full";
-                        const activeStyle = "bg-dark-grey text-white";
-                        const className =
-                          isEqual(inputs.time, time)
-                            ? `${baseStyle} ${activeStyle}`
-                            : baseStyle;
+                      {!Array.isArray(availableTimes) || availableTimes.length === 0 ?
+                        "No available times" :
+                        availableTimes.map((time) => {
+                          const baseStyle = "w-full";
+                          const activeStyle = "bg-dark-grey text-white";
+                          const className =
+                            isEqual(inputs.time, time)
+                              ? `${baseStyle} ${activeStyle}`
+                              : baseStyle;
 
-                        return (
-                          <Button
-                            key={time}
-                            className={className}
-                            onClick={() => {
-                              setInputs((i) => {
-                                return {
-                                  ...i,
-                                  time: time,
-                                };
-                              });
-                            }}
-                          >
-                            {format(time, 'p')}
-                          </Button>
-                        );
-                      })}
+                          return (
+                            <Button
+                              key={time}
+                              className={className}
+                              onClick={() => {
+                                setInputs((i) => {
+                                  return {
+                                    ...i,
+                                    time: time,
+                                  };
+                                });
+                              }}
+                            >
+                              {format(time, 'p')}
+                            </Button>
+                          );
+                        })}
                     </div>
                   </div>
                 )}
