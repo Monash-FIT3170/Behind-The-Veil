@@ -144,9 +144,11 @@ on a case by case basis within individual JSX components.
     }
 
     .brides-profile-page-booking-card-base {
-        @apply grid grid-cols-3 grid-rows-6 gap-x-10 gap-y-4  max-h-60 p-0;
+        @apply grid grid-cols-3  w-3/4 max-h-60 p-0;
     }
-
+    .text-space-brides-profile-page-booking-card-base {
+        @apply grid grid-cols-2 grid-rows-6 gap-x-0 gap-y-2 max-h-60 p-0 ;
+    }
 
 
     /* css for the brides profile page  */
