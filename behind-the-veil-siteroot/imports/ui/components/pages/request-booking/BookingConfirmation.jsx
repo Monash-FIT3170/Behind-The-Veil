@@ -1,6 +1,5 @@
 import React, {useId, useState} from "react";
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
-import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
 import {CheckCircleIcon, CheckIcon} from "@heroicons/react/24/outline";
 
