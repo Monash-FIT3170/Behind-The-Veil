@@ -17,14 +17,12 @@ import RequestBooking from "./components/pages/request-booking/RequestBooking.js
 import SpecificServicePage from "./components/pages/service/SpecificServicePage.jsx";
 import ArtistServiceArea from "./components/pages/artist/ArtistServiceArea.jsx";
 import ArtistProfilePage from "./components/pages/profile/ArtistProfilePage.jsx";
-import CancelBooking from './components/pages/cancel-booking/CancelBooking.jsx';
+import CancelBooking from "./components/pages/cancel-booking/CancelBooking.jsx";
 import AccountActivatedPage from "./components/pages/register/AccountActivatedPage";
 import CreateAccountPage from "./components/pages/register/CreateAccountPage";
 import ActivateAccountPage from "./components/pages/register/ActivateAccountPage";
 import BookingSummary from "./components/pages/request-booking/BookingSummary";
-import AccountActivatedPage from "./components/pages/register/AccountActivatedPage";
-import CreateAccountPage from "./components/pages/register/CreateAccountPage";
-import ActivateAccountPage from "./components/pages/register/ActivateAccountPage";
+import BookingDetails from "./components/pages/request-booking/BookingDetails.jsx";
 
 export const App = () => (
   <div>
@@ -61,7 +59,7 @@ export const App = () => (
             path="/register/createAccount/"
             element={
               <LoggedOutOnlyRoute>
-                <CreateAccountPage/>
+                <CreateAccountPage />
               </LoggedOutOnlyRoute>
             }
           />
@@ -69,7 +67,7 @@ export const App = () => (
             path="/register/activateAccount"
             element={
               <LoggedOutOnlyRoute>
-                <ActivateAccountPage/>
+                <ActivateAccountPage />
               </LoggedOutOnlyRoute>
             }
           />
@@ -77,7 +75,7 @@ export const App = () => (
             path="/register/accountActivated"
             element={
               <LoggedOutOnlyRoute>
-                <AccountActivatedPage/>
+                <AccountActivatedPage />
               </LoggedOutOnlyRoute>
             }
           />
@@ -105,13 +103,12 @@ export const App = () => (
           <Route path="/artist-profile" element={<ArtistProfilePage />} />
           {/* TODO: haven't implemented actual flow to get here yet */}
           <Route path="/request-booking" element={<RequestBooking />} />
-            <Route path="/booking-summary" element={<BookingSummary/>} />
+          <Route path="/booking-summary" element={<BookingSummary />} />
           {/* Define other routes that you need*/}
           <Route path="/service-area" element={<ArtistServiceArea />} />
-
+          <Route path="/booking-details" element={<BookingDetails />} />
           {/* TODO:.... */}
-          <Route path="/cancel-booking" element={<CancelBooking/>}/>
-
+          <Route path="/cancel-booking" element={<CancelBooking />} />
         </Routes>
       </main>
     </Router>

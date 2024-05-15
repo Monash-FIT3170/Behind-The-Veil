@@ -55,7 +55,7 @@ export const MarkerMap = ({ className, location }) => {
     }, [location, australiaBounds]);
 
     return (
-        <div className='flex h-96 w-1/3 overflow-hidden rounded-[45px]'>
+        <div className='flex h-96 overflow-hidden rounded-[45px]'>
             <div className={classes} ref={mapContainer} />
         </div>
     );
