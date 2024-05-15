@@ -68,7 +68,7 @@ export const App = () => (
             element={
               <LoggedInOnlyRoute>
                 {" "}
-                <MessagesPage />
+                <BridePage />
               </LoggedInOnlyRoute>
             }
           />

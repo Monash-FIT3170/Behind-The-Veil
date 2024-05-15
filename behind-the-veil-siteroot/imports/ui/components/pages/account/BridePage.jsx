@@ -14,6 +14,103 @@ import ProfileDisplay from '../../profilePhoto/ProfileDisplay.jsx';
 import BookingTab from './BookingTab.jsx';
 import Card from '../../card/Card.jsx';
 
+const mockBrides =   {
+        "username": "andsj",
+        "type":"bride"
+
+    }
+
+const bookingMock = [
+    {
+        bookingID: "some string",
+        bookingStartDate: "01/02/2022",
+        bookingDuration: "1 hour",
+        bookingLocation: "ringwood",
+        bookingPrice: "$200",
+        bookingStatus: "confirmed",
+        brideUserName: "looking_fint555",
+        artistUserName: "bob_ross333",
+        serviceID: "serving"
+
+    },
+    {
+        bookingID: "some string",
+        bookingStartDate: "01/02/2022",
+        bookingDuration: "1 hour",
+        bookingLocation: "ringwood",
+        bookingPrice: "$300",
+        bookingStatus: "confirmed",
+        brideUserName: "looking_fint555",
+        artistUserName: "bob_ross333",
+        serviceID: "serving"
+
+    },
+    {
+        bookingID: "some string",
+        bookingStartDate: "01/02/2022",
+        bookingDuration: "1 hour",
+        bookingLocation: "ringwood",
+        bookingPrice: "$300",
+        bookingStatus: "pending",
+        brideUserName: "looking_fint555",
+        artistUserName: "bob_ross333",
+        serviceID: "serving"
+
+    },
+    {
+        bookingID: "some string",
+        bookingStartDate: "01/02/2022",
+        bookingDuration: "1 hour",
+        bookingLocation: "ringwood",
+        bookingPrice: "$300",
+        bookingStatus: "past",
+        brideUserName: "looking_fint555",
+        artistUserName: "bob_ross333",
+        serviceID: "serving"
+
+    },
+    {
+        bookingID: "some string",
+        bookingStartDate: "01/02/2022",
+        bookingDuration: "1 hour",
+        bookingLocation: "ringwood",
+        bookingPrice: "$300",
+        bookingStatus: "past",
+        brideUserName: "looking_fint555",
+        artistUserName: "bob_ross333",
+        serviceID: "serving"
+
+    }
+]
+let confirmedBookings = [];
+let pendingBookings = [];
+let pastBookings = [];
+let archivedBookings = [];
+
+// Loop through the bookingMock array and separate bookings based on status
+for (let booking of bookingMock) {
+    switch (booking.bookingStatus) {
+        case "confirmed":
+            confirmedBookings.push(booking);
+            break;
+        case "pending":
+            pendingBookings.push(booking);
+            break;
+        case "past":
+            pastBookings.push(booking);
+            break;
+            case "archived":
+                archivedBookings.push(booking);
+                break;
+        default:
+
+            break;
+    }
+}
+
+console.log(confirmedBookings[0].bookingID)
+
+
 /**
  * Page of a list of Artist cards for users to see
  */
@@ -29,13 +126,13 @@ export const BridePage = () => {
                 <div className="corner-button">
                         <Button className="word-icon-button">
                             <span>Settings</span>
-                            <span><Cog8ToothIcon className="min-h-4 w-4 cursor-pointer"/></span>
+                            <span><Cog8ToothIcon className="icon-base" /></span>
                             </Button>
                 </div>
             </div>
         
             <div className='booking-tab'>
-                <BookingTab/>
+                <BookingTab confirm={confirmedBookings} pending={pendingBookings} past={pastBookings} archived={archivedBookings}></BookingTab>
             </div>
 
 

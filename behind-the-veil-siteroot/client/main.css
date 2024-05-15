@@ -143,16 +143,24 @@ on a case by case basis within individual JSX components.
         @apply grid grid-cols-2 grid-rows-2 gap-x-10 gap-y-4 w-full;
     }
 
+    .brides-profile-page-booking-card-base {
+        @apply grid grid-cols-3 grid-rows-6 gap-x-10 gap-y-4  max-h-60 p-0;
+    }
+
+
+
     /* css for the brides profile page  */
     .word-icon-button {
         display: inline-block;
         color: black;
-        font-size: small;   
+        font-size: small;  
+        vertical-align: middle; 
     }
     .word-icon-button  span {
         display: inline-block;
         margin-right: 5px;
         margin-left: 5px;
+        vertical-align: text-top;
     }
     .profile {
         width: 100%;
@@ -175,6 +183,10 @@ on a case by case basis within individual JSX components.
     }
     .corner-button {
         width: 40%;
+        vertical-align: text-top;
+        display: inline-block;
+    }
+    .corner-button Button{
         vertical-align: text-top;
     }
     .booking-tab {
