@@ -57,7 +57,7 @@ export const BookingCard = ({
                                 {"$"}{servicePrice}
                             </div>
                         </div>
-                    <div className="small-text text-dark-grey max-h-[4.5rem] max-w-full line-clamp-4 mb-3 break-all">
+                    <div className="small-text text-dark-grey max-h-[10rem] max-w-full line-clamp-4 mb-3 break-all">
                         {serviceDesc}</div>
                     <div className="flex flex-col lg:flex-row gap-5 items-center">
                         {/* button for specific booking detail page */}
