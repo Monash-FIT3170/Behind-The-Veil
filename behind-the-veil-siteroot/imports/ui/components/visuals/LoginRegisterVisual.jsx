@@ -10,7 +10,7 @@ import React from 'react';
  */
 export const LoginRegisterVisual = () => {
     return (
-        <div className={"hidden lg:flex flex-col items-center justify-center gap-y-10 xl:translate-x-[10%] fixed left-0 top-56"}>
+        <div className={"hidden lg:flex flex-col items-center justify-center gap-y-10 xl:translate-x-[10%] fixed left-0 top-[20vh]"}>
             <div className="title-text text-center text-secondary-purple-hover w-[450px] ">
                 Bridal Makeup & Services
             </div>

@@ -47,7 +47,7 @@ export const WhiteBackground = ({children, className, pageLayout, ...divProps}) 
 
         // has a left circular div for the visual - hides visual if screen is too small
         pageSubDivClasses = "white-glass-base hidden lg:flex " +
-            "rounded-full h-[85vw] w-[100vw] translate-x-[-50%] fixed left-0 top-0";
+            "rounded-full h-[85vw] w-[100vw] translate-x-[-50%] fixed left-0 -top-[25vh]";
 
     } else if (pageLayout === PageLayout.SMALL_CENTER) {
         // small page in the center
