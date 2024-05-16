@@ -36,6 +36,12 @@ export const ArtistProfilePage = () => {
     }, []); // Empty dependency array ensures this effect runs only once
 
 
+    let servicesData = useTracker(() => {
+        return ServiceCollection.find().fetch();
+    });
+    let services = servicesData;
+
+
     //import plusIcon from heroicons for "add photo" button
     const plusIcon = <PlusIcon className="icon-base" />;
 
