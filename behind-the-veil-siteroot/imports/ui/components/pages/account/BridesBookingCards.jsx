@@ -30,7 +30,7 @@ const serviceMock = [
         serviceID: "some string other",
         serviceType: "makeup lalalala",
         serviceName: "lovydovy erararfaer",
-        serviceDesc: "imma put on some makeup real good"
+        serviceDesc: "imma put on some makeup  good"
 
     }
 

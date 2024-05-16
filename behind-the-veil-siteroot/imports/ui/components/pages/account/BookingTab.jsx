@@ -55,8 +55,8 @@ const BookingTab = ({confirm, pending, past, archived}) => {
         statusIcon: <XMarkIcon className="icon-base w-5 h-5"/>,
         statusStyle: "flex flex-row gap-x-2 items-centers w-4/5 lg:w-1/2 min-w-60 text-sm text-red-500 pt-1",
 
-        buttonIcon: statusIconArchived,
-        buttonText: "Service Completed"
+        buttonIcon: "",
+        buttonText: ""
     }
 
     

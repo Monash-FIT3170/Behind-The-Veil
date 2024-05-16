@@ -55,7 +55,7 @@ const bookingMock = [
         bookingStatus: "pending",
         brideUserName: "looking_fint555",
         artistUserName: "bob_ross333",
-        serviceID: "serving"
+        serviceID: "some string other"
 
     },
     {
@@ -63,11 +63,11 @@ const bookingMock = [
         bookingStartDate: "01/02/2022",
         bookingDuration: "1 hour",
         bookingLocation: "ringwood",
-        bookingPrice: "$300",
+        bookingPrice: "$23424234",
         bookingStatus: "past",
         brideUserName: "looking_fint555",
         artistUserName: "bob_ross333",
-        serviceID: "serving"
+        serviceID: "some string other"
 
     },
     {
