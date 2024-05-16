@@ -7,6 +7,7 @@
 import React, { useState, useEffect } from "react";
 import {useSubscribe, useTracker} from "meteor/react-meteor-data"
 import ServiceCollection from "/imports/api/collections/services";
+import UserCollection from "../../../../api/collections/users.js";
 
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout.tsx";
@@ -27,41 +28,21 @@ import { StarIcon as SolStarIcon } from "@heroicons/react/24/solid";
 export const ArtistProfilePage = () => {
 
     // set up subscription (publication is in the "publication" folder)
-    const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        const subscription = Meteor.subscribe('all_services', {
-            onReady: () => setIsLoading(false),
-            onStop: () => setIsLoading(false),
-            onError: () => setIsLoading(false)
-        });
+    const [filterType, setFilterType] = useState("All")
 
-        return () => {
-            if (subscription) {
-                subscription.stop();
-                setIsLoading(true);
-            }
-        };
-    }, []); // Empty dependency array ensures this effect runs only once
-
+    const isLoading = useSubscribe('all_services');
 
     let servicesData = useTracker(() => {
         return ServiceCollection.find().fetch();
     });
     let services = servicesData;
 
-
     //import plusIcon from heroicons for "add photo" button
     const plusIcon = <PlusIcon className="icon-base" />;
 
     //import gearIcon from heroicons for "settings" button.
     const gearIcon = <Cog8ToothIcon className="icon-base" />;
-
-    const outlineStarIcon = <OutStarIcon className="size-20 stroke-1" />;
-
-  const solidStarIcon = <SolStarIcon className="size-20 stroke-1" />;
-
-  const smallSolidStarIcon = <SolStarIcon className="size-10 strok-1" />;
 
   const serviceCardList = services.map((service) => (<ServiceCard
             key={service._id._str}
@@ -72,6 +53,7 @@ export const ArtistProfilePage = () => {
             artistUsername={service.artistUsername}
             serviceImageData={service.serviceImageData}
             artistAlias={service.artistAlias}
+            isEdit={true}
     ></ServiceCard>));
 
      const activeServices = services.filter(service => service.serviceActive);
@@ -84,6 +66,7 @@ export const ArtistProfilePage = () => {
             artistUsername={service.artistUsername}
             serviceImageData={service.serviceImageData}
             artistAlias={service.artistAlias}
+            isEdit={true}
     ></ServiceCard>));
 
     const inactiveServices = services.filter(service => !service.serviceActive);
@@ -96,11 +79,16 @@ export const ArtistProfilePage = () => {
             artistUsername={service.artistUsername}
             serviceImageData={service.serviceImageData}
             artistAlias={service.artistAlias}
+            isEdit={true}
     ></ServiceCard>));
+
+        console.log(serviceCardList);
     
     const [serviceCardsShown, setServiceCardsShown] = useState(serviceCardList);
 
     const handleShowCardTypeChange = (type) => {
+        console.log(serviceCardsShown);
+        setFilterType(type);
         if (type === "All") {
             setServiceCardsShown(serviceCardList);
         } else if (type === "Active") {
@@ -110,24 +98,27 @@ export const ArtistProfilePage = () => {
         }
     }
 
+    const activeFilterButtonClasses = "bg-secondary-purple hover:bg-secondary-purple rounded-md";
+    const inactiveFilterButtonClasses = "bg-light-grey hover:bg-light-grey-hover rounded-md";
+
     const servicePanel = (  
         <div className="flex flex-col gap-6">
             <div className="flex flex-col md:flex-row gap-6 items-center justify-center md:items-start md:justify-start">
                 <div className="flex flex-row gap-6">
                     <Button
-                        className="rounded-md"
+                        className={filterType === "All" ? activeFilterButtonClasses : inactiveFilterButtonClasses}
                         onClick={() => handleShowCardTypeChange("All")}
                     >
                         Show All
                     </Button>
                     <Button
-                        className="rounded-md"
+                        className={filterType === "Active" ? activeFilterButtonClasses : inactiveFilterButtonClasses}
                         onClick={() => handleShowCardTypeChange("Active")}
                     >
                         Active
                     </Button>
                     <Button
-                        className="rounded-md"
+                        className={filterType === "Inactive" ? activeFilterButtonClasses : inactiveFilterButtonClasses}
                         onClick={() => handleShowCardTypeChange("Inactive")}
                     >
                         Inactive
@@ -138,7 +129,7 @@ export const ArtistProfilePage = () => {
                 </Button>
             </div>
             <div className="flex items-center justify-center">
-                {isLoading ? (<div>Loading...</div>) : (<div className="flex flex-col lg:flex-row gap-10 items-center justify-center flex-wrap">
+                {(document.readyState != "complete" || isLoading()) ? (<div>Loading...</div>) : (<div className="flex flex-col lg:flex-row lg:min-w-[1000px] gap-10 items-center justify-center flex-wrap">
                 {serviceCardsShown}
                 </div>
                 )}

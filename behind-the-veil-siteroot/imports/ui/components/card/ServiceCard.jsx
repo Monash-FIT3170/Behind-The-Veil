@@ -48,7 +48,7 @@ export const ServiceCard = ({
     const buttonBaseClasses = "flex flex-row gap-x-2 justify-center items-center w-4/5 lg:w-1/2 min-w-40 transition duration-500";
     if (isEdit) {
         viewOrEditButton = "Edit Service";
-        buttonClasses = classNames("light-grey hover:light-grey-hover", buttonBaseClasses);
+        buttonClasses = classNames("bg-light-grey hover:bg-light-grey-hover", buttonBaseClasses);
     } else {
         viewOrEditButton = "View Service";
         buttonClasses = classNames("bg-secondary-purple hover:bg-secondary-purple-hover", buttonBaseClasses);
