@@ -43,7 +43,7 @@ export const ServicesPage = () => {
     let imagesData = useTracker(() => {
         return ImageCollection.find().fetch();
     });
-    console.log(usersData)
+
     // manual aggregation
     let combined = servicesData;
     for (let i = 0; i < servicesData.length; i++) {
@@ -59,16 +59,20 @@ export const ServicesPage = () => {
         // then aggregate with the FIRST image (cover)
         for (let j = 0; j < imagesData.length; j++) {
             // find matching image for the service
-            if (imagesData[j].imageType === "service" && servicesData[i]._id._str === imagesData[j].target_id) {
+
+            if (imagesData[j].imageType === "service" && servicesData[i]._id === imagesData[j].target_id) {
                 servicesData[i].serviceImageData = imagesData[j].imageData;
                 break;
             }
         }
     }
 
-    const serviceCardList = combined.map((service) => (<ServiceCard
-        key={service._id._str}
-        serviceId={service._id._str}
+    console.log(combined)
+
+
+    const displayedServicesJsx = combined.map((service) => (<ServiceCard
+        key={service._id}
+        serviceId={service._id}
         serviceName={service.serviceName}
         serviceDesc={service.serviceDesc}
         servicePrice={service.servicePrice}
@@ -91,25 +95,22 @@ export const ServicesPage = () => {
                 <div className="flex flex-col items-center justify-center gap-y-5">
 
                     <Pagination
+                        reset={false}
                         itemsPerPage={itemsPerPage}
-                        displayItems={serviceCardList}
+                        displayItems={displayedServicesJsx}
                     />
 
                     <div className="flex flex-row items-center justify-center gap-x-2">
                         Items per page:
-                        <input type={"number"}
-                               value={itemsPerPage}
-                               className="border-2 p-2 border-light-grey rounded-[6px] main-text h-12 max-w-20 sm:w-[361px]"
-                               onChange={(event) => {
-                                   // ensure no negative pages
-                                   const newValue = Number(event.target.value);
-                                   if (newValue > 0) {
-                                       setItemsPerPage(newValue);
-                                   }
-                               }}
-                               min={1}
-                               max={100}
-                        />
+                        <select onChange={(event) => {
+                            setItemsPerPage(event.target.value)
+                        }} className="input-base w-20">
+                            <option value={5}>5</option>
+                            <option selected value={10}>10</option>
+                            <option value={25}>25</option>
+                            <option value={50}>50</option>
+                            <option value={100}>100</option>
+                        </select>
                     </div>
                 </div>
             </WhiteBackground>

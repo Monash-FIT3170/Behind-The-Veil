@@ -144,7 +144,7 @@ export const HomePage = () => {
             </div>
 
             {/* Container for the title text on the home page (positioned absolute) */}
-            <div className={"flex flex-row items-center justify-center w-full"}>
+            <div className={"flex flex-row items-center justify-center w-full cursor-default"}>
                 <div
                     className={"absolute z-30 main-text text-white text-xl md:text-2xl lg:text-3xl xl:text-5xl " +
                         "left-[16%] top-[45%] w-[68%] " +
@@ -186,7 +186,7 @@ export const HomePage = () => {
                     ></SearchBar>
 
                     <div className="flex flex-row items-center justify-center gap-3">
-                        <select onChange={handleSearchTypeChange} className="input-base w-28">
+                        <select defaultValue={"services"} onChange={handleSearchTypeChange} className="input-base w-28">
                             <option value="artists">Artists</option>
                             <option value="services">Services</option>
                         </select>

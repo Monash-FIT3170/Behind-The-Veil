@@ -13,7 +13,7 @@ import Button from '../button/Button';
 import {DocumentMagnifyingGlassIcon} from "@heroicons/react/24/outline"
 
 /**
- * Component that displays brief service details on the Services page
+ * Component that displays brief booking details
  *
  * @param className {string} additional classes to be applied on top of the base style
  * @param bookingId {int} id of the service (used for routing)
@@ -35,31 +35,36 @@ export const BookingCard = ({
                                 bookingStatus
                             }) => {
 
-    //variables to handle routing
+    // variables to handle routing
     const navigateTo = useNavigate();
 
-    const classes = classNames(className, "flex flex-col overflow-hidden justify-between w-full min-w-60 lg:w-2/5 lg:min-w-78 min-h-56");
+    const classes = classNames("flex flex-col overflow-hidden justify-between " +
+        "w-full min-w-60 lg:w-2/5 lg:min-w-78 min-h-[330px] pr-6 md:pr-0 lg:pr-6 xl:pr-0", className);
 
     return (
-        <Card className={classes} style={{ paddingRight: 0 }}>
-            <div className={"flex flex-row gap-x-8 justify-center"}>
+        <Card className={classes}>
+            <div className={"flex flex-row gap-x-4 justify-center"}>
                 <div className={"cursor-default px-4"}>
+
                     {/* displaying booking information */}
                     <div className="large-text text-our-black max-w-full break-all line-clamp-1 mb-3">
                         {serviceName}</div>
                     <div className="medium-text text-our-black max-w-full break-all line-clamp-1 mb-3">
                         {bookingStatus}</div>
-                        <div className="flex">
-                            <div className="medium-text text-our-black max-w-full break-all line-clamp-1 mb-3">
-                                {bookingStartDateTime}
-                            </div>
-                            <div className="medium-text text-our-black max-w-full break-all line-clamp-1 mb-3 ml-auto">
-                                {"$"}{servicePrice}
-                            </div>
-                        </div>
-                    <div className="small-text text-dark-grey max-h-[10rem] max-w-full line-clamp-4 mb-3 break-all">
+
+                    <div className="flex flex-row justify-between">
+                        <div className="medium-text text-our-black max-w-full break-all line-clamp-1 mb-3">
+                            {bookingStartDateTime}</div>
+                        <div className="medium-text text-dark-grey max-w-full break-all line-clamp-1 mb-3 ml-auto">
+                            ${servicePrice}</div>
+                    </div>
+                    <div className="small-text text-dark-grey max-h-[10rem] max-w-full line-clamp-4 mb-3 break-words"
+                         style={{"wordBreak": "break-word"}}>
                         {serviceDesc}</div>
+
+                    {/*This is the buttons area on the bottom*/}
                     <div className="flex flex-col lg:flex-row gap-5 items-center">
+
                         {/* button for specific booking detail page */}
                         <Button className="flex flex-row gap-x-2 justify-center items-center w-4/5 lg:w-1/2 min-w-40 mt-5
                         bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500"
@@ -71,10 +76,11 @@ export const BookingCard = ({
                 </div>
 
                 {/* image on the right side */}
-                <div className={"hidden sm:flex flex-col justify-center relative min-w-64 min-h-40"}>
-                    <img className={"w-full object-cover absolute"}
-                        src={serviceImageData}
-                        alt={"Service's cover image"}/>
+                {/*negative margin to counter the padding in the card*/}
+                <div className={"hidden md:flex lg:hidden xl:flex -mt-6 relative min-w-56 h-full "}>
+                    <img className={"w-full min-h-[350px] object-cover absolute"}
+                         src={serviceImageData}
+                         alt={"Service's cover image"}/>
                 </div>
             </div>
         </Card>

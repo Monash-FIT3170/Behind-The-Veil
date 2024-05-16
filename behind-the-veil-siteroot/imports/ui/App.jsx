@@ -15,7 +15,7 @@ import RegisterPage from "./components/pages/register/RegisterPage.jsx";
 import RequestBooking from "./components/pages/request-booking/RequestBooking.jsx";
 import PaymentDetails from "./components/pages/request-booking/PaymentDetails";
 import SpecificServicePage from "./components/pages/service/SpecificServicePage.jsx";
-import ArtistServiceArea from "./components/pages/artist/ArtistServiceArea.jsx";
+import ArtistServiceArea from "./components/pages/profile/ArtistServiceArea.jsx";
 import ArtistProfilePage from "./components/pages/profile/ArtistProfilePage.jsx";
 import CancelBooking from './components/pages/cancel-booking/CancelBooking.jsx';
 import ForgotPasswordPage from "./components/pages/forgotPassword/ForgotPasswordPage";
@@ -26,6 +26,7 @@ import ActivateAccountPage from "./components/pages/register/ActivateAccountPage
 import BookingSummary from "./components/pages/request-booking/BookingSummary";
 import RoutingAccess from "./enums/RoutingAccess";
 import UrlBasePath from "./enums/UrlBasePath";
+import NonExistingPage from "./components/pages/nonExistingPage/NonExistingPage";
 import BridePage from "./components/pages/account/BridePage.jsx"
 import BookingConfirmation from "./components/pages/request-booking/BookingConfirmation";
 
@@ -41,7 +42,7 @@ export const App = () => (
 
                     {/*routes that any user can access*/}
                     <Route path="/" element={<HomePage/>}/>
-                    <Route path="*" element={ <Navigate to="/" /> }/> {/*default path for all other non-routed paths*/}
+                    <Route path="*" element={<NonExistingPage/> } /> {/*default path for all other non-routed paths*/}
 
                     <Route path="/services" element={<ServicesPage/>}/>
                     <Route path="/services/:serviceId" element={<SpecificServicePage/>}/>

@@ -16,19 +16,24 @@ import classNames from "classnames";
  * @param {string} internalClassName - custom classes that override the inner pagination style
  * @param {number} itemsPerPage - number of items per "page" of the pagination
  * @param {JSX.Element} displayItems - the list items to display (an array of JSX.Element such as <Div>s)
+ * @param {boolean} reset - whether to reset the view back to 1 each time or to retain where it was at before
  */
-export const Pagination = ({externalClassName, internalClassName, itemsPerPage, displayItems}) => {
+export const Pagination = ({externalClassName, internalClassName, itemsPerPage, displayItems, reset}) => {
 
     // get page from URL first, if there is
     let urlPageNum = 1;
-    let {hash} = useLocation();
 
-    if (hash) {
-        try {
-            // try to get existing page number
-            urlPageNum = Number(hash.substring(1,));
-        } catch (e) {
-            // no proper page number
+    if (!reset) {
+        // if not reset the page  back to 1, then get it from the url
+        let {hash} = useLocation();
+
+        if (hash) {
+            try {
+                // try to get existing page number
+                urlPageNum = Number(hash.substring(1,));
+            } catch (e) {
+                // no proper page number
+            }
         }
     }
 

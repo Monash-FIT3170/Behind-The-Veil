@@ -1,203 +1,99 @@
 /**
  * File Description: Artist Profile
  * File version: 1.1
- * Contributors: Kefei (Phillip) Li, Laura
+ * Contributors: Kefei (Phillip) Li, Laura, Nikki
  */
 
-import React from "react";
+import React, {useState} from "react";
+import {Cog8ToothIcon, StarIcon as OutStarIcon,} from "@heroicons/react/24/outline";
+import {StarIcon as SolStarIcon} from "@heroicons/react/24/solid";
 
-import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
+import Button from "../../button/Button.jsx";
 import PageLayout from "../../../enums/PageLayout.tsx";
+import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import Tabs from "../../tabs/Tabs.jsx";
 import ProfilePhoto from "../../profilePhoto/ProfilePhoto.jsx";
-import Button from "../../button/Button.jsx";
-import DashboardCard from "../../card/DashboardCard.jsx";
-import {
-    PlusIcon,
-    Cog8ToothIcon,
-} from "@heroicons/react/24/outline";
-import BookingListView from "../../booking/BookingListView.jsx";
-import { StarIcon as SolStarIcon } from "@heroicons/react/24/solid";
-import ArtistServicesTab from "./ArtistServicesTab.jsx";
+import ArtistDashboardTab from "./ArtistDashboardTab";
+import ArtistGalleryTab from "./ArtistGalleryTab";
+import ArtistBookingsTab from "./ArtistBookingsTab";
+import {Tracker} from "meteor/tracker";
+import {Meteor} from "meteor/meteor";
+
 /**
  * Page for artist profile
  */
 export const ArtistProfilePage = () => {
-    //import plusIcon from heroicons for "add photo" button
-    const plusIcon = <PlusIcon className="icon-base" />;
+
+    // get current user information
+    const [userInfo, setUserInfo] = useState(
+        {"alias": null, "username": null}
+    );
+
+    // tracker for the required user data updates
+    Tracker.autorun(() => {
+        const user = Meteor.user();
+
+        if (user) {
+            // user data is returned (sometimes it takes a while)
+            const userAlias = user.profile.alias;
+            const username = user.username;
+
+            // check if an update to the current user info is required or not (this is needed to prevent inf loop)
+            if (userInfo.alias !== userAlias || userInfo.username !== username) {
+                setUserInfo(
+                    {
+                        "alias": user.profile.alias,
+                        "username": user.username
+                    }
+                )
+            }
+
+        }
+    })
 
     //import gearIcon from heroicons for "settings" button.
-    const gearIcon = <Cog8ToothIcon className="icon-base" />;
+    const gearIcon = <Cog8ToothIcon className="icon-base"/>;
 
-    const smallSolidStarIcon = <SolStarIcon className="size-10 strok-1" />;
-
-    // Booking tab with the list view only (for now)
-    const bookingTab = (
-        <div className="relative">
-            <div className="top-20 z-20 flex justify-end">
-                <Button className="absolute top-2 flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover">
-                    {plusIcon} Add Availability
-                </Button>
-            </div>
-            <BookingListView></BookingListView>
-        </div>
-    );
-
-    // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
-    // When completing the dynamic version for this page, probably a good idea to setup the photos as components and importing them in.
-    const galleryTab = (
-        <div className="relative">
-            <div className="sticky top-20 z-20 flex justify-end">
-                <Button className="absolute top-5 flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover">
-                    {plusIcon} Add Photo
-                </Button>
-            </div>
-            <div className="px-10 relative flex flex-col gap-3">
-                <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-                    <div className="grid gap-4">
-                        <div>
-                            <img
-                                className="h-auto max-w-full rounded-lg object-cover object-center"
-                                src="https://images.unsplash.com/photo-1432462770865-65b70566d673?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-                                alt="gallery-photo"
-                            />
-                        </div>
-                        <div>
-                            <img
-                                className="h-auto max-w-full rounded-lg object-cover object-center "
-                                src="https://images.unsplash.com/photo-1629367494173-c78a56567877?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=927&q=80"
-                                alt="gallery-photo"
-                            />
-                        </div>
-                        <div>
-                            <img
-                                className="h-auto max-w-full rounded-lg object-cover object-center"
-                                src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80"
-                                alt="gallery-photo"
-                            />
-                        </div>
-                    </div>
-                    <div className="grid gap-4">
-                        <div>
-                            <img
-                                className="h-auto max-w-full rounded-lg object-cover object-center"
-                                src="https://images.unsplash.com/photo-1552960562-daf630e9278b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
-                                alt="gallery-photo"
-                            />
-                        </div>
-                        <div>
-                            <img
-                                className="h-auto max-w-full rounded-lg object-cover object-center"
-                                src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80"
-                                alt="gallery-photo"
-                            />{" "}
-                        </div>
-                        <div>
-                            <img
-                                className="h-auto max-w-full rounded-lg object-cover object-center "
-                                src="https://docs.material-tailwind.com/img/team-3.jpg"
-                                alt="gallery-photo"
-                            />
-                        </div>
-                    </div>
-                    <div className="grid gap-4">
-                        <div>
-                            <img
-                                className="h-auto max-w-full rounded-lg object-cover object-center"
-                                src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80"
-                                alt="gallery-photo"
-                            />
-                        </div>
-                        <div>
-                            <img
-                                className="h-auto max-w-full rounded-lg object-cover object-center "
-                                src="https://docs.material-tailwind.com/img/team-3.jpg"
-                                alt="gallery-photo"
-                            />
-                        </div>
-                        <div>
-                            <img
-                                className="h-auto max-w-full rounded-lg object-cover object-center"
-                                src="https://images.unsplash.com/photo-1552960562-daf630e9278b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
-                                alt="gallery-photo"
-                            />
-                        </div>
-                    </div>
-                    <div className="grid gap-4">
-                        <div>
-                            <img
-                                className="h-auto max-w-full rounded-lg object-cover object-center"
-                                src="https://images.unsplash.com/photo-1552960562-daf630e9278b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
-                                alt="gallery-photo"
-                            />
-                        </div>
-                        <div>
-                            <img
-                                className="h-auto max-w-full rounded-lg object-cover object-center"
-                                src="https://images.unsplash.com/photo-1629367494173-c78a56567877?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=927&q=80"
-                                alt="gallery-photo"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-
-    //Utilise DashboardCard component as basis for the dashboard.
-    //The dashboardCardValue will have to be dynamic. Title and Desc can be static given it's the same across all accounts.
-    const dashboardTab = (
-        <div className="grid lg:grid-cols-2 gap-8 justify-items-center">
-            <DashboardCard
-                dashboardCardTitle="Total Customers - Lifetime"
-                dashboardCardDesc="Celebrate your achievement in helping brides with their special
-              day!"
-                dashboardCardValue="273"
-            ></DashboardCard>
-            <DashboardCard
-                dashboardCardTitle="Total Customers - This Month"
-                dashboardCardDesc="People you have glowed 
-        up this month!"
-                dashboardCardValue="5"
-            ></DashboardCard>
-            <DashboardCard
-                dashboardCardTitle="Total Earnings"
-                dashboardCardDesc="Count your dollars!"
-                dashboardCardValue="$32,760"
-            ></DashboardCard>
-            <DashboardCard
-                dashboardCardTitle="Pending Earnings"
-                dashboardCardDesc="Cash currently in transit!"
-                dashboardCardValue="$480"
-            ></DashboardCard>
-        </div>
-    );
+    const outlineStarIcon = <OutStarIcon className="size-20 stroke-1"/>;
+    const solidStarIcon = <SolStarIcon className="size-20 stroke-1"/>;
+    const smallSolidStarIcon = <SolStarIcon className="size-10 stroke-1"/>;
 
     //Utilise Tab components to create page schematics.
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-            <div className="flex justify-end">
-                <Button className="flex flex-row gap-x-1.5">
-                    {gearIcon} Settings
+            {/*Settings buttons*/}
+            <div className="flex items-center justify-end w-full ">
+                <Button
+                    className="flex flex-row justify-center items-center gap-x-1.5 sm:w-36">
+                    {gearIcon}
+                    <span className={"hidden sm:flex"}>
+                        Settings
+                    </span>
                 </Button>
             </div>
-            <ProfilePhoto className="flex container mx-auto" />
-            <div className="text-center main-text">Name</div>
-            <div className="text-center main-text">Tag</div>
+
+            {/*Top div where artist info*/}
+            <div className={"flex flex-col items-center justify-center"}>
+                <ProfilePhoto className="flex container mx-auto"/>
+                <div className="text-center large-text">{userInfo.alias}</div>
+                <div className="text-center medium-text text-dark-grey">@{userInfo.username}</div>
+            </div>
+
+            {/*bottom half where all the tabs are at*/}
             <Tabs
                 tabs={[
-                    "Dashboard",
-                    "Bookings",
-                    "My Services",
-                    "Gallery",
-                    "Reviews",
+                    <span key={1}>Dashboard</span>,
+                    <span key={2}>Bookings</span>,
+                    <span key={3}>My Services</span>,
+                    <span key={4}>Gallery</span>,
+                    <span key={5}>Reviews</span>,
                 ]}
                 tabPanels={[
-                    dashboardTab,
-                    bookingTab,
+                    <ArtistDashboardTab key={"dashboard"}/>,
+                    <ArtistBookingsTab key={"bookings"}/>,
                     <ArtistServicesTab />,
-                    galleryTab,
-                    "reviewTab",
+                    <ArtistGalleryTab key={"gallery"}/>,
+                    <span key={"my-services"}>review tab</span>
                 ]}
                 tabsClassName="flex justify-between"
             />

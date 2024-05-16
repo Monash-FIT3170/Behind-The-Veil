@@ -23,7 +23,7 @@ const PaginationExamples = () => {
     ]
 
     // default number of items per page
-    const [itemsPerPage, setItemsPerPage] = React.useState(3);
+    const [itemsPerPage, setItemsPerPage] = React.useState(5);
 
     return (
         <div className="flex flex-col gap-3">
@@ -38,19 +38,15 @@ const PaginationExamples = () => {
 
                 <div className="flex flex-row items-center justify-center gap-x-2">
                     Items per page:
-                    <input type={"number"}
-                           value={itemsPerPage}
-                           className="border-2 p-2 border-light-grey rounded-[6px] main-text h-12 max-w-20 sm:w-[361px]"
-                           onChange={(event) => {
-                               // ensure no negative pages
-                               const newValue = Number(event.target.value);
-                               if (newValue > 0) {
-                                   setItemsPerPage(newValue);
-                               }
-                           }}
-                           min={1}
-                           max={100}
-                    />
+                    <select defaultValue={10} onChange={(event) => {
+                        setItemsPerPage(event.target.value)
+                    }} className="input-base w-20">
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                        <option value={25}>25</option>
+                        <option value={50}>50</option>
+                        <option value={100}>100</option>
+                    </select>
                 </div>
             </div>
         </div>
