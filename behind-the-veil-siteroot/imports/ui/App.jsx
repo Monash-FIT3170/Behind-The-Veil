@@ -107,6 +107,7 @@ export const App = () => (
           {/* Define other routes that you need*/}
           <Route path="/service-area" element={<ArtistServiceArea />} />
             
+            
           {/* TODO:.... */}
           <Route path="/cancel-booking" element={<CancelBooking/>}/>
 
