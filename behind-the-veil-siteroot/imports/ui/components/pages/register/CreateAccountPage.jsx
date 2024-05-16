@@ -70,7 +70,9 @@ const CreateAccountPage = () => {
             } else {
                 // TODO send activation code via inputted email
                 console.log('User created successfully!');
-                console.log(newUser);
+                console.log(Meteor.userId());
+                console.log(Meteor.user());
+                Meteor.logout()
                 // After successful activation, navigate to activation completed page
                 navigate(`/register/activateAccount?username=${username}`);
             }

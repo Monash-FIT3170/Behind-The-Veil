@@ -84,7 +84,7 @@ export const ServiceCard = ({
 
                 {/* button to specific booking detail page*/}
                 <Button className={buttonClasses}
-                        onClick={() => navigateTo('/service/' + serviceId)}>
+                        onClick={() => navigateTo('/services/' + serviceId)}>
                     <CalendarDaysIcon className="icon-base"/>
                     {viewOrEditButton}
                 </Button>
