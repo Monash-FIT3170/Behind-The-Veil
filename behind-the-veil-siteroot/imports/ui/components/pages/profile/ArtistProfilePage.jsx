@@ -50,6 +50,7 @@ export const ArtistProfilePage = () => {
                     }
                     artistUsername={"alice_smith"}
                     artistName={"Alice Smith"}
+                    isEdit={true}
                 ></ServiceCard>
                 <ServiceCard
                     className=""
@@ -66,6 +67,7 @@ export const ArtistProfilePage = () => {
                     }
                     artistUsername={"alice_smith"}
                     artistName={"Alice Smith"}
+                    isEdit={true}
                 ></ServiceCard>
                 <ServiceCard
                     className=""
@@ -82,6 +84,7 @@ export const ArtistProfilePage = () => {
                     }
                     artistUsername={"alice_smith"}
                     artistName={"Alice Smith"}
+                    isEdit={true}
                 ></ServiceCard>
                 <ServiceCard
                     className=""
@@ -98,6 +101,7 @@ export const ArtistProfilePage = () => {
                     }
                     artistUsername={"alice_smith"}
                     artistName={"Alice Smith"}
+                    isEdit={true}
                 ></ServiceCard>
                 <ServiceCard
                     className=""
@@ -114,6 +118,7 @@ export const ArtistProfilePage = () => {
                     }
                     artistUsername={"alice_smith"}
                     artistName={"Alice Smith"}
+                    isEdit={true}
                 ></ServiceCard>
                 <ServiceCard
                     className=""
@@ -130,6 +135,7 @@ export const ArtistProfilePage = () => {
                     }
                     artistUsername={"alice_smith"}
                     artistName={"Alice Smith"}
+                    isEdit={true}
                 ></ServiceCard>
                 <ServiceCard
                     className=""
@@ -146,6 +152,7 @@ export const ArtistProfilePage = () => {
                     }
                     artistUsername={"alice_smith"}
                     artistName={"Alice Smith"}
+                    isEdit={true}
                 ></ServiceCard>
             </div>
         </div>
