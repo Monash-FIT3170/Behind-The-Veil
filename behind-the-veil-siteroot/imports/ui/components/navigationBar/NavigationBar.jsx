@@ -28,10 +28,7 @@ export const NavigationBar = () => {
     const [loggedInUserId, setLoggedInUserId] = useState(Meteor.userId());
     const [userInfo, setUserInfo] = useState({"type": null, "username": null});
 
-    console.log("navi: " + Meteor.loggingIn())
-    console.log("navi: " + Meteor.loggingOut())
-    console.log("navi: " + loggedInUserId)
-    console.log(userInfo)
+    console.log("Current logged in user:" + JSON.stringify(userInfo))
 
     // When login status changes, this is automatically ran
     Tracker.autorun(() => {

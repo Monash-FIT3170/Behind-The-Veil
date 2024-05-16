@@ -58,10 +58,6 @@ export const ProtectedRoute = ({children, accessReq}) => {
         }
     })
 
-    console.log("route: " + logoutLoading);
-    console.log("route: " + loginLoading);
-    console.log("route: " + loggedInUser);
-
     if (logoutLoading || loginLoading) {
         // wait for login/logout to complete
         return (

@@ -20,7 +20,6 @@ import CancelBooking from './components/pages/cancel-booking/CancelBooking.jsx';
 import ForgotPasswordPage from "./components/pages/forgotPassword/ForgotPasswordPage";
 import ResetPasswordPage from "./components/pages/forgotPassword/ResetPasswordPage";
 import ResetCompletePage from "./components/pages/forgotPassword/ResetCompletePage";
-import AccountActivatedPage from "./components/pages/register/AccountActivatedPage";
 import CreateAccountPage from "./components/pages/register/CreateAccountPage";
 import ActivateAccountPage from "./components/pages/register/ActivateAccountPage";
 import BookingSummary from "./components/pages/request-booking/BookingSummary";
@@ -70,12 +69,6 @@ export const App = () => (
                         path="/register/activateAccount"
                         element={
                             <ProtectedRoute accessReq={RoutingAccess.SIGNED_OUT_ONLY}><ActivateAccountPage/></ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/register/accountActivated"
-                        element={
-                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_OUT_ONLY}><AccountActivatedPage/></ProtectedRoute>
                         }
                     />
 
