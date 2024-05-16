@@ -1,4 +1,10 @@
-import React, {useId, useState} from "react";
+/**
+ * File Description: Payment details page
+ * File version: 1.0
+ * Contributors: Neth
+ */
+
+import React, { useId, useState } from "react";
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
@@ -6,14 +12,26 @@ import { CurrencyDollarIcon } from '@heroicons/react/24/outline'
 import Input from "../../input/Input";
 import BackButton from "../../button/BackButton";
 
+/**
+ * Component for handling payment details.
+ *
+ * This component allows users to input their payment details
+ * such as card number, cardholder name, expiry date, and CVV,
+ * and proceeds with payment confirmation.
+ *
+ * @returns {JSX.Element} PaymentDetails component.
+ */
 const PaymentDetails = () => {
+    // Error messages for input fields
+    const errorMsg = ["card number", "card holder name", "expiry date", "CVV"];
 
-    const errorMsg = ["card number", "card holder name", "expiry date", "CVV"]
+    // Generate unique IDs for input fields
     const cardNumberId = useId();
     const cardNameId = useId();
     const expDateId = useId();
     const cvvId = useId();
 
+    // State for input values and errors
     const [inputs, setInputs] = useState({
         cardNumber: "",
         cardName: "",
@@ -28,20 +46,21 @@ const PaymentDetails = () => {
         cvv: "",
     });
 
+    // Handler for input change
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setInputs({ ...inputs, [name]: value });
         setErrors({ ...errors, [name]: "" }); // Clear error message for the corresponding input field
     }
 
+    // Handler for payment confirmation
     const paymentConfirmation = (event) => {
         event.preventDefault();
         let newErrors = {};
         let isError = false;
 
-        // Check for empty fields in each field. Make sure nothing is empty
+        // Check for empty fields in each input field
         Object.keys(inputs).forEach((key, index) => {
-            // TODO: CHECK VALIDITY might use Square API
             if (!inputs[key].trim()) {
                 newErrors[key] = `Please input valid ${errorMsg[index]}.`;
                 isError = true;
