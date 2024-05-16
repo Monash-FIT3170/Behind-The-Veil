@@ -10,7 +10,14 @@ import PageLayout from "../../../enums/PageLayout.tsx";
 import Tabs from "../../tabs/Tabs.jsx";
 import ProfilePhoto from "../../profilePhoto/ProfilePhoto.jsx";
 import Button from "../../button/Button.jsx";
-import { PlusIcon, Cog8ToothIcon } from "@heroicons/react/24/outline";
+import DashboardCard from "../../card/DashboardCard.jsx";
+import {
+  PlusIcon,
+  Cog8ToothIcon,
+  StarIcon as OutStarIcon,
+} from "@heroicons/react/24/outline";
+import { StarIcon as SolStarIcon } from "@heroicons/react/24/solid";
+
 /**
  * Page for artist profile
  */
@@ -20,6 +27,12 @@ export const ArtistProfilePage = () => {
 
   //import gearIcon from heroicons for "settings" button.
   const gearIcon = <Cog8ToothIcon className="icon-base" />;
+
+  const outlineStarIcon = <OutStarIcon className="size-20 stroke-1" />;
+
+  const solidStarIcon = <SolStarIcon className="size-20 stroke-1" />;
+
+  const smallSolidStarIcon = <SolStarIcon className="size-10 strok-1" />;
 
   // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
   // When completing the dynamic version for this page, probably a good idea to setup the photos as components and importing them in.
@@ -122,11 +135,40 @@ export const ArtistProfilePage = () => {
     </div>
   );
 
+  //Utilise DashboardCard component as basis for the dashboard.
+  //The dashboardCardValue will have to be dynamic. Title and Desc can be static given it's the same across all accounts.
+  const dashboardTab = (
+    <div className="grid lg:grid-cols-2 gap-8 justify-items-center">
+      <DashboardCard
+        dashboardCardTitle="Total Customers - Lifetime"
+        dashboardCardDesc="Celebrate your achievement in helping brides with their special
+              day!"
+        dashboardCardValue="273"
+      ></DashboardCard>
+      <DashboardCard
+        dashboardCardTitle="Total Customers - This Month"
+        dashboardCardDesc="People you have glowed 
+         up this month!"
+        dashboardCardValue="5"
+      ></DashboardCard>
+      <DashboardCard
+        dashboardCardTitle="Total Earnings"
+        dashboardCardDesc="Count your dollars!"
+        dashboardCardValue="$32,760"
+      ></DashboardCard>
+      <DashboardCard
+        dashboardCardTitle="Pending Earnings"
+        dashboardCardDesc="Cash currently in transit!"
+        dashboardCardValue="$480"
+      ></DashboardCard>
+    </div>
+  );
+
   //Utilise Tab components to create page schematics.
   return (
     <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
       <div className="flex justify-end">
-        <Button className="flex flex-row gap-x-1.5"> {gearIcon} Settings</Button>
+        <Button className="flex flex-row gap-x-1.5">{gearIcon} Settings</Button>
       </div>
       <ProfilePhoto className="flex container mx-auto" />
       <div className="text-center main-text">Name</div>
@@ -134,11 +176,11 @@ export const ArtistProfilePage = () => {
       <Tabs
         tabs={["Dashboard", "Bookings", "My Services", "Gallery", "Reviews"]}
         tabPanels={[
-          "Dashboard Panel",
+          dashboardTab,
           "Bookings Panel",
           "My Services Panel",
           galleryTab,
-          "Reviews Panel",
+          "reviewTab",
         ]}
         tabsClassName="flex justify-between"
       />
