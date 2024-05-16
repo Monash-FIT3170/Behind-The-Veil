@@ -202,6 +202,17 @@ const RequestBooking = () => {
                   autoComplete="address-line1"
                 />
               </AddressAutofill>
+              <AddressAutofill accessToken="pk.eyJ1IjoibWFzdGVyY2hpZWYwIiwiYSI6ImNsdzdtMXAyZzBtdWgyc280Z2wycHlzZXEifQ.X3CmBWszdI4h1y0vri5KsA">
+                <Input
+                  id={locationInputId}
+                  placeholder="Input location for service: wedding venue, address, ..."
+                  name="location"
+                  value={inputs.location || ""}
+                  onChange={handleInputChange}
+                  className="input mb12"
+                  autoComplete="address-line1"
+                />
+              </AddressAutofill>
             </div>
 
             {/* date/time */}
