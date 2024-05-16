@@ -36,7 +36,7 @@ const CardExamples = () => {
                     serviceName={"AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"}
                     serviceDesc={"Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"}
                     servicePrice={112333294}
-                    servicePhotoData={""}
+                    serviceImageData={""}
                     artistUsername={"alice_smith"}
                     artistName={"Alice Smith"}
                 ></ServiceCard>
@@ -46,7 +46,7 @@ const CardExamples = () => {
                     serviceName={"Bachelorette Glam Experience"}
                     serviceDesc={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n"}
                     servicePrice={123}
-                    servicePhotoData={""}
+                    serviceImageData={""}
                     artistUsername={"Bobbyyy1"}
                     artistName={"Bob"}
                 ></ServiceCard>
@@ -56,7 +56,7 @@ const CardExamples = () => {
                     serviceName={"GlamourGlow Beauty"}
                     serviceDesc={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n"}
                     servicePrice={123}
-                    servicePhotoData={""}
+                    serviceImageData={""}
                     artistUsername={"ihavealonglonglongnameJones"}
                     artistName={"LonglonglongnamedJones LongnamedDavis"}
                 ></ServiceCard>
