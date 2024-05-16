@@ -4,7 +4,7 @@
  * Contributors: Kefei (Phillip) Li
  */
 
-import React from "react";
+import React, { useState } from "react";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout.tsx";
 import Tabs from "../../tabs/Tabs.jsx";
@@ -23,131 +23,132 @@ export const ArtistProfilePage = () => {
     const gearIcon = <Cog8ToothIcon className="icon-base" />;
 
     const servicePanel = (
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-row gap-6">
-          <Button className="rounded-md">Show All</Button>
-          <Button className="rounded-md">Active</Button>
-          <Button className="rounded-md">Inactive</Button>
-          <Button className="absolute right-10 flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover">
+        <div className="flex flex-col gap-6">
+            <div className="flex flex-col md:flex-row gap-6 items-center justify-center md:items-start md:justify-start">
+                <div className="flex flex-row gap-6">
+                    <Button className="rounded-md">Show All</Button>
+                    <Button className="rounded-md">Active</Button>
+                    <Button className="rounded-md">Inactive</Button>
+                </div>
+                <Button className="md:absolute md:right-[66px] flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover">
                     {plusIcon} Add Service
                 </Button>
+            </div>
+            <div className="flex flex-col lg:flex-row gap-10 items-center justify-center flex-wrap">
+                <ServiceCard
+                    className=""
+                    serviceId={111111}
+                    serviceName={
+                        "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"
+                    }
+                    serviceDesc={
+                        "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"
+                    }
+                    servicePrice={112333294}
+                    serviceImageData={
+                        "https://docs.material-tailwind.com/img/team-3.jpg"
+                    }
+                    artistUsername={"alice_smith"}
+                    artistName={"Alice Smith"}
+                ></ServiceCard>
+                <ServiceCard
+                    className=""
+                    serviceId={111111}
+                    serviceName={
+                        "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"
+                    }
+                    serviceDesc={
+                        "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"
+                    }
+                    servicePrice={112333294}
+                    serviceImageData={
+                        "https://docs.material-tailwind.com/img/team-3.jpg"
+                    }
+                    artistUsername={"alice_smith"}
+                    artistName={"Alice Smith"}
+                ></ServiceCard>
+                <ServiceCard
+                    className=""
+                    serviceId={111111}
+                    serviceName={
+                        "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"
+                    }
+                    serviceDesc={
+                        "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"
+                    }
+                    servicePrice={112333294}
+                    serviceImageData={
+                        "https://docs.material-tailwind.com/img/team-3.jpg"
+                    }
+                    artistUsername={"alice_smith"}
+                    artistName={"Alice Smith"}
+                ></ServiceCard>
+                <ServiceCard
+                    className=""
+                    serviceId={111111}
+                    serviceName={
+                        "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"
+                    }
+                    serviceDesc={
+                        "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"
+                    }
+                    servicePrice={112333294}
+                    serviceImageData={
+                        "https://docs.material-tailwind.com/img/team-3.jpg"
+                    }
+                    artistUsername={"alice_smith"}
+                    artistName={"Alice Smith"}
+                ></ServiceCard>
+                <ServiceCard
+                    className=""
+                    serviceId={111111}
+                    serviceName={
+                        "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"
+                    }
+                    serviceDesc={
+                        "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"
+                    }
+                    servicePrice={112333294}
+                    serviceImageData={
+                        "https://docs.material-tailwind.com/img/team-3.jpg"
+                    }
+                    artistUsername={"alice_smith"}
+                    artistName={"Alice Smith"}
+                ></ServiceCard>
+                <ServiceCard
+                    className=""
+                    serviceId={111111}
+                    serviceName={
+                        "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"
+                    }
+                    serviceDesc={
+                        "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"
+                    }
+                    servicePrice={112333294}
+                    serviceImageData={
+                        "https://docs.material-tailwind.com/img/team-3.jpg"
+                    }
+                    artistUsername={"alice_smith"}
+                    artistName={"Alice Smith"}
+                ></ServiceCard>
+                <ServiceCard
+                    className=""
+                    serviceId={111111}
+                    serviceName={
+                        "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"
+                    }
+                    serviceDesc={
+                        "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"
+                    }
+                    servicePrice={112333294}
+                    serviceImageData={
+                        "https://docs.material-tailwind.com/img/team-3.jpg"
+                    }
+                    artistUsername={"alice_smith"}
+                    artistName={"Alice Smith"}
+                ></ServiceCard>
+            </div>
         </div>
- <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <ServiceCard
-                className="lg:w-full"
-                serviceId={111111}
-                serviceName={
-                    "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"
-                }
-                serviceDesc={
-                    "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"
-                }
-                servicePrice={112333294}
-                serviceImageData={
-                    "https://docs.material-tailwind.com/img/team-3.jpg"
-                }
-                artistUsername={"alice_smith"}
-                artistName={"Alice Smith"}
-            ></ServiceCard>
-            <ServiceCard
-                className="lg:w-full"
-                serviceId={111111}
-                serviceName={
-                    "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"
-                }
-                serviceDesc={
-                    "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"
-                }
-                servicePrice={112333294}
-                serviceImageData={
-                    "https://docs.material-tailwind.com/img/team-3.jpg"
-                }
-                artistUsername={"alice_smith"}
-                artistName={"Alice Smith"}
-            ></ServiceCard>
-            <ServiceCard
-                className="lg:w-full"
-                serviceId={111111}
-                serviceName={
-                    "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"
-                }
-                serviceDesc={
-                    "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"
-                }
-                servicePrice={112333294}
-                serviceImageData={
-                    "https://docs.material-tailwind.com/img/team-3.jpg"
-                }
-                artistUsername={"alice_smith"}
-                artistName={"Alice Smith"}
-            ></ServiceCard>
-            <ServiceCard
-                className="lg:w-full"
-                serviceId={111111}
-                serviceName={
-                    "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"
-                }
-                serviceDesc={
-                    "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"
-                }
-                servicePrice={112333294}
-                serviceImageData={
-                    "https://docs.material-tailwind.com/img/team-3.jpg"
-                }
-                artistUsername={"alice_smith"}
-                artistName={"Alice Smith"}
-            ></ServiceCard>
-            <ServiceCard
-                className="lg:w-full"
-                serviceId={111111}
-                serviceName={
-                    "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"
-                }
-                serviceDesc={
-                    "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"
-                }
-                servicePrice={112333294}
-                serviceImageData={
-                    "https://docs.material-tailwind.com/img/team-3.jpg"
-                }
-                artistUsername={"alice_smith"}
-                artistName={"Alice Smith"}
-            ></ServiceCard>
-            <ServiceCard
-                className="lg:w-full"
-                serviceId={111111}
-                serviceName={
-                    "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"
-                }
-                serviceDesc={
-                    "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"
-                }
-                servicePrice={112333294}
-                serviceImageData={
-                    "https://docs.material-tailwind.com/img/team-3.jpg"
-                }
-                artistUsername={"alice_smith"}
-                artistName={"Alice Smith"}
-            ></ServiceCard>
-            <ServiceCard
-                className="lg:w-full"
-                serviceId={111111}
-                serviceName={
-                    "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"
-                }
-                serviceDesc={
-                    "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"
-                }
-                servicePrice={112333294}
-                serviceImageData={
-                    "https://docs.material-tailwind.com/img/team-3.jpg"
-                }
-                artistUsername={"alice_smith"}
-                artistName={"Alice Smith"}
-            ></ServiceCard>
-        </div>
-      </div>
-       
     );
 
     // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
