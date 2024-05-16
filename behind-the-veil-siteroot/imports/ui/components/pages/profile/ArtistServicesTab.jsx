@@ -4,10 +4,11 @@
  * Contributors: Lucas Sharp
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSubscribe, useTracker } from "meteor/react-meteor-data";
 import ServiceCollection from "/imports/api/collections/services";
 
+import Loader3 from "react-spinners/BounceLoader";
 import Button from "../../button/Button.jsx";
 import ServiceCard from "../../card/ServiceCard.jsx";
 import { PlusIcon } from "@heroicons/react/24/outline";
@@ -24,74 +25,63 @@ export const ArtistServicesTab = () => {
     let servicesData = useTracker(() => {
         return ServiceCollection.find().fetch();
     });
-    let services = servicesData;
 
-    // Creating service cards for all of the artists services
-    const serviceCardList = services.map((service) => (
-        <ServiceCard
-            key={service._id._str}
-            serviceId={service._id._str}
-            serviceName={service.serviceName}
-            serviceDesc={service.serviceDesc}
-            servicePrice={service.servicePrice}
-            artistUsername={service.artistUsername}
-            serviceImageData={service.serviceImageData}
-            artistAlias={service.artistAlias}
-            isEdit={true}
-        ></ServiceCard>
-    ));
-
-    // Creating service cards for all of the artists active services
-    const activeServices = services.filter((service) => service.serviceActive);
-    const activeServiceCardList = activeServices.map((service) => (
-        <ServiceCard
-            key={service._id._str}
-            serviceId={service._id._str}
-            serviceName={service.serviceName}
-            serviceDesc={service.serviceDesc}
-            servicePrice={service.servicePrice}
-            artistUsername={service.artistUsername}
-            serviceImageData={service.serviceImageData}
-            artistAlias={service.artistAlias}
-            isEdit={true}
-        ></ServiceCard>
-    ));
-
-    // Creating service cards for all of the artists inactive services
-    const inactiveServices = services.filter(
-        (service) => !service.serviceActive
-    );
-    const inactiveServiceCardList = inactiveServices.map((service) => (
-        <ServiceCard
-            key={service._id._str}
-            serviceId={service._id._str}
-            serviceName={service.serviceName}
-            serviceDesc={service.serviceDesc}
-            servicePrice={service.servicePrice}
-            artistUsername={service.artistUsername}
-            serviceImageData={service.serviceImageData}
-            artistAlias={service.artistAlias}
-            isEdit={true}
-        ></ServiceCard>
-    ));
-
-    // Creating the state of the service cards that will be shown
-    const [serviceCardsShown, setServiceCardsShown] = useState(serviceCardList);
-
-    // Creating the state of the filter for the service cards (defaults to All)
-    const [filterType, setFilterType] = useState("All");
     
-    // When a button is clicked to change the filter of service cards shown, this adjusts it
-    const handleShowCardTypeChange = (type) => {
-        setFilterType(type);
-        if (type === "All") {
-            setServiceCardsShown(serviceCardList);
-        } else if (type === "Active") {
-            setServiceCardsShown(activeServiceCardList);
-        } else if (type === "Inactive") {
-            setServiceCardsShown(inactiveServiceCardList);
+// Creating the state of the filter for the service cards (defaults to All)
+    const [filterType, setFilterType] = useState("All");
+
+    const [serviceCardsShown, setServiceCardsShown] = useState(<div>Loading...</div>);
+
+    useEffect(() => {
+    // Once the data is fetched, update serviceCardsShown based on the filterType
+    if (!isLoading()) {
+        const allServices = servicesData;
+        const activeServices = servicesData.filter(service => service.serviceActive);
+        const inactiveServices = servicesData.filter(service => !service.serviceActive);
+        if (filterType === "All") {
+            setServiceCardsShown(allServices.map(service => (
+                <ServiceCard
+                key={service._id._str}
+            serviceId={service._id._str}
+            serviceName={service.serviceName}
+            serviceDesc={service.serviceDesc}
+            servicePrice={service.servicePrice}
+            artistUsername={service.artistUsername}
+            serviceImageData={service.serviceImageData}
+            artistAlias={service.artistAlias}
+            isEdit={true}/>
+            )));
+        } else if (filterType === "Active") {
+            setServiceCardsShown(activeServices.map(service => (
+                <ServiceCard
+                    key={service._id._str}
+            serviceId={service._id._str}
+            serviceName={service.serviceName}
+            serviceDesc={service.serviceDesc}
+            servicePrice={service.servicePrice}
+            artistUsername={service.artistUsername}
+            serviceImageData={service.serviceImageData}
+            artistAlias={service.artistAlias}
+            isEdit={true}
+                />
+            )));
+        } else if (filterType === "Inactive") {
+            setServiceCardsShown(inactiveServices.map(service => (
+                <ServiceCard
+                    key={service._id._str}
+            serviceId={service._id._str}
+            serviceName={service.serviceName}
+            serviceDesc={service.serviceDesc}
+            servicePrice={service.servicePrice}
+            artistUsername={service.artistUsername}
+            serviceImageData={service.serviceImageData}
+            artistAlias={service.artistAlias}
+            isEdit={true}
+                />
+            )));
         }
-    };
+    }
+}, [isLoading(), filterType]);
 
     // The UI of the filter buttons based on whether they are active or not
     const activeFilterButtonClasses =
@@ -112,7 +102,7 @@ export const ArtistServicesTab = () => {
                                 ? activeFilterButtonClasses
                                 : inactiveFilterButtonClasses
                         }
-                        onClick={() => handleShowCardTypeChange("All")}
+                        onClick={() => setFilterType("All")}
                     >
                         Show All
                     </Button>
@@ -122,7 +112,7 @@ export const ArtistServicesTab = () => {
                                 ? activeFilterButtonClasses
                                 : inactiveFilterButtonClasses
                         }
-                        onClick={() => handleShowCardTypeChange("Active")}
+                        onClick={() => setFilterType("Active")}
                     >
                         Active
                     </Button>
@@ -132,7 +122,7 @@ export const ArtistServicesTab = () => {
                                 ? activeFilterButtonClasses
                                 : inactiveFilterButtonClasses
                         }
-                        onClick={() => handleShowCardTypeChange("Inactive")}
+                        onClick={() => setFilterType("Inactive")}
                     >
                         Inactive
                     </Button>
@@ -143,7 +133,9 @@ export const ArtistServicesTab = () => {
             </div>
             <div className="flex items-center justify-center">
                 {document.readyState != "complete" || isLoading() ? (
-                    <div>Loading...</div>
+                    <div className={"flex flex-col items-center justify-center"}>
+                <Loader3/>
+                </div>
                 ) : (
                     <div className="flex flex-col lg:flex-row lg:min-w-[1000px] gap-10 items-center justify-center flex-wrap">
                         {serviceCardsShown}
