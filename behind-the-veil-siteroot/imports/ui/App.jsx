@@ -1,9 +1,8 @@
 import React from "react";
-import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import {BrowserRouter as Router, Navigate, Route, Routes} from "react-router-dom";
 
 import NavigationBar from "./components/navigationBar/NavigationBar.jsx";
-import LoggedInOnlyRoute from "./components/protectedRoute/LoggedInOnlyRoute.jsx";
-import LoggedOutOnlyRoute from "./components/protectedRoute/LoggedOutOnlyRoute.jsx";
+import ProtectedRoute from "./components/protectedRoute/ProtectedRoute.jsx";
 
 import Examples from "./components/pages/examples/Examples.jsx";
 
@@ -25,6 +24,8 @@ import AccountActivatedPage from "./components/pages/register/AccountActivatedPa
 import CreateAccountPage from "./components/pages/register/CreateAccountPage";
 import ActivateAccountPage from "./components/pages/register/ActivateAccountPage";
 import BookingSummary from "./components/pages/request-booking/BookingSummary";
+import RoutingAccess from "./enums/RoutingAccess";
+import UrlBasePath from "./enums/UrlBasePath";
 
 export const App = () => (
     <div>
@@ -35,13 +36,14 @@ export const App = () => (
                 <Routes>
 
                     {/* removed once dev is finished*/}
-                    <Route path="/examples" element={<Examples/>}/>
+                    <Route path={`/${UrlBasePath.EXAMPLES}`} element={<Examples/>}/>
 
                     {/*routes that any user can access*/}
                     <Route path="/" element={<HomePage/>}/>
+                    <Route path="*" element={ <Navigate to="/" /> }/> {/*default path for all other non-routed paths*/}
 
                     <Route path="/services" element={<ServicesPage/>}/>
-                    <Route path="/service/:serviceId" element={<SpecificServicePage/>}/>
+                    <Route path="/services/:serviceId" element={<SpecificServicePage/>}/>
 
                     <Route path="/artists" element={<ArtistsPage/>}/>
 
@@ -49,84 +51,74 @@ export const App = () => (
                     <Route
                         path="/login"
                         element={
-                            <LoggedOutOnlyRoute>
-                                <LoginPage/>
-                            </LoggedOutOnlyRoute>
+                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_OUT_ONLY}><LoginPage/></ProtectedRoute>
                         }
                     />
                     <Route
                         path="/register"
                         element={
-                            <LoggedOutOnlyRoute>
-                                <RegisterPage/>
-                            </LoggedOutOnlyRoute>
+                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_OUT_ONLY}><RegisterPage/></ProtectedRoute>
                         }
                     />
                     <Route
                         path="/register/createAccount/"
                         element={
-                            <LoggedOutOnlyRoute>
-                                <CreateAccountPage/>
-                            </LoggedOutOnlyRoute>
+                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_OUT_ONLY}><CreateAccountPage/></ProtectedRoute>
                         }
                     />
                     <Route
                         path="/register/activateAccount"
                         element={
-                            <LoggedOutOnlyRoute>
-                                <ActivateAccountPage/>
-                            </LoggedOutOnlyRoute>
+                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_OUT_ONLY}><ActivateAccountPage/></ProtectedRoute>
                         }
                     />
                     <Route
                         path="/register/accountActivated"
                         element={
-                            <LoggedOutOnlyRoute>
-                                <AccountActivatedPage/>
-                            </LoggedOutOnlyRoute>
+                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_OUT_ONLY}><AccountActivatedPage/></ProtectedRoute>
                         }
                     />
 
                     <Route
                         path="/forgot-password"
-                        element={<LoggedOutOnlyRoute><ForgotPasswordPage/></LoggedOutOnlyRoute>}
+                        element={
+                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_OUT_ONLY}><ForgotPasswordPage/></ProtectedRoute>
+                        }
                     />
                     <Route
                         path="/reset-password/:token"
-                        element={<LoggedOutOnlyRoute><ResetPasswordPage/></LoggedOutOnlyRoute>}
+                        element={
+                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_OUT_ONLY}><ResetPasswordPage/></ProtectedRoute>
+                        }
                     />
 
                     <Route
-                        path="/reset-complete"
-                        element={<LoggedOutOnlyRoute><ResetCompletePage/></LoggedOutOnlyRoute>}
+                        path="/reset-password/complete"
+                        element={
+                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_OUT_ONLY}><ResetCompletePage/></ProtectedRoute>
+                        }
                     />
 
                     {/*routes that ONLY authenticated users can access*/}
                     <Route
                         path="/messages"
                         element={
-                            <LoggedInOnlyRoute>
-                                <MessagesPage/>
-                            </LoggedInOnlyRoute>
+                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}><MessagesPage/></ProtectedRoute>
                         }
                     />
 
                     <Route
-                        path="/account"
+                        path="/artist-profile/:username"
                         element={
-                            <LoggedInOnlyRoute>
-                                <MessagesPage/>
-                            </LoggedInOnlyRoute>
+                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}><ArtistProfilePage/></ProtectedRoute>
                         }
                     />
 
-                    <Route path="/artist-profile/:username" element={<ArtistProfilePage/>}/>
-
                     {/* TODO: haven't implemented actual flow to get here yet */}
-                    <Route path="/request-booking" element={<RequestBooking/>}/>
                     <Route path="/service-area" element={<ArtistServiceArea/>}/>
+                    <Route path="/request-booking" element={<RequestBooking/>}/>
                     <Route path="/cancel-booking" element={<CancelBooking/>}/>
-                    <Route path="/booking-summary" element={<BookingSummary/>} />
+                    <Route path="/booking-summary" element={<BookingSummary/>}/>
 
                 </Routes>
             </main>

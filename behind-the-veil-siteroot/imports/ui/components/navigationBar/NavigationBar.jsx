@@ -1,34 +1,73 @@
 /**
  * File Description: Navigation Bar React component
- * File version: 1.0
+ * File version: 2.0
  * Contributors: Nikki
  */
 
 import React, {useState} from "react";
-import {NavLink} from "react-router-dom";
-import {XMarkIcon, Bars3Icon, UserCircleIcon} from "@heroicons/react/24/outline"
+import {NavLink, useLocation} from "react-router-dom";
+import {Tracker} from 'meteor/tracker';
+import {Meteor} from "meteor/meteor";
+import {Bars3Icon, UserCircleIcon, XMarkIcon} from "@heroicons/react/24/outline"
 
-import Button from "../button/Button.jsx";
-import {getUserAuth} from "../hooks/UserAuth.jsx";
+import Button from "/imports/ui/components/button/Button.jsx";
+import UrlBasePath from "/imports/ui/enums/UrlBasePath";
 import "./navigationBar.css"
 
-// const logo1 = require("../../../../client/logo.png");
 
 /**
  * Navigation Bar component for all pages of the app, relies on the Route object in App.js
  * for correct routing.
- *
- * TODO: complete login check after Auth hook is done
  */
 export const NavigationBar = () => {
 
-    // variable for if user is logged in
-    // TODO: Replace with call to actual Authentication hook
-    const user = getUserAuth();
-    const [loggedInUser, setLoggedInUser] = useState(user) // temp currently hardcoded
+    // first level URL path for underlining the nav tab - e.g. services, artists. profile, etc
+    const baseUrl = useLocation().pathname.split('/')[1];
 
-    // variable for tracking which is the currently active tab
-    const [activeTab, setActiveTab] = useState("home");
+    // variables for logged in user (if any)
+    const [loggedInUserId, setLoggedInUserId] = useState(Meteor.userId());
+    const [userInfo, setUserInfo] = useState({"type": null, "username": null});
+
+    console.log("navi: " + Meteor.loggingIn())
+    console.log("navi: " + Meteor.loggingOut())
+    console.log("navi: " + loggedInUserId)
+    console.log(userInfo)
+
+    // When login status changes, this is automatically ran
+    Tracker.autorun(() => {
+        const userId = Meteor.userId();
+
+        if (userId !== loggedInUserId) {
+            setLoggedInUserId(Meteor.userId());
+        }
+    })
+
+    // tracker for the required user data
+    Tracker.autorun(() => {
+        const user = Meteor.user();
+
+        if (user) {
+            // user is logged in
+            const userType = user.profile.type;
+            const username = user.username;
+
+            // check if an update to the current user info is required or not (this is needed to prevent inf loop)
+            if (userInfo.type !== userType || userInfo.username !== username) {
+                setUserInfo(
+                    {"type": user.profile.type, "username": user.username}
+                )
+            }
+
+        } else {
+            // user is not logged in
+            // check if an update to the current user info is required or not (this is needed to prevent inf loop)
+            if (userInfo.type !== null || userInfo.username !== null) {
+                setUserInfo(
+                    {"type": null, "username": null}
+                )
+            }
+        }
+    })
 
     // Code for menu open and close
     const [menuShown, setMenuShown] = useState(false);
@@ -64,12 +103,11 @@ export const NavigationBar = () => {
             lg:flex-row lg:items-center lg:gap-x-5">
                 {/*Examples page TODO: remove once dev is done*/}
                 <li>
-                    <NavLink to="/examples"
+                    <NavLink to={`/${UrlBasePath.EXAMPLES}`}
                              onClick={() => {
                                  autoCloseMenu();
-                                 setActiveTab("examples");
                              }}
-                             className={activeTab === "examples" ?
+                             className={baseUrl === UrlBasePath.EXAMPLES ?
                                  "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3 mr-12" :
                                  "main-text navbar-link-inactive p-3 mr-12"}>Examples Here</NavLink>
                 </li>
@@ -78,9 +116,8 @@ export const NavigationBar = () => {
                     <NavLink to="/"
                              onClick={() => {
                                  autoCloseMenu();
-                                 setActiveTab("home");
                              }}
-                             className={activeTab === "home" ?
+                             className={baseUrl === UrlBasePath.HOME ?
                                  "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3" :
                                  "main-text navbar-link-inactive p-3"}>Home</NavLink>
                 </li>
@@ -89,9 +126,8 @@ export const NavigationBar = () => {
                     <NavLink to="/services"
                              onClick={() => {
                                  autoCloseMenu();
-                                 setActiveTab("services");
                              }}
-                             className={activeTab === "services" ?
+                             className={baseUrl === UrlBasePath.SERVICES ?
                                  "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3" :
                                  "main-text navbar-link-inactive p-3"}>Services</NavLink>
                 </li>
@@ -100,29 +136,26 @@ export const NavigationBar = () => {
                     <NavLink to="/artists"
                              onClick={() => {
                                  autoCloseMenu();
-                                 setActiveTab("artists");
                              }}
-                             className={activeTab === "artists" ?
+                             className={baseUrl === UrlBasePath.ARTISTS ?
                                  "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3" :
                                  "main-text navbar-link-inactive p-3"}>Artists</NavLink>
                 </li>
                 {/*Messages Page*/}
-                <li className={loggedInUser ? "" : "hidden"}>
+                <li className={loggedInUserId ? "" : "hidden"}>
                     <NavLink to="/messages"
                              onClick={() => {
                                  autoCloseMenu();
-                                 setActiveTab("messages");
                              }}
-                             className={activeTab === "messages" ?
+                             className={baseUrl === UrlBasePath.MESSAGES ?
                                  "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3" :
                                  "main-text navbar-link-inactive p-3"}>Messages</NavLink>
                 </li>
                 {/*Login Page*/}
-                <li className={!loggedInUser ? "" : "hidden"}>
+                <li className={!loggedInUserId ? "" : "hidden"}>
                     <NavLink to="/login"
                              onClick={() => {
                                  autoCloseMenu();
-                                 setActiveTab("login");
                              }}>
                         <Button type="button"
                                 className="
@@ -133,11 +166,10 @@ export const NavigationBar = () => {
                     </NavLink>
                 </li>
                 {/*Register Page*/}
-                <li className={!loggedInUser ? "" : "hidden"}>
+                <li className={!loggedInUserId ? "" : "hidden"}>
                     <NavLink to="/register"
                              onClick={() => {
                                  autoCloseMenu();
-                                 setActiveTab("register");
                              }}>
                         <Button type="button"
                                 className="
@@ -147,21 +179,41 @@ export const NavigationBar = () => {
                         </Button>
                     </NavLink>
                 </li>
+
                 {/*Profile Page*/}
-                <li className={loggedInUser ? "" : "hidden"}>
+                <li className={loggedInUserId ? "" : "hidden"}>
                     {/*todo: unsure how profiles will work yet (if bride and artist separate or not todo later*/}
-                    <NavLink to="/account"
+
+
+                    <NavLink to={
+                        userInfo.type === 'artist' ?
+                            `/${UrlBasePath.ARTIST_PROFILE}/${userInfo.username}` :
+                            `/${UrlBasePath.BRIDE_PROFILE}/${userInfo.username}`
+                    }
                              onClick={() => {
                                  autoCloseMenu();
-                                 setActiveTab("account");
                              }}
-                             className={activeTab === "account" ?
+                             className={baseUrl === UrlBasePath.ARTIST_PROFILE || baseUrl === UrlBasePath.BRIDE_PROFILE ?
                                  "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3 lg:p-0" :
                                  "main-text navbar-link-inactive p-3 lg:p-0"}>
 
                         {/*profile icon appears for horizontal menu, the word "Account" appears for vertical menu*/}
                         <span className="lg:hidden">Account</span>
                         <button><UserCircleIcon className="hidden lg:block min-h-14 w-14 cursor-pointer"/></button>
+                    </NavLink>
+                </li>
+
+                {/*Logout button*/}
+                <li className={loggedInUserId ? "" : "hidden"}>
+                    <NavLink to="/"
+                             onClick={() => {
+                                 Meteor.logout();
+                                 autoCloseMenu();
+                             }}>
+                        <Button type="button"
+                                className="bg-white hover:bg-light-grey outline outline-2 outline-light-grey">
+                            Logout
+                        </Button>
                     </NavLink>
                 </li>
             </ul>
@@ -172,7 +224,6 @@ export const NavigationBar = () => {
         <header className=
                     "header fixed top-0 left-0 z-[999] px-8 bg-white border-b-2 border-light-grey w-full">
             <nav>
-
                 {/* Contains all the non-mobile/large screen menu */}
                 <div className="flex items-center justify-between relative h-16 m-4">
 
@@ -180,12 +231,9 @@ export const NavigationBar = () => {
                     <NavLink to="/"
                              onClick={() => {
                                  autoCloseMenu();
-                                 setActiveTab("home");
-                                 setLoggedInUser(!loggedInUser); // todo: temp, hard coded for testing
                              }}
                     >
-                        Logo (also press to toggle UI for testing)
-                        <img src="../../../../client/logo.png" alt=""/>
+                        <img src="/logo.png" alt=""/>
                     </NavLink>
 
                     {/* All the navigation links in a list (hidden when small screen) */}
