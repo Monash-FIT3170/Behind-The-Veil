@@ -186,25 +186,23 @@ const RequestBooking = () => {
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4">
             {/* location */}
-            <div className="flex flex-col gap-1">
-              <label htmlFor={locationInputId} className="main-text text-our-black">Location</label>
-              <Input
-                id={locationInputId}
-                placeholder="Input location for service: wedding venue, address, ..."
-                name="location"
-                value={inputs.location || ""}
-                onChange={handleInputChange}
-              />
-            </div>
+            <Input
+              id={locationInputId}
+              label={<label htmlFor={locationInputId} className="main-text text-our-black">Location</label>}
+              placeholder="Input location for service: wedding venue, address, ..."
+              name="location"
+              value={inputs.location || ""}
+              onChange={handleInputChange}
+            />
 
             {/* date/time */}
             <div className="flex flex-col md:flex-row gap-4 md:gap-10">
               {/* date input + calendar */}
               <div className="flex flex-col flex-grow gap-1 md:max-w-[350px] lg:max-w-[420px] xl:lg:max-w-[490px]">
-                <label htmlFor={dateInputId} className="main-text text-our-black">Select Date</label>
                 <div className="flex flex-col gap-4">
                   <Input
                     id={dateInputId}
+                    label={<label htmlFor={dateInputId} className="main-text text-our-black">Select Date</label>}
                     placeholder="DD-MM-YYYY"
                     name="date"
                     value={formatDateInput(inputs.date) || ""}
