@@ -84,32 +84,27 @@ const RequestBooking = () => {
           <div className="flex flex-col gap-4">
 
             {/* location */}
-            <div className="flex flex-col gap-1">
-              <label htmlFor={locationInputId} className="main-text text-our-black">Location</label>
               <Input
                 id={locationInputId}
+                label={<label htmlFor={locationInputId} className="main-text text-our-black">Location</label>}
                 placeholder="Input location for service: wedding venue, address, ..."
                 name="location"
                 value={inputs.location || ""}
                 onChange={handleInputChange}
               />
-            </div>
 
             {/* date/time */}
             <div className="flex gap-10">
               {/* input fields */}
               <div className="flex flex-col gap-4 grow">
-                <div className="flex flex-col gap-1">
-                  <label htmlFor={dateInputId} className="main-text text-our-black">Select Date</label>
                   <Input
                     id={dateInputId}
+                    label={<label htmlFor={dateInputId} className="main-text text-our-black">Select Date</label>}
                     placeholder="Select a date"
                     name="date"
                     value={inputs.date || ""}
                     onChange={handleInputChange}
                   />
-                </div>
-
                 {/* if there are available times, render the time input buttons */}
                 {
                   availableTimes && (

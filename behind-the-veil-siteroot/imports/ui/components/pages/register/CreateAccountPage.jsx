@@ -1,23 +1,28 @@
 /**
  * File Description: Create Account page
- * File version: 1.0
- * Contributors: Ryan
+ * File version: 1.1
+ * Contributors: Ryan, Nikki
  */
 
-import React, { useState } from 'react';
-import { Accounts } from 'meteor/accounts-base';
+import React, {useState} from 'react';
+import {useLocation, useNavigate} from "react-router-dom";
+import {Accounts} from 'meteor/accounts-base';
+import URLSearchParams from '@ungap/url-search-params'
+
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
-import { useNavigate, useLocation } from "react-router-dom";
-import URLSearchParams from '@ungap/url-search-params'
+import Input from "../../input/Input";
 
 const CreateAccountPage = () => {
     const navigate = useNavigate();
-    const accountType = new URLSearchParams(useLocation().search).get("type");
-    console.log(accountType);
 
-    const handleRegister = () => {
+    // get the chosen account type from last page
+    const accountType = new URLSearchParams(useLocation().search).get("type");
+
+    const handleRegister = (event) => {
+        event.preventDefault();
+
         const username = document.getElementById('username').value.trim();
         const alias = document.getElementById('name').value.trim();
         const email = document.getElementById('email').value.trim();
@@ -67,33 +72,12 @@ const CreateAccountPage = () => {
                 console.log('User created successfully!');
                 console.log(newUser);
                 // After successful activation, navigate to activation completed page
-                navigate(`/register/activateAccount`);
+                navigate(`/register/activateAccount?username=${username}`);
             }
         });
     };
 
-    const flexContainerStyle = {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '10px',
-        padding: '10px',
-    };
-
-    const ActionButton = ({ marginTop, label, onClick }) => (
-        <div style={{ marginTop: marginTop, width: "80%", display: "flex", justifyContent: "center" }}>
-            <Button
-                type="button"
-                className="bg-secondary-purple hover:bg-secondary-purple-hover outline outline-2 outline-secondary-purple"
-                style={{ width: "40%", height: "50px" }}
-                onClick={onClick}
-            >
-                {label}
-            </Button>
-        </div>
-    );
-
-    const TextInput = ({ label, id, name, placeholder, type = 'text', autoComplete = 'off' }) => {
+    const TextInput = ({labelText, id, name, placeholder, type = 'text', autoComplete = 'off'}) => {
         const [value, setValue] = useState('');
 
         const handleChange = (e) => {
@@ -102,26 +86,17 @@ const CreateAccountPage = () => {
         };
 
         return (
-            <div>
-                <label htmlFor={id} className="main-text">{label}</label>
-                <input
-                    type={type}
-                    id={id}
-                    name={name}
-                    placeholder={placeholder}
-                    autoComplete={autoComplete}
-                    value={value}
-                    onChange={handleChange}
-                    style={{
-                        marginBottom: '5px',
-                        width: '100%',
-                        height: '50px',
-                        border: '1px solid lightgrey',
-                        borderRadius: '5px',
-                        padding: '10px'
-                    }}
-                />
-            </div>
+            <Input
+                label={<label htmlFor={id} className="main-text">{labelText}</label>}
+                type={type}
+                id={id}
+                name={name}
+                placeholder={placeholder}
+                autoComplete={autoComplete}
+                value={value}
+                onChange={handleChange}
+                className={"w-full"}
+            />
         );
     };
 
@@ -129,47 +104,45 @@ const CreateAccountPage = () => {
         // if window size is SMALLER than a large screen (default variable for large in tailwind lg:1024px),
         // then use center aligned and no visuals on the left so the inputs aren't all squished
         <WhiteBackground pageLayout={window.innerWidth <= 1024 ? PageLayout.SMALL_CENTER : PageLayout.SMALL_RIGHT}>
-            {/*you MUST keep this div and put everything on the left side (e.g. the visual) of it*/}
-            <div className="hidden lg:flex translate-x-1/2 translate-y-[80vh]">
-                {/*You might have to alter the above translation values or something to make sure that the visual
-                doesn't move when changing screen size*/}
-                <span>Registration Page Visual here!!</span>
-            </div>
 
             {/* Right side content */}
-            <div style={{textAlign: "center", paddingTop: "5px"}}>
-                <div className="title-text" style={{textAlign: "center", marginTop: "-20px"}}>Create an Account</div>
-                <div style={flexContainerStyle}>
+            <div className={"text-center pt-1"}>
+                <div className="title-text mb-3 sm:mb-8">Create an Account</div>
+
+                <form className={"flex flex-col items-center gap-4 p-2.5"}>
                     {/* Input fields for account creation */}
-                    <div style={{width: "80%", textAlign: "left"}}>
-                        <TextInput label="Username" id="username" name="username"
+
+                    <div className={"flex flex-col gap-y-3 w-4/5 text-left"}>
+
+                        <TextInput labelText="Username" id="username" name="username"
                                    placeholder="Enter your unique username"/>
-                        <TextInput label="Name/Alias" id="name" name="name" placeholder="Enter your name or alias"/>
-                        <TextInput label="Email" id="email" name="email" placeholder="Enter your email" type="email"/>
-                        <TextInput label="Password" id="password" name="password" placeholder="Enter your password"
+                        <TextInput labelText="Name/Alias" id="name" name="name" placeholder="Enter your name or alias"/>
+                        <TextInput labelText="Email" id="email" name="email" placeholder="Enter your email"
+                                   type="email"/>
+                        <TextInput labelText="Password" id="password" name="password" placeholder="Enter your password"
                                    type="password" autoComplete="new-password"/>
-                        <TextInput label="Retype Password" id="retypePassword" name="retypePassword"
+                        <TextInput labelText="Retype Password" id="retypePassword" name="retypePassword"
                                    placeholder="Retype your password" type="password" autoComplete="new-password"/>
                     </div>
 
                     {/* Password requirements message */}
-                    <div className="message-tag-text" style={{textAlign: "left", marginTop: "-10px", width: "80%"}}>
+                    <div className="small-text text-dark-grey text-left w-4/5">
                         Please ensure your password has at least:
                         <ul className={"list-disc list-inside"}>
-                            <li>a number (0-9)</li>
-                            <li>a special character (e.g. % & ! )</li>
-                            <li>a lowercase letter (a-z)</li>
-                            <li>an uppercase letter (A-Z)</li>
-                            <li>minimum 8 characters</li>
+                            <li className={"ml-2"}>a number (0-9)</li>
+                            <li className={"ml-2"}>a special character (e.g. % & ! )</li>
+                            <li className={"ml-2"}>a lowercase letter (a-z)</li>
+                            <li className={"ml-2"}>an uppercase letter (A-Z)</li>
+                            <li className={"ml-2"}>minimum 8 characters</li>
                         </ul>
                     </div>
 
-                    <ActionButton
-                        marginTop="5px"
-                        label="Register"
-                        onClick={handleRegister}
-                    />
-                </div>
+                    <Button type={"submit"}
+                            className={"bg-secondary-purple hover:bg-secondary-purple-hover w-1/3 min-w-40"}
+                            onClick={handleRegister}>
+                        Register
+                    </Button>
+                </form>
             </div>
         </WhiteBackground>
     );
