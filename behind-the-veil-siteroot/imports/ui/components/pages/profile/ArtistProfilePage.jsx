@@ -63,8 +63,51 @@ export const ArtistProfilePage = () => {
 
   const smallSolidStarIcon = <SolStarIcon className="size-10 strok-1" />;
 
+  const serviceCardList = services.map((service) => (<ServiceCard
+            key={service._id._str}
+            serviceId={service._id._str}
+            serviceName={service.serviceName}
+            serviceDesc={service.serviceDesc}
+            servicePrice={service.servicePrice}
+            artistUsername={service.artistUsername}
+            serviceImageData={service.serviceImageData}
+            artistAlias={service.artistAlias}
+    ></ServiceCard>));
+
+     const activeServices = services.filter(service => service.serviceActive);
+     const activeServiceCardList = activeServices.map((service) => (<ServiceCard
+            key={service._id._str}
+            serviceId={service._id._str}
+            serviceName={service.serviceName}
+            serviceDesc={service.serviceDesc}
+            servicePrice={service.servicePrice}
+            artistUsername={service.artistUsername}
+            serviceImageData={service.serviceImageData}
+            artistAlias={service.artistAlias}
+    ></ServiceCard>));
+
+    const inactiveServices = services.filter(service => !service.serviceActive);
+     const inactiveServiceCardList = inactiveServices.map((service) => (<ServiceCard
+            key={service._id._str}
+            serviceId={service._id._str}
+            serviceName={service.serviceName}
+            serviceDesc={service.serviceDesc}
+            servicePrice={service.servicePrice}
+            artistUsername={service.artistUsername}
+            serviceImageData={service.serviceImageData}
+            artistAlias={service.artistAlias}
+    ></ServiceCard>));
+    
+    const [serviceCardsShown, setServiceCardsShown] = useState(serviceCardList);
+
     const handleShowCardTypeChange = (type) => {
-        console.log(type);
+        if (type === "All") {
+            setServiceCardsShown(serviceCardList);
+        } else if (type === "Active") {
+            setServiceCardsShown(activeServiceCardList);
+        } else if (type === "Inactive") {
+            setServiceCardsShown(inactiveServiceCardList);
+        }
     }
 
     const servicePanel = (  
@@ -96,125 +139,7 @@ export const ArtistProfilePage = () => {
             </div>
             <div className="flex items-center justify-center">
                 {isLoading ? (<div>Loading...</div>) : (<div className="flex flex-col lg:flex-row gap-10 items-center justify-center flex-wrap">
-                <ServiceCard
-                    className=""
-                    serviceId={111111}
-                    serviceName={
-                        "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"
-                    }
-                    serviceDesc={
-                        "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"
-                    }
-                    servicePrice={112333294}
-                    serviceImageData={
-                        "https://docs.material-tailwind.com/img/team-3.jpg"
-                    }
-                    artistUsername={"alice_smith"}
-                    artistName={"Alice Smith"}
-                    isEdit={true}
-                ></ServiceCard>
-                <ServiceCard
-                    className=""
-                    serviceId={111111}
-                    serviceName={
-                        "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"
-                    }
-                    serviceDesc={
-                        "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"
-                    }
-                    servicePrice={112333294}
-                    serviceImageData={
-                        "https://docs.material-tailwind.com/img/team-3.jpg"
-                    }
-                    artistUsername={"alice_smith"}
-                    artistName={"Alice Smith"}
-                    isEdit={true}
-                ></ServiceCard>
-                <ServiceCard
-                    className=""
-                    serviceId={111111}
-                    serviceName={
-                        "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"
-                    }
-                    serviceDesc={
-                        "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"
-                    }
-                    servicePrice={112333294}
-                    serviceImageData={
-                        "https://docs.material-tailwind.com/img/team-3.jpg"
-                    }
-                    artistUsername={"alice_smith"}
-                    artistName={"Alice Smith"}
-                    isEdit={true}
-                ></ServiceCard>
-                <ServiceCard
-                    className=""
-                    serviceId={111111}
-                    serviceName={
-                        "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"
-                    }
-                    serviceDesc={
-                        "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"
-                    }
-                    servicePrice={112333294}
-                    serviceImageData={
-                        "https://docs.material-tailwind.com/img/team-3.jpg"
-                    }
-                    artistUsername={"alice_smith"}
-                    artistName={"Alice Smith"}
-                    isEdit={true}
-                ></ServiceCard>
-                <ServiceCard
-                    className=""
-                    serviceId={111111}
-                    serviceName={
-                        "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"
-                    }
-                    serviceDesc={
-                        "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"
-                    }
-                    servicePrice={112333294}
-                    serviceImageData={
-                        "https://docs.material-tailwind.com/img/team-3.jpg"
-                    }
-                    artistUsername={"alice_smith"}
-                    artistName={"Alice Smith"}
-                    isEdit={true}
-                ></ServiceCard>
-                <ServiceCard
-                    className=""
-                    serviceId={111111}
-                    serviceName={
-                        "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"
-                    }
-                    serviceDesc={
-                        "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"
-                    }
-                    servicePrice={112333294}
-                    serviceImageData={
-                        "https://docs.material-tailwind.com/img/team-3.jpg"
-                    }
-                    artistUsername={"alice_smith"}
-                    artistName={"Alice Smith"}
-                    isEdit={true}
-                ></ServiceCard>
-                <ServiceCard
-                    className=""
-                    serviceId={111111}
-                    serviceName={
-                        "AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"
-                    }
-                    serviceDesc={
-                        "Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"
-                    }
-                    servicePrice={112333294}
-                    serviceImageData={
-                        "https://docs.material-tailwind.com/img/team-3.jpg"
-                    }
-                    artistUsername={"alice_smith"}
-                    artistName={"Alice Smith"}
-                    isEdit={true}
-                ></ServiceCard>
+                {serviceCardsShown}
                 </div>
                 )}
             </div>
