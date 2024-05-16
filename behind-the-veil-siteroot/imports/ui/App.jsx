@@ -25,7 +25,6 @@ import ActivateAccountPage from "./components/pages/register/ActivateAccountPage
 import BookingSummary from "./components/pages/request-booking/BookingSummary";
 import RoutingAccess from "./enums/RoutingAccess";
 import UrlBasePath from "./enums/UrlBasePath";
-import ArtistAddPost from "./components/pages/profile/ArtistAddPost.jsx";
 
 export const App = () => (
     <div>
@@ -113,7 +112,6 @@ export const App = () => (
                     <Route path="/request-booking" element={<RequestBooking/>}/>
                     <Route path="/cancel-booking" element={<CancelBooking/>}/>
                     <Route path="/booking-summary" element={<BookingSummary/>}/>
-                    <Route path="/add-post" element={<ArtistAddPost />} />
 
 
                 </Routes>
