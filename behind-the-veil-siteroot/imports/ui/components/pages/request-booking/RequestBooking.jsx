@@ -128,7 +128,13 @@ const RequestBooking = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // TODO: implement validation, i.e. must have a valid time
+    
+    // TODO: implement validation
+    
+    if (!(isValid(inputs.time))) {
+      alert('Please select a valid time.')
+      return
+    }
 
     // pass the data to the next page via the url
     const query = new URLSearchParams(inputs).toString();
