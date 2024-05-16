@@ -1,7 +1,7 @@
 /**
  * File Description: Artist Profile
- * File version: 1.0
- * Contributors: Kefei (Phillip) Li
+ * File version: 1.1
+ * Contributors: Kefei (Phillip) Li, Laura
  */
 
 import React from "react";
@@ -16,6 +16,7 @@ import {
   Cog8ToothIcon,
   StarIcon as OutStarIcon,
 } from "@heroicons/react/24/outline";
+import BookingListView from "../../booking/BookingListView.jsx";
 import { StarIcon as SolStarIcon } from "@heroicons/react/24/solid";
 
 /**
@@ -33,6 +34,18 @@ export const ArtistProfilePage = () => {
   const solidStarIcon = <SolStarIcon className="size-20 stroke-1" />;
 
   const smallSolidStarIcon = <SolStarIcon className="size-10 strok-1" />;
+
+  // Booking tab with the list view only (for now)
+  const bookingTab = (
+    <div className="relative">
+      <div className="top-20 z-20 flex justify-end">
+        <Button className="absolute top-2 flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover">
+          {plusIcon} Add Availability
+        </Button>
+      </div>
+      <BookingListView></BookingListView>
+    </div>
+  )
 
   // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
   // When completing the dynamic version for this page, probably a good idea to setup the photos as components and importing them in.
@@ -177,7 +190,7 @@ export const ArtistProfilePage = () => {
         tabs={["Dashboard", "Bookings", "My Services", "Gallery", "Reviews"]}
         tabPanels={[
           dashboardTab,
-          "Bookings Panel",
+          bookingTab,
           "My Services Panel",
           galleryTab,
           "reviewTab",
