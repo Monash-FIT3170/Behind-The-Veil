@@ -4,7 +4,7 @@
  * Contributors: Kefei (Phillip) Li
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout.tsx";
 import Tabs from "../../tabs/Tabs.jsx";
@@ -16,25 +16,65 @@ import ServiceCard from "../../card/ServiceCard.jsx";
  * Page for artist profile
  */
 export const ArtistProfilePage = () => {
+
+    // set up subscription (publication is in the "publication" folder)
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const subscription = Meteor.subscribe('all_services', {
+            onReady: () => setIsLoading(false),
+            onStop: () => setIsLoading(false),
+            onError: () => setIsLoading(false)
+        });
+
+        return () => {
+            if (subscription) {
+                subscription.stop();
+                setIsLoading(true);
+            }
+        };
+    }, []); // Empty dependency array ensures this effect runs only once
+
+
     //import plusIcon from heroicons for "add photo" button
     const plusIcon = <PlusIcon className="icon-base" />;
 
     //import gearIcon from heroicons for "settings" button.
     const gearIcon = <Cog8ToothIcon className="icon-base" />;
 
-    const servicePanel = (
+    const handleShowCardTypeChange = (type) => {
+        console.log(type);
+    }
+
+    const servicePanel = (  
         <div className="flex flex-col gap-6">
             <div className="flex flex-col md:flex-row gap-6 items-center justify-center md:items-start md:justify-start">
                 <div className="flex flex-row gap-6">
-                    <Button className="rounded-md">Show All</Button>
-                    <Button className="rounded-md">Active</Button>
-                    <Button className="rounded-md">Inactive</Button>
+                    <Button
+                        className="rounded-md"
+                        onClick={() => handleShowCardTypeChange("All")}
+                    >
+                        Show All
+                    </Button>
+                    <Button
+                        className="rounded-md"
+                        onClick={() => handleShowCardTypeChange("Active")}
+                    >
+                        Active
+                    </Button>
+                    <Button
+                        className="rounded-md"
+                        onClick={() => handleShowCardTypeChange("Inactive")}
+                    >
+                        Inactive
+                    </Button>
                 </div>
                 <Button className="md:absolute md:right-[66px] flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover">
                     {plusIcon} Add Service
                 </Button>
             </div>
-            <div className="flex flex-col lg:flex-row gap-10 items-center justify-center flex-wrap">
+            <div className="flex items-center justify-center">
+                {isLoading ? (<div>Loading...</div>) : (<div className="flex flex-col lg:flex-row gap-10 items-center justify-center flex-wrap">
                 <ServiceCard
                     className=""
                     serviceId={111111}
@@ -154,6 +194,8 @@ export const ArtistProfilePage = () => {
                     artistName={"Alice Smith"}
                     isEdit={true}
                 ></ServiceCard>
+                </div>
+                )}
             </div>
         </div>
     );
