@@ -13,7 +13,6 @@ import PageLayout from "../../../enums/PageLayout";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import Button from "../../button/Button.jsx";
 import Input from "../../input/Input";
-import UserCollection from "../../../../api/collections/users";
 
 /**
  * The Sign-In Page for the website.
@@ -44,7 +43,7 @@ export const LoginPage = () => {
                 alert('Username or password incorrect')
             } else {
                 // logged in, get the account type
-                const accountType = UserCollection.find({"username": username}).fetch()[0].profile.type;
+                const accountType = Meteor.user().profile.type;
 
                 // If the user type is artist, redirect to the artist landing page.
                 if (accountType === 'artist') {
