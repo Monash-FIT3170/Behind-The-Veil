@@ -17,6 +17,7 @@ import mockBookings from './mockBookings.json'
 import { addHours, areIntervalsOverlapping, eachHourOfInterval, isEqual, set, format, isValid, isDate, parse, isWithinInterval, startOfDay, addYears, startOfHour, isAfter, eachDayOfInterval, nextDay, isSameDay, addDays } from "date-fns";
 import { BookingStatus } from "../../../enums/BookingStatus.ts";
 import { useNavigate } from "react-router-dom";
+import { AddressAutofill } from '@mapbox/search-js-react';
 
 /**
  * Page for user to request a booking
@@ -192,14 +193,18 @@ const RequestBooking = () => {
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4">
             {/* location */}
-            <Input
-              id={locationInputId}
-              label={<label htmlFor={locationInputId} className="main-text text-our-black">Location</label>}
-              placeholder="Input location for service: wedding venue, address, ..."
-              name="location"
-              value={inputs.location || ""}
-              onChange={handleInputChange}
-            />
+              <label htmlFor={locationInputId} className="main-text text-our-black">Location</label>
+              <AddressAutofill accessToken="pk.eyJ1IjoibWFzdGVyY2hpZWYwIiwiYSI6ImNsdzdtMXAyZzBtdWgyc280Z2wycHlzZXEifQ.X3CmBWszdI4h1y0vri5KsA">
+                <Input
+                  id={locationInputId}
+                  placeholder="Input location for service: wedding venue, address, ..."
+                  name="location"
+                  //value={inputs.location || ""}
+                  onChange={handleInputChange}
+                  className="input mb12"
+                  autoComplete="address-line1"
+                />
+              </AddressAutofill>
 
             {/* date/time */}
             <div className="flex flex-col md:flex-row gap-4 md:gap-10">
