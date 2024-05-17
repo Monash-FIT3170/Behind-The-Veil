@@ -115,6 +115,12 @@ export const App = () => (
                             <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}><ArtistProfilePage/></ProtectedRoute>
                         }
                     />
+                    <Route
+                        path="/bride-profile/:username"
+                        element={
+                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}><BridePage/></ProtectedRoute>
+                        }
+                    />
 
                     {/* TODO: haven't implemented actual flow to get here yet */}
                     <Route path="/service-area" element={<ArtistServiceArea/>}/>

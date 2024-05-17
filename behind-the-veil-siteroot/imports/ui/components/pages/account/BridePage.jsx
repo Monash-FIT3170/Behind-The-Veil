@@ -1,7 +1,7 @@
 /**
- * File Description: Login page
+ * File Description: The Brides profile page
  * File version: 1.0
- * Contributors:
+ * Contributors: Katie
  */
 
 import React from 'react';
@@ -14,16 +14,17 @@ import ProfileDisplay from '../../profilePhoto/ProfileDisplay.jsx';
 import BookingTab from './BookingTab.jsx';
 import Card from '../../card/Card.jsx';
 
+// mock data for the brides user information
 const mockBrides =   {
         username: "sarah price",
         tag: "@thisbride34",
         type:"bride"
-
     }
 
+// mock data for the bookings the bride has made
 const bookingMock = [
     {
-        bookingID: "some string",
+        bookingID: "a",
         bookingStartDate: "01/02/2022",
         bookingDuration: "1 hour",
         bookingLocation: "ringwood",
@@ -31,11 +32,11 @@ const bookingMock = [
         bookingStatus: "confirmed",
         brideUserName: "looking_fint555",
         artistUserName: "bob_ross333",
-        serviceID: "serving"
+        serviceID: "a"
 
     },
     {
-        bookingID: "some string",
+        bookingID: "b",
         bookingStartDate: "01/02/2022",
         bookingDuration: "1 hour",
         bookingLocation: "ringwood",
@@ -43,23 +44,23 @@ const bookingMock = [
         bookingStatus: "confirmed",
         brideUserName: "looking_fint555",
         artistUserName: "bob_ross333",
-        serviceID: "serving"
+        serviceID: "b"
 
     },
     {
-        bookingID: "some string",
+        bookingID: "c",
         bookingStartDate: "01/02/2022",
         bookingDuration: "1 hour",
         bookingLocation: "ringwood",
-        bookingPrice: "$300",
+        bookingPrice: "$1",
         bookingStatus: "pending",
         brideUserName: "looking_fint555",
         artistUserName: "bob_ross333",
-        serviceID: "some string other"
+        serviceID: "c"
 
     },
     {
-        bookingID: "some string",
+        bookingID: "d",
         bookingStartDate: "01/02/2022",
         bookingDuration: "1 hour",
         bookingLocation: "ringwood",
@@ -67,11 +68,11 @@ const bookingMock = [
         bookingStatus: "past",
         brideUserName: "looking_fint555",
         artistUserName: "bob_ross333",
-        serviceID: "some string other"
+        serviceID: "a"
 
     },
     {
-        bookingID: "some string",
+        bookingID: "e",
         bookingStartDate: "01/02/2022",
         bookingDuration: "1 hour",
         bookingLocation: "ringwood",
@@ -79,11 +80,11 @@ const bookingMock = [
         bookingStatus: "past",
         brideUserName: "looking_fint555",
         artistUserName: "bob_ross333",
-        serviceID: "serving"
+        serviceID: "b"
 
     },
     {
-        bookingID: "some string",
+        bookingID: "f",
         bookingStartDate: "01/02/2022",
         bookingDuration: "1 hour",
         bookingLocation: "ringwood",
@@ -91,17 +92,17 @@ const bookingMock = [
         bookingStatus: "archived",
         brideUserName: "looking_fint555",
         artistUserName: "bob_ross333",
-        serviceID: "serving"
+        serviceID: "c"
 
     }
 
 ]
+
+// grouping the bookings into their status
 let confirmedBookings = [];
 let pendingBookings = [];
 let pastBookings = [];
 let archivedBookings = [];
-
-// Loop through the bookingMock array and separate bookings based on status
 for (let booking of bookingMock) {
     switch (booking.bookingStatus) {
         case "confirmed":
@@ -122,11 +123,8 @@ for (let booking of bookingMock) {
     }
 }
 
-console.log(confirmedBookings[0].bookingID)
-
-
 /**
- * Page of a list of Artist cards for users to see
+ * The brides profile, with the profile display, settings button, and booking tabs
  */
 export const BridePage = () => {
     return (
@@ -141,15 +139,13 @@ export const BridePage = () => {
                         <Button className="word-icon-button">
                             <span>Settings</span>
                             <span><Cog8ToothIcon className="icon-base" /></span>
-                            </Button>
+                        </Button>
                 </div>
             </div>
-        
+            {/* booking tab */}
             <div className='booking-tab'>
                 <BookingTab confirm={confirmedBookings} pending={pendingBookings} past={pastBookings} archived={archivedBookings}></BookingTab>
             </div>
-
-
         </WhiteBackground>
     );
 };

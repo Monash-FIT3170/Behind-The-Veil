@@ -1,7 +1,7 @@
 /**
- * File Description: Tabs examples
+ * File Description: Tab for brides profile page
  * File version: 1.0
- * Contributors: Josh
+ * Contributors: Katie
  */
 
 import React from "react";
@@ -16,51 +16,51 @@ import {CurrencyDollarIcon, ArrowPathIcon, PencilSquareIcon, DocumentMagnifyingG
 </svg>
 
 /**
- * Examples of simple tabs. Tabs component uses headless UI: https://headlessui.com/react/tabs
+ * this tab displays bookings, grouping bookings into status  
  */
 const BookingTab = ({confirm, pending, past, archived}) => {
+    // icons
     const statusIconConfirm = <CurrencyDollarIcon className="icon-base"/>
     const statusIconPending = <ArrowPathIcon className="icon-base"/>
     const statusIconPast = <PencilSquareIcon className="icon-base"/>
     const statusIconReviewed = <DocumentMagnifyingGlassIcon className="icon-base"/>
-    const statusIconArchived = ""
+    const statusTextConfirm = <CheckIcon className="icon-base w-5 h-5"/>
+    const statusTextPending = <ClockIcon className="icon-base w-5 h-5"/>
+    const statusTextPast = <SparklesIcon className="icon-base w-5 h-5"/>
+    const statusTextArchived = <XMarkIcon className="icon-base w-5 h-5"/>
+    
+    // button style
+    const buttonStyle = "col-span-2 flex flex-row gap-x-2 justify-center items-center w-4/5 lg:w-1/2 min-w-60 bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500"
 
-
-    console.log(archived[0])
+    // the different formattind of the cards, depending on their status
     const statusConfirm = {
         status: "Confirmed",
-        statusIcon: <CheckIcon className="icon-base w-5 h-5"/>,
+        statusIcon: statusTextConfirm,
         statusStyle: "flex flex-row gap-x-2 items-centers w-4/5 lg:w-1/2 min-w-60 text-sm text-green-400 pt-1",
-        buttonIcon: statusIconConfirm,
-        buttonText: "Service Completed"
+        button: <Button className={buttonStyle} onClick={() => navigateTo('/service/' + serviceId)}>{statusIconConfirm}Service Completed</Button>
     }
     const statusPending = {
         status: "Awaiting Artist Confirmation",
-        statusIcon: <ClockIcon className="icon-base w-5 h-5"/>,
+        statusIcon: statusTextPending,
         statusStyle: "flex flex-row gap-x-2 items-centers w-4/5 lg:w-1/2 min-w-60 text-sm text-indigo-400 pt-1",
+        button: <Button className={buttonStyle} onClick={() => navigateTo('/service/' + serviceId)}>{statusIconPending}Request Change</Button>
 
-        buttonIcon: statusIconPending,
-        buttonText: "Request Change"
     }
     const statusPast = {
         status: "Completed",
-        statusIcon: <SparklesIcon className="icon-base w-5 h-5"/>,
+        statusIcon: statusTextPast,
         statusStyle: "flex flex-row gap-x-2 items-centers w-4/5 lg:w-1/2 min-w-60 text-sm text-green-400 pt-1",
+        button: <Button className={buttonStyle} onClick={() => navigateTo('/service/' + serviceId)}>{statusIconPast}Leave Review</Button>
 
-        buttonIcon: statusIconPast,
-        buttonText: "Leave Review"
     }
     const statusArchived = {
         status: "Cancelled",
-        statusIcon: <XMarkIcon className="icon-base w-5 h-5"/>,
+        statusIcon: statusTextArchived,
         statusStyle: "flex flex-row gap-x-2 items-centers w-4/5 lg:w-1/2 min-w-60 text-sm text-red-500 pt-1",
-
-        buttonIcon: "",
-        buttonText: ""
+        button: ""
     }
 
     
-    // console.log(archived[0].bookingID)
     const confirmBookingPanel = (
         <ul className="p-4 flex gap-4 block">
             <li className="w-full">
