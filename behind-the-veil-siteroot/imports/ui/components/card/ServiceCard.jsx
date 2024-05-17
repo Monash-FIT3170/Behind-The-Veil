@@ -34,12 +34,25 @@ export const ServiceCard = ({
                                 serviceImageData,
                                 artistUsername,
                                 artistAlias,
+                                isEdit,
                             }) => {
 
     // variables to handle routing
     const navigateTo = useNavigate();
 
     const classes = classNames(className, "flex flex-col justify-between w-full min-w-60 lg:w-2/5 lg:min-w-78 min-h-56");
+    
+    var viewOrEditButton;
+    var buttonClasses;
+
+    const buttonBaseClasses = "flex flex-row gap-x-2 justify-center items-center w-4/5 lg:w-1/2 min-w-40 transition duration-500";
+    if (isEdit) {
+        viewOrEditButton = "Edit Service";
+        buttonClasses = classNames("bg-light-grey hover:bg-light-grey-hover", buttonBaseClasses);
+    } else {
+        viewOrEditButton = "View Service";
+        buttonClasses = classNames("bg-secondary-purple hover:bg-secondary-purple-hover", buttonBaseClasses);
+    }
 
     return (
         <Card className={classes}>
@@ -70,11 +83,10 @@ export const ServiceCard = ({
                 </div>
 
                 {/* button to specific booking detail page*/}
-                <Button className="flex flex-row gap-x-2 justify-center items-center w-4/5 lg:w-1/2 min-w-40
-                bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500"
+                <Button className={buttonClasses}
                         onClick={() => navigateTo('/services/' + serviceId)}>
                     <CalendarDaysIcon className="icon-base"/>
-                    View Service
+                    {viewOrEditButton}
                 </Button>
             </div>
         </Card>
