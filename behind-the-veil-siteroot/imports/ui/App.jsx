@@ -13,6 +13,7 @@ import MessagesPage from "./components/pages/messages/MessagesPage.jsx";
 import LoginPage from "./components/pages/login/LoginPage.jsx";
 import RegisterPage from "./components/pages/register/RegisterPage.jsx";
 import RequestBooking from "./components/pages/request-booking/RequestBooking.jsx";
+import PaymentDetails from "./components/pages/request-booking/PaymentDetails";
 import SpecificServicePage from "./components/pages/service/SpecificServicePage.jsx";
 import ArtistServiceArea from "./components/pages/artist/ArtistServiceArea.jsx";
 import ArtistProfilePage from "./components/pages/profile/ArtistProfilePage.jsx";
@@ -112,7 +113,7 @@ export const App = () => (
                     <Route path="/request-booking" element={<RequestBooking/>}/>
                     <Route path="/cancel-booking" element={<CancelBooking/>}/>
                     <Route path="/booking-summary" element={<BookingSummary/>}/>
-
+                    <Route path="/payment-details" element={<PaymentDetails/>}/>
                 </Routes>
             </main>
         </Router>
