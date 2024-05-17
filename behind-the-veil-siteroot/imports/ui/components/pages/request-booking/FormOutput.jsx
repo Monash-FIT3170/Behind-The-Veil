@@ -30,7 +30,7 @@ const FormOutput = ({ label, input, textColor, haveHelpText, tipText}) => {
                 <span className="content-center ml-2">
                     <Tippy
                         render={attrs => (
-                            <div className="box border border-main-blue rounded-lg mt-1 px-4 py-2 bg-glass-panel-background shadow-lg w-80" tabIndex="-1" {...attrs}>
+                            <div className="box border border-main-blue rounded-lg mt-1 px-4 py-2 white-glass-base shadow-lg w-80" tabIndex="-1" {...attrs}>
                                 {tipText}
                             </div>
                         )}>

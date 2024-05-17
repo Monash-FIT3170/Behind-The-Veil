@@ -58,8 +58,7 @@ export const BookingCard = ({
                         <div className="medium-text text-dark-grey max-w-full break-all line-clamp-1 mb-3 ml-auto">
                             ${servicePrice}</div>
                     </div>
-                    <div className="small-text text-dark-grey max-h-[10rem] max-w-full line-clamp-4 mb-3 break-words"
-                         style={{"wordBreak": "break-word"}}>
+                    <div className="small-text text-dark-grey max-h-[10rem] max-w-full line-clamp-4 mb-3 break-words">
                         {serviceDesc}</div>
 
                     {/*This is the buttons area on the bottom*/}

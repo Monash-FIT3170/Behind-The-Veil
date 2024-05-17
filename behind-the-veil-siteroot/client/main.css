@@ -19,7 +19,10 @@
         box-sizing: border-box;
         padding: 0;
         margin: 0;
+        /* this attribute makes sure by default words break at a space, excessively long words can break the middle */
+        word-break: break-word;
     }
+
     *:focus {
         @apply outline-secondary-purple-hover;
     }
@@ -132,7 +135,8 @@ on a case by case basis within individual JSX components.
     /*used for ALL cards and background (basically anything that is a background and is white, use this)*/
     .white-glass-base {
         @apply rounded-3xl bg-white bg-opacity-90 backdrop-blur-lg /*style of the div*/
-        flex flex-col gap-5; /*consistent styling for inside the div*/
+        flex flex-col gap-5;
+        /*consistent styling for inside the div*/
     }
 
     .card-base {

@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import FormOutput from "./FormOutput";
 import { addHours, format, enAU } from "date-fns";
+import PreviousButton from "../../button/PreviousButton";
 
 /**
  * Component for displaying booking summary and allowing continuation to the next step.
@@ -78,12 +79,10 @@ const BookingSummary = () => {
     return (
         <WhiteBackground>
             {/* Back button */}
-            <Button className="bg-transparent text-dark-grey flex gap-2" onClick={() => navigateTo('/request-booking')}>
-                <ArrowLeftIcon className="size-6" />
-                Back
-            </Button>
+            <PreviousButton/>
+
             {/* Booking summary */}
-            <div className="flex flex-col gap-6 xl:px-40">
+            <div className="flex flex-col gap-6 md:px-20 lg:px-40">
                 <div className="large-text">Booking Summary</div>
                 {/* Display booking details */}
                 {Object.keys(queryData()).map((key, index) => {
@@ -94,7 +93,7 @@ const BookingSummary = () => {
                     return <FormOutput key={index} textColor="text-dark-grey" haveHelpText={false} label={key} input={value}></FormOutput>;
                 })}
                 {/* Display deposit required */}
-                <FormOutput className='deposit-input' key={queryData().length} label='Deposit Required' input='$60.00' textColor="text-cancelled-colour" haveHelpText={true} tipText={tipText} />
+                <FormOutput className='deposit-input' key={queryData().length} label='Deposit Required' input='$120.00' textColor="text-cancelled-colour" haveHelpText={true} tipText={tipText} />
                 <br />
                 {/* Continue button */}
                 <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2" type="submit" onClick={handleSubmit}>

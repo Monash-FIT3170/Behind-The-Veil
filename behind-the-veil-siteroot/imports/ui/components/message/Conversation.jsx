@@ -54,7 +54,7 @@ export const Conversation = ({user}) => {
                     {messages.map((message, index) => (
                         <div key={index} className="flex justify-end">
                             <Card className={`my-2 rounded-3xl max-w-[80%] h-auto overflow-hidden ${message.sender === 'me' ? ' bg-main-blue' : 'bg-light-grey'}`}>
-                                <div className="whitespace-pre-wrap">{message.text.replace(/(.{5})/g, "$1\u200B")}</div>
+                                <div>{message.text}</div>
                             </Card>
                         </div>
                     ))}

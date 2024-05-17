@@ -1,7 +1,7 @@
 /**
  * File Description: Payment details page
- * File version: 1.0
- * Contributors: Neth
+ * File version: 1.1
+ * Contributors: Neth, Nikki
  */
 
 import React, {useId, useState} from "react";
@@ -14,6 +14,7 @@ import BackButton from "../../button/BackButton";
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 import {useNavigate} from "react-router-dom";
+import PreviousButton from "../../button/PreviousButton";
 
 /**
  * Component for handling payment details.
@@ -56,9 +57,9 @@ const PaymentDetails = () => {
     const onCloseModal = () => setOpen(false);
 
     const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setInputs({ ...inputs, [name]: value });
-        setErrors({ ...errors, [name]: "" }); // Clear error message for the corresponding input field
+        const {name, value} = event.target;
+        setInputs({...inputs, [name]: value});
+        setErrors({...errors, [name]: ""}); // Clear error message for the corresponding input field
     }
 
     // Handler for payment confirmation
@@ -71,7 +72,7 @@ const PaymentDetails = () => {
         Object.keys(inputs).forEach((key, index) => {
             // TODO: CHECK VALIDITY might use Square API
             if (!inputs[key].trim()) {
-                newErrors[key] = `Please input valid ${errorMsg[index]}.`;
+                newErrors[key] = `Please input a valid ${errorMsg[index]}`;
                 isError = true;
             }
         });
@@ -91,14 +92,16 @@ const PaymentDetails = () => {
 
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-            <BackButton />
-            <div className="flex flex-col gap-4 xl:px-40">
+            <PreviousButton/>
+            <div className="flex flex-col gap-4 md:px-40">
                 <div className="large-text">Payment Details</div>
-                <form className="w-[50%]" onSubmit={paymentConfirmation}>
+                <form className="w-full md:w-full lg:w-2/3 xl:w-1/2" onSubmit={paymentConfirmation}>
                     <div className="flex flex-col gap-4">
                         <div className="flex flex-col gap-1">
-                            <label htmlFor={cardNumberId} className="main-text text-our-black">Card Number</label>
+
                             <Input
+                                label={<label htmlFor={cardNumberId}
+                                              className="main-text text-our-black">Card Number</label>}
                                 id={cardNumberId}
                                 placeholder="Enter Card Number"
                                 name="cardNumber"
@@ -108,8 +111,10 @@ const PaymentDetails = () => {
                             {errors.cardNumber && <span className="text-cancelled-colour">{errors.cardNumber}</span>}
                         </div>
                         <div className="flex flex-col gap-1">
-                            <label htmlFor={cardNameId} className="main-text text-our-black">Card Name</label>
+
                             <Input
+                                label={<label htmlFor={cardNameId}
+                                              className="main-text text-our-black">Card Name</label>}
                                 id={cardNameId}
                                 placeholder="Enter Card Holder Name"
                                 name="cardName"
@@ -118,34 +123,41 @@ const PaymentDetails = () => {
                             />
                             {errors.cardName && <span className="text-cancelled-colour">{errors.cardName}</span>}
                         </div>
-                        <div className="flex flex-col md:flex-row gap-5">
+                        <div className="flex flex-col md:flex-row justify-between md:justify-start gap-5">
+
                             <div className="flex flex-col gap-1">
-                                <label htmlFor={expDateId} className="main-text text-our-black">Exp. Date</label>
                                 <Input
+                                    label={<label htmlFor={expDateId}
+                                                  className="main-text text-our-black">Exp. Date</label>}
+                                    className={"w-1/2 md:w-full"}
                                     id={expDateId}
                                     placeholder="MM/YY"
                                     name="expDate"
                                     value={inputs.expDate}
                                     onChange={handleInputChange}
                                 />
-                                {errors.expDate && <span className="text-cancelled-colour">{errors.expDate}</span>}
+                                {errors.expDate &&
+                                    <span className="text-cancelled-colour w-full">{errors.expDate}</span>}
                             </div>
+
                             <div className="flex flex-col gap-1">
-                                <label htmlFor={cvvId} className="main-text text-our-black">CVV</label>
                                 <Input
+                                    label={<label htmlFor={cvvId}
+                                                  className="main-text text-our-black">CVV</label>}
+                                    className={"w-1/2 md:w-full"}
                                     id={cvvId}
                                     placeholder="Enter CVV"
                                     name="cvv"
                                     value={inputs.cvv}
                                     onChange={handleInputChange}
                                 />
-                                {errors.cvv && <span className="text-cancelled-colour">{errors.cvv}</span>}
+                                {errors.cvv && <span className="text-cancelled-colour w-full">{errors.cvv}</span>}
                             </div>
                         </div>
                         <Button
                             className="mt-8 bg-secondary-purple hover:bg-secondary-purple-hover ps-[50px] pe-[50px] flex gap-1"
                             type="submit">
-                            <CurrencyDollarIcon className="icon-base" />
+                            <CurrencyDollarIcon className="icon-base"/>
                             Pay
                         </Button>
                         <Modal classNames={{
