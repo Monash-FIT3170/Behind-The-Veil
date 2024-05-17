@@ -122,9 +122,8 @@ const RequestBooking = () => {
 
   // form related functions
   const handleInputChange = (event) => {
-    const name = event.target.name;
     const value = event.target.value;
-    setInputs((i) => ({ ...i, [name]: value }));
+    setInputs((i) => ({ ...i, location: value }));
   };
 
   const handleSubmit = (event) => {
@@ -197,13 +196,13 @@ const RequestBooking = () => {
               <AddressAutofill accessToken="pk.eyJ1IjoibWFzdGVyY2hpZWYwIiwiYSI6ImNsdzdtMXAyZzBtdWgyc280Z2wycHlzZXEifQ.X3CmBWszdI4h1y0vri5KsA">
                 <Input
                   id={locationInputId}
+                  className="input mb12"
                   placeholder="Input location for service: wedding venue, address, ..."
                   name="location"
-                  //value={inputs.location || ""}
-                  onChange={handleInputChange}
-                  className="input mb12"
                   autoComplete="address-line1"
-                />
+                  value={inputs.location}
+                  onChange={handleInputChange}
+                 />
               </AddressAutofill>
 
             {/* date/time */}
