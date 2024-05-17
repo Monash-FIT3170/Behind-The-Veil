@@ -16,6 +16,7 @@ import { addHours, format, enAU } from "date-fns";
  * Component for displaying booking summary and allowing continuation to the next step.
  */
 const BookingSummary = () => {
+
     const tipText = "Full deposit for a service is required. If the booking is cancelled or rejected, the full fee will be refunded.";
     /**
      * Function to calculate start and end dates based on input dateTime and service duration.
@@ -68,8 +69,7 @@ const BookingSummary = () => {
     const handleSubmit = () => {
         // pass the data to the next page via the url
         const query = new URLSearchParams(queryData()).toString();
-        console.log(query)
-        // TODO: Navigate to payment page
+        navigateTo(`/payment-details?${query}`);
     }
 
     // Navigate hook for redirecting to another page
