@@ -1,5 +1,5 @@
 /**
- * File Description: Services page
+ * File Description: Specific Services page
  * File version: 1.0
  * Contributors: Nhu
  */
