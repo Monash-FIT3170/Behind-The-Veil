@@ -5,6 +5,13 @@
  */
 
 import React, {useState} from 'react';
+import {useSubscribe, useTracker} from "meteor/react-meteor-data"
+import {resetDatabase} from 'meteor/xolvio:cleaner';
+import { Meteor } from 'meteor/meteor';
+
+import ChatCollection from "/imports/api/collections/chat";
+import MessageCollection from "/imports/api/collections/message";
+
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Conversation from '../../message/Conversation';
@@ -45,6 +52,48 @@ export const MessagesPage = () => {
         console.log("hello from the messages page");
     };
     const newMsgPreviewsComponents = users.map((user, index) => <MessagesPreview key = {index} data = {user} onClick={() => handlePreviewClick(index)}></MessagesPreview>);
+
+    // Working with the database for messages and chats
+    // Get the logged in user's username
+    // const user = Meteor.users.findOne(this.userId);
+    // if (!user) {
+    //     return this.ready();
+    // }
+    // const username = user.username;
+
+    const loggedInUser = "loggedIn"
+    const chat1User = "annie"
+    const chat2User = "mikasa"
+    resetDatabase(); // Clear the collection before each test
+    const handleAddChat = (brideUser, artistUser, chatId) => {
+        Meteor.call('add_chat', brideUser, artistUser, chatId, (error, result) => {
+            if (error) {
+                console.error('Error adding chat:', error);
+            } else {
+                console.log('Chat added with ID:', result);
+                // Handle successful chat creation (e.g., updating the UI or state)
+                console.log('Chat with user: ', brideUser);
+            }
+        });
+    };
+    handleAddChat(chat1User, loggedInUser, '1');
+    handleAddChat(chat1User, loggedInUser, '2');
+
+
+
+
+    // set up subscription (publication is in the "publication" folder)
+    const isLoadingChats = useSubscribe('all_user_chats', 'dummyUserName');
+    // get chat data associated with the user from db
+    let chatsData = useTracker(() => {return ChatCollection.find().fetch();});
+    // for each chat, subscribe to the messages
+    for (let i = 0; i < chatsData.length; i++) {
+        useSubscribe('all_chat_messages', chatsData[i].chatId);
+    }
+    // get the message data associated with each chat
+    let messagesData = useTracker(() => {return MessageCollection.find().fetch();});
+    console.log(chatsData);
+
     return (
         // if window size is SMALLER than a medium screen (default variable for medium in tailwind sm:768px),
         // then have the contacts/list of people on separate screens than the conversation

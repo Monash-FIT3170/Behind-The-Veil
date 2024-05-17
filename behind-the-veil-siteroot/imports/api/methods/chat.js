@@ -3,6 +3,7 @@
  * File version: 1.0
  * Contributors: Vicky
  */
+import { Meteor } from 'meteor/meteor';
 import {ChatCollection} from "../collections/chat";
 
 Meteor.methods({
@@ -31,16 +32,4 @@ Meteor.methods({
             {_id: chatId},
         )
     },
-
-    /**
-     * Adds a message instance to a chat instance in the database.
-     * @param {string} chatId - The ID of the chat to update.
-     * @param {object} updateObject - Field and value object of elements that need to be upgraded
-     */
-    "add_message_to_chat": function (chatId, updateObject) {
-        ChatCollection.update(
-            { _id: chatId },
-            { $set: updateObject},
-        );
-    }
 })
