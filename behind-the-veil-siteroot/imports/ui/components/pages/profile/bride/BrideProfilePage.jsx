@@ -13,7 +13,7 @@ import ProfileDisplay from '../../../profilePhoto/ProfileDisplay.jsx';
 import {Tracker} from "meteor/tracker";
 import {Meteor} from "meteor/meteor";
 import Tabs from "../../../tabs/Tabs";
-import {BookingStatus} from "../../../../enums/BookingStatus";
+import BookingStatus from "../../../../enums/BookingStatus";
 import BookingCard from "../../../card/BookingCard";
 import BookingListView from "../../../booking/BookingListView";
 

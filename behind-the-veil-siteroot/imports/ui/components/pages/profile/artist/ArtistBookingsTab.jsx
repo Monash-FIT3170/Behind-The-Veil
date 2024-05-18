@@ -9,8 +9,8 @@ import {PlusIcon,} from "@heroicons/react/24/outline";
 
 import Button from "../../../button/Button";
 import BookingCard from "../../../card/BookingCard";
-import {BookingStatus} from "../../../../enums/BookingStatus";
-import {BookingFilter} from "../../../../enums/ArtistBookingsFilter";
+import BookingStatus from "../../../../enums/BookingStatus";
+import BookingFilter from "../../../../enums/ArtistBookingsFilter";
 import BookingListView from "../../../booking/BookingListView";
 
 

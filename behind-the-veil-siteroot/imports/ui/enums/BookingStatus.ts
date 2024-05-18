@@ -12,3 +12,5 @@ export enum BookingStatus {
   COMPLETED = 'completed',
   OVERDUE = 'overdue'
 }
+
+export default BookingStatus;

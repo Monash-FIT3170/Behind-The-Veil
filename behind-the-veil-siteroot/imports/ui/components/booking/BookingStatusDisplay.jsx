@@ -9,7 +9,7 @@ import {CheckIcon, ClockIcon, SparklesIcon, XMarkIcon} from "@heroicons/react/24
 import Tippy from '@tippyjs/react/headless';
 import QuestionMarkCircleIcon from "@heroicons/react/16/solid/QuestionMarkCircleIcon";
 
-import {BookingStatus} from "../../enums/BookingStatus";
+import BookingStatus from "../../enums/BookingStatus";
 
 /**
  * Booking status display component with a tool tip popup

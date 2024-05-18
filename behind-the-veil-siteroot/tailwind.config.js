@@ -24,7 +24,6 @@ module.exports = {
         "cancelled-colour": "#D33B3B",
         "bg-gradient-start": "#BBCAFE",
         "bg-gradient-end": "#E5D6FF",
-        "glass-panel-background": "rgba(255, 255, 255, 0.90)",
       },
     },
     plugins: [require("@headlessui/tailwindcss")]

@@ -30,7 +30,7 @@ import {
     startOfDay,
     startOfHour
 } from "date-fns";
-import {BookingStatus} from "../../../enums/BookingStatus.ts";
+import BookingStatus from "../../../enums/BookingStatus.ts";
 import {useNavigate} from "react-router-dom";
 
 /**

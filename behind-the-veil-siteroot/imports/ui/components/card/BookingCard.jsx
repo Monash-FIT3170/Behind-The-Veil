@@ -16,7 +16,7 @@ import {
     DocumentMagnifyingGlassIcon,
     PencilSquareIcon,
 } from "@heroicons/react/24/outline"
-import {BookingStatus} from "../../enums/BookingStatus";
+import BookingStatus from "../../enums/BookingStatus";
 import BookingStatusDisplay from "../booking/BookingStatusDisplay";
 
 
