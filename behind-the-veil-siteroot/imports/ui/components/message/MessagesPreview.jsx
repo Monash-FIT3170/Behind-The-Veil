@@ -8,9 +8,13 @@ import Card from "../card/Card";
 import ProfilePhoto from '../profilePhoto/ProfilePhoto';
 
 const MessagesPreview = (props) => {
-    const {userName, name, recentMessage, image, date, read} = props.data;
+    const {name, profilePic, messages, userName} = props.data;
+    const onClick = props.onClick;
+    const recentMessageObj = messages[messages.length - 1];
+    const read = recentMessageObj.read;
+    const recentMessage = recentMessageObj.text;
     return (
-        <Card className="flex flex-row justify-center items-center w-full h-full border-none lg:flex-center">
+        <Card className="flex flex-row justify-center items-center w-full h-full border-none lg:flex-center cursor-pointer" onClick={onClick}>
             {/* Only show the profile photo on small screens */}
             <div className="lg:hidden">
                 <ProfilePhoto className="min-w-[10%] h-auto"></ProfilePhoto>

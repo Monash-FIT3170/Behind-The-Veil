@@ -4,12 +4,16 @@
  * Contributors: Nikki
  */
 
-import {Meteor} from 'meteor/meteor'
-import {ServiceCollection} from "/imports/api/collections/services";
+import { Meteor } from "meteor/meteor";
+import { ServiceCollection } from "/imports/api/collections/services";
 
 /**
  * Publishes all active services.
  */
-Meteor.publish('active_services', function() {
-    return ServiceCollection.find({"serviceActive":true});
+Meteor.publish("active_services", function () {
+    return ServiceCollection.find({ serviceActive: true });
+});
+
+Meteor.publish("all_services", function () {
+    return ServiceCollection.find();
 });

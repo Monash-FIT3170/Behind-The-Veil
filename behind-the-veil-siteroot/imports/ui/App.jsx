@@ -35,7 +35,6 @@ export const App = () => (
             <NavigationBar/>
             <main className="main-content">
                 <Routes>
-
                     {/* removed once dev is finished*/}
                     <Route path={`/${UrlBasePath.EXAMPLES}`} element={<Examples/>}/>
 
