@@ -6,25 +6,28 @@
 
 import React, {useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
+import ServiceCollection from "../../../../api/collections/services";
+import UserCollection from "../../../../api/collections/users";
+import ImageCollection from "../../../../api/collections/images";
+import {useSubscribe, useTracker} from "meteor/react-meteor-data";
 import {CalendarDaysIcon, ChevronLeftIcon, ChevronRightIcon, Squares2X2Icon} from "@heroicons/react/24/outline";
 
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
-import {useSubscribe, useTracker} from "meteor/react-meteor-data";
-import ServiceCollection from "../../../../api/collections/services";
-import UserCollection from "../../../../api/collections/users";
-import ImageCollection from "../../../../api/collections/images";
 import Loader from "../../loader/Loader";
 import Card from "../../card/Card";
 import FormOutput from "../request-booking/FormOutput";
 import PreviousButton from "../../button/PreviousButton";
 
 /**
- *
+ * Displays a page for a specific service
  */
 const SpecificServicePage = () => {
 
+    const navigateTo = useNavigate();
+
+    // image carousel handler
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     const handlePrevClick = () => {
@@ -35,10 +38,7 @@ const SpecificServicePage = () => {
         setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imageUrls.length);
     };
 
-
-    const navigateTo = useNavigate();
-
-    //  grab the service ID from the URL
+    // grab the service ID from the URL
     const {serviceId} = useParams();
 
     // set up subscription and get data from db for this service
@@ -47,7 +47,6 @@ const SpecificServicePage = () => {
     let serviceData = useTracker(() => {
         return ServiceCollection.find().fetch()[0];
     });
-
 
     // grab the artist and image data depending on if service is loaded or not
     const isLoadingArtist = useSubscribe('specific_user', serviceData ? serviceData.artistUsername : "");
@@ -67,26 +66,6 @@ const SpecificServicePage = () => {
         return ImageCollection.find({"imageType": "profile"}).fetch()[0];
     });
 
-
-    console.log("artistData")
-    console.log(artistData)
-
-    console.log("imagesData")
-    console.log(serviceImagesData)
-    console.log(profileImagesData)
-
-    console.log(serviceData);
-
-    let result = null;
-
-    // Grab service details based on the id
-    const serviceDetails = {
-        serviceType: 'Bridal Makeup',
-        price: '$120',
-        duration: '2 hours',
-        description: 'Indulge in the ultimate pampering experience with our exclusive Bachelorette Makeup Service! Elevate your pre-wedding festivities with a touch of glamour and sophistication.'
-    };
-
     const imageUrls = serviceImagesData.map((image) => (
         image.imageData
     ))
@@ -94,7 +73,7 @@ const SpecificServicePage = () => {
 
     if (isLoading) {
         // is loader, display loader
-        result = (
+        return (
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
                 <Loader
                     loadingText={"loading . . ."}
@@ -105,10 +84,9 @@ const SpecificServicePage = () => {
             </WhiteBackground>
         );
 
-
     } else {
 
-        result = (
+        return (
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
                 {/* Title container for centering */}
                 <PreviousButton/>
@@ -224,7 +202,6 @@ const SpecificServicePage = () => {
             </WhiteBackground>
         );
     }
-    return result;
 };
 
 export default SpecificServicePage;

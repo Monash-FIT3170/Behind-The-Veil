@@ -66,7 +66,7 @@ export const Pagination = ({externalClassName, internalClassName, itemsPerPage, 
     useEffect(() => {
         // click on button
         navigate("#" + pageNum)
-    }, [pageNum, displayItems]);
+    }, [pageNum]);
 
     // updating the classes if received any as input
     const externClasses = classNames(externalClassName, "flex flex-col gap-y-10");

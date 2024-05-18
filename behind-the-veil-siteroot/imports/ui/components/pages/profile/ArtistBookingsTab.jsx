@@ -107,6 +107,7 @@ export const ArtistBookingsTab = () => {
 
                     return (
                         <Button
+                            keuy={filter}
                             className={className}
                             onClick={() => setSelectedFilter(filter)}>
                             {filter}
