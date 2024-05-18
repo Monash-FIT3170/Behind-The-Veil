@@ -41,7 +41,7 @@ export const ServicesPage = () => {
         return UserCollection.find({"profile.type": "artist"}).fetch();
     });
     let imagesData = useTracker(() => {
-        return ImageCollection.find().fetch();
+        return ImageCollection.find({"imageType":"service"}).fetch();
     });
 
     // manual aggregation into serviceData with its artist and images

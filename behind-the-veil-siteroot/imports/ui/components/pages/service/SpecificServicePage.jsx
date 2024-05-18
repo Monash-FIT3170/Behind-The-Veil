@@ -45,7 +45,7 @@ const SpecificServicePage = () => {
     const isLoadingService = useSubscribe('specific_service', serviceId);
 
     let serviceData = useTracker(() => {
-        return ServiceCollection.find().fetch()[0];
+        return ServiceCollection.find({"_id": serviceId}).fetch()[0];
     });
 
     // grab the artist and image data depending on if service is loaded or not
@@ -55,15 +55,21 @@ const SpecificServicePage = () => {
     const isLoading = isLoadingService() || isLoadingArtist() || isLoadingServiceImages() || isLoadingArtistProfile();
 
     let artistData = useTracker(() => {
-        return UserCollection.find().fetch()[0];
+        return UserCollection.find({username:serviceData ? serviceData.artistUsername : "" }).fetch()[0];
     });
 
     let serviceImagesData = useTracker(() => {
-        return ImageCollection.find({"imageType": "service"}).fetch();
+        return ImageCollection.find({$and: [
+                {"imageType": "service"},
+                {"target_id": serviceData ? serviceData._id : ""}
+            ]}).fetch();
     });
 
     let profileImagesData = useTracker(() => {
-        return ImageCollection.find({"imageType": "profile"}).fetch()[0];
+        return ImageCollection.find({$and: [
+                {"imageType": "profile"},
+                {"target_id": serviceData ? serviceData.artistUsername : ""}
+            ]}).fetch()[0];
     });
 
     const imageUrls = serviceImagesData.map((image) => (
