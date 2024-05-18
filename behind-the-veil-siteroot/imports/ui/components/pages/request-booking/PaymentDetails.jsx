@@ -1,4 +1,3 @@
-
 /**
  * File Description: Payment details page
  * File version: 1.0
