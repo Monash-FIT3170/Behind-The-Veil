@@ -19,6 +19,7 @@ import {CheckIcon} from "@heroicons/react/24/outline";
  */
 
 export const ArtistServiceArea = () => {
+
     const ServiceAreaPanel = (
         <div className="flex flex-col items-left justify-center gap-y-8">
             <div className="flex flex-col items-left justify-center md:flex-row md:items-center md:justify-start gap-6">

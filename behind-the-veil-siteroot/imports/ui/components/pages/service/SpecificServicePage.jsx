@@ -6,7 +6,7 @@
 
 import React, {useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {ChevronLeftIcon, ChevronRightIcon, Squares2X2Icon, CalendarDaysIcon} from "@heroicons/react/24/outline";
+import {CalendarDaysIcon, ChevronLeftIcon, ChevronRightIcon, Squares2X2Icon} from "@heroicons/react/24/outline";
 
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
@@ -79,17 +79,6 @@ const SpecificServicePage = () => {
 
     let result = null;
 
-    const loadingScreen = (
-        <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-            <Loader
-                loadingText={"loading . . ."}
-                isLoading={isLoadingService()}
-                size={100}
-                speed={1.5}
-            />
-        </WhiteBackground>
-    );
-
     // Grab service details based on the id
     const serviceDetails = {
         serviceType: 'Bridal Makeup',
@@ -101,19 +90,20 @@ const SpecificServicePage = () => {
     const imageUrls = serviceImagesData.map((image) => (
         image.imageData
     ))
-
-    // const imageUrls = [
-    //     'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    //     'https://cdn.britannica.com/98/94698-050-F64C03A6/African-savanna-elephant.jpg',
-    //     'https://images.pexels.com/photos/128756/pexels-photo-128756.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
-    // ];
-
     const durationTip = "Duration does not include travel. It is the required time to performing the service for the bride.";
-
 
     if (isLoading) {
         // is loader, display loader
-        result = loadingScreen;
+        result = (
+            <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
+                <Loader
+                    loadingText={"loading . . ."}
+                    isLoading={isLoadingService()}
+                    size={100}
+                    speed={1.5}
+                />
+            </WhiteBackground>
+        );
 
 
     } else {
@@ -180,16 +170,14 @@ const SpecificServicePage = () => {
                                     className="sm:hidden bg-transparent hover:bg-white-hover active:bg-light-grey">
                                 <ChevronRightIcon className="size-10 stroke-[4] text-dark-grey"/>
                             </Button>
-
                         </div>
-
-
                     </div>
 
                     {/* Right side - User Info and Details */}
                     <div className="flex flex-col gap-y-10 items-center justify-center">
                         {/* User Info Container */}
-                        <Card className="flex flex-row items-center justify-center space-x-2 w-fit sm:min-w-[450px] rounded-2xl">
+                        <Card
+                            className="flex flex-row items-center justify-center space-x-2 w-fit sm:min-w-[450px] rounded-2xl">
                             <img src={profileImagesData.imageData} alt="Artist profile image"
                                  className="rounded-[10px] object-cover size-24"/>
 
@@ -201,16 +189,14 @@ const SpecificServicePage = () => {
                                         className="medium-text text-dark-grey line-clamp-1"> @{artistData.username}</span>
                                 </div>
 
-                                    <Button
-                                        className="flex flex-row gap-2 min-w-40 w-full justify-center items-center mt-2"
-                                        onClick={() => navigateTo('/artists/' + artistData.username)}>
-                                        {/*this is the BRIDE's view of the artist, not the artist profile*/}
-                                        <Squares2X2Icon className={"icon-base"}/>
-                                        All services
-                                    </Button>
-                                </div>
-
-
+                                <Button
+                                    className="flex flex-row gap-2 min-w-40 w-full justify-center items-center mt-2"
+                                    onClick={() => navigateTo('/artists/' + artistData.username)}>
+                                    {/*this is the BRIDE's view of the artist, not the artist profile*/}
+                                    <Squares2X2Icon className={"icon-base"}/>
+                                    All services
+                                </Button>
+                            </div>
                         </Card>
 
                         {/* Service Details */}
@@ -218,20 +204,20 @@ const SpecificServicePage = () => {
                             <FormOutput textColor="text-dark-grey" haveHelpText={false} label={"Service Type:"}
                                         input={serviceData.serviceType}></FormOutput>
                             <FormOutput textColor="text-dark-grey" haveHelpText={false} label={"Price:"}
-                                        input={serviceData.servicePrice}></FormOutput>
+                                        input={"$" + serviceData.servicePrice}></FormOutput>
                             <FormOutput textColor="text-dark-grey" haveHelpText={true} tipText={durationTip}
-                                        label={"Duration:"} input={serviceDetails.duration}>hours</FormOutput>
+                                        label={"Duration:"} input={serviceData.serviceDuration + " hours"}></FormOutput>
                             <FormOutput textColor="text-dark-grey" haveHelpText={false} label={"Description:"}
                                         input={serviceData.serviceDesc}></FormOutput>
 
                         </div>
 
-                            <Button className="flex flex-row gap-x-2 justify-center items-center w-4/5 sm:w-1/3 min-w-60
+                        <Button className="flex flex-row gap-x-2 justify-center items-center w-4/5 sm:w-1/3 min-w-60
                             bg-secondary-purple hover:bg-secondary-purple-hover"
-                                    onClick={() => navigateTo('/services/' + serviceId + '/request-booking')}>
-                                <CalendarDaysIcon className="icon-base"/>
-                                Request Booking
-                            </Button>
+                                onClick={() => navigateTo('/services/' + serviceId + '/request-booking')}>
+                            <CalendarDaysIcon className="icon-base"/>
+                            Request Booking
+                        </Button>
                     </div>
                 </div>
 
