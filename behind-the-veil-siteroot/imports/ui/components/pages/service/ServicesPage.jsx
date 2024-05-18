@@ -69,7 +69,6 @@ export const ServicesPage = () => {
 
     console.log(combined)
 
-
     const displayedServicesJsx = combined.map((service) => (<ServiceCard
         key={service._id}
         serviceId={service._id}

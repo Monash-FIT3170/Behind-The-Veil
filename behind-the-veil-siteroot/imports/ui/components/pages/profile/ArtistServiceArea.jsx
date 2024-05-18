@@ -56,10 +56,9 @@ export const ArtistServiceArea = () => {
 
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
+            <BackButton/>
             <div className="flex flex-row flex-nowrap items-center">
-                <BackButton/>
-                <div className="title-text text-center grow">Settings</div>
-                <BackButton className={"invisible"}/>
+                <div className="title-text text-center sm:-mt-10 mb-5 grow">Settings</div>
             </div>
             <Tabs
                 tabs={["Payment Details", "Change Password", "Service Area"]}

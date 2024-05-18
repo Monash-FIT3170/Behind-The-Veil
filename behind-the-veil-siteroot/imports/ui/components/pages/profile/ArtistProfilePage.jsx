@@ -18,11 +18,14 @@ import ArtistGalleryTab from "./ArtistGalleryTab";
 import ArtistBookingsTab from "./ArtistBookingsTab";
 import {Tracker} from "meteor/tracker";
 import {Meteor} from "meteor/meteor";
+import {useNavigate} from "react-router-dom";
 
 /**
  * Page for artist profile
  */
 export const ArtistProfilePage = () => {
+
+    const navigate = useNavigate();
 
     // get current user information
     const [userInfo, setUserInfo] = useState(
@@ -47,7 +50,6 @@ export const ArtistProfilePage = () => {
                     }
                 )
             }
-
         }
     })
 
@@ -63,7 +65,7 @@ export const ArtistProfilePage = () => {
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
             {/*Settings buttons*/}
             <div className="flex items-center justify-end w-full ">
-                <Button
+                <Button onClick={() => {navigate('/artist-profile/'+ userInfo.username +'/service-area')}}
                     className="flex flex-row justify-center items-center gap-x-1.5 sm:w-36">
                     {gearIcon}
                     <span className={"hidden sm:flex"}>
@@ -95,7 +97,7 @@ export const ArtistProfilePage = () => {
                     <ArtistGalleryTab key={"gallery"}/>,
                     <span key={"my-services"}>review tab</span>
                 ]}
-                tabsClassName="flex justify-between"
+                tabsClassName="md:flex md:justify-between"
             />
         </WhiteBackground>
     );

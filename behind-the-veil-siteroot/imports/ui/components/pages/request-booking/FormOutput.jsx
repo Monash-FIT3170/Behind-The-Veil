@@ -19,7 +19,7 @@ import Tippy from '@tippyjs/react/headless';
  */
 const FormOutput = ({ label, input, textColor, haveHelpText, tipText}) => {
     return (
-        <div className="flex text">
+        <div className="flex flex-col sm:flex-row gap-y-2 text">
             <span className={`min-w-[150px] lg:w-[200px] ${textColor} font-semibold`}>
                 {label}
             </span>

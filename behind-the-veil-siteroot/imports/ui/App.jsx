@@ -124,9 +124,12 @@ export const App = () => (
                         }
                     />
 
+                    <Route path="/artist-profile/:username/service-area" element={<ArtistServiceArea/>}/>
+                    <Route path="/services/:serviceId/request-booking" element={<RequestBooking/>}/>
+                    <Route path="/booking-summary" element={<BookingSummary/>}/>
+                    <Route path="/payment-details" element={<PaymentDetails/>}/>
+
                     {/* TODO: haven't implemented actual flow to get here yet */}
-                    <Route path="/service-area" element={<ArtistServiceArea/>}/>
-                    <Route path="/request-booking" element={<RequestBooking/>}/>
                     <Route path="/cancel-booking" element={<CancelBooking/>}/>
                     <Route path="/booking-summary" element={<BookingSummary/>}/>
                     <Route path="/payment-details" element={<PaymentDetails/>}/>

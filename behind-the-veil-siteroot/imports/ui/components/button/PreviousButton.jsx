@@ -20,7 +20,7 @@ import {ChevronLeftIcon} from "@heroicons/react/24/outline";
  * @param {string} to - option parameter to hard code where this button leads to
  */
 const PreviousButton = ({className, to}) => {
-    const buttonClasses = classNames("flex flex-row items-center gap-x-2 " +
+    const buttonClasses = classNames("flex flex-row items-center gap-x-2 min-w-28 " +
         "bg-transparent hover:bg-transparent hover:bg-white-hover text-dark-grey hover:text-our-black", className);
     let navigate = useNavigate();
 
