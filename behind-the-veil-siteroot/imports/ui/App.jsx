@@ -26,6 +26,7 @@ import ActivateAccountPage from "./components/pages/register/ActivateAccountPage
 import BookingSummary from "./components/pages/request-booking/BookingSummary";
 import RoutingAccess from "./enums/RoutingAccess";
 import UrlBasePath from "./enums/UrlBasePath";
+import BridePage from "./components/pages/account/BridePage.jsx"
 
 export const App = () => (
     <div>
@@ -99,11 +100,25 @@ export const App = () => (
                             <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}><MessagesPage/></ProtectedRoute>
                         }
                     />
+                    <Route
+                        path="/account"
+                        element={
+                          <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}>
+                                <BridePage/>
+                                </ProtectedRoute>
+                        }
+                    />
 
                     <Route
                         path="/artist-profile/:username"
                         element={
                             <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}><ArtistProfilePage/></ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/bride-profile/:username"
+                        element={
+                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}><BridePage/></ProtectedRoute>
                         }
                     />
 

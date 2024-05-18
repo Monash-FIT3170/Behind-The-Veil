@@ -16,7 +16,7 @@ import {UserCircleIcon} from "@heroicons/react/20/solid"
  */
 export const ProfilePhoto = ({className, artistPhotoData}) => {
     // todo change depending on actual photo data format from database
-    const classes = classNames(className, "relative h-[10vh] w-[10vh]");
+    const classes = classNames(className, "relative h-[20vh] w-[20vh]");
 
     if (artistPhotoData) {
         // if the profile image data is available

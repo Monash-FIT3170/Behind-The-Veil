@@ -190,9 +190,11 @@ export const NavigationBar = () => {
                              onClick={() => {
                                  autoCloseMenu();
                              }}
+                             
                              className={baseUrl === UrlBasePath.ARTIST_PROFILE || baseUrl === UrlBasePath.BRIDE_PROFILE ?
                                  "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3 lg:p-0" :
                                  "main-text navbar-link-inactive p-3 lg:p-0"}>
+                                    
 
                         {/*profile icon appears for horizontal menu, the word "Account" appears for vertical menu*/}
                         <span className="lg:hidden">Account</span>
