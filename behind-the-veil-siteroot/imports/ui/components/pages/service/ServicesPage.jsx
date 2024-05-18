@@ -66,8 +66,8 @@ export const ServicesPage = () => {
         }
     }
 
-    const displayedServicesJsx = servicesData.map((service) => (<ServiceCard
-        key={service._id}
+    const displayedServicesJsx = servicesData.map((service, index) => (<ServiceCard
+        key={index}
         serviceId={service._id}
         serviceName={service.serviceName}
         serviceDesc={service.serviceDesc}

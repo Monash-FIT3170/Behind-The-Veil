@@ -7,11 +7,11 @@
 import React, {useState} from 'react';
 import {PlusIcon,} from "@heroicons/react/24/outline";
 
-import Button from "../../button/Button";
-import BookingCard from "../../card/BookingCard";
-import {BookingStatus} from "../../../enums/BookingStatus";
-import {BookingFilter} from "../../../enums/ArtistBookingsFilter";
-import BookingListView from "../../booking/BookingListView";
+import Button from "../../../button/Button";
+import BookingCard from "../../../card/BookingCard";
+import {BookingStatus} from "../../../../enums/BookingStatus";
+import {BookingFilter} from "../../../../enums/ArtistBookingsFilter";
+import BookingListView from "../../../booking/BookingListView";
 
 
 /**
@@ -101,14 +101,14 @@ export const ArtistBookingsTab = ({username}) => {
         <div
             className="w-full sm:w-2/5 flex flex-wrap sm:flex-nowrap gap-5 items-center justify-center sm:justify-start">
             {
-                availableFilters.map((filter) => {
+                availableFilters.map((filter, index) => {
                     const baseStyle = "w-1/2 min-w-28 rounded-md p-2 hover:bg-secondary-purple";
                     const activeStyle = "bg-secondary-purple";
                     const className = selectedFilter === filter ? `${baseStyle} ${activeStyle}` : baseStyle;
 
                     return (
                         <Button
-                            keuy={filter}
+                            key={index}
                             className={className}
                             onClick={() => setSelectedFilter(filter)}>
                             {filter}
@@ -168,6 +168,8 @@ export const ArtistBookingsTab = ({username}) => {
                     </Button>
                 </div>
             </div>
+
+            {/*bottom tab with booking*/}
             {
                 bookingView === "list" ?
                     // rendering filtered bookings based on the applied filter

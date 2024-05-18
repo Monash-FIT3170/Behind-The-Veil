@@ -1,14 +1,14 @@
 /**
  * File Description: Booking Status enum
- * File version: 1.0
- * Contributors: Laura
+ * File version: 1.1
+ * Contributors: Laura, Nikki
  */
 
 export enum BookingStatus {
-  PENDING = 'Pending',
-  CONFIRMED = 'Confirmed',
-  REJECTED = 'Rejected',
-  CANCELLED = 'Cancelled',
-  COMPLETED = 'Completed',
-  OVERDUE = 'Overdue'
+  PENDING = 'pending',
+  CONFIRMED = 'confirmed',
+  REJECTED = 'rejected',
+  CANCELLED = 'cancelled',
+  COMPLETED = 'completed',
+  OVERDUE = 'overdue'
 }

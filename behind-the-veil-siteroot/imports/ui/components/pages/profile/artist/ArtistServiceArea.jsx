@@ -4,12 +4,12 @@
  * Contributors: Hirun, Nikki
  */
 import React from "react";
-import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
-import PageLayout from "../../../enums/PageLayout";
-import Tabs from "../../tabs/Tabs.jsx";
-import Input from "../../input/Input";
-import Button from "../../button/Button.jsx";
-import BackButton from "../../button/BackButton.jsx";
+import WhiteBackground from "../../../whiteBackground/WhiteBackground.jsx";
+import PageLayout from "../../../../enums/PageLayout";
+import Tabs from "../../../tabs/Tabs.jsx";
+import Input from "../../../input/Input";
+import Button from "../../../button/Button.jsx";
+import BackButton from "../../../button/BackButton.jsx";
 import {CheckIcon} from "@heroicons/react/24/outline";
 
 /**

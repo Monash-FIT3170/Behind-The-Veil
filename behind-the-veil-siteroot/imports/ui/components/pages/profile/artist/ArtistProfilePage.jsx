@@ -9,18 +9,18 @@ import {useNavigate} from "react-router-dom";
 import {Cog8ToothIcon, StarIcon as OutlineStarIcon,} from "@heroicons/react/24/outline";
 import {StarIcon as FilledStarIcon} from "@heroicons/react/24/solid";
 
-import Button from "../../button/Button.jsx";
-import PageLayout from "../../../enums/PageLayout.tsx";
-import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
-import Tabs from "../../tabs/Tabs.jsx";
-import ProfilePhoto from "../../profilePhoto/ProfilePhoto.jsx";
+import Button from "../../../button/Button.jsx";
+import PageLayout from "../../../../enums/PageLayout.tsx";
+import WhiteBackground from "../../../whiteBackground/WhiteBackground.jsx";
+import Tabs from "../../../tabs/Tabs.jsx";
+import ProfilePhoto from "../../../profilePhoto/ProfilePhoto.jsx";
 import ArtistDashboardTab from "./ArtistDashboardTab";
 import ArtistGalleryTab from "./ArtistGalleryTab";
 import ArtistBookingsTab from "./ArtistBookingsTab";
 import {Tracker} from "meteor/tracker";
 import {Meteor} from "meteor/meteor";
 import ArtistServicesTab from "./ArtistServicesTab";
-import ProfileDisplay from "../../profilePhoto/ProfileDisplay";
+import ProfileDisplay from "../../../profilePhoto/ProfileDisplay";
 
 /**
  * Page for artist profile
@@ -57,7 +57,6 @@ export const ArtistProfilePage = () => {
 
     //import gearIcon from heroicons for "settings" button.
     const gearIcon = <Cog8ToothIcon className="icon-base"/>;
-
     const outlineStarIcon = <OutlineStarIcon className="size-20 stroke-1"/>;
     const solidStarIcon = <FilledStarIcon className="size-20 stroke-1"/>;
     const smallSolidStarIcon = <FilledStarIcon className="size-10 stroke-1"/>;

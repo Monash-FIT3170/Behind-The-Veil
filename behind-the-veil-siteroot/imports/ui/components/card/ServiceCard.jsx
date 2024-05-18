@@ -99,7 +99,7 @@ export const ServiceCard = ({
             <div className="flex flex-col lg:flex-row gap-5 justify-center items-center">
                 <div className="border-2 border-dashed border-dark-grey py-2 px-4 rounded-full w-4/5 lg:w-1/4 min-w-32
                 flex items-center justify-center">
-                    <label className="main-text font-bold text-our-black line-clamp-1">${servicePrice}</label>
+                    <label className="main-text font-bold text-our-black line-clamp-1">${servicePrice.toFixed(2)}</label>
                 </div>
 
                 {/* button to specific booking detail page*/}

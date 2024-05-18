@@ -15,8 +15,8 @@ import RegisterPage from "./components/pages/register/RegisterPage.jsx";
 import RequestBooking from "./components/pages/request-booking/RequestBooking.jsx";
 import PaymentDetails from "./components/pages/request-booking/PaymentDetails";
 import SpecificServicePage from "./components/pages/service/SpecificServicePage.jsx";
-import ArtistServiceArea from "./components/pages/profile/ArtistServiceArea.jsx";
-import ArtistProfilePage from "./components/pages/profile/ArtistProfilePage.jsx";
+import ArtistServiceArea from "./components/pages/profile/artist/ArtistServiceArea.jsx";
+import ArtistProfilePage from "./components/pages/profile/artist/ArtistProfilePage.jsx";
 import CancelBooking from './components/pages/cancel-booking/CancelBooking.jsx';
 import ForgotPasswordPage from "./components/pages/forgotPassword/ForgotPasswordPage";
 import ResetPasswordPage from "./components/pages/forgotPassword/ResetPasswordPage";
@@ -27,7 +27,7 @@ import BookingSummary from "./components/pages/request-booking/BookingSummary";
 import RoutingAccess from "./enums/RoutingAccess";
 import UrlBasePath from "./enums/UrlBasePath";
 import NonExistingPage from "./components/pages/nonExistingPage/NonExistingPage";
-import BridePage from "./components/pages/account/BridePage.jsx"
+import BrideProfilePage from "./components/pages/profile/bride/BrideProfilePage.jsx"
 import BookingConfirmation from "./components/pages/request-booking/BookingConfirmation";
 
 export const App = () => (
@@ -102,38 +102,33 @@ export const App = () => (
                             <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}><MessagesPage/></ProtectedRoute>
                         }
                     />
-                    <Route
-                        path="/account"
-                        element={
-                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}>
-                                <BridePage/>
-                            </ProtectedRoute>
-                        }
-                    />
+                    {/*todo: general settings and change password pages here too*/}
 
+                    {/*artist profile ONLY related*/}
                     <Route
                         path="/artist-profile/:username"
                         element={
                             <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}><ArtistProfilePage/></ProtectedRoute>
                         }
                     />
+                    <Route path="/artist-profile/:username/service-area" element={<ArtistServiceArea/>}/>
+
+                    {/*bride profile ONLY related*/}
                     <Route
                         path="/bride-profile/:username"
                         element={
-                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}><BridePage/></ProtectedRoute>
+                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}><BrideProfilePage/></ProtectedRoute>
                         }
                     />
 
-                    <Route path="/artist-profile/:username/service-area" element={<ArtistServiceArea/>}/>
+                    {/*requesting booking flow*/}
                     <Route path="/services/:serviceId/request-booking" element={<RequestBooking/>}/>
                     <Route path="/booking-summary" element={<BookingSummary/>}/>
                     <Route path="/payment-details" element={<PaymentDetails/>}/>
+                    <Route path="/booking-confirmation" element={<BookingConfirmation/>}/>
 
                     {/* TODO: haven't implemented actual flow to get here yet */}
                     <Route path="/cancel-booking" element={<CancelBooking/>}/>
-                    <Route path="/booking-summary" element={<BookingSummary/>}/>
-                    <Route path="/payment-details" element={<PaymentDetails/>}/>
-                    <Route path="/booking-confirmation" element={<BookingConfirmation/>}/>
                 </Routes>
             </main>
         </Router>

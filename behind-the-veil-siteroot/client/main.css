@@ -149,7 +149,7 @@ on a case by case basis within individual JSX components.
     }
 
     .icon-base {
-        @apply size-6 stroke-2;
+        @apply size-6 min-h-6 min-w-6 stroke-2;
     }
 
     .service-details-header-base {
@@ -162,53 +162,4 @@ on a case by case basis within individual JSX components.
     .text-space-brides-profile-page-booking-card-base {
         @apply grid grid-cols-2 grid-rows-6 gap-x-0 gap-y-2 max-h-60 p-0 ;
     }
-
-
-    /* css for the brides profile page  */
-    .word-icon-button {
-        display: inline-block;
-        color: black;
-        font-size: small;  
-        vertical-align: middle; 
-    }
-    .word-icon-button  span {
-        display: inline-block;
-        margin-right: 5px;
-        margin-left: 5px;
-        vertical-align: text-top;
-    }
-    .profile {
-        width: 100%;
-    }
-    .profile div{
-        display: inline-block;
-        text-align: end;
-        vertical-align: text-top;
-    }
-    .profile-photo {
-        width: 60%;
-        height: 100%;
-    }
-    .profile-photo span{
-        display: block;
-        text-align: center;
-        font-size: small;
-
-    }
-    .corner-button {
-        width: 40%;
-        vertical-align: text-top;
-        display: inline-block;
-    }
-    .corner-button Button{
-        vertical-align: text-top;
-    }
-    .booking-tab {
-        padding: 10px;
-        margin: 10px;
-        height: 700px;
-    }
-
-
-
 }

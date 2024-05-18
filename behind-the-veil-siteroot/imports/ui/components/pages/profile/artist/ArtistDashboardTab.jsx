@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import DashboardCard from "../../card/DashboardCard";
+import DashboardCard from "../../../card/DashboardCard";
 
 /**
  * Dashboard tab of an artist's profile

@@ -8,16 +8,12 @@ import React, {useState} from "react";
 import {useSubscribe, useTracker} from "meteor/react-meteor-data";
 import ServiceCollection from "/imports/api/collections/services";
 import {PlusIcon} from "@heroicons/react/24/outline";
-
-import Loader3 from "react-spinners/BounceLoader";
-import Button from "../../button/Button.jsx";
-import ServiceCard from "../../card/ServiceCard.jsx";
-import ImageCollection from "../../../../api/collections/images";
-import ArtistServicesFilter from "../../../enums/ArtistServicesFilter";
-import WhiteBackground from "../../whiteBackground/WhiteBackground";
-import PageLayout from "../../../enums/PageLayout";
-import SearchBar from "../../searchBar/searchBar";
-import Loader from "../../loader/Loader";
+import Button from "../../../button/Button.jsx";
+import ServiceCard from "../../../card/ServiceCard.jsx";
+import ImageCollection from "../../../../../api/collections/images";
+import ArtistServicesFilter from "../../../../enums/ArtistServicesFilter";
+import Loader from "../../../loader/Loader";
+import Pagination from "../../../pagination/Pagination";
 
 
 /**
@@ -26,6 +22,7 @@ import Loader from "../../loader/Loader";
  * @param username {string} - username of the current user's profile
  */
 export const ArtistServicesTab = ({username}) => {
+    const [itemsPerPage, setItemsPerPage] = useState(10);
 
     // todo: change to subscribing to all_user_services() after demo, currently displaying all services for every user
     const isLoadingUserServices = useSubscribe("all_services", username);
@@ -64,12 +61,12 @@ export const ArtistServicesTab = ({username}) => {
     if (isLoading) {
         // is loading, display loader
         return (
-                <Loader
-                    loadingText={"Services are loading . . ."}
-                    isLoading={isLoading}
-                    size={100}
-                    speed={1.5}
-                />
+            <Loader
+                loadingText={"Services are loading . . ."}
+                isLoading={isLoading}
+                size={100}
+                speed={1.5}
+            />
         );
     } else {
         // filtered bookings array based on the selected filter
@@ -83,10 +80,10 @@ export const ArtistServicesTab = ({username}) => {
             }
         });
 
-        const displayServices = filteredServices.map((service) => {
+        const displayServices = filteredServices.map((service, index) => {
             return (
                 <ServiceCard
-                    key={service._id}
+                    key={index}
                     serviceId={service._id}
                     serviceName={service.serviceName}
                     serviceDesc={service.serviceDesc}
@@ -151,17 +148,30 @@ export const ArtistServicesTab = ({username}) => {
                     </div>
                 </div>
 
-                <div className="flex items-center justify-center">
-                    {document.readyState !== "complete" || isLoadingUserServices() ? (
-                        <div className={"flex flex-col items-center justify-center"}>
-                            <Loader3/>
-                        </div>
-                    ) : (
-                        <div
-                            className="flex flex-col lg:flex-row lg:min-w-[1000px] gap-10 items-center justify-center flex-wrap">
-                            {displayServices}
-                        </div>
-                    )}
+                {/*bottom tab with booking*/}
+                <div className="flex flex-col items-center justify-center gap-8">
+                    {/*the bookings and pagination*/}
+                    <Pagination
+                        reset={true}
+                        itemsPerPage={itemsPerPage}
+                        displayItems={displayServices}
+                    />
+
+                    {/*bottom component for the custom item per page*/}
+                    <div className="flex flex-row items-center justify-center gap-x-2">
+                        Items per page:
+                        <select defaultValue={10}
+                                onChange={(event) => {
+                                    setItemsPerPage(event.target.value)
+                                }}
+                                className="input-base w-20">
+                            <option value={5}>5</option>
+                            <option value={10}>10</option>
+                            <option value={25}>25</option>
+                            <option value={50}>50</option>
+                            <option value={100}>100</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         );
