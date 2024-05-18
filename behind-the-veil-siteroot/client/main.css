@@ -175,7 +175,6 @@ on a case by case basis within individual JSX components.
     }
     .profile {
         width: 100%;
-        height: 150px;
     }
     .profile div{
         display: inline-block;

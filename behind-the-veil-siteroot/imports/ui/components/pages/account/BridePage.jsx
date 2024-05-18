@@ -132,7 +132,7 @@ export const BridePage = () => {
             <div className="profile">
                 {/* <!-- profile picture --> */}
                 <div className="profile-photo">
-                    <ProfileDisplay className={"h-full w-1/2"} profileData={mockBrides} ></ProfileDisplay>
+                    <ProfileDisplay className={"h-full w-1/2 m-3"} profileData={mockBrides} ></ProfileDisplay>
                 </div>
                 {/* <!-- settings --> */}
                 <div className="corner-button">
@@ -143,7 +143,7 @@ export const BridePage = () => {
                 </div>
             </div>
             {/* booking tab */}
-            <div className='booking-tab'>
+            <div className='booking-tab pt-5'>
                 <BookingTab confirm={confirmedBookings} pending={pendingBookings} past={pastBookings} archived={archivedBookings}></BookingTab>
             </div>
         </WhiteBackground>

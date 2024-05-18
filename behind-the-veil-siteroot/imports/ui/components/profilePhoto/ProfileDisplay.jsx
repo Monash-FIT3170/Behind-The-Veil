@@ -31,7 +31,7 @@ export const ProfileDisplay = ({className, profileData}) => {
     else {
         return (
             <div className={classes}>
-                <span><ProfilePhoto className="max-h-50 w-50"></ProfilePhoto></span>
+                <span><ProfilePhoto className="max-h-50 max-w-50"></ProfilePhoto></span>
                 <span>Brides Name</span>
                 <span>@ tag</span>
             </div>
