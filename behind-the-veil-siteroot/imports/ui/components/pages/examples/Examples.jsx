@@ -16,6 +16,7 @@ import MapExamples from "./map-examples/MapExamples.jsx";
 import PaginationExample from "./pagination-example/PaginationExample";
 import InputExamples from "./input-examples/InputExamples.jsx";
 import LoaderExamples from "./loaderExamples/LoaderExamples";
+import ModalExamples from "./modal-examples/ModalExamples";
 
 /**
  * Page to showcase examples
@@ -25,14 +26,15 @@ const Examples = () => {
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
             <div className="title-text">Examples</div>
             <ButtonExamples/>
+            <ModalExamples/>
             <FontExamples/>
             <CardExamples/>
             <ServiceDetailsHeaderExamples/>
             <TabsExamples/>
-            <InputExamples />
-            <MapExamples />
+            <InputExamples/>
+            <MapExamples/>
             <PaginationExample/>
-            <LoaderExamples />
+            <LoaderExamples/>
         </WhiteBackground>
     );
 };

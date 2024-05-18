@@ -27,6 +27,7 @@ import BookingSummary from "./components/pages/request-booking/BookingSummary";
 import RoutingAccess from "./enums/RoutingAccess";
 import UrlBasePath from "./enums/UrlBasePath";
 import BridePage from "./components/pages/account/BridePage.jsx"
+import BookingConfirmation from "./components/pages/request-booking/BookingConfirmation";
 
 export const App = () => (
     <div>
@@ -103,9 +104,9 @@ export const App = () => (
                     <Route
                         path="/account"
                         element={
-                          <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}>
+                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}>
                                 <BridePage/>
-                                </ProtectedRoute>
+                            </ProtectedRoute>
                         }
                     />
 
@@ -128,6 +129,7 @@ export const App = () => (
                     <Route path="/cancel-booking" element={<CancelBooking/>}/>
                     <Route path="/booking-summary" element={<BookingSummary/>}/>
                     <Route path="/payment-details" element={<PaymentDetails/>}/>
+                    <Route path="/booking-confirmation" element={<BookingConfirmation/>}/>
                 </Routes>
             </main>
         </Router>
