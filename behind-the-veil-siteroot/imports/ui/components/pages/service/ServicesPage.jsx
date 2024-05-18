@@ -44,8 +44,7 @@ export const ServicesPage = () => {
         return ImageCollection.find().fetch();
     });
 
-    // manual aggregation
-    let combined = servicesData;
+    // manual aggregation into serviceData with its artist and images
     for (let i = 0; i < servicesData.length; i++) {
 
         // aggregate with artist first
@@ -67,9 +66,7 @@ export const ServicesPage = () => {
         }
     }
 
-    console.log(combined)
-
-    const displayedServicesJsx = combined.map((service) => (<ServiceCard
+    const displayedServicesJsx = servicesData.map((service) => (<ServiceCard
         key={service._id}
         serviceId={service._id}
         serviceName={service.serviceName}
@@ -87,9 +84,9 @@ export const ServicesPage = () => {
                 <span className={"title-text text-center"}>Services</span>
 
                 {/*todo: functional search bar*/}
-                <div className="flex flex-col items-center mb-10">
-                    <SearchBar/>
-                </div>
+                {/*<div className="flex flex-col items-center mb-10">*/}
+                {/*    <SearchBar/>*/}
+                {/*</div>*/}
 
                 <div className="flex flex-col items-center justify-center gap-y-5">
 
@@ -101,11 +98,11 @@ export const ServicesPage = () => {
 
                     <div className="flex flex-row items-center justify-center gap-x-2">
                         Items per page:
-                        <select onChange={(event) => {
+                        <select defaultValue={10} onChange={(event) => {
                             setItemsPerPage(event.target.value)
                         }} className="input-base w-20">
                             <option value={5}>5</option>
-                            <option selected value={10}>10</option>
+                            <option value={10}>10</option>
                             <option value={25}>25</option>
                             <option value={50}>50</option>
                             <option value={100}>100</option>
@@ -115,7 +112,7 @@ export const ServicesPage = () => {
             </WhiteBackground>
         );
     } else {
-        // is loader, display loader
+        // is loading, display loader
         return (
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
                 <span className={"title-text text-center"}>Services</span>

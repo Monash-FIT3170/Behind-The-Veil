@@ -8,9 +8,11 @@ import React from 'react';
 import DashboardCard from "../../card/DashboardCard";
 
 /**
- * Page of a list of Artist cards for users to see
+ * Dashboard tab of an artist's profile
+ *
+ * @param username {string} - username of the current user's profile
  */
-export const ArtistDashboardTab = () => {
+export const ArtistDashboardTab = ({username}) => {
     //Utilise DashboardCard component as basis for the dashboard.
     //The dashboardCardValue will have to be dynamic. Title and Desc can be static given it's the same across all accounts.
     return (

@@ -1,12 +1,13 @@
 /**
  * File Description: Artist Profile
- * File version: 1.1
- * Contributors: Kefei (Phillip) Li, Laura, Nikki
+ * File version: 1.3
+ * Contributors: Kefei (Phillip) Li, Laura, Nikki, Lucas
  */
 
 import React, {useState} from "react";
-import {Cog8ToothIcon, StarIcon as OutStarIcon,} from "@heroicons/react/24/outline";
-import {StarIcon as SolStarIcon} from "@heroicons/react/24/solid";
+import {useNavigate} from "react-router-dom";
+import {Cog8ToothIcon, StarIcon as OutlineStarIcon,} from "@heroicons/react/24/outline";
+import {StarIcon as FilledStarIcon} from "@heroicons/react/24/solid";
 
 import Button from "../../button/Button.jsx";
 import PageLayout from "../../../enums/PageLayout.tsx";
@@ -18,7 +19,8 @@ import ArtistGalleryTab from "./ArtistGalleryTab";
 import ArtistBookingsTab from "./ArtistBookingsTab";
 import {Tracker} from "meteor/tracker";
 import {Meteor} from "meteor/meteor";
-import {useNavigate} from "react-router-dom";
+import ArtistServicesTab from "./ArtistServicesTab";
+import ProfileDisplay from "../../profilePhoto/ProfileDisplay";
 
 /**
  * Page for artist profile
@@ -56,9 +58,9 @@ export const ArtistProfilePage = () => {
     //import gearIcon from heroicons for "settings" button.
     const gearIcon = <Cog8ToothIcon className="icon-base"/>;
 
-    const outlineStarIcon = <OutStarIcon className="size-20 stroke-1"/>;
-    const solidStarIcon = <SolStarIcon className="size-20 stroke-1"/>;
-    const smallSolidStarIcon = <SolStarIcon className="size-10 stroke-1"/>;
+    const outlineStarIcon = <OutlineStarIcon className="size-20 stroke-1"/>;
+    const solidStarIcon = <FilledStarIcon className="size-20 stroke-1"/>;
+    const smallSolidStarIcon = <FilledStarIcon className="size-10 stroke-1"/>;
 
     //Utilise Tab components to create page schematics.
     return (
@@ -75,11 +77,7 @@ export const ArtistProfilePage = () => {
             </div>
 
             {/*Top div where artist info*/}
-            <div className={"flex flex-col items-center justify-center"}>
-                <ProfilePhoto className="flex container mx-auto"/>
-                <div className="text-center large-text">{userInfo.alias}</div>
-                <div className="text-center medium-text text-dark-grey">@{userInfo.username}</div>
-            </div>
+            <ProfileDisplay imageData={""} userAlias={userInfo.alias} userUsername={userInfo.username}/>
 
             {/*bottom half where all the tabs are at*/}
             <Tabs
@@ -91,11 +89,12 @@ export const ArtistProfilePage = () => {
                     <span key={5}>Reviews</span>,
                 ]}
                 tabPanels={[
-                    <ArtistDashboardTab key={"dashboard"}/>,
-                    <ArtistBookingsTab key={"bookings"}/>,
-                    <ArtistServicesTab />,
-                    <ArtistGalleryTab key={"gallery"}/>,
-                    <span key={"my-services"}>review tab</span>
+                    // pass in the username so that it doesn't have to be queried again
+                    <ArtistDashboardTab key={"dashboard"} username={userInfo.username}/>,
+                    <ArtistBookingsTab key={"bookings"} username={userInfo.username}/>,
+                    <ArtistServicesTab key={"my-services"} username={userInfo.username}/>,
+                    <ArtistGalleryTab key={"gallery"} username={userInfo.username}/>,
+                    <span key={"reviews"}>review tab</span>
                 ]}
                 tabsClassName="md:flex md:justify-between"
             />

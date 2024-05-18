@@ -1,5 +1,5 @@
 /**
- * File Description: Artist gallery tab
+ * File Description: Artist bookings tab
  * File version: 1.1
  * Contributors: Kefei (Phillip) Li, Laura, Nikki
  */
@@ -10,15 +10,16 @@ import {PlusIcon,} from "@heroicons/react/24/outline";
 import Button from "../../button/Button";
 import BookingCard from "../../card/BookingCard";
 import {BookingStatus} from "../../../enums/BookingStatus";
-import {BookingFilter} from "../../../enums/BookingsFilterEnum";
-import Pagination from "../../pagination/Pagination";
+import {BookingFilter} from "../../../enums/ArtistBookingsFilter";
 import BookingListView from "../../booking/BookingListView";
 
 
 /**
- * Page of a list of Artist cards for users to see
+ * Bookings tab of an artist's profile
+ *
+ * @param username {string} - username of the current user's profile
  */
-export const ArtistBookingsTab = () => {
+export const ArtistBookingsTab = ({username}) => {
     // booking view, calendar or list
     const [bookingView, setBookingView] = useState("list"); // todo: calendar view
 
@@ -142,7 +143,7 @@ export const ArtistBookingsTab = () => {
 
     // Booking tab with the list view only (for now)
     return (
-        <div className="relative mt-2 min-w-2">
+        <div className="flex flex-col gap-6 mt-2">
 
             {/*top button row*/}
             <div className={"flex flex-col-reverse gap-y-6 items xl:flex-row xl:items-center xl:justify-between"}>

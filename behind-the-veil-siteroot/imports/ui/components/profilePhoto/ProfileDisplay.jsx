@@ -1,42 +1,32 @@
 /**
- * File Description: A round profile photo component
- * File version: 1.0
- * Contributors: Nikki
+ * File Description: A profile display with profile image, name and username
+ * File version: 1.1
+ * Contributors: Katie, Nikki
  */
 
 import React from 'react';
 import classNames from "classnames";
 import ProfilePhoto from './ProfilePhoto';
 
-
 /**
- * Round profile picture for any user, if data is not available outputs default grey profile icon
+ * Uses ProfilePhoto, adds the username and alias together. Used for Profile pages.
  *
- * @param className {string} additional classes to be applied on top of the base style
- * @param profileData artist profile photo's data from database
+ * @param className {string} - additional classes to be applied on top of the base style
+ * @param imageData - image data for the profile
+ * @param userAlias {string} - user's alias/name
+ * @param userUsername {string} - user's username
  */
-export const ProfileDisplay = ({className, profileData}) => {
+export const ProfileDisplay = ({className, imageData, userAlias, userUsername}) => {
     // todo change depending on actual photo data format from database
-    const classes = classNames(className, "");
-    if (profileData){
-        return (
-            // make up how it would be coded with the data
-            <div className={classes}>
-                <span ><ProfilePhoto ></ProfilePhoto></span>
-                <span className='text-sm'>{profileData.username}</span>
-                <span>{profileData.tag}</span>
-            </div>
-        );
-    }
-    else {
-        return (
-            <div className={classes}>
-                <span><ProfilePhoto className="max-h-50 max-w-50"></ProfilePhoto></span>
-                <span>Brides Name</span>
-                <span>@ tag</span>
-            </div>
-        );
-    } 
+    const classes = classNames(className, "flex flex-col items-center justify-center");
+    return (
+        // make up how it would be coded with the data
+        <div className={classes}>
+            <ProfilePhoto className="flex container mx-auto" artistPhotoData={imageData}/>
+            <div className="text-center large-text">{userAlias ? userAlias : "User Alias"}</div>
+            <div className="text-center medium-text text-dark-grey">{userUsername ? "@" + userUsername : "@username"}</div>
+        </div>
+    )
 }
 
 export default ProfileDisplay;

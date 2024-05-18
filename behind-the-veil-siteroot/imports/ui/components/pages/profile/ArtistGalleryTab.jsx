@@ -1,6 +1,6 @@
 /**
  * File Description: Artist gallery tab
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Kefei (Phillip) Li, Nikki
  */
 
@@ -10,9 +10,11 @@ import {PlusIcon,} from "@heroicons/react/24/outline";
 import Button from "../../button/Button";
 
 /**
- * Page of a list of Artist cards for users to see
+ * Gallery tab of an artist's profile
+ *
+ * @param username {string} - username of the current user's profile
  */
-export const ArtistGalleryTab = () => {
+export const ArtistGalleryTab = ({username}) => {
     const plusIcon = <PlusIcon className="icon-base"/>;
     // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
     // When completing the dynamic version for this page, probably a good idea to setup the photos as components and importing them in.

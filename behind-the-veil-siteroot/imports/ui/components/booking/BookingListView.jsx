@@ -17,7 +17,7 @@ const BookingListView = ({displayBookings}) => {
     const [itemsPerPage, setItemsPerPage] = useState(10);
 
     return (
-        <div className="flex flex-col items-center justify-center gap-8 mt-6">
+        <div className="flex flex-col items-center justify-center gap-8">
             {/*the bookings and pagination*/}
             <Pagination
                 reset={true}

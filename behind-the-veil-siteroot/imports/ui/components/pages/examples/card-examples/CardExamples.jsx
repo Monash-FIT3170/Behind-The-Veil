@@ -32,33 +32,44 @@ const CardExamples = () => {
             <div className={"flex flex-col lg:flex-row gap-10 items-center justify-center flex-wrap"}>
                 <ServiceCard
                     className=""
-                    serviceId={111111}
+                    serviceId={1}
                     serviceName={"AnExtremelyLongServiceNameWithNoSpacesInBetweenWillBeTruncatedOff"}
                     serviceDesc={"Areallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallylongword.\n"}
                     servicePrice={112333294}
-                    serviceImageData={""}
+                    serviceImageData={"/images/unsplash-valerie-elash-bI8Yv7AH6b0.jpg"}
                     artistUsername={"alice_smith"}
                     artistName={"Alice Smith"}
                 ></ServiceCard>
                 <ServiceCard
                     className=""
-                    serviceId={2222222}
+                    serviceId={2}
                     serviceName={"Bachelorette Glam Experience"}
                     serviceDesc={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n"}
                     servicePrice={123}
-                    serviceImageData={""}
+                    serviceImageData={"/images/unsplash-amir-seilsepour.png"}
                     artistUsername={"Bobbyyy1"}
                     artistName={"Bob"}
                 ></ServiceCard>
                 <ServiceCard
                     className=""
-                    serviceId={1234567}
+                    serviceId={3}
                     serviceName={"GlamourGlow Beauty"}
                     serviceDesc={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n"}
                     servicePrice={123}
-                    serviceImageData={""}
+                    serviceImageData={"/images/pexels-kristina-polianskaia-2617447-4241704.jpg"}
                     artistUsername={"ihavealonglonglongnameJones"}
                     artistName={"LonglonglongnamedJones LongnamedDavis"}
+                ></ServiceCard>
+                <ServiceCard
+                    className=""
+                    serviceId={4}
+                    serviceName={"GlamourGlow Beauty"}
+                    serviceDesc={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n"}
+                    servicePrice={123}
+                    serviceImageData={"/images/pexels-christian-diokno-1666462-3260852.jpg"}
+                    artistUsername={"ihavealonglonglongnameJones"}
+                    artistName={"LonglonglongnamedJones LongnamedDavis"}
+                    isEdit={true}
                 ></ServiceCard>
             </div>
 

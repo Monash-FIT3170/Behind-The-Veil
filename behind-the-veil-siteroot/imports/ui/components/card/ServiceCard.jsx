@@ -8,7 +8,7 @@ import React from 'react';
 import classNames from "classnames";
 import {useNavigate} from "react-router-dom";
 
-import {CalendarDaysIcon} from "@heroicons/react/24/outline"
+import {CalendarDaysIcon, PencilIcon} from "@heroicons/react/24/outline"
 
 import Card from "./Card";
 import Button from "../button/Button";
@@ -16,14 +16,15 @@ import Button from "../button/Button";
 /**
  * Component that displays brief service details on the Services page
  *
- * @param className {string} additional classes to be applied on top of the base style
- * @param serviceId {int} id of the service (used for routing)
- * @param serviceName {string} name of service
- * @param serviceDesc {string} description of service
- * @param servicePrice {int} price of the service
- * @param serviceImageData service's cover image data from database
- * @param artistUsername {string} Username (e.g. alice_tran1234) of artist that posted the service
- * @param artistAlias {string} name of artist that posted the service
+ * @param className {string} - additional classes to be applied on top of the base style
+ * @param serviceId {int} - id of the service (used for routing)
+ * @param serviceName {string} - name of service
+ * @param serviceDesc {string} - description of service
+ * @param servicePrice {int} - price of the service
+ * @param serviceImageData - service's cover image data from database
+ * @param artistUsername {string} - Username (e.g. alice_tran1234) of artist that posted the service
+ * @param artistAlias {string} - name of artist that posted the service
+ * @param isEdit {boolean} - true for "edit service" button, false or null for "view service" button
  */
 export const ServiceCard = ({
                                 className,
@@ -41,17 +42,32 @@ export const ServiceCard = ({
     const navigateTo = useNavigate();
 
     const classes = classNames(className, "flex flex-col justify-between w-full min-w-60 lg:w-2/5 lg:min-w-78 min-h-56");
-    
-    var viewOrEditButton;
-    var buttonClasses;
 
-    const buttonBaseClasses = "flex flex-row gap-x-2 justify-center items-center w-4/5 lg:w-1/2 min-w-40 transition duration-500";
+    // set button style depending on whether isEdit mode or not
+    let viewOrEditButton = "";
+    let buttonClasses = "";
+    let mainButton = null;
+
+    const buttonBaseClasses = "flex flex-row gap-x-2 justify-center items-center w-4/5 lg:w-1/2 min-w-40";
     if (isEdit) {
         viewOrEditButton = "Edit Service";
-        buttonClasses = classNames("bg-light-grey hover:bg-light-grey-hover", buttonBaseClasses);
+        mainButton = (
+            <Button className={buttonBaseClasses}
+                    onClick={() => navigateTo('/services/' + serviceId + '/edit')}>
+                <PencilIcon className="icon-base"/>
+                {viewOrEditButton}
+            </Button>
+        )
     } else {
         viewOrEditButton = "View Service";
         buttonClasses = classNames("bg-secondary-purple hover:bg-secondary-purple-hover", buttonBaseClasses);
+        mainButton = (
+            <Button className={buttonClasses}
+                    onClick={() => navigateTo('/services/' + serviceId)}>
+                <CalendarDaysIcon className="icon-base"/>
+                {viewOrEditButton}
+            </Button>
+        )
     }
 
     return (
@@ -62,9 +78,13 @@ export const ServiceCard = ({
                         {serviceName}</div>
                     <div className="small-text text-dark-grey max-h-[5.5rem] max-w-full line-clamp-4 mb-3 break-words">
                         {serviceDesc}</div>
-                    <div className="main-text text-dark-grey max-h-[1.5rem] max-w-full line-clamp-1 break-all">
-                        Artist: {artistAlias} ( @{artistUsername} )
-                    </div>
+                    {/*only display the artist information if it isnt in edit mode (artist doenst need to see their own
+                    information repeated on each service) */}
+                    { isEdit ? null :
+                        <div className="main-text text-dark-grey max-h-[1.5rem] max-w-full line-clamp-1 break-all">
+                            Artist: {artistAlias} ( @{artistUsername} )
+                        </div>
+                    }
                 </div>
 
                 {/* image on the right side for service*/}
@@ -79,15 +99,12 @@ export const ServiceCard = ({
             <div className="flex flex-col lg:flex-row gap-5 justify-center items-center">
                 <div className="border-2 border-dashed border-dark-grey py-2 px-4 rounded-full w-4/5 lg:w-1/4 min-w-32
                 flex items-center justify-center">
-                    <label className="main-text font-bold text-our-black">${servicePrice}</label>
+                    <label className="main-text font-bold text-our-black line-clamp-1">${servicePrice}</label>
                 </div>
 
                 {/* button to specific booking detail page*/}
-                <Button className={buttonClasses}
-                        onClick={() => navigateTo('/services/' + serviceId)}>
-                    <CalendarDaysIcon className="icon-base"/>
-                    {viewOrEditButton}
-                </Button>
+                {mainButton}
+
             </div>
         </Card>
     );

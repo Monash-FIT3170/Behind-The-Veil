@@ -10,3 +10,5 @@ export enum BookingFilter {
     PENDING = "Pending",
     CLOSED = "Closed"
 }
+
+export default BookingFilter;
