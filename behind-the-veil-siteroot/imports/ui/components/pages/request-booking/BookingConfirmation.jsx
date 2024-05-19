@@ -34,13 +34,13 @@ const BookingConfirmation = () => {
             <div className="flex flex-col items-center gap-4">
                 <div className="title-text text-center">Payment Completed</div>
                 <CheckCircleIcon className="w-[85px] text-confirmed-colour"/>
-                <div>
-                    <p className="text-dark-grey">Your payment has been processed.</p>
-                    <p className="text-dark-grey">Thank you for using Behind the Veil!</p>
+                <div className={"main-text text-dark-grey"}>
+                    <p className="">Your payment has been processed.</p>
+                    <p className="">Thank you for using Behind the Veil!</p>
                 </div>
                 <div className="flex flex-row gap-4 mt-6">
-                    <span className="text-dark-grey">Receipt Number:</span>
-                    <span className="flex items-center justify-center">X219061084912321</span>
+                    <span className="main-text text-dark-grey">Receipt Number:</span>
+                    <span className="flex main-text items-center justify-center">X219061084912321</span>
                 </div>
                 <Button className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[25px] pe-[25px] flex gap-1 mt-10" onClick={returnToAccount}>
                     <CheckIcon className="icon-base" />

@@ -19,7 +19,7 @@ import Tippy from '@tippyjs/react/headless';
  */
 const FormOutput = ({ label, input, textColor, haveHelpText, tipText}) => {
     return (
-        <div className="flex text">
+        <div className="flex flex-col sm:flex-row gap-y-2 text">
             <span className={`min-w-[150px] lg:w-[200px] ${textColor} font-semibold`}>
                 {label}
             </span>
@@ -30,7 +30,7 @@ const FormOutput = ({ label, input, textColor, haveHelpText, tipText}) => {
                 <span className="content-center ml-2">
                     <Tippy
                         render={attrs => (
-                            <div className="box border border-main-blue rounded-lg mt-1 px-4 py-2 bg-glass-panel-background shadow-lg w-80" tabIndex="-1" {...attrs}>
+                            <div className="box border border-main-blue rounded-lg mt-1 px-4 py-2 white-glass-base shadow-lg w-80" tabIndex="-1" {...attrs}>
                                 {tipText}
                             </div>
                         )}>

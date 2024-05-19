@@ -22,7 +22,7 @@ import Button from "../../button/Button";
 export const ForgotPasswordPage = () => {
 
     const navigate = useNavigate();
-    useSubscribe('all_users');
+    const loadingUsers = useSubscribe('all_users');
 
     // get user data from meteor
     let usersEmailData = useTracker(() => {
@@ -31,9 +31,10 @@ export const ForgotPasswordPage = () => {
             fields: {"emails": 1}
         }).fetch();
 
-        return emailArrays.map((emailArray) => (
+        // get the emails ONLY if user data has loaded
+        return emailArrays ? emailArrays.map((emailArray) => (
             emailArray.emails[0].address
-        ))
+        )) : []
     });
 
     // form input values
@@ -51,8 +52,6 @@ export const ForgotPasswordPage = () => {
         if (!emailInput) {
             alert("Please enter a valid email");
         } else {
-            console.log(usersEmailData);
-            console.log(usersEmailData.includes(emailInput))
 
             if (usersEmailData.includes(emailInput)) {
                 // send the email to reset password
@@ -60,10 +59,11 @@ export const ForgotPasswordPage = () => {
             }
 
             // todo: change to navigate to home page later after demo
-            alert("(to be implemented) Sending email to: " + emailInput);
+            alert("(to be implemented) Sending email to: " + emailInput +
+                "\nThis email is in the database: " + usersEmailData.includes(emailInput));
+
             alert("navigating to change password page for demonstration purposes");
             navigate('/reset-password/demodemodemo')
-
         }
     }
 

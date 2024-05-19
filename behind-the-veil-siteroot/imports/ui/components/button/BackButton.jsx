@@ -16,15 +16,16 @@ import {ChevronLeftIcon} from "@heroicons/react/24/outline";
  *
  * This is different to the "PrevButton" component which takes you back the page you came from.
  * @param className custom classes that override the base button style, e.g. background color, font, etc
+ * @param {string} to - option parameter to hard code where this button leads to
  */
-const BackButton = ({className}) => {
+const BackButton = ({className, to}) => {
 
-    const buttonClasses = "flex flex-row items-center justify-start gap-x-2 py-2 px-4 full w-fit rounded-full " +
+    const buttonClasses = "flex flex-row items-center justify-start gap-x-2 py-2 px-4 full w-fit min-w-28 rounded-full " +
         "main-text font-bold text-dark-grey hover:bg-white-hover hover:text-our-black transition duration-500"
     const classes = classNames(buttonClasses, className);
 
     return (
-        <Link className={classes} to={".."}>
+        <Link className={classes} to={to ? to : ".."}>
             <ChevronLeftIcon className={"size-7 stroke-2 cursor-pointer"}/> Back
         </Link>
     );

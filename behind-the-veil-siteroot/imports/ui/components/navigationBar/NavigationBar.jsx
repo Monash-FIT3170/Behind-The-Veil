@@ -99,15 +99,15 @@ export const NavigationBar = () => {
             flex-col gap-y-5
             lg:flex-row lg:items-center lg:gap-x-5">
                 {/*Examples page TODO: remove once dev is done*/}
-                <li>
-                    <NavLink to={`/${UrlBasePath.EXAMPLES}`}
-                             onClick={() => {
-                                 autoCloseMenu();
-                             }}
-                             className={baseUrl === UrlBasePath.EXAMPLES ?
-                                 "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3 mr-12" :
-                                 "main-text navbar-link-inactive p-3 mr-12"}>Examples Here</NavLink>
-                </li>
+                {/*<li>*/}
+                {/*    <NavLink to={`/${UrlBasePath.EXAMPLES}`}*/}
+                {/*             onClick={() => {*/}
+                {/*                 autoCloseMenu();*/}
+                {/*             }}*/}
+                {/*             className={baseUrl === UrlBasePath.EXAMPLES ?*/}
+                {/*                 "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3 mr-12" :*/}
+                {/*                 "main-text navbar-link-inactive p-3 mr-12"}>Examples Here</NavLink>*/}
+                {/*</li>*/}
                 {/*Home Page*/}
                 <li>
                     <NavLink to="/"
