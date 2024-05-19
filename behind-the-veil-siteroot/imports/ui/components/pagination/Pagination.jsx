@@ -20,6 +20,9 @@ import classNames from "classnames";
  */
 export const Pagination = ({externalClassName, internalClassName, itemsPerPage, displayItems, reset}) => {
 
+    // ensure item per page is a number
+    itemsPerPage = Number(itemsPerPage);
+
     // get page from URL first, if there is
     let urlPageNum = 1;
 
@@ -50,6 +53,9 @@ export const Pagination = ({externalClassName, internalClassName, itemsPerPage, 
 
     // splice only required items
     const currentItems = displayItems.slice(startIndex, endIndex);
+
+    // console.log("from:" + startIndex + " to:" + endIndex);
+    // console.log(currentItems);
 
     // getting TOTAL page count
     const pageCount = Math.ceil(displayItems.length / itemsPerPage);
