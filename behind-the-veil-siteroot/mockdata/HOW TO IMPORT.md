@@ -38,7 +38,7 @@ edit the file at `/etc/paths` and add the above address to the end of the file
 1. running this command: `sudo vim /etc/paths`
 2. press `i` to go into insert mode and writing in the file
 3. paste in your path you want to add at the end on a new line
-4. press `escape` and then type `:qa` to save the file
+4. press `escape` and then type `:wq` to save the file
 
 - don't have access to a Mac, try to google for more specific instructions.
 
