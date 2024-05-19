@@ -55,3 +55,13 @@ in the above command, replace:
 - `PORT` with the port that the mongoDb is running on, if your meteor project is on 3000, then it is most likely 3001
 - `COLLECTION_NAME` with the database entity name (such as user, service, image, etc.)
 - `FILENAME.json` with the file path to the file to import
+
+Example commands to import everything (with port 3001)
+
+```
+mongoimport -h localhost:3001 --db meteor --collection services --file mockdata/services50.json --jsonArray
+mongoimport -h localhost:3001 --db meteor --collection users --file mockdata/artists50.json --jsonArray
+mongoimport -h localhost:3001 --db meteor --collection users --file mockdata/brides50.json --jsonArray
+mongoimport -h localhost:3001 --db meteor --collection images --file mockdata/user_images50.json --jsonArray
+mongoimport -h localhost:3001 --db meteor --collection images --file mockdata/service_images100.json --jsonArray
+```
