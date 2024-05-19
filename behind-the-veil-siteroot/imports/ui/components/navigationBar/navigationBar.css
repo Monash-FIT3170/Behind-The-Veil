@@ -1,0 +1,11 @@
+.navbar-link-active {
+    @apply no-underline text-hyperlink-colour lg:text-our-black
+}
+
+.navbar-link-inactive {
+    @apply no-underline text-dark-grey hover:text-hyperlink-colour transition duration-500 ease-in-out
+}
+
+.navbar-link-inactive:hover {
+    @apply border-b-2 border-dark-grey transition duration-500 ease-in-out
+}

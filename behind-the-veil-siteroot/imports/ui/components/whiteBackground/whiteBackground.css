@@ -1,0 +1,42 @@
+.large-page {
+    @apply rounded-b-none; /*dont round bottom corners for this*/
+    @apply bottom-0 top-28 mt-8 mx-12 p-16 absolute w-11/12 h-fit; /*some positioning variables*/
+    min-height: calc(100vh - 9rem); /*always to bottom of the page*/
+}
+
+.small-page {
+    @apply h-fit min-h-[30rem];
+    /* margin top and bottom difference account for navbar margin overlap of 1rem=4 */
+    @apply mt-10 mb-6 mx-8 px-8 py-16 lg:p-16 w-4/5; /*positioning variables for smaller screens*/
+    @apply lg:mt-16 lg:mb-12 lg:mx-14 lg:p-16 lg:w-2/5 ; /*positioning variables for large screens*/
+}
+
+.standard-shadow {
+    box-shadow: 0.25rem 0.25rem 0.625rem rgba(0, 0, 0, 0.2);
+}
+
+.inner-shadow {
+    box-shadow: inset -10px 0 0.75rem -0.75rem rgba(0, 0, 0, 0.4);
+}
+
+.full-outermost-div {
+    /* this is ~height of the view port, minus the navbar section */
+    min-height: calc(100vh - 9rem);
+}
+
+.grey-glass-base {
+    @apply rounded-3xl bg-light-grey-hover bg-opacity-80 backdrop-blur-lg;
+}
+
+.message-left {
+    @apply rounded-b-none rounded-r-none; /*dont round bottom and left corners for this*/
+    @apply mt-16 p-4 w-3/12 h-fit; /*some positioning variables*/
+    min-height: calc(100vh - 9rem);
+}
+
+.message-right {
+    @apply rounded-b-none rounded-l-none; /*dont round bottom and left corners for this*/
+    @apply mt-16 p-10 w-8/12 h-fit; /*some positioning variables*/
+    min-height: calc(100vh - 9rem);
+}
+
