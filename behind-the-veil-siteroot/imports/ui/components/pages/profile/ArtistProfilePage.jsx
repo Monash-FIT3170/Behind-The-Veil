@@ -18,6 +18,7 @@ import {
 } from "@heroicons/react/24/outline";
 import BookingListView from "../../booking/BookingListView.jsx";
 import { StarIcon as SolStarIcon } from "@heroicons/react/24/solid";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Page for artist profile
@@ -25,6 +26,8 @@ import { StarIcon as SolStarIcon } from "@heroicons/react/24/solid";
 export const ArtistProfilePage = () => {
   //import plusIcon from heroicons for "add photo" button
   const plusIcon = <PlusIcon className="icon-base" />;
+
+  const navigate = useNavigate();
 
   //import gearIcon from heroicons for "settings" button.
   const gearIcon = <Cog8ToothIcon className="icon-base" />;
@@ -35,6 +38,9 @@ export const ArtistProfilePage = () => {
 
   const smallSolidStarIcon = <SolStarIcon className="size-10 strok-1" />;
 
+  function addPostNavigate(){
+    navigate("/add-post")
+  }
   // Booking tab with the list view only (for now)
   const bookingTab = (
     <div className="relative">
@@ -52,7 +58,10 @@ export const ArtistProfilePage = () => {
   const galleryTab = (
     <div className="relative">
       <div className="sticky top-20 z-20 flex justify-end">
-        <Button className="absolute top-5 flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover">
+        <Button 
+        className="absolute top-5 flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover"
+        onClick={addPostNavigate}
+        >
           {plusIcon} Add Photo
         </Button>
       </div>
