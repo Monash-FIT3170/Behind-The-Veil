@@ -20,6 +20,9 @@ import classNames from "classnames";
  */
 export const Pagination = ({externalClassName, internalClassName, itemsPerPage, displayItems, reset}) => {
 
+    // ensure item per page is a number
+    itemsPerPage = Number(itemsPerPage);
+
     // get page from URL first, if there is
     let urlPageNum = 1;
 
