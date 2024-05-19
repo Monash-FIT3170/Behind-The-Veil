@@ -54,9 +54,6 @@ export const Pagination = ({externalClassName, internalClassName, itemsPerPage, 
     // splice only required items
     const currentItems = displayItems.slice(startIndex, endIndex);
 
-    // console.log("from:" + startIndex + " to:" + endIndex);
-    // console.log(currentItems);
-
     // getting TOTAL page count
     const pageCount = Math.ceil(displayItems.length / itemsPerPage);
 
