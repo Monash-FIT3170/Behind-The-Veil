@@ -11,6 +11,7 @@ import Input from "../../../input/Input";
 import Button from "../../../button/Button.jsx";
 import BackButton from "../../../button/BackButton.jsx";
 import {CheckIcon} from "@heroicons/react/24/outline";
+import PreviousButton from "../../../button/PreviousButton";
 
 /**
  * This page allows the artist to enter a location as well as provide a radius in which they can travel from that location
@@ -57,7 +58,7 @@ export const ArtistServiceArea = () => {
 
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-            <BackButton/>
+            <PreviousButton/>
             <div className="flex flex-row flex-nowrap items-center">
                 <div className="title-text text-center sm:-mt-10 mb-5 grow">Settings</div>
             </div>

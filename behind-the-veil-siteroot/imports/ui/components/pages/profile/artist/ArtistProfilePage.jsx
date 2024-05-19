@@ -95,7 +95,7 @@ export const ArtistProfilePage = () => {
                     <ArtistGalleryTab key={"gallery"} username={userInfo.username}/>,
                     <span key={"reviews"}>review tab</span>
                 ]}
-                tabsClassName="md:flex md:justify-between"
+                tabsClassName="lg:flex lg:justify-between"
             />
         </WhiteBackground>
     );

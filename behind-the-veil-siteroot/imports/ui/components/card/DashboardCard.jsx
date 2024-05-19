@@ -33,8 +33,8 @@ export const DashboardCard = ({
     return (
         <Card className={classes}>
 
-            <div className="flex flex-col w-fit max-w-[250px] h-fit
-            col-span-full sm:col-span-3 lg:col-span-full lg:w-full xl:col-span-3 xl:w-fit">
+            <div className="flex flex-col w-full max-w-[250px] h-fit
+            col-span-full sm:col-span-3 lg:col-span-full xl:col-span-3">
                 <div
                     className="large-text text-wrap text-our-black max-w-full mb-3 text-center">
                     {dashboardCardTitle}
