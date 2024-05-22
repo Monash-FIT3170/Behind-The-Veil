@@ -4,7 +4,7 @@
  * Contributors: Josh, Nikki
  */
 
-import React, {useId, useState} from "react";
+import React, {useId, useState, useEffect} from "react";
 import ServiceDetailsHeader from "../../service-details-header/ServiceDetailsHeader";
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
@@ -32,10 +32,12 @@ import {
 } from "date-fns";
 import BookingStatus from "../../../enums/BookingStatus.ts";
 import {useNavigate} from "react-router-dom";
+import { AddressAutofill } from "@mapbox/search-js-react";
 
 /**
  * Page for user to request a booking
  */
+
 const RequestBooking = () => {
     const navigateTo = useNavigate();
 
@@ -103,7 +105,7 @@ const RequestBooking = () => {
                 bookingStartDateTime: new Date(booking.bookingStartDateTime)
             }
         })
-    }
+    };
 
     // TODO: make actual database call to get all bookings for this artist id
     const bookings = parseBookings(mockBookings)
@@ -121,7 +123,9 @@ const RequestBooking = () => {
         }
 
         return day
-    }
+    };
+    
+    
 
     // form input values
     const [inputs, setInputs] = useState({
@@ -137,15 +141,64 @@ const RequestBooking = () => {
 
     // form related functions
     const handleInputChange = (event) => {
-        const name = event.target.name;
-        const value = event.target.value;
-        setInputs((i) => ({...i, [name]: value}));
+      const value = event.target.value;
+      setInputs((i) => ({...i, location: value}));
     };
+
+    // const [feature, setFeature] = useState();
+    // const handleRetrieve = useCallback(
+    //   (res) => {
+    //     console.log("hello testing")
+    //     console.log(res)
+    //     const feature = res.features[0];
+    //     setFeature(feature);
+    //   },
+    //   [setFeature]
+    // );
+
+    const [address, setAddress] = useState({
+        street:"",
+        suburb:"",
+        state:"",
+    });
+
+    const handleStreet = (event) => {
+      const value = event.target.value;
+      setAddress((i) => ({...i, street: value}));
+        
+    };
+
+    const handleSuburb = (event) => {
+      const value = event.target.value;
+      setAddress((i) => ({...i, suburb: value}));
+    };
+    const handleState = (event) => {
+      const value = event.target.value;
+      setAddress((i) => ({...i, state: value}));
+    };
+
+    useEffect(() => {
+      const street =address.street
+      const suburb = address.suburb
+      const state = address.state
+      const full = street + ',' + suburb + ' ,' + state;
+      console.log(full)
+      setInputs((i) => ({...i, location: full}));
+    }, [address]); //
+
+    
+    
+
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
         // TODO: implement validation
+        // street =address.street
+        // suburb = address.suburb
+        // state = address.state
+        // const full = street + ',' + suburb + ' ,' + state;
+        // console.log(full)
+        // setInputs((i) => ({...i, location: full}));
 
         if (!(isValid(inputs.time))) {
             alert('Please select a valid time.')
@@ -157,6 +210,7 @@ const RequestBooking = () => {
 
         // pass the data to the next page via the url
         const query = new URLSearchParams(inputs).toString();
+        
         navigateTo(`/booking-summary?${query}`);
     }
 
@@ -211,15 +265,38 @@ const RequestBooking = () => {
                 <form onSubmit={handleSubmit}>
                     <div className="flex flex-col gap-4">
                         {/* location */}
+                        <AddressAutofill
+                        accessToken="pk.eyJ1IjoibWFzdGVyY2hpZWYwIiwiYSI6ImNsdzdtMXAyZzBtdWgyc280Z2wycHlzZXEifQ.X3CmBWszdI4h1y0vri5KsA"
+                        //onRetrieve={handleRetrieve}  
+                        >
                         <Input
                             id={locationInputId}
                             label={<label htmlFor={locationInputId}
-                                          className="main-text text-our-black">Location</label>}
+                            className="main-text text-our-black">Location</label>}
+                            className = "location"
                             placeholder="Input location for service: wedding venue, address, ..."
                             name="location"
-                            value={inputs.location || ""}
-                            onChange={handleInputChange}
+                            autoComplete = "street-address"
+                            value= {address.street}
+                            onChange= {handleStreet}
                         />
+                        <Input
+                          className = "location"
+                          value = {address.suburb}
+                          onChange = {handleSuburb}
+                          autoComplete = "address-level2"
+                          style={{opacity: 0, height: 1, width:1}}
+                          />
+
+                        <Input
+                          className = "location"
+                          value = {address.state}
+                          onChange = {handleState}
+                          autoComplete = "address-level1"
+                          style={{opacity: 0, height: 1, width:1}}
+
+                        />
+                        </AddressAutofill>
 
                         {/* date/time */}
                         <div className="flex flex-col md:flex-row gap-4 md:gap-10">
