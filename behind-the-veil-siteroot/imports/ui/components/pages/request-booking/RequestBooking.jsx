@@ -172,7 +172,7 @@ const RequestBooking = () => {
       const suburb = address.suburb
       const state = address.state
       const post = address.post
-      const full = street + ',' + suburb + '' + post + ' ,' + state;
+      const full = street + ', ' + suburb + ' ' + post + ', ' + state;
       setInputs((i) => ({...i, location: full}));
     }, [address]); //
 
