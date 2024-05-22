@@ -140,11 +140,6 @@ const RequestBooking = () => {
     const timeInputId = useId();
 
     // form related functions
-    const handleInputChange = (event) => {
-      const value = event.target.value;
-      setInputs((i) => ({...i, location: value}));
-    };
-
     // Different parts of address
     const [address, setAddress] = useState({
         street:"",
@@ -178,7 +173,6 @@ const RequestBooking = () => {
       const state = address.state
       const post = address.post
       const full = street + ',' + suburb + '' + post + ' ,' + state;
-      console.log(full)
       setInputs((i) => ({...i, location: full}));
     }, [address]); //
 
@@ -285,7 +279,7 @@ const RequestBooking = () => {
                           value = {address.post}
                           onChange = {handlePost}
                           autoComplete = "postal-code"
-                          //style={{opacity: 0, height: 1, width:1}}
+                          style={{opacity: 0, height: 1, width:1}}
                         />
                         </AddressAutofill>
 
