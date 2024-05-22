@@ -29,6 +29,7 @@ import UrlBasePath from "./enums/UrlBasePath";
 import NonExistingPage from "./components/pages/nonExistingPage/NonExistingPage";
 import BrideProfilePage from "./components/pages/profile/bride/BrideProfilePage.jsx"
 import BookingConfirmation from "./components/pages/request-booking/BookingConfirmation";
+import ArtistAddPost from "./components/pages/artist/ArtistAddPost.jsx";
 
 export const App = () => (
     <div>
@@ -129,6 +130,8 @@ export const App = () => (
 
                     {/* TODO: haven't implemented actual flow to get here yet */}
                     <Route path="/cancel-booking" element={<CancelBooking/>}/>
+                    <Route path="/add-post" element={<ArtistAddPost/>}/>
+
                 </Routes>
             </main>
         </Router>
