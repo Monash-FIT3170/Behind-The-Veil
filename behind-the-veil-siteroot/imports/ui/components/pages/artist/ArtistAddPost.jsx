@@ -75,7 +75,7 @@ export const ArtistAddPost = () => {
 
   return (
     <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-      <BackButton />
+      <BackButton to={"/artist-profile/:username"} className="your-custom-classes" />
 
       {/* Main container for content */}
       <div className="flex flex-col gap-4 xl:px-40">
