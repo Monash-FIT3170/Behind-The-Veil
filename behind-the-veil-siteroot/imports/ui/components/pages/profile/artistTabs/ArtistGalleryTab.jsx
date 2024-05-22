@@ -6,7 +6,7 @@
 
 import React from 'react';
 import {PlusIcon,} from "@heroicons/react/24/outline";
-
+import {useNavigate} from "react-router-dom";
 import Button from "../../../button/Button";
 
 /**
@@ -15,6 +15,12 @@ import Button from "../../../button/Button";
  * @param username {string} - username of the current user's profile
  */
 export const ArtistGalleryTab = ({username}) => {
+    const navigate = useNavigate();
+
+    function addPostNavigate(){
+        console.log("button pressed")
+        navigate("/add-post")
+    }
     const plusIcon = <PlusIcon className="icon-base"/>;
     // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
     // When completing the dynamic version for this page, probably a good idea to setup the photos as components and importing them in.
@@ -22,7 +28,7 @@ export const ArtistGalleryTab = ({username}) => {
         <div className="relative">
             <div className="sticky top-20 z-20 flex justify-end">
                 <Button
-                    className="absolute top-5 flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover mt-2">
+                    className="absolute top-5 flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover mt-2" onClick={addPostNavigate}>
                     {plusIcon} Add Photo
                 </Button>
             </div>
