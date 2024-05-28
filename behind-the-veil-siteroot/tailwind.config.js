@@ -26,5 +26,8 @@ module.exports = {
         "bg-gradient-end": "#E5D6FF",
       },
     },
-    plugins: [require("@headlessui/tailwindcss")]
-}};
+  },
+  plugins: [
+    require('@headlessui/tailwindcss')
+  ],
+};
