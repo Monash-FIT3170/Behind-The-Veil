@@ -129,6 +129,10 @@ export const App = () => (
 
                     {/* TODO: haven't implemented actual flow to get here yet */}
                     <Route path="/cancel-booking" element={<CancelBooking/>}/>
+
+                    {/* Booking calendar page artist*/}
+                    <Route path="/calendar-artist" element={<BookingCalendarView/>}/>
+
                 </Routes>
             </main>
         </Router>
