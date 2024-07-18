@@ -13,12 +13,22 @@ import WhiteBackground from "../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../enums/PageLayout";
 
 import { Calendar, momentLocalizer } from 'react-big-calendar';
+//import BigCalendar from "react-big-calendar";
+
 import moment from 'moment'
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
 // Setup the localizer by providing the moment (or globalize, or Luxon) Object
 // to the correct localizer.
+
+moment.locale("ko", {
+    week: {
+    dow: 1,
+    foy: 1,
+    }
+});
+
 const localizer = momentLocalizer(moment) // or globalizeLocalizer
 
 const myEventsList = [
@@ -83,7 +93,7 @@ const BookingCalendarView = (props) => (
 
       startAccessor="start"
       endAccessor="end"
-      style={{ height: 600 }}
+      style={{ height: 600, margin: "30px" }}
       views={{ month: true }}
       step={155}
       dayPropGetter={calendarStyle}

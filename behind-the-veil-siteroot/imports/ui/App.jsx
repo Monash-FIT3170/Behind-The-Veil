@@ -29,6 +29,7 @@ import UrlBasePath from "./enums/UrlBasePath";
 import NonExistingPage from "./components/pages/nonExistingPage/NonExistingPage";
 import BrideProfilePage from "./components/pages/profile/bride/BrideProfilePage.jsx"
 import BookingConfirmation from "./components/pages/request-booking/BookingConfirmation";
+import BookingCalendarView from "./components/booking/BookingCalendarView";
 
 export const App = () => (
     <div>
