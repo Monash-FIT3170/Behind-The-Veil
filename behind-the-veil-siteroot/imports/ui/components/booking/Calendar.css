@@ -1,0 +1,6 @@
+/* Align the date number to the left */
+.rbc-date-cell > a {
+  float: left !important;
+  padding-left: 9px;
+  color: grey !important;
+}
