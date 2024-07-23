@@ -94,8 +94,8 @@ meteor npm install --save @babel/runtime react react-dom
 > In the event that the app will not start due to "Unexpected mongo exit code 14":
 
 - Try:
-- meteor reset
-- meteor
+  meteor reset
+  meteor
+  credit: https://stackoverflow.com/questions/38988365/meteor-unexpected-mongo-exit-code-14-restarting-cant-start-mongo-server
 
-credit: https://stackoverflow.com/questions/38988365/meteor-unexpected-mongo-exit-code-14-restarting-cant-start-mongo-server
 Written & tested by Neth, Josh and Nikki
