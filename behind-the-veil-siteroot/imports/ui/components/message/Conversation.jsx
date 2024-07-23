@@ -14,15 +14,22 @@ import Button from "../button/Button";
 export const Conversation = ({user}) => {
 
     const [formValue, setFormValue] = useState('');
+    // TODO: set up subscription to messages here
+
+    // TODO: replace messages with the messages db 
     const [messages, setMessages] = useState([]);
+
+    // TODO: Sort messages based on sent date (oldest to newest)
     const conversationRef = useRef(null);
 
     const sendMessage = (event) => {
         event.preventDefault();
         if (formValue.trim() === '') return;
+        // TODO: call update chat method (for latest message and date) and call insert message method
+        // for messages db
         setMessages(prevMessages => [...prevMessages, {text: formValue, sender: 'me'}]);
         setFormValue('');
-        let heightToScroll = conversationRef?.current.scrollHeight + 50
+        let heightToScroll = conversationRef?.current.scrollHeight + 50 // TODO: check, might have to adjust the value or code
         setTimeout(() => {
             conversationRef?.current.scrollTo({left: 0, top: heightToScroll, behaviour: "smooth"})
         }, 5)
