@@ -29,6 +29,7 @@ import UrlBasePath from "./enums/UrlBasePath";
 import NonExistingPage from "./components/pages/nonExistingPage/NonExistingPage";
 import BrideProfilePage from "./components/pages/profile/bride/BrideProfilePage.jsx"
 import BookingConfirmation from "./components/pages/request-booking/BookingConfirmation";
+import AddEditServicePage from "./components/pages/service/AddEditServicePage.jsx";
 
 export const App = () => (
     <div>
@@ -46,6 +47,10 @@ export const App = () => (
 
                     <Route path="/services" element={<ServicesPage/>}/>
                     <Route path="/services/:serviceId" element={<SpecificServicePage/>}/>
+                    
+                    {/* reconfig for just artists */}
+                    <Route path="/services/addservice" element={<AddEditServicePage/>}/>
+                    {/*  */}
 
                     <Route path="/artists" element={<ArtistsPage/>}/>
 
