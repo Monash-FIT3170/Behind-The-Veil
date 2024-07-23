@@ -13,42 +13,90 @@ import WhiteBackground from "../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../enums/PageLayout";
 
 import { Calendar, momentLocalizer } from 'react-big-calendar';
-//import BigCalendar from "react-big-calendar";
-
-import moment from 'moment'
-
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import "./Calendar.css";
+import "./CalendarToolbar.css";
+import {ChevronRightIcon} from "@heroicons/react/24/outline"
+import {ChevronLeftIcon} from "@heroicons/react/24/outline"
+import moment from 'moment';
 
-// Setup the localizer by providing the moment (or globalize, or Luxon) Object
-// to the correct localizer.
+const CustomToolbar = ({ label, onNavigate }) => {
+  return (
+    <div className="medium-text">
+
+        <div className="custom-toolbar" >
+          <span className="toolbar-label">{label}</span>
+          <button
+            className="toolbar-button prev bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"
+            onClick={() => onNavigate("PREV")}
+          >
+            <ChevronLeftIcon className="icon-base"/>
+          </button>
+          <button
+            className="toolbar-button next bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"
+            onClick={() => onNavigate("NEXT")}
+          >
+            <ChevronRightIcon className="icon-base"/>
+
+          </button>
+          <button
+            className="toolbar-button today"
+            onClick={() => onNavigate("TODAY")}
+          >
+            Today
+          </button>
+        </div>
+    </div>
+  );
+};
+
+
+const formats = {
+  monthHeaderFormat: (date, culture, localizer) => {
+    const month = moment(date).format("MMMM");
+    const year = moment(date).format("YYYY");
+    return `${month} ${year}`;
+  },
+  dayFormat: (date, culture, localizer) => {
+    return localizer.format(date, "D", culture);
+  },
+  dateFormat: (date, culture, localizer) => {
+    return localizer.format(date, "D", culture);
+  },
+  weekdayFormat: (date, culture, localizer) => {
+    return localizer.format(date, "ddd", culture);
+  },
+};
 
 moment.locale("ko", {
-    week: {
+  week: {
     dow: 1,
-    foy: 1,
-    }
+    doy: 1,
+  },
 });
 
-const localizer = momentLocalizer(moment) // or globalizeLocalizer
+
+
+const localizer = momentLocalizer(moment)
 
 const myEventsList = [
   {
-    start: new Date("2024-05-06T05:30:00"),
-    end: new Date("2024-05-06T07:30:00"),
+    start: new Date("2024-07-06T05:30:00"),
+    end: new Date("2024-07-06T07:30:00"),
     title: "Dolly Parton",
     status: "Pending",
   },
 
   {
-    start: new Date("2024-05-21T10:00:00"),
-    end: new Date("2024-05-21T12:00:00"),
+    start: new Date("2024-07-21T10:00:00"),
+    end: new Date("2024-07-21T12:00:00"),
     title: "Jo",
     status: "Closed",
   },
 
   {
-    start: new Date("2024-05-16T18:30:00"),
-    end: new Date("2024-05-16T20:30:00"),
+    start: new Date("2024-07-16T18:30:00"),
+    end: new Date("2024-07-16T20:30:00"),
     title: "Annie",
     color: "green",
     status: "Confirmed",
@@ -58,14 +106,12 @@ const myEventsList = [
 const calendarStyle = () => {
   return {
     style: {
-      backgroundColor: 'white', // Background color (this works)
-      //color: 'green', // Text color (this won't work directly)
+      backgroundColor: 'white',
     },
   };
 };
 
 const HeaderCellContent = ({ label }) => {
-  // Customize the header cell content (e.g., weekdays)
   const customStyles = {
     color: 'grey',
   };
@@ -93,12 +139,13 @@ const BookingCalendarView = (props) => (
 
       startAccessor="start"
       endAccessor="end"
-      style={{ height: 600, margin: "30px" }}
+      formats={formats}
+      style={{ height: "85vh", margin: "50px"}}
       views={{ month: true }}
       step={155}
       dayPropGetter={calendarStyle}
       components={{
-      // Customize the header cell style
+      toolbar: CustomToolbar,
       month: {
       header: HeaderCellContent,
       },
