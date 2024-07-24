@@ -16,6 +16,9 @@ import ProfileDisplay from "../../profilePhoto/ProfileDisplay";
 import BrideProfileTabs from "./BrideProfileTabs";
 import ArtistProfileTabs from "./ArtistProfileTabs";
 
+/**
+ * The general profile page (changes for content depending on user type)
+ */
 export const ProfilePage = () => {
 
     const navigate = useNavigate();
