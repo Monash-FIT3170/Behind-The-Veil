@@ -1,6 +1,6 @@
 /**
  * File Description: Booking card component based on the generic "Card" component
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Laura, Nikki
  */
 
@@ -153,6 +153,10 @@ export const BookingCard = ({
                 {/*negative margin to counter the padding in the card*/}
                 <div className={"hidden md:flex lg:hidden xl:flex -mt-6 relative min-w-56 h-full"}>
                     <img className={"w-full object-cover absolute min-h-[400px]"}
+                         onError={({currentTarget}) => {
+                             currentTarget.onError = null; // prevent infinite loop
+                             currentTarget.src = '/imageNotFound.png';
+                         }}
                          src={serviceImageData}
                          alt={"Service's cover image"}/>
                 </div>

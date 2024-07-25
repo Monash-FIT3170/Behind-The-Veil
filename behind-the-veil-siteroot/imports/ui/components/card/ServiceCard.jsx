@@ -1,6 +1,6 @@
 /**
  * File Description: Service card component based on the generic "Card" component
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Nikki
  */
 
@@ -92,6 +92,10 @@ export const ServiceCard = ({
                 <div className={"hidden sm:flex flex-col items-center justify-center " +
                     "relative min-w-40 min-h-40"}>
                     <img className={"w-full h-3/4 object-cover absolute rounded-[20px]"}
+                         onError={({currentTarget }) => {
+                             currentTarget.onError=null; // prevent infinite loop
+                             currentTarget.src='/imageNotFound.png';
+                         }}
                          src={serviceImageData}
                          alt={"Service's cover image"}/>
                 </div>
