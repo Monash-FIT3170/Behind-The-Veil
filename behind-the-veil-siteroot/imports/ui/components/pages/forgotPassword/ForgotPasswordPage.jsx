@@ -1,6 +1,6 @@
 /**
  * File Description: Forget password: Email page
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Nikki
  */
 
@@ -14,6 +14,7 @@ import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Input from "../../input/Input";
 import Button from "../../button/Button";
+import UrlBasePath from "../../../enums/UrlBasePath";
 
 
 /**
@@ -63,7 +64,7 @@ export const ForgotPasswordPage = () => {
                 "\nThis email is in the database: " + usersEmailData.includes(emailInput));
 
             alert("navigating to change password page for demonstration purposes");
-            navigate('/reset-password/demodemodemo')
+            navigate(`/${UrlBasePath.RESET_PASSWORD}/demodemodemo`)
         }
     }
 

@@ -1,6 +1,6 @@
 /**
  * File Description: Service card component based on the generic "Card" component
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Nikki
  */
 
@@ -12,6 +12,7 @@ import {CalendarDaysIcon, PencilIcon} from "@heroicons/react/24/outline"
 
 import Card from "./Card";
 import Button from "../button/Button";
+import urlBasePath from "../../enums/UrlBasePath";
 
 /**
  * Component that displays brief service details on the Services page
@@ -53,7 +54,7 @@ export const ServiceCard = ({
         viewOrEditButton = "Edit Service";
         mainButton = (
             <Button className={buttonBaseClasses}
-                    onClick={() => navigateTo('/services/' + serviceId + '/edit')}>
+                    onClick={() => navigateTo(`/${urlBasePath.SERVICES}/${serviceId}/edit`)}>
                 <PencilIcon className="icon-base"/>
                 {viewOrEditButton}
             </Button>
@@ -63,7 +64,7 @@ export const ServiceCard = ({
         buttonClasses = classNames("bg-secondary-purple hover:bg-secondary-purple-hover", buttonBaseClasses);
         mainButton = (
             <Button className={buttonClasses}
-                    onClick={() => navigateTo('/services/' + serviceId)}>
+                    onClick={() => navigateTo(`/${urlBasePath.SERVICES}/${serviceId}`)}>
                 <CalendarDaysIcon className="icon-base"/>
                 {viewOrEditButton}
             </Button>

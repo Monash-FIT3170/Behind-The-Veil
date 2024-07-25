@@ -4,7 +4,7 @@
  * Contributors: Josh
  */
 import React from "react";
-import { Tab } from "@headlessui/react";
+import {Tab} from "@headlessui/react";
 import classNames from "classnames";
 
 /**
