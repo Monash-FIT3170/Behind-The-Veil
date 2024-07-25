@@ -50,8 +50,8 @@ export const ServicesPage = () => {
         // aggregate with artist first
         for (let j = 0; j < usersData.length; j++) {
             // find matching artist and add their name
-            if (servicesData[i].artistUsername === usersData[j]._id) {
-                servicesData[i].artistAlias = usersData[j].userAlias;
+            if (servicesData[i].artistUsername === usersData[j].username) {
+                servicesData[i].artistAlias = usersData[j].profile.alias;
                 break;
             }
         }
