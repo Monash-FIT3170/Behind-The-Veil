@@ -1,6 +1,6 @@
 /**
  * File Description: Specific Services page
- * File version: 1.3
+ * File version: 1.4
  * Contributors: Nhu, Nikki
  */
 
@@ -96,28 +96,42 @@ const SpecificServicePage = () => {
         );
 
     } else {
+        // service data for this service ID is not found
+        if (!serviceData) {
+            return (
+                <WhiteBackground>
+                    <div className="flex flex-col gap-y-6 items-center justify-center">
+                        <span className={"large-text"}>Service is not found </span>
 
-        return (
-            <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-                {/* Title container for centering */}
-                <PreviousButton/>
-                <div className="flex flex-row flex-nowrap items-center">
-                    <div className="large-text md:title-text text-center mb-5 grow">{serviceData.serviceName}</div>
-                </div>
+                        <Button className={"bg-secondary-purple hover:bg-secondary-purple-hover"}
+                                onClick={() => navigateTo("/services")}>
+                            Back to all services
+                        </Button>
+                    </div>
+                </WhiteBackground>
+            )
+        } else {
+            return (
+                <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
+                    {/* Title container for centering */}
+                    <PreviousButton/>
+                    <div className="flex flex-row flex-nowrap items-center">
+                        <div className="large-text md:title-text text-center mb-5 grow">{serviceData.serviceName}</div>
+                    </div>
 
-                {/* Content container */}
-                <div className="flex flex-col xl:flex-row xl:items-start justify-center w-full gap-y-10">
+                    {/* Content container */}
+                    <div className="flex flex-col xl:flex-row xl:items-start justify-center w-full gap-y-10">
 
-                    {/* Left side: image carousel with navigation buttons */}
-                    <div className="flex flex-col items-center justify-start gap-y-8">
+                        {/* Left side: image carousel with navigation buttons */}
+                        <div className="flex flex-col items-center justify-start gap-y-8">
 
-                        <div className={"flex flex-row items-center justify-center"}>
+                            <div className={"flex flex-row items-center justify-center"}>
 
-                            {/* Backward Button */}
-                            <Button onClick={handlePrevClick}
-                                    className="hidden sm:flex bg-transparent hover:bg-white-hover active:bg-light-grey">
-                                <ChevronLeftIcon className="size-10 stroke-[4] text-dark-grey"/>
-                            </Button>
+                                {/* Backward Button */}
+                                <Button onClick={handlePrevClick}
+                                        className="hidden sm:flex bg-transparent hover:bg-white-hover active:bg-light-grey">
+                                    <ChevronLeftIcon className="size-10 stroke-[4] text-dark-grey"/>
+                                </Button>
 
                             {/* Image */}
                             <img className="rounded-2xl object-contain
@@ -133,39 +147,39 @@ const SpecificServicePage = () => {
                                  }}
                             />
 
-                            {/* Forward Button */}
-                            <Button onClick={handleNextClick}
-                                    className="hidden sm:flex bg-transparent hover:bg-white-hover active:bg-light-grey">
-                                <ChevronRightIcon className="size-10 stroke-[4] text-dark-grey"/>
-                            </Button>
-                        </div>
-
-                        {/*bottom of photo div*/}
-                        <div className={"flex flex-row items-center justify-center gap-x-4"}>
-                            {/* Backward Button on tiny screens at the bottom*/}
-                            <Button onClick={handlePrevClick}
-                                    className="sm:hidden bg-transparent hover:bg-white-hover active:bg-light-grey">
-                                <ChevronLeftIcon className="size-10 stroke-[4] text-dark-grey"/>
-                            </Button>
-
-                            {/* Dots Indicator */}
-                            <div className="flex">
-                                {imageUrls.map((_, index) => (
-                                    <span
-                                        key={index}
-                                        className={`size-4 mx-1  rounded-full ${currentImageIndex === index ? 'bg-dark-grey' : 'bg-light-grey'}`}
-                                        onClick={() => setCurrentImageIndex(index)}
-                                    />
-                                ))}
+                                {/* Forward Button */}
+                                <Button onClick={handleNextClick}
+                                        className="hidden sm:flex bg-transparent hover:bg-white-hover active:bg-light-grey">
+                                    <ChevronRightIcon className="size-10 stroke-[4] text-dark-grey"/>
+                                </Button>
                             </div>
 
-                            {/* Forward Button on tiny screens at the bottom */}
-                            <Button onClick={handleNextClick}
-                                    className="sm:hidden bg-transparent hover:bg-white-hover active:bg-light-grey">
-                                <ChevronRightIcon className="size-10 stroke-[4] text-dark-grey"/>
-                            </Button>
+                            {/*bottom of photo div*/}
+                            <div className={"flex flex-row items-center justify-center gap-x-4"}>
+                                {/* Backward Button on tiny screens at the bottom*/}
+                                <Button onClick={handlePrevClick}
+                                        className="sm:hidden bg-transparent hover:bg-white-hover active:bg-light-grey">
+                                    <ChevronLeftIcon className="size-10 stroke-[4] text-dark-grey"/>
+                                </Button>
+
+                                {/* Dots Indicator */}
+                                <div className="flex">
+                                    {imageUrls.map((_, index) => (
+                                        <span
+                                            key={index}
+                                            className={`size-4 mx-1  rounded-full ${currentImageIndex === index ? 'bg-dark-grey' : 'bg-light-grey'}`}
+                                            onClick={() => setCurrentImageIndex(index)}
+                                        />
+                                    ))}
+                                </div>
+
+                                {/* Forward Button on tiny screens at the bottom */}
+                                <Button onClick={handleNextClick}
+                                        className="sm:hidden bg-transparent hover:bg-white-hover active:bg-light-grey">
+                                    <ChevronRightIcon className="size-10 stroke-[4] text-dark-grey"/>
+                                </Button>
+                            </div>
                         </div>
-                    </div>
 
                     {/* Right side - User Info and Details */}
                     <div className="flex flex-col gap-y-10 items-center justify-center">
@@ -180,14 +194,12 @@ const SpecificServicePage = () => {
                                  }}
                             />
 
-
-                            <div className="flex flex-col items-start justify-center gap-y-1 w-full">
-                                <div className="flex flex-col items-start justify-center gap-y-1 pl-3">
-                                    <span className="large-text line-clamp-1">{artistData.profile.alias}</span>
-                                    <span
-                                        className="medium-text text-dark-grey line-clamp-1"> @{artistData.username}</span>
-                                </div>
-
+                                <div className="flex flex-col items-start justify-center gap-y-1 w-full">
+                                    <div className="flex flex-col items-start justify-center gap-y-1 pl-3">
+                                        <span className="large-text line-clamp-1">{artistData.profile.alias}</span>
+                                        <span
+                                            className="medium-text text-dark-grey line-clamp-1"> @{artistData.username}</span>
+                                    </div>
                                 <Button
                                     className="flex flex-row gap-2 min-w-40 w-full justify-center items-center mt-2"
                                     onClick={() => navigateTo(`/${UrlBasePath.ARTISTS}/${artistData.username}`)}>
@@ -195,21 +207,22 @@ const SpecificServicePage = () => {
                                     <Squares2X2Icon className={"icon-base"}/>
                                     All services
                                 </Button>
+                                </div>
+                            </Card>
+
+                            {/* Service Details */}
+                            <div className="flex flex-col items-start gap-y-6 w-4/5">
+                                <FormOutput textColor="text-dark-grey" haveHelpText={false} label={"Service Type:"}
+                                            input={serviceData.serviceType}></FormOutput>
+                                <FormOutput textColor="text-dark-grey" haveHelpText={false} label={"Price:"}
+                                            input={"$" + serviceData.servicePrice}></FormOutput>
+                                <FormOutput textColor="text-dark-grey" haveHelpText={true} tipText={durationTip}
+                                            label={"Duration:"}
+                                            input={serviceData.serviceDuration + " hours"}></FormOutput>
+                                <FormOutput textColor="text-dark-grey" haveHelpText={false} label={"Description:"}
+                                            input={serviceData.serviceDesc}></FormOutput>
+
                             </div>
-                        </Card>
-
-                        {/* Service Details */}
-                        <div className="flex flex-col items-start gap-y-6 w-4/5">
-                            <FormOutput textColor="text-dark-grey" haveHelpText={false} label={"Service Type:"}
-                                        input={serviceData.serviceType}></FormOutput>
-                            <FormOutput textColor="text-dark-grey" haveHelpText={false} label={"Price:"}
-                                        input={"$" + serviceData.servicePrice}></FormOutput>
-                            <FormOutput textColor="text-dark-grey" haveHelpText={true} tipText={durationTip}
-                                        label={"Duration:"} input={serviceData.serviceDuration + " hours"}></FormOutput>
-                            <FormOutput textColor="text-dark-grey" haveHelpText={false} label={"Description:"}
-                                        input={serviceData.serviceDesc}></FormOutput>
-
-                        </div>
 
                         <Button className="flex flex-row gap-x-2 justify-center items-center w-4/5 sm:w-1/3 min-w-60
                             bg-secondary-purple hover:bg-secondary-purple-hover"
@@ -217,11 +230,11 @@ const SpecificServicePage = () => {
                             <CalendarDaysIcon className="icon-base"/>
                             Request Booking
                         </Button>
+                        </div>
                     </div>
-                </div>
-
-            </WhiteBackground>
-        );
+                </WhiteBackground>
+            );
+        }
     }
 };
 
