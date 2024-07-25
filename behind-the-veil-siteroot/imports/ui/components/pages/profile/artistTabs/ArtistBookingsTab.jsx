@@ -15,7 +15,7 @@ import BookingListView from "../../../booking/BookingListView";
 
 
 /**
- * Bookings tab of an artist's profile
+ * Bookings tab of an artist Tabs' profile
  *
  * @param username {string} - username of the current user's profile
  */

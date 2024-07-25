@@ -42,16 +42,8 @@ export const LoginPage = () => {
                 // could not log in (don't explicitly say username or password incorrect for good security practice)
                 alert('Username or password incorrect')
             } else {
-                // logged in, get the account type
-                const accountType = Meteor.user().profile.type;
-
-                // If the user type is artist, redirect to the artist landing page.
-                if (accountType === 'artist') {
-                    navigate('/artist-profile/' + username);
-                    // If the user type is bride, redirect to the bride landing page.
-                } else {
-                    navigate('/bride-profile/' + username);
-                }
+                // logged in, navigate to own profile page
+                navigate('/profile/');
             }
         });
     }
