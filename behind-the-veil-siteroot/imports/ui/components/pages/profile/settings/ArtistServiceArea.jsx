@@ -4,14 +4,9 @@
  * Contributors: Hirun, Nikki
  */
 import React from "react";
-import WhiteBackground from "../../../whiteBackground/WhiteBackground.jsx";
-import PageLayout from "../../../../enums/PageLayout";
-import Tabs from "../../../tabs/Tabs.jsx";
 import Input from "../../../input/Input";
 import Button from "../../../button/Button.jsx";
-import BackButton from "../../../button/BackButton.jsx";
 import {CheckIcon} from "@heroicons/react/24/outline";
-import PreviousButton from "../../../button/PreviousButton";
 
 /**
  * This page allows the artist to enter a location as well as provide a radius in which they can travel from that location
@@ -21,7 +16,7 @@ import PreviousButton from "../../../button/PreviousButton";
 
 export const ArtistServiceArea = () => {
 
-    const ServiceAreaPanel = (
+    return (
         <div className="flex flex-col items-left justify-center gap-y-8">
             <div className="flex flex-col items-left justify-center md:flex-row md:items-center md:justify-start gap-6">
 
@@ -54,19 +49,6 @@ export const ArtistServiceArea = () => {
                 Save Changes
             </Button>
         </div>
-    );
-
-    return (
-        <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-            <PreviousButton/>
-            <div className="flex flex-row flex-nowrap items-center">
-                <div className="title-text text-center sm:-mt-10 mb-5 grow">Settings</div>
-            </div>
-            <Tabs
-                tabs={["Payment Details", "Change Password", "Service Area"]}
-                tabPanels={["Tab Panel 1", "Tab Panel 2", ServiceAreaPanel]}
-            />
-        </WhiteBackground>
     );
 };
 
