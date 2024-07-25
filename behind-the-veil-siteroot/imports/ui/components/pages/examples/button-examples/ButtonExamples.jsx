@@ -1,6 +1,6 @@
 /**
  * File Description: Button examples
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Josh, Nikki
  */
 
@@ -29,9 +29,14 @@ const ButtonExamples = () => {
             <div className="main-text underline">Specific Usage Buttons</div>
             <PreviousButton />
             <BackButton />
-            <Button className="btn-base flex items-center"><span> Settings<Cog8ToothIcon className="min-h-4 w-4 cursor-pointer ml-1"/></span>
-                </Button>
-            <Button className="settings-button"><span>Settings</span><span><Cog8ToothIcon className="min-h-4 w-4 cursor-pointer"/></span></Button>
+
+            {/*Settings buttons*/}
+            <Button className="flex flex-row justify-center items-center gap-x-1.5 sm:w-36">
+                <Cog8ToothIcon className="icon-base"/>
+                <span className={"hidden sm:flex"}>
+                        Settings
+                    </span>
+            </Button>
         </div>
     )
 }
