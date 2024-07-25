@@ -1,6 +1,6 @@
 /**
  * File Description: URL base levels enum
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Nikki
  */
 
@@ -15,10 +15,8 @@ export enum UrlBasePath {
     FORGOT_PASSWORD = "forgot-password",
     RESET_PASSWORD = "reset-password",
     SERVICES = "services",
-    // todo: might reroute profiles to be the same page but display different things
     ARTISTS = "artists",
-    ARTIST_PROFILE = "artist-profile",
-    BRIDE_PROFILE = "bride-profile",
+    PROFILE = "profile",
     MESSAGES = "messages"
 }
 
