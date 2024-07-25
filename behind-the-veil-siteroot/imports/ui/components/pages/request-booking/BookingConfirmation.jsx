@@ -26,7 +26,7 @@ const BookingConfirmation = () => {
      * Function to navigate the user back to their account page.
      */
     const returnToAccount = () => {
-        navigateTo(`/bride-profile/:username`);
+        navigateTo(`/profile/`);
     }
 
     return (

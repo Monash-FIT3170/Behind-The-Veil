@@ -1,5 +1,5 @@
 import React from "react";
-import {BrowserRouter as Router, Navigate, Route, Routes} from "react-router-dom";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 
 import NavigationBar from "./components/navigationBar/NavigationBar.jsx";
 import ProtectedRoute from "./components/protectedRoute/ProtectedRoute.jsx";
@@ -15,8 +15,6 @@ import RegisterPage from "./components/pages/register/RegisterPage.jsx";
 import RequestBooking from "./components/pages/request-booking/RequestBooking.jsx";
 import PaymentDetails from "./components/pages/request-booking/PaymentDetails";
 import SpecificServicePage from "./components/pages/service/SpecificServicePage.jsx";
-import ArtistServiceArea from "./components/pages/profile/artist/ArtistServiceArea.jsx";
-import ArtistProfilePage from "./components/pages/profile/artist/ArtistProfilePage.jsx";
 import CancelBooking from './components/pages/cancel-booking/CancelBooking.jsx';
 import ForgotPasswordPage from "./components/pages/forgotPassword/ForgotPasswordPage";
 import ResetPasswordPage from "./components/pages/forgotPassword/ResetPasswordPage";
@@ -27,8 +25,9 @@ import BookingSummary from "./components/pages/request-booking/BookingSummary";
 import RoutingAccess from "./enums/RoutingAccess";
 import UrlBasePath from "./enums/UrlBasePath";
 import NonExistingPage from "./components/pages/nonExistingPage/NonExistingPage";
-import BrideProfilePage from "./components/pages/profile/bride/BrideProfilePage.jsx"
 import BookingConfirmation from "./components/pages/request-booking/BookingConfirmation";
+import ProfilePage from "./components/pages/profile/ProfilePage";
+import ProfileSettingsPage from "./components/pages/profile/settings/ProfileSettingsPage";
 
 export const App = () => (
     <div>
@@ -41,88 +40,90 @@ export const App = () => (
                     <Route path={`/${UrlBasePath.EXAMPLES}`} element={<Examples/>}/>
 
                     {/*routes that any user can access*/}
-                    <Route path="/" element={<HomePage/>}/>
-                    <Route path="*" element={<NonExistingPage/> } /> {/*default path for all other non-routed paths*/}
+                    <Route path={`/${UrlBasePath.HOME}`} element={<HomePage/>}/>
+                    <Route path="*" element={<NonExistingPage/>}/> {/*default path for all other non-routed paths*/}
 
-                    <Route path="/services" element={<ServicesPage/>}/>
-                    <Route path="/services/:serviceId" element={<SpecificServicePage/>}/>
+                    <Route path={`/${UrlBasePath.SERVICES}`} element={<ServicesPage/>}/>
+                    <Route path={`/${UrlBasePath.SERVICES}/:serviceId`} element={<SpecificServicePage/>}/>
 
-                    <Route path="/artists" element={<ArtistsPage/>}/>
+                    <Route path={`/${UrlBasePath.ARTISTS}`} element={<ArtistsPage/>}/>
 
                     {/*routes that NOT authenticated users can access*/}
                     <Route
-                        path="/login"
+                        path={`/${UrlBasePath.LOGIN}`}
                         element={
                             <ProtectedRoute accessReq={RoutingAccess.SIGNED_OUT_ONLY}><LoginPage/></ProtectedRoute>
                         }
                     />
                     <Route
-                        path="/register"
+                        path={`/${UrlBasePath.REGISTER}`}
                         element={
                             <ProtectedRoute accessReq={RoutingAccess.SIGNED_OUT_ONLY}><RegisterPage/></ProtectedRoute>
                         }
                     />
                     <Route
-                        path="/register/createAccount/"
+                        path={`/${UrlBasePath.REGISTER}/createAccount`}
                         element={
-                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_OUT_ONLY}><CreateAccountPage/></ProtectedRoute>
+                            <ProtectedRoute
+                                accessReq={RoutingAccess.SIGNED_OUT_ONLY}><CreateAccountPage/></ProtectedRoute>
                         }
                     />
                     <Route
-                        path="/register/activateAccount"
+                        path={`/${UrlBasePath.REGISTER}/activateAccount`}
                         element={
-                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_OUT_ONLY}><ActivateAccountPage/></ProtectedRoute>
-                        }
-                    />
-
-                    <Route
-                        path="/forgot-password"
-                        element={
-                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_OUT_ONLY}><ForgotPasswordPage/></ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/reset-password/:token"
-                        element={
-                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_OUT_ONLY}><ResetPasswordPage/></ProtectedRoute>
+                            <ProtectedRoute
+                                accessReq={RoutingAccess.SIGNED_OUT_ONLY}><ActivateAccountPage/></ProtectedRoute>
                         }
                     />
 
                     <Route
-                        path="/reset-password/complete"
+                        path={`/${UrlBasePath.FORGOT_PASSWORD}`}
                         element={
-                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_OUT_ONLY}><ResetCompletePage/></ProtectedRoute>
+                            <ProtectedRoute
+                                accessReq={RoutingAccess.SIGNED_OUT_ONLY}><ForgotPasswordPage/></ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path={`/${UrlBasePath.RESET_PASSWORD}/:token`}
+                        element={
+                            <ProtectedRoute
+                                accessReq={RoutingAccess.SIGNED_OUT_ONLY}><ResetPasswordPage/></ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path={`/${UrlBasePath.RESET_PASSWORD}/complete`}
+                        element={
+                            <ProtectedRoute
+                                accessReq={RoutingAccess.SIGNED_OUT_ONLY}><ResetCompletePage/></ProtectedRoute>
                         }
                     />
 
                     {/*routes that ONLY authenticated users can access*/}
                     <Route
-                        path="/messages"
+                        path={`/${UrlBasePath.MESSAGES}`}
                         element={
                             <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}><MessagesPage/></ProtectedRoute>
                         }
                     />
-                    {/*todo: general settings and change password pages here too*/}
 
-                    {/*artist profile ONLY related*/}
+                    {/*profile related pages*/}
                     <Route
-                        path="/artist-profile/:username"
+                        path={`/${UrlBasePath.PROFILE}`}
                         element={
-                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}><ArtistProfilePage/></ProtectedRoute>
+                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}><ProfilePage/></ProtectedRoute>
                         }
                     />
-                    <Route path="/artist-profile/:username/service-area" element={<ArtistServiceArea/>}/>
 
-                    {/*bride profile ONLY related*/}
+                    {/*todo: general settings and change password pages here too*/}
                     <Route
-                        path="/bride-profile/:username"
-                        element={
-                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}><BrideProfilePage/></ProtectedRoute>
-                        }
+                        path={`/${UrlBasePath.PROFILE}/settings`}
+                        element={<ProtectedRoute
+                            accessReq={RoutingAccess.SIGNED_IN_ONLY}><ProfileSettingsPage/></ProtectedRoute>}
                     />
 
                     {/*requesting booking flow*/}
-                    <Route path="/services/:serviceId/request-booking" element={<RequestBooking/>}/>
+                    <Route path={`/${UrlBasePath.SERVICES}/:serviceId/request-booking`} element={<RequestBooking/>}/>
                     <Route path="/booking-summary" element={<BookingSummary/>}/>
                     <Route path="/payment-details" element={<PaymentDetails/>}/>
                     <Route path="/booking-confirmation" element={<BookingConfirmation/>}/>
