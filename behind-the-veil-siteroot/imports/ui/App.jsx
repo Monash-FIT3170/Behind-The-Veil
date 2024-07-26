@@ -37,11 +37,11 @@ export const App = () => (
     <div>
         {/*This is the navigation bar on every Page*/}
         <Router>
-            <NavigationBar />
+            <NavigationBar/>
             <main className="main-content">
                 <Routes>
                     {/* removed once dev is finished*/}
-                    <Route path={`/${UrlBasePath.EXAMPLES}`} element={<Examples />} />
+                    <Route path={`/${UrlBasePath.EXAMPLES}`} element={<Examples/>}/>
                     {/*routes that any user can access*/}
                     <Route path={`/${UrlBasePath.HOME}`} element={<HomePage />} />
                     <Route path="*" element={<NonExistingPage />} /> {/*default path for all other non-routed paths*/}
@@ -149,13 +149,15 @@ export const App = () => (
                             </ProtectedRoute>
                         }
                     />
+                    {/* booking related */}
+                    <Route path="/booking/:bookingId" element={<BookingDetailsPage/>}/>
                     {/*requesting booking flow*/}
                     <Route path={`/${UrlBasePath.SERVICES}/:serviceId/request-booking`} element={<RequestBooking />} />
                     <Route path="/booking-summary" element={<BookingSummary />} />
                     <Route path="/payment-details" element={<PaymentDetails />} />
                     <Route path="/booking-confirmation" element={<BookingConfirmation />} />
                     {/* TODO: haven't implemented actual flow to get here yet */}
-                    <Route path="/cancel-booking" element={<CancelBooking />} />
+                    <Route path="/cancel-booking" element={<CancelBooking/>}/>
                 </Routes>
             </main>
         </Router>

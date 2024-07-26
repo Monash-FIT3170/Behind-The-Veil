@@ -1,158 +1,177 @@
 /**
  * File Description: Brides profile page tabs
- * File version: 2.1
+ * File version: 2.2
  * Contributors: Katie, Nikki
  */
 
 import React from 'react';
-import Tabs from "../../tabs/Tabs";
-import BookingStatus from "../../../enums/BookingStatus";
-import BookingCard from "../../card/BookingCard";
-import BookingListView from "../../booking/BookingListView";
+import {Cog8ToothIcon} from "@heroicons/react/24/outline"
+import {getUserInfo} from "../../../util";
+import {useSubscribe, useTracker} from "meteor/react-meteor-data";
+
+import BookingCollection from "../../../../../api/collections/booking";
+import ServiceCollection from "../../../../../api/collections/services";
+import ImageCollection from "../../../../../api/collections/images";
+
+import WhiteBackground from "../../../whiteBackground/WhiteBackground.jsx";
+import PageLayout from "../../../../enums/PageLayout";
+import Button from "../../../button/Button.jsx";
+import ProfileDisplay from '../../../profilePhoto/ProfileDisplay.jsx';
+import Tabs from "../../../tabs/Tabs";
+import BookingStatus from "../../../../enums/BookingStatus";
+import BookingCard from "../../../card/BookingCard";
+import BookingListView from "../../../booking/BookingListView";
+import Loader from "../../../loader/Loader";
 
 
 /**
  * Component for bride profile tabs
  */
-export const BrideProfileTabs = ({userInfo}) => {
-    // mock bookings, todo: replace with db calls
-    const MOCK_BOOKINGS = [
-        {
-            bookingId: "1",
-            serviceName: "Bachelorette Glam Experience",
-            serviceDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n",
-            servicePrice: 123.00,
-            serviceImageData: "/images/unsplash-amir-seilsepour.png",
-            bookingStartDateTime: "Tuesday, 12 May, 2024",
-            bookingStatus: BookingStatus.COMPLETED
-        },
-        {
-            bookingId: "2",
-            serviceName: "GlamourGlow Beauty",
-            serviceDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n",
-            servicePrice: 42142.01,
-            serviceImageData: "/images/pexels-christian-diokno-1666462-3260852.jpg",
-            bookingStartDateTime: "Thursday, 14 May, 2024",
-            bookingStatus: BookingStatus.COMPLETED
-        },
-        {
-            bookingId: "3",
-            serviceName: "Bridal Glam Affair",
-            serviceDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n",
-            servicePrice: 213.57,
-            serviceImageData: "/images/unsplash-valerie-elash-bI8Yv7AH6b0.jpg",
-            bookingStartDateTime: "Friday, 15 May, 2024",
-            bookingStatus: BookingStatus.CONFIRMED
-        },
-        {
-            bookingId: "4",
-            serviceName: "Bachelorette Glam Experience",
-            serviceDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n",
-            servicePrice: 120.32,
-            serviceImageData: "/images/unsplash-amir-seilsepour.png",
-            bookingStartDateTime: "Saturday, 16 May, 2024",
-            bookingStatus: BookingStatus.PENDING
-        },
-        {
-            bookingId: "5",
-            serviceName: "GlamourGlow Beauty",
-            serviceDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n",
-            servicePrice: 167.00,
-            serviceImageData: "/images/pexels-christian-diokno-1666462-3260852.jpg",
-            bookingStartDateTime: "Monday, 18 May, 2024",
-            bookingStatus: BookingStatus.REJECTED
-        },
-        {
-            bookingId: "6",
-            serviceName: "Bridal Glam Affair",
-            serviceDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n",
-            servicePrice: 123.90,
-            serviceImageData: "/images/unsplash-valerie-elash-bI8Yv7AH6b0.jpg",
-            bookingStartDateTime: "Tuesday, 19 May, 2024",
-            bookingStatus: BookingStatus.PENDING
-        },
-        {
-            bookingId: "7",
-            serviceName: "GlamourGlow Beauty",
-            serviceDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n",
-            servicePrice: 183.90,
-            serviceImageData: "/images/unsplash-valerie-elash-bI8Yv7AH6b0.jpg",
-            bookingStartDateTime: "Tuesday, 19 May, 2024",
-            bookingStatus: BookingStatus.CANCELLED
-        },
-        {
-            bookingId: "8",
-            serviceName: "Bachelorette Glam Experience",
-            serviceDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis vulputate erat, tristique ultrices orci. Duis fringilla mollis sapien, eu condimentum nibh pharetra quis. In ultricies mauris vitae velit commodo congue. Donec placerat elit et ullamcorper laoreet. Morbi at bibendum quam. Nunc eu elit at ipsum vehicula  a.\n",
-            servicePrice: 391.90,
-            serviceImageData: "/images/unsplash-valerie-elash-bI8Yv7AH6b0.jpg",
-            bookingStartDateTime: "Tuesday, 19 May, 2024",
-            bookingStatus: BookingStatus.PENDING
+export const BrideProfilePage = () => {
+
+    // get current user information
+    const userInfo = getUserInfo();
+
+    // get bookings information from database
+    const isLoadingBooking = useSubscribe('all_user_bookings', userInfo.username);
+    const isLoadingService = useSubscribe('all_services');
+    const isLoadingServiceImage = useSubscribe('service_images');
+
+    let bookingsData = useTracker(() => {
+
+        return BookingCollection.find({
+            $or: [
+                {"brideUsername": userInfo.username},
+                {"artistUsername": userInfo.username}
+            ]
+        }).fetch();
+    });
+
+    let servicesData = useTracker(() => {
+        return ServiceCollection.find().fetch();
+    });
+
+    let imagesData = useTracker(() => {
+        return ImageCollection.find({"imageType": "service"}).fetch();
+    });
+
+    const isLoading = isLoadingBooking() || isLoadingService() || isLoadingServiceImage();
+
+    // manual aggregation into bookingsData with its services and images
+    for (let i = 0; i < bookingsData.length; i++) {
+
+        // aggregate with service first
+        for (let j = 0; j < servicesData.length; j++) {
+            // find matching service ID
+            if (bookingsData[i].serviceId === servicesData[j]._id) {
+                bookingsData[i].serviceName = servicesData[j].serviceName;
+                bookingsData[i].serviceDesc = servicesData[j].serviceDesc;
+                break;
+            }
         }
-    ]
-
-    // grouping the bookings into their status
-    let bookings = {
-        confirmed: [],
-        pending: [],
-        past: [],
-        archived: []
-    }
-
-    // put each booking into the array according to its status
-    for (let booking of MOCK_BOOKINGS) {
-        switch (booking.bookingStatus) {
-            case BookingStatus.CONFIRMED || BookingStatus.OVERDUE:
-                bookings.confirmed.push(booking);
+        // then aggregate with the FIRST service image (cover)
+        for (let j = 0; j < imagesData.length; j++) {
+            // find matching image for the service
+            if (imagesData[j].imageType === "service" && bookingsData[i].serviceId === imagesData[j].target_id) {
+                bookingsData[i].serviceImageData = imagesData[j].imageData;
                 break;
-            case BookingStatus.PENDING:
-                bookings.pending.push(booking);
-                break;
-            case BookingStatus.COMPLETED:
-                bookings.past.push(booking);
-                break;
-            case BookingStatus.REJECTED:
-            case BookingStatus.CANCELLED:
-                bookings.archived.push(booking);
-                break;
-            default:
-                break;
+            }
         }
     }
 
-    // map every booking to a JSX object
-    for (let status in bookings) {
-
-        bookings[status] = bookings[status].map((booking) => (
-            <BookingCard key={booking.bookingId}
-                         bookingId={booking.bookingId}
-                         serviceName={booking.serviceName}
-                         serviceDesc={booking.serviceDesc}
-                         servicePrice={booking.servicePrice}
-                         serviceImageData={booking.serviceImageData}
-                         bookingStartDateTime={booking.bookingStartDateTime}
-                         bookingStatus={booking.bookingStatus}
-                         userType={'bride'}
+    // wait for bookings data to be loaded
+    if (isLoading) {
+        return (
+            <Loader
+                loadingText={"loading . . ."}
+                isLoading={isLoading}
+                size={100}
+                speed={1.5}
             />
-        ));
-    }
+        );
+    } else {
+        // data is loaded
 
-    return (
-        <Tabs
-            tabs={[
+        // grouping the bookings into their status
+        let bookings = {
+            confirmed: [],
+            pending: [],
+            past: [],
+            archived: []
+        }
+
+        // put each booking into the array according to its status
+        for (let booking of bookingsData) {
+            switch (booking.bookingStatus) {
+                case BookingStatus.CONFIRMED || BookingStatus.OVERDUE:
+                    bookings.confirmed.push(booking);
+                    break;
+                case BookingStatus.PENDING:
+                    bookings.pending.push(booking);
+                    break;
+                case BookingStatus.COMPLETED:
+                    bookings.past.push(booking);
+                    break;
+                case BookingStatus.REJECTED:
+                case BookingStatus.CANCELLED:
+                    bookings.archived.push(booking);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // map every booking to a JSX object
+        for (let status in bookings) {
+            bookings[status] = bookings[status].map((booking, index) => (
+                <BookingCard
+                    key={index}
+                    bookingId={booking._id}
+                    serviceName={booking.serviceName}
+                    serviceDesc={booking.serviceDesc}
+                    bookingPrice={booking.bookingPrice}
+                    serviceImageData={booking.serviceImageData}
+                    bookingStartDateTime={booking.bookingStartDateTime}
+                    bookingStatus={booking.bookingStatus}
+                    bookingIsReviewed={booking.bookingIsReviewed}
+                    userType={'bride'}
+                />
+            ));
+        }
+
+        return (
+            <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
+                {/*Settings buttons*/}
+                <div className="flex items-center justify-end w-full ">
+                    {/*todo: route button to settings page*/}
+                    <Button className="flex flex-row justify-center items-center gap-x-1.5 sm:w-36">
+                        <Cog8ToothIcon className="icon-base"/>
+                        <span className={"hidden sm:flex"}>
+                        Settings
+                    </span>
+                    </Button>
+                </div>
+
+                {/*Top div where bride's info*/}
+                <ProfileDisplay imageData={""} userAlias={userInfo.alias} userUsername={userInfo.username}/>
+
+                {/*bottom half where all the tabs are at*/}
+                <Tabs
+                    tabs={['Confirmed Bookings', 'Pending Bookings', 'Past Bookings', 'Archived Bookings']}
+                    tabPanels={[
+                        <BookingListView key={"confirmed"} displayBookings={bookings["confirmed"]}/>,
+                        <BookingListView key={"pending"} displayBookings={bookings["pending"]}/>,
+                        <BookingListView key={"past"} displayBookings={bookings["past"]}/>,
+                        <BookingListView key={"archived"} displayBookings={bookings["archived"]}/>
+                    ]}
+                />
+            </WhiteBackground>
+        );
+    }
                 <span key={1}>Confirmed Bookings</span>,
                 <span key={2}>Pending Bookings</span>,
                 <span key={3}>Past Bookings</span>,
                 <span key={4}>Archived Bookings</span>
-            ]}
-            tabPanels={[
-                <BookingListView key={"confirmed"} displayBookings={bookings["confirmed"]}/>,
-                <BookingListView key={"pending"} displayBookings={bookings["pending"]}/>,
-                <BookingListView key={"past"} displayBookings={bookings["past"]}/>,
-                <BookingListView key={"archived"} displayBookings={bookings["archived"]}/>
-            ]}
-        />
-    );
 };
 
 export default BrideProfileTabs;
