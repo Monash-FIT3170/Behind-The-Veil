@@ -18,17 +18,18 @@ import ProfilePhoto from "../profilePhoto/ProfilePhoto";
  *
  * @param className {string} - additional classes to be applied on top of the base style
  * @param artistUsername {string} - username of artist
- * @param artistAlias
- * @param artistProfileImageData
+ * @param artistAlias {string} - alias/name of artist
+ * @param artistProfileImageData - the image data of the artist's profile
+ * @param cardProps - encompasses all other props supplied and applies them to the card
  */
-export const ArtistCard = ({className, artistUsername, artistAlias, artistProfileImageData}) => {
+export const ArtistCard = ({className, artistUsername, artistAlias, artistProfileImageData, ...cardProps}) => {
     // variables to handle routing
     const navigateTo = useNavigate();
 
     const classes = classNames(className, "");
 
     return (
-        <Card className={"cursor-default flex flex-col justify-center items-center w-56 min-h-56 gap-y-2"}>
+        <Card className={"cursor-default flex flex-col justify-center items-center w-56 min-h-56 gap-y-2"} {...cardProps}>
 
             <ProfilePhoto artistPhotoData={artistProfileImageData} hoverEffect={false}/>
 

@@ -52,9 +52,9 @@ export const ArtistsPage = () => {
     }
 
     // map data into artist cards
-    const displayedArtistJsx = usersData.map((user, index) => (
+    const displayedArtistJsx = usersData.map((user) => (
         <ArtistCard
-            key={index}
+            key={user.username}
             artistUsername={user.username}
             artistAlias={user.profile.alias}
             artistProfileImageData={user.profileImageData}/>)
