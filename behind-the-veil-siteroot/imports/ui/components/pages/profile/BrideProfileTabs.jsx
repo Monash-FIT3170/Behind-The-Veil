@@ -5,29 +5,29 @@
  */
 
 import React from 'react';
-import {Cog8ToothIcon} from "@heroicons/react/24/outline"
-import {getUserInfo} from "../../../util";
 import {useSubscribe, useTracker} from "meteor/react-meteor-data";
+import {Cog8ToothIcon} from "@heroicons/react/24/outline"
+import {getUserInfo} from "../../util";
 
-import BookingCollection from "../../../../../api/collections/booking";
-import ServiceCollection from "../../../../../api/collections/services";
-import ImageCollection from "../../../../../api/collections/images";
+import BookingCollection from "../../../../api/collections/booking";
+import ServiceCollection from "../../../../api/collections/services";
+import ImageCollection from "../../../../api/collections/images";
 
-import WhiteBackground from "../../../whiteBackground/WhiteBackground.jsx";
-import PageLayout from "../../../../enums/PageLayout";
-import Button from "../../../button/Button.jsx";
-import ProfileDisplay from '../../../profilePhoto/ProfileDisplay.jsx';
-import Tabs from "../../../tabs/Tabs";
-import BookingStatus from "../../../../enums/BookingStatus";
-import BookingCard from "../../../card/BookingCard";
-import BookingListView from "../../../booking/BookingListView";
-import Loader from "../../../loader/Loader";
+import WhiteBackground from "../../../components/whiteBackground/WhiteBackground.jsx";
+import Button from "../../../components/button/Button.jsx";
+import ProfileDisplay from '../../../components/profilePhoto/ProfileDisplay.jsx';
+import Tabs from "../../../components/tabs/Tabs";
+import Loader from "../../../components/loader/Loader";
+import BookingListView from "../../../components/booking/BookingListView";
+import BookingCard from "../../../components/card/BookingCard";
+import PageLayout from "../../../../ui/enums/PageLayout";
+import BookingStatus from "../../../../ui/enums/BookingStatus";
 
 
 /**
  * Component for bride profile tabs
  */
-export const BrideProfilePage = () => {
+export const BrideProfileTabs = () => {
 
     // get current user information
     const userInfo = getUserInfo();
@@ -157,7 +157,12 @@ export const BrideProfilePage = () => {
 
                 {/*bottom half where all the tabs are at*/}
                 <Tabs
-                    tabs={['Confirmed Bookings', 'Pending Bookings', 'Past Bookings', 'Archived Bookings']}
+                    tabs={[
+                        <span key={1}>Confirmed Bookings</span>,
+                        <span key={2}>Pending Bookings</span>,
+                        <span key={3}>Past Bookings</span>,
+                        <span key={4}>Archived Bookings</span>
+                    ]}
                     tabPanels={[
                         <BookingListView key={"confirmed"} displayBookings={bookings["confirmed"]}/>,
                         <BookingListView key={"pending"} displayBookings={bookings["pending"]}/>,
@@ -168,10 +173,6 @@ export const BrideProfilePage = () => {
             </WhiteBackground>
         );
     }
-                <span key={1}>Confirmed Bookings</span>,
-                <span key={2}>Pending Bookings</span>,
-                <span key={3}>Past Bookings</span>,
-                <span key={4}>Archived Bookings</span>
 };
 
 export default BrideProfileTabs;

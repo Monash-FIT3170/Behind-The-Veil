@@ -330,9 +330,7 @@ const BookingDetailsPage = () => {
 
                             {/*map*/}
                             <div className={"xl:hidden flex flex-col gap-6"}>
-                                <MarkerMap
-                                    location={"Southern Cross,Melbourne,Australia"}
-                                />
+                                <MarkerMap location={bookingData.bookingLocation}/>
 
                                 {/* action buttons (such as reject, cancel, etc) */}
                                 <div className="flex flex-col items-center justify-center gap-y-2 w-full">
@@ -345,9 +343,7 @@ const BookingDetailsPage = () => {
                         <div className="hidden xl:flex flex-col gap-y-6 h-full w-1/3 items-center justify-end mt-10 bottom-0">
 
                             {/*map*/}
-                            <MarkerMap
-                                location={"Southern Cross,Melbourne,Australia"}
-                            />
+                            <MarkerMap location={bookingData.bookingLocation}/>
 
                             {/* action buttons (such as reject, cancel, etc) */}
                             <div className="flex flex-col items-center justify-center gap-y-2 w-full">

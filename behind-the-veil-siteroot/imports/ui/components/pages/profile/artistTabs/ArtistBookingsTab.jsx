@@ -12,7 +12,6 @@ import BookingCollection from "../../../../../api/collections/booking";
 import ImageCollection from "../../../../../api/collections/images";
 import ServiceCollection from "../../../../../api/collections/services";
 
-
 import Button from "../../../button/Button";
 import BookingCard from "../../../card/BookingCard";
 import BookingStatus from "../../../../enums/BookingStatus";
@@ -23,7 +22,7 @@ import Loader from "../../../loader/Loader";
 
 
 /**
- * Bookings tab of an artist Tabs' profile
+ * Bookings tab of an artist's profile
  *
  * @param username {string} - username of the current user's profile
  */

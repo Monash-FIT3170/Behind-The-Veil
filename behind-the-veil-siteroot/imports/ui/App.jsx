@@ -26,6 +26,10 @@ import ActivateAccountPage from "./components/pages/register/ActivateAccountPage
 import ForgotPasswordPage from "./components/pages/forgotPassword/ForgotPasswordPage";
 import ResetPasswordPage from "./components/pages/forgotPassword/ResetPasswordPage";
 import ResetCompletePage from "./components/pages/forgotPassword/ResetCompletePage";
+
+import BookingDetailsPage from "./components/pages/request-booking/BookingDetailsPage";
+import RequestBooking from "./components/pages/request-booking/RequestBooking.jsx";
+import PaymentDetails from "./components/pages/request-booking/PaymentDetails";
 import BookingSummary from "./components/pages/request-booking/BookingSummary";
 import BookingConfirmation from "./components/pages/request-booking/BookingConfirmation";
 
@@ -151,6 +155,7 @@ export const App = () => (
                     />
                     {/* booking related */}
                     <Route path="/booking/:bookingId" element={<BookingDetailsPage/>}/>
+
                     {/*requesting booking flow*/}
                     <Route path={`/${UrlBasePath.SERVICES}/:serviceId/request-booking`} element={<RequestBooking />} />
                     <Route path="/booking-summary" element={<BookingSummary />} />
