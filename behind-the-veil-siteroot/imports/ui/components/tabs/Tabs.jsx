@@ -1,7 +1,7 @@
 /**
  * File Description: Tab component
- * File version: 1.0
- * Contributors: Josh
+ * File version: 1.1
+ * Contributors: Josh, Nikki
  */
 import React from "react";
 import {Tab} from "@headlessui/react";
@@ -16,34 +16,34 @@ import classNames from "classnames";
  * @returns tabs component
  */
 const Tabs = ({
-  tabs = [],
-  tabPanels = [],
-  tabsClassName,
-  tabPanelsClassName,
-}) => {
-  return (
-    <Tab.Group>
-      <Tab.List
-        className={classNames(
-          "overflow-auto text-dark-grey main-text border-b-2 border-light-grey",
-          tabsClassName
-        )}
-      >
-        {tabs.map((tab) => {
-          return (
-            <Tab className="py-2 px-8 border-b-2 border-transparent ui-selected:border-b-black ui-selected:text-our-black">
-              {tab}
-            </Tab>
-          );
-        })}
-      </Tab.List>
-      <Tab.Panels className={tabPanelsClassName}>
-        {tabPanels.map((tabPanel) => {
-          return <Tab.Panel>{tabPanel}</Tab.Panel>;
-        })}
-      </Tab.Panels>
-    </Tab.Group>
-  );
+                  tabs = [],
+                  tabPanels = [],
+                  tabsClassName,
+                  tabPanelsClassName,
+              }) => {
+    return (
+        <Tab.Group>
+            <Tab.List
+                className={classNames(
+                    "overflow-auto text-dark-grey main-text border-b-2 border-light-grey",
+                    tabsClassName
+                )}>
+                {tabs.map((tab) => {
+                    return (
+                        <Tab key={tab.key}
+                             className="py-2 px-8 border-b-2 border-transparent ui-selected:border-b-black ui-selected:text-our-black">
+                            {tab}
+                        </Tab>
+                    );
+                })}
+            </Tab.List>
+            <Tab.Panels className={tabPanelsClassName}>
+                {tabPanels.map((tabPanel) => {
+                    return <Tab.Panel key={tabPanel.key}>{tabPanel}</Tab.Panel>;
+                })}
+            </Tab.Panels>
+        </Tab.Group>
+    );
 };
 
 export default Tabs;

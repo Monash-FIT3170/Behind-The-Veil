@@ -1,6 +1,6 @@
 /**
  * File Description: Service card component based on the generic "Card" component
- * File version: 1.2
+ * File version: 1.3
  * Contributors: Nikki
  */
 
@@ -26,6 +26,7 @@ import urlBasePath from "../../enums/UrlBasePath";
  * @param artistUsername {string} - Username (e.g. alice_tran1234) of artist that posted the service
  * @param artistAlias {string} - name of artist that posted the service
  * @param isEdit {boolean} - true for "edit service" button, false or null for "view service" button
+ * @param cardProps - encompasses all other props supplied and applies them to the card
  */
 export const ServiceCard = ({
                                 className,
@@ -37,6 +38,7 @@ export const ServiceCard = ({
                                 artistUsername,
                                 artistAlias,
                                 isEdit,
+                                ...cardProps
                             }) => {
 
     // variables to handle routing
@@ -72,7 +74,7 @@ export const ServiceCard = ({
     }
 
     return (
-        <Card className={classes}>
+        <Card className={classes} {...cardProps}>
             <div className={"flex flex-row gap-x-8 justify-center"}>
                 <div className={"cursor-default"}>
                     <div className="large-text text-our-black max-w-full break-all line-clamp-1 mb-3 text-center">
@@ -81,7 +83,7 @@ export const ServiceCard = ({
                         {serviceDesc}</div>
                     {/*only display the artist information if it isnt in edit mode (artist doenst need to see their own
                     information repeated on each service) */}
-                    { isEdit ? null :
+                    {isEdit ? null :
                         <div className="main-text text-dark-grey max-h-[1.5rem] max-w-full line-clamp-1 break-all">
                             Artist: {artistAlias} ( @{artistUsername} )
                         </div>
@@ -104,7 +106,8 @@ export const ServiceCard = ({
             <div className="flex flex-col lg:flex-row gap-5 justify-center items-center">
                 <div className="border-2 border-dashed border-dark-grey py-2 px-4 rounded-full w-4/5 lg:w-1/4 min-w-32
                 flex items-center justify-center">
-                    <label className="main-text font-bold text-our-black line-clamp-1">${servicePrice.toFixed(2)}</label>
+                    <label
+                        className="main-text font-bold text-our-black line-clamp-1">${servicePrice.toFixed(2)}</label>
                 </div>
 
                 {/* button to specific booking detail page*/}

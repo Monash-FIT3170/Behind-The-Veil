@@ -1,6 +1,6 @@
 /**
  * File Description: Booking card component based on the generic "Card" component
- * File version: 1.2
+ * File version: 1.3
  * Contributors: Laura, Nikki
  */
 
@@ -31,6 +31,8 @@ import BookingStatusDisplay from "../booking/BookingStatusDisplay";
  * @param serviceImageData service's cover image data from database
  * @param bookingStartDateTime {string} booking start date and time
  * @param bookingStatus {BookingStatus} current booking status
+ * @param userType {string} type of the current user
+ * @param cardProps encompasses all other props supplied and applies them to the card
  */
 export const BookingCard = ({
                                 className,
@@ -41,7 +43,8 @@ export const BookingCard = ({
                                 serviceImageData,
                                 bookingStartDateTime,
                                 bookingStatus,
-                                userType
+                                userType,
+                                ...cardProps
                             }) => {
 
     // variables to handle routing
@@ -115,7 +118,7 @@ export const BookingCard = ({
         // todo
     }
     return (
-        <Card className={classes}>
+        <Card className={classes} {...cardProps}>
             <div className={"flex flex-row gap-x-4 justify-center"}>
                 <div className={"cursor-default px-4"}>
 
