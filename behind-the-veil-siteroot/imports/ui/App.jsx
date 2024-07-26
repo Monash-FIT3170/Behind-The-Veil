@@ -49,7 +49,7 @@ export const App = () => (
                     <Route path="/services/:serviceId" element={<SpecificServicePage/>}/>
                     
                     {/* reconfig for just artists */}
-                    <Route path="/services/addservice" element={<AddEditServicePage/>}/>
+                    <Route path="/services/addservice" element={<AddEditServicePage S/>}/>
                     {/*  */}
 
                     <Route path="/artists" element={<ArtistsPage/>}/>
