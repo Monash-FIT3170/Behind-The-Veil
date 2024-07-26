@@ -41,7 +41,7 @@ export const ServicesPage = () => {
         return UserCollection.find({"profile.type": "artist"}).fetch();
     });
     let imagesData = useTracker(() => {
-        return ImageCollection.find({"imageType":"service"}).fetch();
+        return ImageCollection.find({"imageType": "service"}).fetch();
     });
 
     // manual aggregation into serviceData with its artist and images
@@ -80,6 +80,7 @@ export const ServicesPage = () => {
         ></ServiceCard>)
     )
 
+    // checks if the page and data has loaded
     if (document.readyState === "complete" && !isLoading) {
         return (
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
@@ -87,9 +88,9 @@ export const ServicesPage = () => {
                 <span className={"title-text text-center"}>Services</span>
 
                 {/*todo: functional search bar*/}
-                {/*<div className="flex flex-col items-center mb-10">*/}
-                {/*    <SearchBar/>*/}
-                {/*</div>*/}
+                <div className="flex flex-col items-center mb-10">
+                    <SearchBar/>
+                </div>
 
                 <div className="flex flex-col items-center justify-center gap-y-5">
 
