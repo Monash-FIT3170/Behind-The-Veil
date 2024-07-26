@@ -1,7 +1,7 @@
 /**
  * File Description: Booking database entity
- * File version: 1.0
- * Contributors: Neth
+ * File version: 1.1
+ * Contributors: Neth, Nikki
  */
 import {Meteor} from 'meteor/meteor'
 import BookingCollection from "../collections/booking";
@@ -14,12 +14,23 @@ import BookingCollection from "../collections/booking";
  * @param {string} username - The username of the user whose bookings are to be published.
  * @returns {Mongo.Cursor} - A cursor representing the result set of bookings to be published.
  */
-Meteor.publish('all_user_bookings', function(username) {
+Meteor.publish('all_user_bookings', function (username) {
     // Check if the userid matches either the brideUsername or artistUsername
     return BookingCollection.find({
         $or: [
-            { brideUsername: username },
-            { artistUsername: username }
+            {brideUsername: username},
+            {artistUsername: username}
         ]
     });
+});
+
+/**
+ * Publishes one booking based on given booking ID to the client.
+ * @param {string} bookingId - The ID of the service to be published.
+ * @returns {Mongo.Cursor} - A cursor representing the result the booking to be published.
+ */
+Meteor.publish('specific_booking', function (bookingId) {
+    // create a mongo ID object to query for ID
+    const idObject = new Mongo.ObjectID(bookingId);
+    return BookingCollection.find({_id: idObject});
 });

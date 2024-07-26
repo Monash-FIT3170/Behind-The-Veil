@@ -1,7 +1,7 @@
 /**
  * File Description: Booking database entity
- * File version: 1.0
- * Contributors: Neth
+ * File version: 1.1
+ * Contributors: Neth, Nikki
  */
 import { BookingCollection } from "../collections/booking";
 
@@ -26,6 +26,7 @@ Meteor.methods({
             bookingLocation: location,
             bookingPrice: price,
             bookingStatus: status,
+            bookingIsReviewed: false,
             brideUsername: brideUsername,
             artistUsername: artistUsername,
             serviceId: serviceId
