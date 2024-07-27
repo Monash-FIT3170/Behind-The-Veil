@@ -1,6 +1,6 @@
 /**
  * File Description: Services page
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Nikki
  */
 
@@ -66,16 +66,19 @@ export const ServicesPage = () => {
         }
     }
 
-    const displayedServicesJsx = servicesData.map((service, index) => (<ServiceCard
-        key={index}
-        serviceId={service._id}
-        serviceName={service.serviceName}
-        serviceDesc={service.serviceDesc}
-        servicePrice={service.servicePrice}
-        artistUsername={service.artistUsername}
-        serviceImageData={service.serviceImageData}
-        artistAlias={service.artistAlias}
-    ></ServiceCard>))
+    // map data into service cards
+    const displayedServicesJsx = servicesData.map((service) => (
+        <ServiceCard
+            key={service._id}
+            serviceId={service._id}
+            serviceName={service.serviceName}
+            serviceDesc={service.serviceDesc}
+            servicePrice={service.servicePrice}
+            artistUsername={service.artistUsername}
+            serviceImageData={service.serviceImageData}
+            artistAlias={service.artistAlias}
+        ></ServiceCard>)
+    )
 
     if (document.readyState === "complete" && !isLoading) {
         return (

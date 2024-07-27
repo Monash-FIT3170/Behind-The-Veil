@@ -1,6 +1,6 @@
 /**
  * File Description: A round profile photo component
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Nikki
  */
 
@@ -23,8 +23,14 @@ export const ProfilePhoto = ({className, artistPhotoData}) => {
         return (
             <div className={classes}>
                 <img className={"w-full h-full object-cover absolute rounded-full border-2 border-light-grey" +
-                    " filter hover:brightness-75 transition duration-500 ease-in-out"} src={artistPhotoData}
-                     alt={"Artist profile photo"}/>
+                    " filter hover:brightness-75 transition duration-500 ease-in-out"}
+                     src={artistPhotoData}
+                     alt={"Artist profile photo"}
+                     onError={({currentTarget }) => {
+                         currentTarget.onError=null; // prevent infinite loop
+                         currentTarget.src='/imageNotFound.png';
+                     }}
+                />
             </div>
         );
     } else {

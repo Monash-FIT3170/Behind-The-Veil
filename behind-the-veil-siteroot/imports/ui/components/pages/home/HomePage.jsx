@@ -1,7 +1,7 @@
 /**
  * File Description: Home page
- * File version: 1.0
- * Contributors: Lucas
+ * File version: 1.1
+ * Contributors: Lucas, Nikki
  */
 
 import React, {useState} from "react";
@@ -19,6 +19,7 @@ import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
 import SearchBar from "../../searchBar/searchBar.jsx";
+import UrlBasePath from "../../../enums/UrlBasePath";
 
 // This is the array of paths to the images need on the home page
 const images = [
@@ -62,9 +63,9 @@ export const HomePage = () => {
     const handleButtonClickOrSubmit = (event) => {
         event.preventDefault(); // This line is important as it prevents the automatic submit for forms which reloads the page
         if (searchType === "services") {
-            navigate("/services")
+            navigate("/" + UrlBasePath.SERVICES)
         } else if (searchType === "artists") {
-            navigate("/artists")
+            navigate("/" + UrlBasePath.ARTISTS)
         }
     };
 
@@ -204,14 +205,14 @@ export const HomePage = () => {
             <div className="container mx-auto pt-8">
                 <form
                     className="flex items-center justify-center flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-8">
-                    <Link to="/services">
+                    <Link to={"/" + UrlBasePath.SERVICES}>
                         <Button
                             className="inline-flex items-center justify-center h-10 w-64 main-text px-0 py-0 gap-x-2">
                             <PaintBrushIcon className="icon-base"/>
                             Browse Services
                         </Button>
                     </Link>
-                    <Link to="/artists">
+                    <Link to={"/" + UrlBasePath.ARTISTS}>
                         <Button
                             className="inline-flex items-center justify-center h-10 w-64 main-text px-0 py-0 gap-x-2">
                             <IdentificationIcon className="icon-base"/>

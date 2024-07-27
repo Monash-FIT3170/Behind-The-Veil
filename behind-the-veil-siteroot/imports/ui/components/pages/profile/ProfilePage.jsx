@@ -1,6 +1,6 @@
 /**
  * File Description: Profile page
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Nikki
  */
 
@@ -15,6 +15,7 @@ import {Cog8ToothIcon} from "@heroicons/react/24/outline";
 import ProfileDisplay from "../../profilePhoto/ProfileDisplay";
 import BrideProfileTabs from "./BrideProfileTabs";
 import ArtistProfileTabs from "./ArtistProfileTabs";
+import UrlBasePath from "../../../enums/UrlBasePath";
 
 /**
  * The general profile page (changes for content depending on user type)
@@ -59,7 +60,7 @@ export const ProfilePage = () => {
                 <Button
                     className="flex flex-row justify-center items-center gap-x-1.5 sm:w-36"
                     onClick={() => {
-                        navigate('/profile/settings')
+                        navigate(`/${UrlBasePath.PROFILE}/settings`)
                     }}>
                     <Cog8ToothIcon className="icon-base"/>
                     <span className={"hidden sm:flex"}>

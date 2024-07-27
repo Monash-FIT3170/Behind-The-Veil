@@ -1,7 +1,7 @@
 /**
- * File Description: Artist my-services Tab
- * File version: 1.1
- * Contributors: Lucas Sharp
+ * File Description: Artist My-Services Tab
+ * File version: 1.2
+ * Contributors: Lucas Sharp, Nikki
  */
 
 import React, {useState} from "react";
@@ -54,7 +54,6 @@ export const ArtistServicesTab = ({username}) => {
         }
     }
 
-
     // Creating the state of the filter for the service cards (defaults to All)
     const [filterType, setFilterType] = useState(ArtistServicesFilter.ALL);
 
@@ -80,10 +79,10 @@ export const ArtistServicesTab = ({username}) => {
             }
         });
 
-        const displayServices = filteredServices.map((service, index) => {
+        const displayServices = filteredServices.map((service) => {
             return (
                 <ServiceCard
-                    key={index}
+                    key={service._id}
                     serviceId={service._id}
                     serviceName={service.serviceName}
                     serviceDesc={service.serviceDesc}

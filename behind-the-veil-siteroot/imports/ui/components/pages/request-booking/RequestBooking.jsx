@@ -4,7 +4,7 @@
  * Contributors: Josh, Nikki
  */
 
-import React, {useId, useState, useEffect} from "react";
+import React, {useEffect, useId, useState} from "react";
 import ServiceDetailsHeader from "../../service-details-header/ServiceDetailsHeader";
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
@@ -32,7 +32,7 @@ import {
 } from "date-fns";
 import BookingStatus from "../../../enums/BookingStatus.ts";
 import {useNavigate} from "react-router-dom";
-import { AddressAutofill } from "@mapbox/search-js-react";
+import {AddressAutofill} from "@mapbox/search-js-react";
 
 /**
  * Page for user to request a booking

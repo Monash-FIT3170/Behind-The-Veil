@@ -1,6 +1,6 @@
 /**
  * File Description: Activate Account page
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Ryan, Nikki
  */
 
@@ -12,6 +12,7 @@ import URLSearchParams from "@ungap/url-search-params";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
+import UrlBasePath from "../../../enums/UrlBasePath";
 
 // TODO: Match code to one sent via email, then activate users account
 const ActivateAccountPage = () => {
@@ -48,7 +49,7 @@ const ActivateAccountPage = () => {
 
                 <Button className={"bg-secondary-purple hover:bg-secondary-purple-hover  w-1/3 min-w-40"}
                         onClick={() => {
-                            navigate("/login")
+                            navigate("/" + UrlBasePath.LOGIN)
                         }}>
                     Return to Login
                 </Button>

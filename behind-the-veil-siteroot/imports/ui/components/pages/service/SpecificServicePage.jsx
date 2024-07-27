@@ -1,6 +1,6 @@
 /**
  * File Description: Specific Services page
- * File version: 1.1
+ * File version: 1.3
  * Contributors: Nhu, Nikki
  */
 
@@ -19,6 +19,7 @@ import Loader from "../../loader/Loader";
 import Card from "../../card/Card";
 import FormOutput from "../request-booking/FormOutput";
 import PreviousButton from "../../button/PreviousButton";
+import UrlBasePath from "../../../enums/UrlBasePath";
 
 /**
  * Displays a page for a specific service
@@ -55,21 +56,25 @@ const SpecificServicePage = () => {
     const isLoading = isLoadingService() || isLoadingArtist() || isLoadingServiceImages() || isLoadingArtistProfile();
 
     let artistData = useTracker(() => {
-        return UserCollection.find({username:serviceData ? serviceData.artistUsername : "" }).fetch()[0];
+        return UserCollection.find({username: serviceData ? serviceData.artistUsername : ""}).fetch()[0];
     });
 
     let serviceImagesData = useTracker(() => {
-        return ImageCollection.find({$and: [
+        return ImageCollection.find({
+            $and: [
                 {"imageType": "service"},
                 {"target_id": serviceData ? serviceData._id : ""}
-            ]}).fetch();
+            ]
+        }).fetch();
     });
 
     let profileImagesData = useTracker(() => {
-        return ImageCollection.find({$and: [
+        return ImageCollection.find({
+            $and: [
                 {"imageType": "profile"},
                 {"target_id": serviceData ? serviceData.artistUsername : ""}
-            ]}).fetch()[0];
+            ]
+        }).fetch()[0];
     });
 
     const imageUrls = serviceImagesData.map((image) => (
@@ -121,7 +126,12 @@ const SpecificServicePage = () => {
                              xl:min-w-[300px] xl:max-w-[400px] xl:max-h-[600px]
                              2xl:min-w-[500px] 2xl:max-w-[600px]"
                                  src={imageUrls[currentImageIndex]}
-                                 alt="Service image"/>
+                                 alt="Service image"
+                                 onError={({currentTarget}) => {
+                                     currentTarget.onError = null; // prevent infinite loop
+                                     currentTarget.src = '/imageNotFound.png';
+                                 }}
+                            />
 
                             {/* Forward Button */}
                             <Button onClick={handleNextClick}
@@ -163,7 +173,12 @@ const SpecificServicePage = () => {
                         <Card
                             className="flex flex-row items-center justify-center space-x-2 w-fit sm:min-w-[450px] rounded-2xl">
                             <img src={profileImagesData.imageData} alt="Artist profile image"
-                                 className="rounded-[10px] object-cover size-24"/>
+                                 className="rounded-[10px] object-cover size-24"
+                                 onError={({currentTarget}) => {
+                                     currentTarget.onError = null; // prevent infinite loop
+                                     currentTarget.src = '/imageNotFound.png';
+                                 }}
+                            />
 
 
                             <div className="flex flex-col items-start justify-center gap-y-1 w-full">
@@ -175,7 +190,7 @@ const SpecificServicePage = () => {
 
                                 <Button
                                     className="flex flex-row gap-2 min-w-40 w-full justify-center items-center mt-2"
-                                    onClick={() => navigateTo('/artists/' + artistData.username)}>
+                                    onClick={() => navigateTo(`/${UrlBasePath.ARTISTS}/${artistData.username}`)}>
                                     {/*this is the BRIDE's view of the artist, not the artist profile*/}
                                     <Squares2X2Icon className={"icon-base"}/>
                                     All services
@@ -198,7 +213,7 @@ const SpecificServicePage = () => {
 
                         <Button className="flex flex-row gap-x-2 justify-center items-center w-4/5 sm:w-1/3 min-w-60
                             bg-secondary-purple hover:bg-secondary-purple-hover"
-                                onClick={() => navigateTo('/services/' + serviceId + '/request-booking')}>
+                                onClick={() => navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/request-booking`)}>
                             <CalendarDaysIcon className="icon-base"/>
                             Request Booking
                         </Button>
