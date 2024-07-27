@@ -1,36 +1,28 @@
 /**
  * File Description: Brides profile page tabs
- * File version: 2.2
+ * File version: 2.3
  * Contributors: Katie, Nikki
  */
 
 import React from 'react';
 import {useSubscribe, useTracker} from "meteor/react-meteor-data";
-import {Cog8ToothIcon} from "@heroicons/react/24/outline"
-import {getUserInfo} from "../../util";
 
 import BookingCollection from "../../../../api/collections/booking";
 import ServiceCollection from "../../../../api/collections/services";
 import ImageCollection from "../../../../api/collections/images";
 
-import WhiteBackground from "../../../components/whiteBackground/WhiteBackground.jsx";
-import Button from "../../../components/button/Button.jsx";
-import ProfileDisplay from '../../../components/profilePhoto/ProfileDisplay.jsx';
 import Tabs from "../../../components/tabs/Tabs";
 import Loader from "../../../components/loader/Loader";
 import BookingListView from "../../../components/booking/BookingListView";
 import BookingCard from "../../../components/card/BookingCard";
-import PageLayout from "../../../../ui/enums/PageLayout";
 import BookingStatus from "../../../../ui/enums/BookingStatus";
 
-
 /**
- * Component for bride profile tabs
+ * Component for bride's profile tabs
+ *
+ * @param userInfo - logged-in user information passed in
  */
-export const BrideProfileTabs = () => {
-
-    // get current user information
-    const userInfo = getUserInfo();
+export const BrideProfileTabs = ({userInfo}) => {
 
     // get bookings information from database
     const isLoadingBooking = useSubscribe('all_user_bookings', userInfo.username);
@@ -140,37 +132,20 @@ export const BrideProfileTabs = () => {
         }
 
         return (
-            <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-                {/*Settings buttons*/}
-                <div className="flex items-center justify-end w-full ">
-                    {/*todo: route button to settings page*/}
-                    <Button className="flex flex-row justify-center items-center gap-x-1.5 sm:w-36">
-                        <Cog8ToothIcon className="icon-base"/>
-                        <span className={"hidden sm:flex"}>
-                        Settings
-                    </span>
-                    </Button>
-                </div>
-
-                {/*Top div where bride's info*/}
-                <ProfileDisplay imageData={""} userAlias={userInfo.alias} userUsername={userInfo.username}/>
-
-                {/*bottom half where all the tabs are at*/}
-                <Tabs
-                    tabs={[
-                        <span key={1}>Confirmed Bookings</span>,
-                        <span key={2}>Pending Bookings</span>,
-                        <span key={3}>Past Bookings</span>,
-                        <span key={4}>Archived Bookings</span>
-                    ]}
-                    tabPanels={[
-                        <BookingListView key={"confirmed"} displayBookings={bookings["confirmed"]}/>,
-                        <BookingListView key={"pending"} displayBookings={bookings["pending"]}/>,
-                        <BookingListView key={"past"} displayBookings={bookings["past"]}/>,
-                        <BookingListView key={"archived"} displayBookings={bookings["archived"]}/>
-                    ]}
-                />
-            </WhiteBackground>
+            <Tabs
+                tabs={[
+                    <span key={1}>Confirmed Bookings</span>,
+                    <span key={2}>Pending Bookings</span>,
+                    <span key={3}>Past Bookings</span>,
+                    <span key={4}>Archived Bookings</span>
+                ]}
+                tabPanels={[
+                    <BookingListView key={"confirmed"} displayBookings={bookings["confirmed"]}/>,
+                    <BookingListView key={"pending"} displayBookings={bookings["pending"]}/>,
+                    <BookingListView key={"past"} displayBookings={bookings["past"]}/>,
+                    <BookingListView key={"archived"} displayBookings={bookings["archived"]}/>
+                ]}
+            />
         );
     }
 };
