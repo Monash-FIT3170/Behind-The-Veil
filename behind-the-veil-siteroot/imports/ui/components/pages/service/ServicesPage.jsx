@@ -77,7 +77,7 @@ export const ServicesPage = () => {
             artistUsername={service.artistUsername}
             serviceImageData={service.serviceImageData}
             artistAlias={service.artistAlias}
-        ></ServiceCard>)
+        />)
     )
 
     // checks if the page and data has loaded

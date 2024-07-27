@@ -39,7 +39,7 @@ const CardExamples = () => {
                     serviceImageData={"/images/unsplash-valerie-elash-bI8Yv7AH6b0.jpg"}
                     artistUsername={"alice_smith"}
                     artistAlias={"Alice Smith"}
-                ></ServiceCard>
+                />
                 <ServiceCard
                     className=""
                     serviceId={2}
@@ -49,7 +49,7 @@ const CardExamples = () => {
                     serviceImageData={"/images/unsplash-amir-seilsepour.png"}
                     artistUsername={"Bobbyyy1"}
                     artistAlias={"Bob"}
-                ></ServiceCard>
+                />
                 <ServiceCard
                     className=""
                     serviceId={3}
@@ -59,7 +59,7 @@ const CardExamples = () => {
                     serviceImageData={"/images/pexels-kristina-polianskaia-2617447-4241704.jpg"}
                     artistUsername={"ihavealonglonglongnameJones"}
                     artistAlias={"LonglonglongnamedJones LongnamedDavis"}
-                ></ServiceCard>
+                />
                 <ServiceCard
                     className=""
                     serviceId={4}
@@ -70,7 +70,7 @@ const CardExamples = () => {
                     artistUsername={"ihavealonglonglongnameJones"}
                     artistAlias={"LonglonglongnamedJones LongnamedDavis"}
                     isEdit={true}
-                ></ServiceCard>
+                />
             </div>
 
 
