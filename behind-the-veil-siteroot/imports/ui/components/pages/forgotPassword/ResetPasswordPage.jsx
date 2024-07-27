@@ -1,6 +1,6 @@
 /**
  * File Description: Forget password: Reset password page
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Nikki
  */
 
@@ -11,6 +11,7 @@ import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Input from "../../input/Input";
 import Button from "../../button/Button";
+import UrlBasePath from "../../../enums/UrlBasePath";
 
 /**
  * Page to change passwords
@@ -47,7 +48,7 @@ export const ResetPasswordPage = () => {
             // if matching, test for criteria
             if (passwordRegex.test(passwordInputs.initial)) {
                 // password passed
-                navigate('/reset-password/complete')
+                navigate(`/${UrlBasePath.RESET_PASSWORD}/complete`)
             } else {
                 // password criteria failed
                 alert('Password must contain at least one number, one special character, one lowercase letter, one uppercase letter, and be at least 8 characters long.');

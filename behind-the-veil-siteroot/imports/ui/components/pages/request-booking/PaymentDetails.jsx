@@ -10,9 +10,8 @@ import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
 import {CheckIcon, CurrencyDollarIcon, NoSymbolIcon} from '@heroicons/react/24/outline'
 import Input from "../../input/Input";
-import BackButton from "../../button/BackButton";
 import 'react-responsive-modal/styles.css';
-import { Modal } from 'react-responsive-modal';
+import {Modal} from 'react-responsive-modal';
 import {useNavigate} from "react-router-dom";
 import PreviousButton from "../../button/PreviousButton";
 
