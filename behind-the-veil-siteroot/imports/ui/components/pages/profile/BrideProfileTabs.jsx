@@ -1,6 +1,6 @@
 /**
  * File Description: Brides profile page tabs
- * File version: 2.0
+ * File version: 2.1
  * Contributors: Katie, Nikki
  */
 
@@ -123,9 +123,8 @@ export const BrideProfileTabs = ({userInfo}) => {
     // map every booking to a JSX object
     for (let status in bookings) {
 
-        bookings[status] = bookings[status].map((booking, index) => (
-            <BookingCard key={index}
-                         className={""}
+        bookings[status] = bookings[status].map((booking) => (
+            <BookingCard key={booking.bookingId}
                          bookingId={booking.bookingId}
                          serviceName={booking.serviceName}
                          serviceDesc={booking.serviceDesc}

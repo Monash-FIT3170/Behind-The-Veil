@@ -1,6 +1,6 @@
 /**
  * File Description: Registration page
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Nikki, Ryan
  */
 
@@ -11,6 +11,7 @@ import {PaintBrushIcon, SparklesIcon} from "@heroicons/react/24/outline";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
+import UrlBasePath from "../../../enums/UrlBasePath";
 
 /**
  * Page where user can choose to sign up for an artist or bride account
@@ -24,7 +25,7 @@ export const RegisterPage = () => {
      */
     const handleAccountTypeSelection = (accountType) => {
         console.log("Selected Type:", accountType);
-        navigate("/register/createAccount?type=" + accountType);
+        navigate(`/${UrlBasePath.REGISTER}/createAccount?type=${accountType}`);
     };
 
     /**
