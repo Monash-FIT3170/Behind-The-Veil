@@ -1,6 +1,6 @@
 /**
  * File Description: Navigation Bar React component
- * File version: 2.0
+ * File version: 2.1
  * Contributors: Nikki
  */
 
@@ -26,9 +26,6 @@ export const NavigationBar = () => {
 
     // variables for logged in user (if any)
     const [loggedInUserId, setLoggedInUserId] = useState(Meteor.userId());
-    const [userInfo, setUserInfo] = useState({"type": null, "username": null});
-
-    console.log("Current logged in user:" + JSON.stringify(userInfo))
 
     // When login status changes, this is automatically ran
     Tracker.autorun(() => {
@@ -36,33 +33,6 @@ export const NavigationBar = () => {
 
         if (userId !== loggedInUserId) {
             setLoggedInUserId(Meteor.userId());
-        }
-    })
-
-    // tracker for the required user data
-    Tracker.autorun(() => {
-        const user = Meteor.user();
-
-        if (user) {
-            // user is logged in
-            const userType = user.profile.type;
-            const username = user.username;
-
-            // check if an update to the current user info is required or not (this is needed to prevent inf loop)
-            if (userInfo.type !== userType || userInfo.username !== username) {
-                setUserInfo(
-                    {"type": user.profile.type, "username": user.username}
-                )
-            }
-
-        } else {
-            // user is not logged in
-            // check if an update to the current user info is required or not (this is needed to prevent inf loop)
-            if (userInfo.type !== null || userInfo.username !== null) {
-                setUserInfo(
-                    {"type": null, "username": null}
-                )
-            }
         }
     })
 
