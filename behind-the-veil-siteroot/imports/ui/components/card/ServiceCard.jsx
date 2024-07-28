@@ -39,17 +39,12 @@ export const ServiceCard = ({
                                 artistUsername,
                                 artistAlias,
                                 isEdit,
-                                viewArtistDetails,
+                                viewArtistDetails = true,
                                 ...cardProps
                             }) => {
 
     // variables to handle routing
     const navigateTo = useNavigate();
-
-    // by default artist details are shown
-    if (viewArtistDetails === undefined) {
-        viewArtistDetails = true;
-    }
 
     const classes = classNames(className, "flex flex-col justify-between w-full min-w-60 lg:w-2/5 lg:min-w-78 min-h-56");
 
