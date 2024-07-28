@@ -35,8 +35,7 @@ export const ArtistServicesTab = ({ username }) => {
         return ServiceCollection.find().fetch();
     });
 
-    // todo: only publish images relevant to this list of serviceIds (a group $OR ?? or an $IN operator??)
-    const isLoadingServiceImages = useSubscribe("service_images", []);
+    const isLoadingServiceImages = useSubscribe('service_images', []);
     const isLoading = isLoadingUserServices() || isLoadingServiceImages();
 
     let imagesData = useTracker(() => {
@@ -95,7 +94,8 @@ export const ArtistServicesTab = ({ username }) => {
         const inactiveFilterButtonClasses = "w-1/3 min-w-28 rounded-md p-2 bg-light-grey hover:bg-light-grey-hover";
 
         return (
-            <div className="flex flex-col gap-6 mt-2">
+            <div className="flex flex-col gap-6">
+
                 {/*top button row*/}
                 <div className={"flex flex-col-reverse gap-y-6 items lg:flex-row lg:items-center lg:justify-between"}>
                     {/* filter buttons on the left*/}
@@ -147,10 +147,14 @@ export const ArtistServicesTab = ({ username }) => {
                     </div>
                 </div>
 
-                {/*bottom tab with booking*/}
+                {/*bottom tab with services*/}
                 <div className="flex flex-col items-center justify-center gap-8">
-                    {/*the bookings and pagination*/}
-                    <Pagination reset={true} itemsPerPage={itemsPerPage} displayItems={displayServices} />
+                    {/*the services and pagination*/}
+                    <Pagination
+                        reset={true}
+                        itemsPerPage={itemsPerPage}
+                        displayItems={displayServices}
+                    />
 
                     {/*bottom component for the custom item per page*/}
                     <div className="flex flex-row items-center justify-center gap-x-2">

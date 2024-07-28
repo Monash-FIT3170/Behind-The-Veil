@@ -38,6 +38,7 @@ export const ProfileSettingsPage = () => {
                         <AccountDetails key={"account-details"}/>,
                         <ChangePasswordTab key={"change-password"} />,
                     ]}
+                    tabsClassName="lg:flex lg:justify-between lg:px-[25%] xl:px-[30%] 2xl:px-[35%]"
                 />
             </WhiteBackground>
         );
@@ -60,6 +61,7 @@ export const ProfileSettingsPage = () => {
                         <ChangePasswordTab key={"change-password"} />,
                         <ArtistServiceArea key={"service-area"}/>
                     ]}
+                    tabsClassName="lg:flex lg:justify-between lg:px-[15%] xl:px-[20%] 2xl:px-[25%]"
                 />
             </WhiteBackground>
         );
