@@ -22,6 +22,18 @@ Meteor.methods({
     "verify_email": function (username) {
         const user = Accounts.findUserByUsername(username);
         Accounts.sendVerificationEmail(user._id);
-    }
+    },
+    /**
+     * Changes the email address associated with a user.
+     * @param {string} email - new email to be associated with the user.
+     */
+    "update_email": function (email) {
+        var user = Meteor.user();
+        var oldEmail = user.emails;
+        if(oldEmail != null){
+            Accounts.removeEmail(user._id, user.emails[0].address)
+        }
+        Accounts.addEmail(user._id, email);
+   },
 })
 
