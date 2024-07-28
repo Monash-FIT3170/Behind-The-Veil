@@ -7,6 +7,7 @@
 import React from "react";
 import SinglePopupForSetExample from "./SinglePopupForSetExample";
 import SimpleAutoplacedExample from "./SimpleAutoplacedExample";
+import CalendarPopupExample from "./CalendarPopupExample";
 
 const PopupExamples = () => {
     return (
@@ -14,6 +15,7 @@ const PopupExamples = () => {
             <div className="large-text underline">Popups:</div>
             <SimpleAutoplacedExample />
             <SinglePopupForSetExample />
+            <CalendarPopupExample />
         </div>
     )
 }

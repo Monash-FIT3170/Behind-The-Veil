@@ -53,6 +53,7 @@ const SinglePopupForSetExample = () => {
                                     setPopupContent(item)
                                 }
                             }}
+                            key={item}
                         >
                             {item}
                         </Button>
