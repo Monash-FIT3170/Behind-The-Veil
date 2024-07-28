@@ -10,6 +10,7 @@ import WhiteBackground from "../../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../../enums/PageLayout";
 import Tabs from "../../../tabs/Tabs.jsx";
 import PreviousButton from "../../../button/PreviousButton";
+import AccountDetails from "./AccountDetails.jsx";
 import ArtistServiceArea from "./ArtistServiceArea";
 
 /**
@@ -71,7 +72,7 @@ export const ProfileSettingsPage = () => {
                         <span key={2}>Change Password</span>,
                     ]}
                     tabPanels={[
-                        <span key={"account-details"}>Account details tab</span>,
+                        <AccountDetails key={"account-details"}/>,
                         <span key={"change-password"}>Change password tab</span>,
                     ]}
                 />
@@ -92,7 +93,7 @@ export const ProfileSettingsPage = () => {
                         <span key={3}>Service Area</span>,
                     ]}
                     tabPanels={[
-                        <span key={"account-details"}>Account details tab</span>,
+                        <AccountDetails key={"account-details"}/>,
                         <span key={"change-password"}>Change password tab</span>,
                         <ArtistServiceArea key={"service-area"}/>
                     ]}
