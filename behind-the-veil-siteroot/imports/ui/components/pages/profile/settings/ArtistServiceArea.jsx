@@ -3,11 +3,11 @@
  * File version: 1.1
  * Contributors: Hirun, Nikki
  */
-import React from "react";
+import React, {useState} from "react";
 import Input from "../../../input/Input";
 import Button from "../../../button/Button.jsx";
-import {CheckIcon} from "@heroicons/react/24/outline";
-
+import { CheckIcon } from "@heroicons/react/24/outline";
+import Card from '../../../card/Card';
 /**
  * This page allows the artist to enter a location as well as provide a radius in which they can travel from that location
  * The design is set up that there can only be a single service location
@@ -15,6 +15,18 @@ import {CheckIcon} from "@heroicons/react/24/outline";
  */
 
 export const ArtistServiceArea = () => {
+    const [overlayVisible, setOverlayVisible] = useState(false);
+    const handleSaveChangesOverlay = () => {
+        setOverlayVisible(true);
+    };
+
+    const handleSaveChanges = () => {
+        // setOverlayVisible(false);
+    };
+
+    const handleCloseOverlay = () => {
+        setOverlayVisible(false);
+    };
 
     return (
         <div className="flex flex-col items-left justify-center gap-y-8">
@@ -44,10 +56,32 @@ export const ArtistServiceArea = () => {
             </div>
 
             {/* Save changes button*/}
-            <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2">
-                <CheckIcon className="icon-base"/>
+            <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2" onClick={handleSaveChangesOverlay}>
+                <CheckIcon className="icon-base" />
                 Save Changes
             </Button>
+            {overlayVisible && (
+                    <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50">
+
+                        <Card className="bg-white p-20 rounded-md">
+                            {/* Content of the card */}
+                            <div className='text-center'>
+                                <p className='title-text'>Save Changes?</p>
+                                <p className='medium-text my-4 '>Press cancel to keep editing</p>
+                            </div>
+                            <div className='flex justify-between'>
+                                <Button onClick={handleSaveChanges} className="flex bg-secondary-purple px-8 hover:bg-secondary-purple-hover">
+                                    <CheckIcon className='icon-base mr-1'></CheckIcon>
+                                    Yes
+                                </Button>
+                                <Button onClick={handleCloseOverlay}
+                                    className="flex px-8 hover:bg-secondary-purple-hover">
+                                    Cancel
+                                </Button>
+                            </div>
+                        </Card>
+                    </div>
+                )}
         </div>
     );
 };
