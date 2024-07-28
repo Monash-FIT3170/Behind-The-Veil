@@ -137,7 +137,7 @@ export const ArtistBookingsTab = ({username}) => {
                 serviceImageData={booking.serviceImageData}
                 bookingStartDateTime={booking.bookingStartDateTime}
                 bookingStatus={booking.bookingStatus}
-            ></BookingCard>
+            />
         );
     })
 
