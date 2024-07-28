@@ -2,3 +2,5 @@
 .idea
 node_modules/
 behind-the-veil-siteroot/package-lock.json
+
+behind-the-veil-siteroot/server/secrets.js
