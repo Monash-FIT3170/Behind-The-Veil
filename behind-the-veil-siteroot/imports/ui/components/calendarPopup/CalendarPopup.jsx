@@ -6,7 +6,7 @@
 
 import React, { useRef } from "react";
 import CalendarPopupContent from "./CalendarPopupContent";
-import { arrow, autoPlacement, FloatingArrow, offset, useClick, useFloating, useInteractions } from "@floating-ui/react";
+import { arrow, autoPlacement, autoUpdate, FloatingArrow, offset, useClick, useFloating, useInteractions } from "@floating-ui/react";
 
 
 const CalendarPopup = ({
@@ -25,7 +25,8 @@ const CalendarPopup = ({
             autoPlacement(),
             arrow({ element: arrowRef })
         ],
-        elements: { reference: activeElement }
+        elements: { reference: activeElement },
+        whileElementsMounted: autoUpdate,
     });
 
     const click = useClick(context);
@@ -38,7 +39,7 @@ const CalendarPopup = ({
         activeElement && (
             <div
                 ref={refs.setFloating}
-                className="border border-dark-grey rounded p-4 bg-white flex flex-col gap-2"
+                className="border border-dark-grey rounded-2xl p-4 bg-white flex flex-col gap-2"
                 style={floatingStyles}
                 {...getFloatingProps()}
             >

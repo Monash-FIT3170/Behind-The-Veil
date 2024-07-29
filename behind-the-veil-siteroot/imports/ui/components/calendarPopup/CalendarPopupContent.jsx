@@ -57,13 +57,13 @@ const CalendarPopupContent = ({
             <div className="flex flex-col gap-y-3 justify-center items-center py-2">
                 <div className="flex items-center gap-x-2">
                     <ClockIcon className="icon-base stroke-1 stroke-dark-grey" />
-                    <div className="main-text text-dark-grey max-w-full break-all line-clamp-1 text-center">
+                    <div className="text-dark-grey max-w-full break-all line-clamp-1 text-center">
                         {bookingTime}
                     </div>
                 </div>
                 <div className="flex items-center gap-x-2">
                     <MapPinIcon className="icon-base stroke-1 stroke-dark-grey" />
-                    <div className="main-text text-dark-grey max-w-full break-all line-clamp-1 text-center">
+                    <div className="text-dark-grey max-w-full break-all line-clamp-1 text-center">
                         {bookingLocation}
                     </div>
                 </div>
