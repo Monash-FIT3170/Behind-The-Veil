@@ -12,6 +12,7 @@ import BookingCard from "../../../card/BookingCard";
 import BookingStatus from "../../../../enums/BookingStatus";
 import BookingFilter from "../../../../enums/ArtistBookingsFilter";
 import BookingListView from "../../../booking/BookingListView";
+import BookingCalendarView from "../../../booking/BookingCalendarView";
 
 
 /**
@@ -149,7 +150,7 @@ export const ArtistBookingsTab = ({username}) => {
             <div className={"flex flex-col-reverse gap-y-6 items xl:flex-row xl:items-center xl:justify-between"}>
 
                 {/*left side buttons, depends on current view*/}
-                {bookingView === "list" ? filterButtons : <div>Calendar view buttons to be done</div>}
+                {bookingView === "list" ? filterButtons : "."}
 
                 {/*right side buttons/drop down*/}
                 <div
@@ -174,7 +175,8 @@ export const ArtistBookingsTab = ({username}) => {
                 bookingView === "list" ?
                     // rendering filtered bookings based on the applied filter
                     <BookingListView displayBookings={displayedBookingsJsx}/> :
-                    <span>Calendar view component here</span>
+                    <BookingCalendarView/>
+                    //<span>Calendar view component here</span>
             }
         </div>
     )
