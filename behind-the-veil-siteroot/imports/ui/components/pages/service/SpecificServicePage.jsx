@@ -10,7 +10,13 @@ import ServiceCollection from "../../../../api/collections/services";
 import UserCollection from "../../../../api/collections/users";
 import ImageCollection from "../../../../api/collections/images";
 import {useSubscribe, useTracker} from "meteor/react-meteor-data";
-import {CalendarDaysIcon, ChevronLeftIcon, ChevronRightIcon, Squares2X2Icon} from "@heroicons/react/24/outline";
+import {
+    CalendarDaysIcon,
+    CheckIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon, NoSymbolIcon,
+    Squares2X2Icon
+} from "@heroicons/react/24/outline";
 
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
@@ -20,6 +26,8 @@ import Card from "../../card/Card";
 import FormOutput from "../request-booking/FormOutput";
 import PreviousButton from "../../button/PreviousButton";
 import UrlBasePath from "../../../enums/UrlBasePath";
+import {getUserInfo} from "../../util";
+import {Modal} from "react-responsive-modal";
 
 /**
  * Displays a page for a specific service
@@ -27,6 +35,13 @@ import UrlBasePath from "../../../enums/UrlBasePath";
 const SpecificServicePage = () => {
 
     const navigateTo = useNavigate();
+    const userInfo = getUserInfo();
+
+    // modal (popup) variables
+    const [open, setOpen] = useState(false);
+    const onOpenModal = () => setOpen(true);
+    const onCloseModal = () => setOpen(false);
+
 
     // image carousel handler
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -113,6 +128,26 @@ const SpecificServicePage = () => {
         } else {
             return (
                 <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
+
+                    <Modal classNames={{
+                        modal: "w-[480px] h-[300px] rounded-[45px] bg-glass-panel-background border border-main-blue"
+                    }} open={open} onClose={onCloseModal} center showCloseIcon={false}>
+                        <div className="flex justify-center items-center h-full">
+                            <div className="flex flex-col">
+                                <h2 className="text-center title-text mb-5">
+                                    Access Restricted
+                                </h2>
+                                <p className="text-center medium-text mb-5">You cannot book a service as an artist.</p>
+                                <div className="flex justify-center space-x-6 mt-5">
+                                    <Button className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[25px] pe-[25px] flex gap-1" onClick={onCloseModal}>
+                                        <CheckIcon className="icon-base" />
+                                        Confirm
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </Modal>
+
                     {/* Title container for centering */}
                     <PreviousButton/>
                     <div className="flex flex-row flex-nowrap items-center">
@@ -226,7 +261,17 @@ const SpecificServicePage = () => {
 
                         <Button className="flex flex-row gap-x-2 justify-center items-center w-4/5 sm:w-1/3 min-w-60
                             bg-secondary-purple hover:bg-secondary-purple-hover"
-                                onClick={() => navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/request-booking`)}>
+                                onClick={() => {
+
+                                    if (!userInfo.username) {
+                                        // user is not logged in, redirect to login page
+                                        navigateTo(`/${UrlBasePath.LOGIN}`)
+                                    } else if (userInfo.type === 'artist') {
+                                        onOpenModal();
+                                    } else {
+                                        navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/request-booking`)
+                                    }
+                                }}>
                             <CalendarDaysIcon className="icon-base"/>
                             Request Booking
                         </Button>
