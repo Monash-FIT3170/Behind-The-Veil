@@ -140,7 +140,7 @@ export const App = () => (
 
                     {/* TODO: haven't implemented actual flow to get here yet */}
                     <Route path="/cancel-booking" element={<CancelBooking/>}/>
-                    <Route path="/add-post" element={<ArtistAddPost/>}/>
+                    <Route path={`/${UrlBasePath.PROFILE}/add-post`}element={<ArtistAddPost/>}/>
 
                 </Routes>
             </main>

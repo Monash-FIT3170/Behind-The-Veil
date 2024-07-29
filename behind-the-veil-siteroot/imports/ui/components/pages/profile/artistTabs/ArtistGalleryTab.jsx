@@ -8,6 +8,7 @@ import React from 'react';
 import {PlusIcon,} from "@heroicons/react/24/outline";
 import {useNavigate} from "react-router-dom";
 import Button from "../../../button/Button";
+import { getUserInfo } from '../../../util';
 
 /**
  * Gallery tab of an artist's profile
@@ -17,9 +18,16 @@ import Button from "../../../button/Button";
 export const ArtistGalleryTab = ({username}) => {
     const navigate = useNavigate();
 
+    // check if user type = artist, if not redirect to home ?
+    const userInfo = getUserInfo();
+
+    if (userInfo.type == "artist") {
+        
+    }
+
     function addPostNavigate(){
         console.log("button pressed")
-        navigate("/add-post")
+        navigate(`/${UrlBasePath.PROFILE}/add-post`)
     }
     const plusIcon = <PlusIcon className="icon-base"/>;
     // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
