@@ -14,7 +14,7 @@ import Button from "../../../button/Button";
  */
 const TabsExamples = () => {
     const uselessButtonsPanel = (
-        <div className="p-4 flex gap-4 h-40 border-light-grey border-2 mt-2 rounded-3xl">
+        <div key="buttons" className="p-4 flex gap-4 h-40 border-light-grey border-2 mt-2 rounded-3xl">
             <Button className="h-fit">{":)"}</Button>
             <Button className="h-fit">{":|"}</Button>
             <Button className="h-fit">{":("}</Button>
@@ -22,7 +22,7 @@ const TabsExamples = () => {
     )
 
     const purpleSquaresPanel = (
-        <div className="p-4 flex gap-4 h-40 border-light-grey border-2 mt-2 rounded-3xl">
+        <div key="squares" className="p-4 flex gap-4 h-40 border-light-grey border-2 mt-2 rounded-3xl">
             <div className="bg-secondary-purple w-5 h-5"></div>
             <div className="bg-secondary-purple w-5 h-5"></div>
             <div className="bg-secondary-purple w-5 h-5"></div>
@@ -32,7 +32,7 @@ const TabsExamples = () => {
     )
 
     const blackRectanglesPanel = (
-        <div className="p-4 flex gap-4 h-40 border-light-grey border-2 mt-2 rounded-3xl">
+        <div key="rectangles" className="p-4 flex gap-4 h-40 border-light-grey border-2 mt-2 rounded-3xl">
             <div className="bg-our-black w-7 h-2"></div>
             <div className="bg-our-black w-7 h-2"></div>
             <div className="bg-our-black w-7 h-2"></div>
@@ -46,8 +46,14 @@ const TabsExamples = () => {
                 {"Basic tabs, demonstrated with just text. These are also accessible (try using arrow and tab keys to navigate):"}
                 <Card className="w-full">
                     <Tabs
-                        tabs={['Tab 1', 'Tab 2']}
-                        tabPanels={['Tab Panel 1', 'Tab Panel 2']}
+                        tabs={[
+                            <span key={1}>Tab 1</span>,
+                            <span key={2}>Tab 2</span>
+                        ]}
+                        tabPanels={[
+                            <span key={1}>Tab Panel 1</span>,
+                            <span key={2}>Tab Panel 2</span>
+                        ]}
                     />
                 </Card>
             </div>
@@ -56,7 +62,11 @@ const TabsExamples = () => {
                 want more complex components in the tab panel section, which we can do like so:
                 <Card className="w-full">
                     <Tabs
-                        tabs={['Useless buttons', 'Purple squares', 'Black rectangles']}
+                        tabs={[
+                            <span key={1}>Useless buttons</span>,
+                            <span key={2}>Purple squares</span>,
+                            <span key={3}>Black rectangles</span>
+                        ]}
                         tabPanels={[uselessButtonsPanel, purpleSquaresPanel, blackRectanglesPanel]}
                     />
                 </Card>

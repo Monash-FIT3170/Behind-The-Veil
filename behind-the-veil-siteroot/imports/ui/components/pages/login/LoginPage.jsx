@@ -1,6 +1,6 @@
 /**
  * File Description: Sign-in page
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Kyle, Nikki
  */
 
@@ -13,6 +13,7 @@ import PageLayout from "../../../enums/PageLayout";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import Button from "../../button/Button.jsx";
 import Input from "../../input/Input";
+import UrlBasePath from "../../../enums/UrlBasePath";
 
 /**
  * The Sign-In Page for the website.
@@ -42,16 +43,8 @@ export const LoginPage = () => {
                 // could not log in (don't explicitly say username or password incorrect for good security practice)
                 alert('Username or password incorrect')
             } else {
-                // logged in, get the account type
-                const accountType = Meteor.user().profile.type;
-
-                // If the user type is artist, redirect to the artist landing page.
-                if (accountType === 'artist') {
-                    navigate('/artist-profile/' + username);
-                    // If the user type is bride, redirect to the bride landing page.
-                } else {
-                    navigate('/bride-profile/' + username);
-                }
+                // logged in, navigate to own profile page
+                navigate("/" + UrlBasePath.ARTISTS);
             }
         });
     }
@@ -101,7 +94,7 @@ export const LoginPage = () => {
 
                         <NavLink
                             className="text-hyperlink-colour underline cursor-pointer ml-auto mr-[10%] right-0"
-                            to={"/forgot-password"}>
+                            to={"/" + UrlBasePath.FORGOT_PASSWORD}>
                             Forgot password?
                         </NavLink>
                     </div>
@@ -115,7 +108,7 @@ export const LoginPage = () => {
                         {/* The register button. Clicking this will take the user to the register webpage. */}
                         <Button className="w-1/3 min-w-40"
                                 onClick={() => {
-                                    navigate("/register");
+                                    navigate("/" + UrlBasePath.REGISTER);
                                 }}>
                             Register
                         </Button>

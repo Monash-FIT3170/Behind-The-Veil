@@ -1,27 +1,20 @@
 /**
- * File Description: The Brides profile page
- * File version: 1.1
+ * File Description: Brides profile page tabs
+ * File version: 2.1
  * Contributors: Katie, Nikki
  */
 
-import React, {useState} from 'react';
-import WhiteBackground from "../../../whiteBackground/WhiteBackground.jsx";
-import PageLayout from "../../../../enums/PageLayout";
-import Button from "../../../button/Button.jsx";
-import {Cog8ToothIcon} from "@heroicons/react/24/outline"
-import ProfileDisplay from '../../../profilePhoto/ProfileDisplay.jsx';
-import {Tracker} from "meteor/tracker";
-import {Meteor} from "meteor/meteor";
-import Tabs from "../../../tabs/Tabs";
-import BookingStatus from "../../../../enums/BookingStatus";
-import BookingCard from "../../../card/BookingCard";
-import BookingListView from "../../../booking/BookingListView";
+import React from 'react';
+import Tabs from "../../tabs/Tabs";
+import BookingStatus from "../../../enums/BookingStatus";
+import BookingCard from "../../card/BookingCard";
+import BookingListView from "../../booking/BookingListView";
 
 
 /**
- * The brides profile, with the profile display, settings button, and booking tabs
+ * Component for bride profile tabs
  */
-export const BrideProfilePage = () => {
+export const BrideProfileTabs = ({userInfo}) => {
     // mock bookings, todo: replace with db calls
     const MOCK_BOOKINGS = [
         {
@@ -98,33 +91,6 @@ export const BrideProfilePage = () => {
         }
     ]
 
-
-    // get current user information
-    const [userInfo, setUserInfo] = useState(
-        {"alias": null, "username": null}
-    );
-
-    // tracker for the required user data updates
-    Tracker.autorun(() => {
-        const user = Meteor.user();
-
-        if (user) {
-            // user data is returned (sometimes it takes a while)
-            const userAlias = user.profile.alias;
-            const username = user.username;
-
-            // check if an update to the current user info is required or not (this is needed to prevent inf loop)
-            if (userInfo.alias !== userAlias || userInfo.username !== username) {
-                setUserInfo(
-                    {
-                        "alias": user.profile.alias,
-                        "username": user.username
-                    }
-                )
-            }
-        }
-    })
-
     // grouping the bookings into their status
     let bookings = {
         confirmed: [],
@@ -145,7 +111,8 @@ export const BrideProfilePage = () => {
             case BookingStatus.COMPLETED:
                 bookings.past.push(booking);
                 break;
-            case BookingStatus.REJECTED: case BookingStatus.CANCELLED:
+            case BookingStatus.REJECTED:
+            case BookingStatus.CANCELLED:
                 bookings.archived.push(booking);
                 break;
             default:
@@ -156,9 +123,8 @@ export const BrideProfilePage = () => {
     // map every booking to a JSX object
     for (let status in bookings) {
 
-        bookings[status] = bookings[status].map((booking, index) => (
-            <BookingCard key={index}
-                         className={""}
+        bookings[status] = bookings[status].map((booking) => (
+            <BookingCard key={booking.bookingId}
                          bookingId={booking.bookingId}
                          serviceName={booking.serviceName}
                          serviceDesc={booking.serviceDesc}
@@ -172,33 +138,21 @@ export const BrideProfilePage = () => {
     }
 
     return (
-        <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-            {/*Settings buttons*/}
-            <div className="flex items-center justify-end w-full ">
-                {/*todo: route button to settings page*/}
-                <Button className="flex flex-row justify-center items-center gap-x-1.5 sm:w-36">
-                    <Cog8ToothIcon className="icon-base"/>
-                    <span className={"hidden sm:flex"}>
-                        Settings
-                    </span>
-                </Button>
-            </div>
-
-            {/*Top div where bride's info*/}
-            <ProfileDisplay imageData={""} userAlias={userInfo.alias} userUsername={userInfo.username}/>
-
-            {/*bottom half where all the tabs are at*/}
-            <Tabs
-                tabs={['Confirmed Bookings', 'Pending Bookings', 'Past Bookings', 'Archived Bookings']}
-                tabPanels={[
-                    <BookingListView key={"confirmed"} displayBookings={bookings["confirmed"]}/>,
-                    <BookingListView key={"pending"} displayBookings={bookings["pending"]}/>,
-                    <BookingListView key={"past"} displayBookings={bookings["past"]}/>,
-                    <BookingListView key={"archived"} displayBookings={bookings["archived"]}/>
-                ]}
-            />
-        </WhiteBackground>
+        <Tabs
+            tabs={[
+                <span key={1}>Confirmed Bookings</span>,
+                <span key={2}>Pending Bookings</span>,
+                <span key={3}>Past Bookings</span>,
+                <span key={4}>Archived Bookings</span>
+            ]}
+            tabPanels={[
+                <BookingListView key={"confirmed"} displayBookings={bookings["confirmed"]}/>,
+                <BookingListView key={"pending"} displayBookings={bookings["pending"]}/>,
+                <BookingListView key={"past"} displayBookings={bookings["past"]}/>,
+                <BookingListView key={"archived"} displayBookings={bookings["archived"]}/>
+            ]}
+        />
     );
 };
 
-export default BrideProfilePage;
+export default BrideProfileTabs;

@@ -1,6 +1,6 @@
 /**
  * File Description: Create Account page
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Ryan, Nikki
  */
 
@@ -13,6 +13,7 @@ import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
 import Input from "../../input/Input";
+import UrlBasePath from "../../../enums/UrlBasePath";
 
 const CreateAccountPage = () => {
     const navigate = useNavigate();
@@ -74,7 +75,7 @@ const CreateAccountPage = () => {
                 console.log(Meteor.user());
                 Meteor.logout()
                 // After successful activation, navigate to activation completed page
-                navigate(`/register/activateAccount?username=${username}`);
+                navigate(`/${UrlBasePath.REGISTER}/activateAccount?username=${username}`);
             }
         });
     };
