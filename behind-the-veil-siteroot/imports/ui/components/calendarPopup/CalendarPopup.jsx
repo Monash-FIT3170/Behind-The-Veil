@@ -6,7 +6,7 @@
 
 import React, { useRef } from "react";
 import CalendarPopupContent from "./CalendarPopupContent";
-import { arrow, autoPlacement, autoUpdate, FloatingArrow, offset, useClick, useFloating, useInteractions } from "@floating-ui/react";
+import { arrow, autoPlacement, autoUpdate, FloatingArrow, offset, shift, useClick, useFloating, useInteractions } from "@floating-ui/react";
 
 
 const CalendarPopup = ({
@@ -18,12 +18,15 @@ const CalendarPopup = ({
     onClose
 }) => {
     const arrowRef = useRef()
+    const ARROW_HEIGHT = 20;
+    const ARROW_WIDTH = 40;
 
     const { refs, floatingStyles, context } = useFloating({
         middleware: [
-            offset(10),
-            autoPlacement(),
-            arrow({ element: arrowRef })
+            offset(ARROW_HEIGHT), // distance from reference. from docs: "offset() should generally be placed at the beginning of your middleware array."
+            autoPlacement(), // auto places in area with most space
+            shift({ padding: 8 }), // auto shifts so that it stays in viewport
+            arrow({ element: arrowRef }), // provides data for popup arrow. from docs: "arrow() should generally be placed toward the end of your middleware array, after shift() (if used)."
         ],
         elements: { reference: activeElement },
         whileElementsMounted: autoUpdate,
@@ -51,6 +54,8 @@ const CalendarPopup = ({
                         [&>path:first-of-type]:stroke-dark-grey
                         [&>path:last-of-type]:stroke-dark-grey
                         "
+                    height={ARROW_HEIGHT}
+                    width={ARROW_WIDTH}
                 />
                 <CalendarPopupContent
                     bookingStatus={bookingStatus}
