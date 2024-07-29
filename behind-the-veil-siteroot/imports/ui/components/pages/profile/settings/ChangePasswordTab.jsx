@@ -64,11 +64,6 @@ const ChangePasswordTab = () => {
             newErrors.retypeNewPassword = 'Passwords do not match.';
             isError = true;
         }
-        // fourth check to ensure the new password is not the same as the current password
-        if (currentPassword === newPassword) {
-            newErrors.currentPassword = 'New password cannot match current password';
-            isError = true;
-        }
         if (isError) {
             setErrors(newErrors);
             return;
