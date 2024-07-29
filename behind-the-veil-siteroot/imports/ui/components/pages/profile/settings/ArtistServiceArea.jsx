@@ -10,7 +10,7 @@ import { CheckIcon } from "@heroicons/react/24/outline";
 import Card from '../../../card/Card';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
-import "/imports/api/methods/serviceAreaMethods";
+import "/imports/api/methods/users";
 /**
  * This page allows the artist to enter a location as well as provide a radius in which they can travel from that location
  * The design is set up that there can only be a single service location
@@ -28,12 +28,16 @@ export const ArtistServiceArea = () => {
     };
 
     const handleSaveChanges = () => {
+        if (radius < 0) {
+            alert('Radius can\'t be negative');
+            return;
+        } 
         if (!text || !radius) {
             alert('Please enter a valid location and radius');
             return;
         }  else {
-            Meteor.call('add_service_area', text, radius);
-            confirm('Service area added!');
+            Meteor.call('update_service_area', text, radius);
+            confirm('Service area updated!');
         }
         setOverlayVisible(false)
     };
