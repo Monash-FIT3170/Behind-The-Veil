@@ -44,7 +44,7 @@ export const LoginPage = () => {
                 alert('Username or password incorrect')
             } else {
                 // logged in, navigate to own profile page
-                navigate("/" + UrlBasePath.ARTISTS);
+                navigate("/" + UrlBasePath.PROFILE);
             }
         });
     }
