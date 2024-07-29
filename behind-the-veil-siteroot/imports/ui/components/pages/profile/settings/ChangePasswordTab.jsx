@@ -3,10 +3,11 @@
  * File version: 1.0
  * Contributors: Ryan
  */
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {Accounts} from 'meteor/accounts-base';
 import Button from "../../../button/Button.jsx";
 import Input from "../../../input/Input";
+import {CheckIcon} from "@heroicons/react/24/outline";
 
 /**
  * Change password tab within settings
@@ -116,6 +117,7 @@ const ChangePasswordTab = () => {
             <Button type={"submit"}
                     className={"bg-secondary-purple hover:bg-secondary-purple-hover w-1/3 min-w-40"}
                     onClick={handleChangePassword}>
+                <CheckIcon className="w-5 h-5 mr-0.5 mb-0.5 inline"/>
                 Confirm
             </Button>
         </form>
