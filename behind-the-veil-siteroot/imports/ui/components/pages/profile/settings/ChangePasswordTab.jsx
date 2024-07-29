@@ -30,7 +30,6 @@ const ChangePasswordTab = () => {
 
         // Password validation criteria
         const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-
         let newErrors = {};
         let isError = false;
 
