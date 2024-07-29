@@ -8,12 +8,15 @@ import React from "react";
 import BookingStatus from "../../enums/BookingStatus";
 import { XCircleIcon, ClockIcon, MapPinIcon, DocumentMagnifyingGlassIcon, CheckCircleIcon } from "@heroicons/react/24/outline"
 import Button from "../button/Button";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Button to go to specific booking detail page
  * @param bookingId booking ID of the booking page to go to
  */
 const ViewDetailsButton = ({ bookingId }) => {
+    const navigateTo = useNavigate();
+
     return (
         <Button
             className="flex flex-row gap-x-2 justify-center items-center
