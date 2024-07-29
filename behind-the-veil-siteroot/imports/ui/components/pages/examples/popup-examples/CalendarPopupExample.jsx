@@ -50,6 +50,9 @@ const CalendarPopupExample = () => {
     return (
         <>
             <div className="large-text">Calendar popups:</div>
+            <div>
+                Click on these buttons to view the corresponding type of popup that you would see in the artist's calendar view.
+            </div>
             <div className="grid grid-cols-3 gap-4">
                 {buttonItems.map((item) => {
                     return (

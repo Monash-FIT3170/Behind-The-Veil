@@ -39,6 +39,9 @@ const SinglePopupForSetExample = () => {
     return (
         <>
             <div className="large-text">One popup for a set of references:</div>
+            <div>
+                Clicking on one of these buttons results in their corresponding popup appearing. A maximum of one popup can exist at a time for this set of buttons.
+            </div>
             <div className="grid grid-cols-3 gap-4">
                 {buttonItems.map((item) => {
                     return (
