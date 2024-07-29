@@ -20,7 +20,8 @@ import MessagesPage from "./components/pages/messages/MessagesPage.jsx";
 import LoginPage from "./components/pages/login/LoginPage.jsx";
 import RegisterPage from "./components/pages/register/RegisterPage.jsx";
 import CreateAccountPage from "./components/pages/register/CreateAccountPage";
-import ActivateAccountPage from "./components/pages/register/ActivateAccountPage";
+import AccountCreatedPage from "./components/pages/register/AccountCreatedPage";
+
 import ForgotPasswordPage from "./components/pages/forgotPassword/ForgotPasswordPage";
 import ResetPasswordPage from "./components/pages/forgotPassword/ResetPasswordPage";
 import ResetCompletePage from "./components/pages/forgotPassword/ResetCompletePage";
@@ -38,6 +39,7 @@ import AddAvailability from './components/pages/add-availability/AddAvailability
 import RoutingAccess from "./enums/RoutingAccess";
 import UrlBasePath from "./enums/UrlBasePath";
 import AddEditServicePage from "./components/pages/service/AddEditServicePage.jsx";
+import EmailVerifyPage from "./components/pages/register/EmailVerifyPage.jsx";
 
 export const App = () => (
     <div>
@@ -83,12 +85,14 @@ export const App = () => (
                             </ProtectedRoute>
                         }
                     />
+
+                    <Route path="/verify-email/:token" element={<EmailVerifyPage/>}/>
+
                     <Route
-                        path={`/${UrlBasePath.REGISTER}/activateAccount`}
+                        path={`/${UrlBasePath.REGISTER}/accountCreated`}
                         element={
-                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_OUT_ONLY}>
-                                <ActivateAccountPage />
-                            </ProtectedRoute>
+                            <ProtectedRoute
+                                accessReq={RoutingAccess.SIGNED_OUT_ONLY}><AccountCreatedPage/></ProtectedRoute>
                         }
                     />
                     <Route

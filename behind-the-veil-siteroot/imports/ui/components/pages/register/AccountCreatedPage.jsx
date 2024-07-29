@@ -1,6 +1,6 @@
 /**
  * File Description: Activate Account page
- * File version: 1.2
+ * File version: 1.3
  * Contributors: Ryan, Nikki
  */
 
@@ -14,18 +14,18 @@ import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
 import UrlBasePath from "../../../enums/UrlBasePath";
 
-// TODO: Match code to one sent via email, then activate users account
-const ActivateAccountPage = () => {
+/**
+ * Page that displays user has successfully created their account but still need to verify their email
+ */
+const AccountCreatedPage = () => {
     const navigate = useNavigate();
-    const username = new URLSearchParams(useLocation().search).get("username");
 
     // method called to email user verification email
-    Meteor.call("verify_email", username);
 
     return (
         <WhiteBackground pageLayout={PageLayout.SMALL_CENTER}>
 
-            <div className="title-text text-center">Activate Your Account</div>
+            <div className="title-text text-center">Verify Your Email</div>
 
             <div className={"flex flex-col items-center justify-center gap-y-3 p-2.5"}>
                 <div className={"flex items-center justify-center"}>
@@ -38,13 +38,8 @@ const ActivateAccountPage = () => {
                     <div className={"main-text"}>
                         Please access the
                         <span className={"text-pending-colour"}> link </span>
-                        sent to your email to activate your account!
+                        sent to your email to verify your email!
                     </div>
-                </div>
-
-                {/* TODO: Remove this div below once email activation has been implemented */}
-                <div className={"main-text text-dark-grey mb-2.5"}>
-                    **The email API has not been completed yet**
                 </div>
 
                 <Button className={"bg-secondary-purple hover:bg-secondary-purple-hover  w-1/3 min-w-40"}
@@ -58,4 +53,4 @@ const ActivateAccountPage = () => {
     );
 };
 
-export default ActivateAccountPage;
+export default AccountCreatedPage;

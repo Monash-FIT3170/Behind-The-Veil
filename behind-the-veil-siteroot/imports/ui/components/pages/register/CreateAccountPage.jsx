@@ -79,9 +79,11 @@ const CreateAccountPage = () => {
                 console.log('User created successfully!');
                 console.log(Meteor.userId());
                 console.log(Meteor.user());
+                // verify its email right after it is created
+                Meteor.call("verify_email", Meteor.userId());
                 Meteor.logout()
                 // After successful activation, navigate to activation completed page
-                navigate(`/${UrlBasePath.REGISTER}/activateAccount?username=${username}`);
+                navigate(`/${UrlBasePath.REGISTER}/accountCreated`);
             }
         });
     };
@@ -144,6 +146,12 @@ const CreateAccountPage = () => {
                             <li className={"ml-2"}>an uppercase letter (A-Z)</li>
                             <li className={"ml-2"}>minimum 8 characters</li>
                         </ul>
+                    </div>
+
+                    <div className="hidden small-text text-dark-grey text-left w-4/5">
+                        Your email address will only be used to send notifications about your account and bookings.
+                        By clicking Register, you agree for "Behind the Veil" to store and use the above details provided within the
+                        "Behind the Veil" application only.
                     </div>
 
                     <Button type={"submit"}

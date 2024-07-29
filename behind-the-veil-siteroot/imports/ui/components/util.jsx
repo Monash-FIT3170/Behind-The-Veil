@@ -19,10 +19,11 @@ export function getUserInfo() {
     const [userInfo, setUserInfo] = useState(
         {
             "id": null,
-            "alias": null,
             "username": null,
-            "type": null,
-            "email": null
+            "email": null,
+            "emailVerified": null,
+            "alias": null,
+            "type": null
         }
     );
 
@@ -36,6 +37,7 @@ export function getUserInfo() {
             const fetchedUserId = userId;
             const fetchedUsername = user.username;
             const fetchedEmail = user.emails[0].address;
+            const fetchedEmailVerified = user.emails[0].verified;
             const fetchedAlias = user.profile.alias;
             const fetchedType = user.profile.type;
 
@@ -44,6 +46,7 @@ export function getUserInfo() {
                 userInfo.id !== fetchedUserId ||
                 userInfo.username !== fetchedUsername ||
                 userInfo.email !== fetchedEmail ||
+                userInfo.emailVerified !== fetchedEmailVerified ||
                 userInfo.alias !== fetchedAlias ||
                 userInfo.type !== fetchedType
             ) {
@@ -52,6 +55,7 @@ export function getUserInfo() {
                         "id": fetchedUserId,
                         "username": fetchedUsername,
                         "email": fetchedEmail,
+                        "emailVerified": fetchedEmailVerified,
                         "alias": fetchedAlias,
                         "type": fetchedType
                     }
