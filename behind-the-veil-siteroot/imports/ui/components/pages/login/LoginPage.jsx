@@ -1,6 +1,6 @@
 /**
  * File Description: Sign-in page
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Kyle, Nikki
  */
 
@@ -13,6 +13,7 @@ import PageLayout from "../../../enums/PageLayout";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import Button from "../../button/Button.jsx";
 import Input from "../../input/Input";
+import UrlBasePath from "../../../enums/UrlBasePath";
 
 /**
  * The Sign-In Page for the website.
@@ -43,7 +44,7 @@ export const LoginPage = () => {
                 alert('Username or password incorrect')
             } else {
                 // logged in, navigate to own profile page
-                navigate('/profile/');
+                navigate("/" + UrlBasePath.ARTISTS);
             }
         });
     }
@@ -93,7 +94,7 @@ export const LoginPage = () => {
 
                         <NavLink
                             className="text-hyperlink-colour underline cursor-pointer ml-auto mr-[10%] right-0"
-                            to={"/forgot-password"}>
+                            to={"/" + UrlBasePath.FORGOT_PASSWORD}>
                             Forgot password?
                         </NavLink>
                     </div>
@@ -107,7 +108,7 @@ export const LoginPage = () => {
                         {/* The register button. Clicking this will take the user to the register webpage. */}
                         <Button className="w-1/3 min-w-40"
                                 onClick={() => {
-                                    navigate("/register");
+                                    navigate("/" + UrlBasePath.REGISTER);
                                 }}>
                             Register
                         </Button>

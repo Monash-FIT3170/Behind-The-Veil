@@ -7,10 +7,10 @@
 import React from "react";
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import Button from "../../button/Button";
-import { useNavigate } from "react-router-dom";
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import {useNavigate} from "react-router-dom";
+import {ArrowRightIcon} from "@heroicons/react/24/outline";
 import FormOutput from "./FormOutput";
-import { addHours, format, enAU } from "date-fns";
+import {addHours, enAU, format} from "date-fns";
 import PreviousButton from "../../button/PreviousButton";
 
 /**

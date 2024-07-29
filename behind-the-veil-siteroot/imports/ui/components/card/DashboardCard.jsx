@@ -1,6 +1,6 @@
 /**
  * File Description: Service card component based on the generic "Card" component
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Kefei (Phillip) Li
  */
 
@@ -15,12 +15,14 @@ import Card from "./Card";
  * @param dashboardCardTitle {int} id of the service (used for routing)
  * @param dashboardCardDesc {string} name of service
  * @param dashboardCardValue {string} description of service
+ * @param cardProps encompasses all other props supplied and applies them to the card
  */
 export const DashboardCard = ({
                                   className,
                                   dashboardCardTitle,
                                   dashboardCardDesc,
                                   dashboardCardValue,
+                                  ...cardProps
                               }) => {
     // variables to handle routing
     const classes = classNames(className,
@@ -31,7 +33,7 @@ export const DashboardCard = ({
         "w-full min-w-60 lg:w-2/5 lg:min-w-[300px] min-h-48");
 
     return (
-        <Card className={classes}>
+        <Card className={classes} {...cardProps}>
 
             <div className="flex flex-col w-full max-w-[250px] h-fit
             col-span-full sm:col-span-3 lg:col-span-full xl:col-span-3">

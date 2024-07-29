@@ -1,6 +1,6 @@
 /**
  * File Description: Services page
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Nikki
  */
 
@@ -41,7 +41,7 @@ export const ServicesPage = () => {
         return UserCollection.find({"profile.type": "artist"}).fetch();
     });
     let imagesData = useTracker(() => {
-        return ImageCollection.find({"imageType":"service"}).fetch();
+        return ImageCollection.find({"imageType": "service"}).fetch();
     });
 
     // manual aggregation into serviceData with its artist and images
@@ -50,8 +50,8 @@ export const ServicesPage = () => {
         // aggregate with artist first
         for (let j = 0; j < usersData.length; j++) {
             // find matching artist and add their name
-            if (servicesData[i].artistUsername === usersData[j]._id) {
-                servicesData[i].artistAlias = usersData[j].userAlias;
+            if (servicesData[i].artistUsername === usersData[j].username) {
+                servicesData[i].artistAlias = usersData[j].profile.alias;
                 break;
             }
         }
@@ -66,17 +66,21 @@ export const ServicesPage = () => {
         }
     }
 
-    const displayedServicesJsx = servicesData.map((service, index) => (<ServiceCard
-        key={index}
-        serviceId={service._id}
-        serviceName={service.serviceName}
-        serviceDesc={service.serviceDesc}
-        servicePrice={service.servicePrice}
-        artistUsername={service.artistUsername}
-        serviceImageData={service.serviceImageData}
-        artistAlias={service.artistAlias}
-    ></ServiceCard>))
+    // map data into service cards
+    const displayedServicesJsx = servicesData.map((service) => (
+        <ServiceCard
+            key={service._id}
+            serviceId={service._id}
+            serviceName={service.serviceName}
+            serviceDesc={service.serviceDesc}
+            servicePrice={service.servicePrice}
+            artistUsername={service.artistUsername}
+            serviceImageData={service.serviceImageData}
+            artistAlias={service.artistAlias}
+        />)
+    )
 
+    // checks if the page and data has loaded
     if (document.readyState === "complete" && !isLoading) {
         return (
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
@@ -84,9 +88,9 @@ export const ServicesPage = () => {
                 <span className={"title-text text-center"}>Services</span>
 
                 {/*todo: functional search bar*/}
-                {/*<div className="flex flex-col items-center mb-10">*/}
-                {/*    <SearchBar/>*/}
-                {/*</div>*/}
+                <div className="flex flex-col items-center mb-10">
+                    <SearchBar/>
+                </div>
 
                 <div className="flex flex-col items-center justify-center gap-y-5">
 

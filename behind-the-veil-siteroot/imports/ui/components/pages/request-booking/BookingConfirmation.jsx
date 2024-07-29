@@ -1,6 +1,6 @@
 /**
  * File Description: Booking confirmation page
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Neth
  */
 
@@ -8,7 +8,8 @@ import React from "react";
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import Button from "../../button/Button";
 import {CheckCircleIcon, CheckIcon} from "@heroicons/react/24/outline";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import UrlBasePath from "../../../enums/UrlBasePath";
 
 /**
  * * Component for displaying a booking confirmation message.
@@ -26,7 +27,7 @@ const BookingConfirmation = () => {
      * Function to navigate the user back to their account page.
      */
     const returnToAccount = () => {
-        navigateTo(`/profile/`);
+        navigateTo("/" + UrlBasePath.PROFILE);
     }
 
     return (

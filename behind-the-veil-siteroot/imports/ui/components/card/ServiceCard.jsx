@@ -1,6 +1,6 @@
 /**
  * File Description: Service card component based on the generic "Card" component
- * File version: 1.0
+ * File version: 1.3
  * Contributors: Nikki
  */
 
@@ -12,6 +12,7 @@ import { CalendarDaysIcon, PencilIcon } from "@heroicons/react/24/outline";
 
 import Card from "./Card";
 import Button from "../button/Button";
+import urlBasePath from "../../enums/UrlBasePath";
 
 /**
  * Component that displays brief service details on the Services page
@@ -25,18 +26,21 @@ import Button from "../button/Button";
  * @param artistUsername {string} - Username (e.g. alice_tran1234) of artist that posted the service
  * @param artistAlias {string} - name of artist that posted the service
  * @param isEdit {boolean} - true for "edit service" button, false or null for "view service" button
+ * @param cardProps - encompasses all other props supplied and applies them to the card
  */
 export const ServiceCard = ({
-    className,
-    serviceId,
-    serviceName,
-    serviceDesc,
-    servicePrice,
-    serviceImageData,
-    artistUsername,
-    artistAlias,
-    isEdit,
-}) => {
+                                className,
+                                serviceId,
+                                serviceName,
+                                serviceDesc,
+                                servicePrice,
+                                serviceImageData,
+                                artistUsername,
+                                artistAlias,
+                                isEdit,
+                                ...cardProps
+                            }) => {
+
     // variables to handle routing
     const navigateTo = useNavigate();
 
@@ -54,7 +58,7 @@ export const ServiceCard = ({
     if (isEdit) {
         viewOrEditButton = "Edit Service";
         mainButton = (
-            <Button className={buttonBaseClasses} onClick={() => navigateTo("/services/" + serviceId + "/editservice")}>
+            <Button className={buttonBaseClasses} onClick={() => navigateTo(`${urlBasePath.SERVICES}/${serviceId}/editservice`)}>
                 <PencilIcon className="icon-base" />
                 {viewOrEditButton}
             </Button>
@@ -63,15 +67,16 @@ export const ServiceCard = ({
         viewOrEditButton = "View Service";
         buttonClasses = classNames("bg-secondary-purple hover:bg-secondary-purple-hover", buttonBaseClasses);
         mainButton = (
-            <Button className={buttonClasses} onClick={() => navigateTo("/services/" + serviceId)}>
-                <CalendarDaysIcon className="icon-base" />
+            <Button className={buttonClasses}
+                    onClick={() => navigateTo(`/${urlBasePath.SERVICES}/${serviceId}`)}>
+                <CalendarDaysIcon className="icon-base"/>
                 {viewOrEditButton}
             </Button>
         );
     }
 
     return (
-        <Card className={classes}>
+        <Card className={classes} {...cardProps}>
             <div className={"flex flex-row gap-x-8 justify-center"}>
                 <div className={"cursor-default"}>
                     <div className="large-text text-our-black max-w-full break-all line-clamp-1 mb-3 text-center">
@@ -82,7 +87,7 @@ export const ServiceCard = ({
                     </div>
                     {/*only display the artist information if it isnt in edit mode (artist doenst need to see their own
                     information repeated on each service) */}
-                    {isEdit ? null : (
+                    {isEdit ? null :(
                         <div className="main-text text-dark-grey max-h-[1.5rem] max-w-full line-clamp-1 break-all">
                             Artist: {artistAlias} ( @{artistUsername} )
                         </div>
@@ -90,23 +95,23 @@ export const ServiceCard = ({
                 </div>
 
                 {/* image on the right side for service*/}
-                <div className={"hidden sm:flex flex-col items-center justify-center " + "relative min-w-40 min-h-40"}>
-                    <img
-                        className={"w-full h-3/4 object-cover absolute rounded-[20px]"}
-                        src={serviceImageData}
-                        alt={"Service's cover image"}
-                    />
+                <div className={"hidden sm:flex flex-col items-center justify-center " +
+                    "relative min-w-40 min-h-40"}>
+                    <img className={"w-full h-3/4 object-cover absolute rounded-[20px]"}
+                         onError={({currentTarget }) => {
+                             currentTarget.onError=null; // prevent infinite loop
+                             currentTarget.src='/imageNotFound.png';
+                         }}
+                         src={serviceImageData}
+                         alt={"Service's cover image"}/>
                 </div>
             </div>
 
             <div className="flex flex-col lg:flex-row gap-5 justify-center items-center">
-                <div
-                    className="border-2 border-dashed border-dark-grey py-2 px-4 rounded-full w-4/5 lg:w-1/4 min-w-32
-                flex items-center justify-center"
-                >
-                    <label className="main-text font-bold text-our-black line-clamp-1">
-                        ${servicePrice.toFixed(2)}
-                    </label>
+                <div className="border-2 border-dashed border-dark-grey py-2 px-4 rounded-full w-4/5 lg:w-1/4 min-w-32
+                flex items-center justify-center">
+                    <label
+                        className="main-text font-bold text-our-black line-clamp-1">${servicePrice.toFixed(2)}</label>
                 </div>
 
                 {/* button to specific booking detail page*/}
