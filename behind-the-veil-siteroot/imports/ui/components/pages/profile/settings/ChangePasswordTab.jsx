@@ -56,7 +56,7 @@ const ChangePasswordTab = () => {
 
         // second check to ensure the new password matches the requirements regex
         if (!passwordRegex.test(newPassword)) {
-            newErrors.newPassword = 'Password must adhere to requirements below';
+            newErrors.newPassword = 'New password must adhere to requirements';
             isError = true;
         }
         // third check to ensure the new password and retype new password match
@@ -64,12 +64,17 @@ const ChangePasswordTab = () => {
             newErrors.retypeNewPassword = 'Passwords do not match.';
             isError = true;
         }
+        // fourth check to ensure the new password is not the same as the current password
+        if (currentPassword === newPassword) {
+            newErrors.currentPassword = 'New password cannot match current password';
+            isError = true;
+        }
         if (isError) {
             setErrors(newErrors);
             return;
         }
 
-        // Handle password change logic here
+        // Handle password change logic
         Accounts.changePassword(currentPassword, newPassword, (error) => {
             // Check if input for current password matches the user's current password
             if (error) {
@@ -151,7 +156,7 @@ const ChangePasswordTab = () => {
                 </ul>
             </div>
 
-            {successMessage && <div className="text-green-500">{successMessage}</div>}
+            {successMessage && <div className="text-green-500 -mt-2">{successMessage}</div>}
 
             <Button type="submit"
                     className="bg-secondary-purple hover:bg-secondary-purple-hover w-1/3 min-w-40">
