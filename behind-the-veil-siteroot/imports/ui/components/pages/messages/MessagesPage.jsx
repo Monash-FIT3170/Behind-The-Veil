@@ -6,14 +6,18 @@
 
 import React, {useState} from 'react';
 import {useSubscribe, useTracker} from "meteor/react-meteor-data"
+import {Tracker} from "meteor/tracker";
+import {Meteor} from "meteor/meteor";
 
 import ChatCollection from "/imports/api/collections/chats";
 import MessageCollection from "/imports/api/collections/messages";
+import ImageCollection from '../../../../api/collections/images.js';
 
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Conversation from '../../message/Conversation';
 import MessagesPreview from '../../message/MessagesPreview';
+import {getUserInfo} from "../../util.jsx"
 
 /**
  * Messages page with all users they've chatted with
@@ -45,45 +49,53 @@ const users = [
 
 export const MessagesPage = () => {
     // get current user information
-    const [userInfo, setUserInfo] = useState(
-        {"username": null, "type": null}
-    );
-
-    // tracker for the required user data updates
-    Tracker.autorun(() => {
-        const user = Meteor.user();
-
-        if (user) {
-            // user data is returned (sometimes it takes a while)
-            const username = user.username;
-            const type = user.type;
-
-            // check if an update to the current user info is required or not (this is needed to prevent inf loop)
-            if (userInfo.username !== username, userInfo.type !== type) {
-                setUserInfo(
-                    {
-                        "username": user.username,
-                        "type": user.profile.type
-                    }
-                )
-            }
-        }
-    })
-
+    const userInfo = getUserInfo();
 
     // set up subscription (publication is in the "publication" folder)
     const isLoadingChats = useSubscribe('all_user_chats');
+    const isLoadingUserImages = useSubscribe('profile_images');
+    const isLoading = isLoadingChats() || isLoadingUserImages();
     
-     // get data from db
-     let chatsData = useTracker(() => {
+    // get data from db
+    let chatsData = useTracker(() => {
         return ChatCollection.find({
             "$or": [
             { "brideUsername": userInfo.username },
             { "artistUsername": userInfo.username }
         ]}).fetch();
     });
+    let usersImagesData = useTracker(() => {
+        return ImageCollection.find().fetch;
+    })
 
-    // TODO: subscribe to all users and then do a for loop to aggregate chat data with other user data (photos, username, etc.)
+    // manual aggregation into chatsData with the other user's images
+    // for (let i = 0; i < chatsData.length; i++) {
+    //     // aggregate with user images
+    //     // find the other user's username 
+    //     if (chatsData.brideUsername != userInfo.username) {
+    //         const otherUser = brideUsername;
+    //     }
+    //     else {
+    //         const otherUser = artistUsername;
+    //     }
+
+    //     for (let j = 0; j < usersImagesData.length; j++) {
+    //         // find the other user and add their image
+    //         if (servicesData[i].artistUsername === usersData[j].username) {
+    //             servicesData[i].artistAlias = usersData[j].profile.alias;
+    //             break;
+    //         }
+    //     }
+    //     // then aggregate with the FIRST image (cover)
+    //     for (let j = 0; j < imagesData.length; j++) {
+    //         // find matching image for the service
+
+    //         if (imagesData[j].imageType === "service" && servicesData[i]._id === imagesData[j].target_id) {
+    //             servicesData[i].serviceImageData = imagesData[j].imageData;
+    //             break;
+    //         }
+    //     }
+    // }
 
     // TODO: this might not sort ascending (check with UI later)
     chatsData.sort(function(dateOne, dateTwo) {
