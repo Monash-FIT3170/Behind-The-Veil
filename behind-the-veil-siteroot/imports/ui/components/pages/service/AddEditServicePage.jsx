@@ -6,7 +6,10 @@
 
 import React, { useState, useEffect } from "react";
 import { useSubscribe, useTracker } from "meteor/react-meteor-data";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Mongo } from "meteor/mongo";
 
+import { getUserInfo } from "../../util";
 import PageLayout from "/imports/ui/enums/PageLayout";
 import WhiteBackground from "/imports/ui/components/whiteBackground/WhiteBackground.jsx";
 import BackButton from "../../button/BackButton";
@@ -14,21 +17,55 @@ import Input from "../../input/Input";
 import Button from "../../button/Button";
 
 import { CheckIcon, XMarkIcon, TrashIcon } from "@heroicons/react/24/outline";
+import UrlBasePath from "../../../enums/UrlBasePath";
 
 export const AddEditServicePage = ({ isEdit }) => {
-
-// check user owns service + user is a artist, else redirect to home
-// after rebase: const userInfo = getUserData();
-
+    const navigateTo = useNavigate();
 
     const title = isEdit ? "Edit Service" : "Add New Service";
     const button = isEdit ? "Edit Service" : "Add Service";
 
-    const [serviceName, setServiceName] = useState(isEdit ? "Name" : "");
-    const [serviceType, setServiceType] = useState(isEdit ? "Makeup" : "None");
-    const [serviceDuration, setServiceDuration] = useState(isEdit ? 3 : 0);
-    const [servicePrice, setServicePrice] = useState(isEdit ? 250 : 0);
-    const [serviceDescription, setServiceDescription] = useState(isEdit ? "Description" : "");
+    const [serviceName, setServiceName] = useState("");
+    const [serviceType, setServiceType] = useState("None");
+    const [serviceDuration, setServiceDuration] = useState(0);
+    const [servicePrice, setServicePrice] = useState(0);
+    const [serviceDescription, setServiceDescription] = useState("");
+
+    userInfo = getUserInfo();
+    if (userInfo.type !== "artist") {
+        navigateTo(`/`);
+    }
+
+    const serviceId = isEdit ? new Mongo.ObjectID(useLocation().pathname.split("/")[2]) : "";
+    useEffect(() => {
+        if (isEdit) {
+            const retrieveService = () => {
+                return new Promise((resolve, reject) => {
+                    Meteor.call("get_service", serviceId, (error, result) => {
+                        if (error) {
+                            reject(`Error: ${error.message}`);
+                        } else {
+                            resolve(result);
+                        }
+                    });
+                });
+            };
+
+            retrieveService().then((service) => {
+                if (service.artistUsername !== userInfo.username) {
+                    navigateTo(`/`);
+                }
+                setServiceName(service.serviceName);
+                setServiceType(service.serviceType);
+                setServiceDuration(service.serviceDuration);
+                setServicePrice(service.servicePrice);
+                setServiceDescription(service.serviceDesc);
+            });
+        }
+    }, []);
+
+    // check user owns service + user is a artist, else redirect to home
+    // after rebase: const userInfo = getUserData();
 
     const [filesArray, setFilesArray] = useState([]);
     const [fileRejected, setFileRejected] = useState(false);
@@ -95,11 +132,15 @@ export const AddEditServicePage = ({ isEdit }) => {
     };
 
     const AddEdit = () => {
-        console.log("Service Name:", serviceName);
-        console.log("Service Type:", serviceType);
-        console.log("Service Duration:", serviceDuration);
-        console.log("Service Price:", servicePrice);
-        console.log("Service Description:", serviceDescription);
+        updatedService = {
+            'serviceName': serviceName,
+            'serviceType': serviceType,
+            'serviceDuration': serviceDuration,
+            'servicePrice': servicePrice,
+            'serviceDesc': serviceDescription,
+        };
+        Meteor.call("update_service_details", serviceId, updatedService);
+        console.log(updatedService);
     };
 
     return (
@@ -111,14 +152,14 @@ export const AddEditServicePage = ({ isEdit }) => {
                     <Input
                         type="text"
                         label={<label className="main-text">Service Name</label>}
-                        defaultValue={serviceName}
+                        value={serviceName}
                         onChange={(e) => setServiceName(e.target.value)}
                     />
                     <label className="main-text" for="type">
                         Service Type
                     </label>
                     <select
-                        defaultValue={serviceType}
+                        value={serviceType}
                         className="flex flex-col gap-1 input-base"
                         name="type"
                         onChange={(e) => setServiceType(e.target.value)}
@@ -133,7 +174,7 @@ export const AddEditServicePage = ({ isEdit }) => {
                         min="0"
                         step="0.5"
                         label={<label className="main-text">Duration (Hours)</label>}
-                        defaultValue={serviceDuration}
+                        value={serviceDuration}
                         onChange={(e) => setServiceDuration(e.target.value)}
                     />
                     <Input
@@ -141,13 +182,13 @@ export const AddEditServicePage = ({ isEdit }) => {
                         type="number"
                         min="0"
                         label={<label className="main-text">Price (AUD)</label>}
-                        defaultValue={servicePrice}
+                        value={servicePrice}
                         onChange={(e) => setServicePrice(e.target.value)}
                     />
                     <Input
                         type="text"
                         label={<label className="main-text">Description</label>}
-                        defaultValue={serviceDescription}
+                        value={serviceDescription}
                         onChange={(e) => setServiceDescription(e.target.value)}
                     />
                     <div className="flex flex-row">

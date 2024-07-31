@@ -16,31 +16,21 @@ import SpecificServicePage from "./components/pages/service/SpecificServicePage.
 
 import ArtistsPage from "./components/pages/artist/ArtistsPage.jsx";
 import MessagesPage from "./components/pages/messages/MessagesPage.jsx";
-
 import LoginPage from "./components/pages/login/LoginPage.jsx";
 import RegisterPage from "./components/pages/register/RegisterPage.jsx";
 import RequestBooking from "./components/pages/request-booking/RequestBooking.jsx";
 import PaymentDetails from "./components/pages/request-booking/PaymentDetails";
-import SpecificServicePage from "./components/pages/service/SpecificServicePage.jsx";
 import CancelBooking from "./components/pages/cancel-booking/CancelBooking.jsx";
 import CreateAccountPage from "./components/pages/register/CreateAccountPage";
 import ActivateAccountPage from "./components/pages/register/ActivateAccountPage";
 import ForgotPasswordPage from "./components/pages/forgotPassword/ForgotPasswordPage";
 import ResetPasswordPage from "./components/pages/forgotPassword/ResetPasswordPage";
 import ResetCompletePage from "./components/pages/forgotPassword/ResetCompletePage";
-
-import RequestBooking from "./components/pages/request-booking/RequestBooking.jsx";
-import PaymentDetails from "./components/pages/request-booking/PaymentDetails";
 import BookingSummary from "./components/pages/request-booking/BookingSummary";
 import BookingConfirmation from "./components/pages/request-booking/BookingConfirmation";
-import CancelBooking from './components/pages/cancel-booking/CancelBooking.jsx';
 
 import RoutingAccess from "./enums/RoutingAccess";
 import UrlBasePath from "./enums/UrlBasePath";
-import NonExistingPage from "./components/pages/nonExistingPage/NonExistingPage";
-import BookingConfirmation from "./components/pages/request-booking/BookingConfirmation";
-import ProfilePage from "./components/pages/profile/ProfilePage";
-import ProfileSettingsPage from "./components/pages/profile/settings/ProfileSettingsPage";
 import AddEditServicePage from "./components/pages/service/AddEditServicePage.jsx";
 
 export const App = () => (
