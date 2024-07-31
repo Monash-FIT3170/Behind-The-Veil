@@ -15,39 +15,46 @@ import "/imports/api/publications/users.js";
 import "/imports/api/collections/images.js";
 import "/imports/api/methods/images.js";
 import "/imports/api/publications/images";
-
-import nodemailer from "nodemailer";
-// import {emailUser, emailPass} from "./secrets.js"
-
-// change email template for verifying password
-Accounts.emailTemplates.verifyEmail = {
-    subject() {
-        return "[Behind the Veil] Verify Your Email Address";
-    },
-    text( user, url ) {
-        let emailAddress   = user.emails[0].address,
-            urlWithoutHash = url.replace( '#/', '' ), // replace # since it doesn't route properly with it in the URL
-            emailBody      = `To verify your email address (${emailAddress}) visit the following link:\n\n${urlWithoutHash}\n\n 
-            If you did not request this verification, please ignore this email.`;
-
-        return emailBody;
-    }
-};
-
+import {emailUser, emailPass, mailUrl, fromUser} from "./secrets.js"
 
 
 // Leave for now for any methods that need to be called on start up.
 Meteor.startup(async () => {
 
     if (Meteor.isServer) {
-        // process.env.MAIL_URL = "smtps://nsha0054@student.monash.edu:a118e39765d19370b432c59e026af613-us17@smtp.mandrillapp.com:465"
-        // process.env.SMTP_EMAIL = emailUser
-        // process.env.SMTP_PASSWORD = emailPass
-        // process.env.MAIL_URL = `smtps://${emailUser}:${emailPass}:@smtp.gmail.com:465` // tried: @ symbol = $40
-        // process.env.MONGO_URL = "mongodb+srv://meteor-main:wO8tu15skxZ1jw59@cluster0.d99ecyx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-        // process.env.MONGO_URL = "mongodb://meteor-main:wO8tu15skxZ1jw59@ac-itwrhue-shard-00-00.d99ecyx.mongodb.net:27017,ac-itwrhue-shard-00-01.d99ecyx.mongodb.net:27017,ac-itwrhue-shard-00-02.d99ecyx.mongodb.net:27017/?ssl=true&replicaSet=atlas-44apap-shard-0&authSource=admin&retryWrites=true&w=majority&appName=Cluster0";
+        process.env.MAIL_URL = mailUrl;
+        Accounts.emailTemplates.from = fromUser;
+
+        // change email template for verifying password
+        Accounts.emailTemplates.verifyEmail = {
+            subject() {
+                return "[Behind the Veil] Verify Your Email Address";
+            },
+            text(user, url) {
+                let emailAddress = user.emails[0].address,
+                    urlWithoutHash = url.replace('#/', ''), // replace # since it doesn't route properly with it in the URL
+                    emailBody = `To verify your email address (${emailAddress}) visit the following link:\n\n${urlWithoutHash}\n\nIf you did not request this verification, please ignore this email.`;
+
+                return emailBody;
+            }
+        };
+
+        // change email template for resetting password
+        Accounts.emailTemplates.resetPassword = {
+            subject() {
+                return "[Behind the Veil] Reset Password Link";
+            },
+            text(user, url) {
+                let emailAddress = user.emails[0].address,
+                    urlWithoutHash = url.replace('#/', ''), // replace # since it doesn't route properly with it in the URL
+                    emailBody = `You requested a link to reset your password for ${emailAddress}. \n\nReset password link:\n\n${urlWithoutHash}\n\nIf you did not request this verification, please ignore this email.`;
+
+                return emailBody;
+            }
+        };
     }
 
+    // nsha0054@student.monash.edu
     // const smtpConfig = {
     //     host: 'smtp.gmail.com',
     //     port: 465,
@@ -71,7 +78,6 @@ Meteor.startup(async () => {
     //
     // Accounts.emailTemplates.from = 'AwesomeSite Admin <accounts@example.com>';
     //
-    // Accounts.sendVerificationEmail("Mso8Y7HzBrXgaaTYF");
 
     // const info = await transporter.sendMail({
     //     from: '"AAAAA" <maddison53@ethereal.email>', // sender address
@@ -80,6 +86,4 @@ Meteor.startup(async () => {
     //     text: "Hello world?", // plain text body
     //     html: "<b>Hello world?</b>", // html body
     // });
-
-
 });

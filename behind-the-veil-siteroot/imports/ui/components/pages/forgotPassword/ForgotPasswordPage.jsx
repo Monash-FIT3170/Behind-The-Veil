@@ -38,8 +38,9 @@ export const ForgotPasswordPage = () => {
         )) : []
     });
 
-    // form input values
+    // form input values and error displays
     const [emailInput, setEmailInput] = useState("")
+    const [error, setError] = useState("");
 
     // changes
     const handleEmailChange = (event) => {
@@ -51,7 +52,8 @@ export const ForgotPasswordPage = () => {
 
         // check that this email is valid email or not
         if (!emailInput) {
-            alert("Please enter a valid email");
+            setError("Please input a valid email")
+            console.log("ERROR")
         } else {
 
             if (usersEmailData.includes(emailInput)) {
@@ -59,12 +61,7 @@ export const ForgotPasswordPage = () => {
                 Accounts.forgotPassword({"email": emailInput});
             }
 
-            // todo: change to navigate to home page later after demo
-            alert("(to be implemented) Sending email to: " + emailInput +
-                "\nThis email is in the database: " + usersEmailData.includes(emailInput));
-
-            alert("navigating to change password page for demonstration purposes");
-            navigate(`/${UrlBasePath.RESET_PASSWORD}/demodemodemo`)
+            navigate(`/${UrlBasePath.FORGOT_PASSWORD}/link-sent`)
         }
     }
 
@@ -75,13 +72,16 @@ export const ForgotPasswordPage = () => {
             </div>
 
             <form className="flex flex-col gap-y-10 items-center justify-center">
-                <Input className={"sm:w-96 lg:w-64 xl:w-96"}
-                       name="email"
-                       label={<label className={"main-text"}>Please enter your email address</label>}
-                       type={"email"}
-                       placeholder={"Email Address"}
-                       onChange={handleEmailChange}
-                />
+                <div className="flex flex-col gap-1 w-fit">
+                    <Input className={"sm:w-96 lg:w-64 xl:w-96"}
+                           name="email"
+                           label={<label className={"main-text"}>Please enter your email address</label>}
+                           type={"email"}
+                           placeholder={"Email Address"}
+                           onChange={handleEmailChange}
+                    />
+                    {error ? <span className="text-cancelled-colour">{error}</span> : null}
+                </div>
 
                 <Button type={"submit"}
                         className={"bg-secondary-purple hover:bg-secondary-purple-hover w-1/3 min-w-40"}

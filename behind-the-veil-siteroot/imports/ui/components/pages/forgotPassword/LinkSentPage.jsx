@@ -1,31 +1,30 @@
 /**
- * File Description: Activate Account page
- * File version: 1.3
- * Contributors: Ryan, Nikki
+ * File Description: Link Sent page
+ * File version: 2.0
+ * Contributors:  Ryan, Nikki
  */
 
 import React from 'react';
 import {useLocation, useNavigate} from "react-router-dom";
 import {ArrowRightIcon, EnvelopeIcon} from "@heroicons/react/24/outline";
-
-import URLSearchParams from "@ungap/url-search-params";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
 import UrlBasePath from "../../../enums/UrlBasePath";
 
 /**
- * Page that displays user has successfully created their account but still need to verify their email
+ * Page that displays user has successfully sent link to email
  */
-const AccountCreatedPage = () => {
+const LinkSentPage = () => {
     const navigate = useNavigate();
 
-    // method called to email user verification email
+    // check URL, if you're on the reset password url or account created page
+    const urlBase = useLocation().pathname.split('/')[1];
 
     return (
         <WhiteBackground pageLayout={PageLayout.SMALL_CENTER}>
 
-            <div className="title-text text-center">Verify Your Email</div>
+            <div className="title-text text-center">{urlBase === UrlBasePath.REGISTER ? "Verify Your Email" : "Password Reset Link Sent"}</div>
 
             <div className={"flex flex-col items-center justify-center gap-y-3 p-2.5"}>
                 <div className={"flex items-center justify-center"}>
@@ -38,7 +37,7 @@ const AccountCreatedPage = () => {
                     <div className={"main-text"}>
                         Please access the
                         <span className={"text-pending-colour"}> link </span>
-                        sent to your email to verify your email!
+                        sent to your email to {urlBase === UrlBasePath.REGISTER ? "verify your email" : "reset your password"}!
                     </div>
                 </div>
 
@@ -53,4 +52,4 @@ const AccountCreatedPage = () => {
     );
 };
 
-export default AccountCreatedPage;
+export default LinkSentPage;
