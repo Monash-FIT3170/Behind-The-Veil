@@ -122,7 +122,7 @@ export const App = () => (
                             <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}><ProfilePage/></ProtectedRoute>
                         }
                     />
-                    <Route path="/add-availability" element={<AddAvailability/>}/>
+                    <Route path="/add-availability/:artistUsername" element={<AddAvailability/>}/>
 
                     {/*todo: general settings and change password pages here too*/}
                     <Route

@@ -26,13 +26,14 @@ import {
     startOfDay,
     startOfHour
 } from "date-fns";
-import {useNavigate} from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 /**
  * Page for artist to add availability
  */
 
 const AddAvailability = () => {
+    const { artistUsername } = useParams();
     const navigateTo = useNavigate();
 
     const MOCK_AVAILABILITY = {
@@ -61,7 +62,6 @@ const AddAvailability = () => {
      */
     const getAvailableTimes = (date) => {
         if (!(isValid(date) && isDate(date))) {
-            console.log(date)
             console.warn('invalid date')
             return []
         }
