@@ -175,7 +175,7 @@ const AddAvailability = () => {
                                 <div className="flex flex-col gap-4">
                                     <Input
                                         id={dateInputId}
-                                        label={<label htmlFor={dateInputId} className="main-text text-our-black">Select Date</label>}
+                                        label={<label htmlFor={dateInputId} className="large-text text-our-black">Select Date</label>}
                                         placeholder="DD-MM-YYYY"
                                         name="date"
                                         value={formatDateInput(inputs.date) || ""}
@@ -207,45 +207,49 @@ const AddAvailability = () => {
                             <div className="flex flex-col flex-grow gap-1">
                                 <label
                                     htmlFor={timeInputId}
-                                    className="main-text text-our-black"
+                                    className="large-text text-our-black"
                                 >
                                     Select Available Hours
                                 </label>
-                                <div id={timeInputId} className="grid grid-cols-2 gap-2">
+                                <div className="flex flex-col gap-4">
+                                    <div id={timeInputId} className="grid grid-cols-2 gap-2">
 
-                                    {/* if there are available times, render the time input buttons */}
-                                    {!Array.isArray(availableTimes) || availableTimes.length === 0 ?
-                                        <span className={"main-text text-dark-grey text-center col-span-2 mt-4"}>No available times</span> :
-                                        availableTimes.map((time) => {
-                                            const baseStyle = "w-full";
-                                            const activeStyle = "bg-confirmed-colour text-white hover:bg-confirmed-colour";
-                                            const isActive = inputs.times.some(t => isEqual(t, time));
-                                            const className = isActive ? `${baseStyle} ${activeStyle}` : baseStyle;
+                                        {/* if there are available times, render the time input buttons */}
+                                        {!Array.isArray(availableTimes) || availableTimes.length === 0 ?
+                                            <span className={"main-text text-dark-grey text-center col-span-2 mt-4"}>No available times</span> :
+                                            availableTimes.map((time) => {
+                                                const baseStyle = "w-full";
+                                                const activeStyle = "bg-confirmed-colour text-white hover:bg-confirmed-colour";
+                                                const isActive = inputs.times.some(t => isEqual(t, time));
+                                                const className = isActive ? `${baseStyle} ${activeStyle}` : baseStyle;
 
-                                            return (
-                                                <Button
-                                                    key={time}
-                                                    className={className}
-                                                    onClick={() => {
-                                                        setInputs((i) => {
-                                                            const times = isActive
-                                                                ? i.times.filter(t => !isEqual(t, time))
-                                                                : [...i.times, time];
-                                                            return {
-                                                                ...i,
-                                                                times,
-                                                            };
-                                                        });
-                                                    }}
-                                                >
-                                                    {format(time, 'p')}
-                                                </Button>
-                                            );
-                                        })}
+                                                return (
+                                                    <Button
+                                                        key={time}
+                                                        className={className}
+                                                        onClick={() => {
+                                                            setInputs((i) => {
+                                                                const times = isActive
+                                                                    ? i.times.filter(t => !isEqual(t, time))
+                                                                    : [...i.times, time];
+                                                                return {
+                                                                    ...i,
+                                                                    times,
+                                                                };
+                                                            });
+                                                        }}
+                                                    >
+                                                        {format(time, 'p')}
+                                                    </Button>
+                                                );
+                                            })}
+                                    </div>
+                                    <div className="flex justify-center items-center">
+                                        <Button
+                                            className="bg-secondary-purple hover:bg-secondary-purple-hover flex items-center justify-center gap-2 w-1/5 mt-4"
+                                            type="submit">Save</Button>
+                                    </div>
                                 </div>
-                                <Button
-                                    className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2 w-fit justify-center"
-                                    type="submit">Save</Button>
                             </div>
                             {/* </div> */}
 
