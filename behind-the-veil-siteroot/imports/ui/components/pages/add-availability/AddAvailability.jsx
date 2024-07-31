@@ -42,7 +42,7 @@ const AddAvailability = () => {
                 "2024-08-10": [12,13,14,15,16],
                 "2024-08-11": [12,13,14,15,16]
             },
-            "artistUsername": "aboydon3"
+            "artistUsername": "laura3"
         },
         {
             "_id": "512a128b-7353-4db1-9f87-b6faff90f179",
@@ -193,12 +193,9 @@ const AddAvailability = () => {
                                             });
                                         }}
                                         tileClassName={({date, view}) => {
-                                            const availableTimes = getAvailableTimes(date)
-                                            if (
-                                                view === 'month' &&
-                                                availableTimes.length > 0
-                                            ) {
-                                                return 'available'
+                                            const dateKey = format(date, 'yyyy-MM-dd');
+                                            if (availability[dateKey] && availability[dateKey].length > 0) {
+                                                return 'available';
                                             }
                                         }}
                                     />
@@ -221,7 +218,7 @@ const AddAvailability = () => {
                                         <span className={"main-text text-dark-grey text-center col-span-2 mt-4"}>No available times</span> :
                                         availableTimes.map((time) => {
                                             const baseStyle = "w-full";
-                                            const activeStyle = "bg-dark-grey text-white hover:bg-dark-grey";
+                                            const activeStyle = "bg-confirmed-colour text-white hover:bg-confirmed-colour";
                                             const isActive = inputs.times.some(t => isEqual(t, time));
                                             const className = isActive ? `${baseStyle} ${activeStyle}` : baseStyle;
 
