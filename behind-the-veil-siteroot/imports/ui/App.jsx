@@ -32,6 +32,8 @@ import BookingSummary from "./components/pages/request-booking/BookingSummary";
 import BookingConfirmation from "./components/pages/request-booking/BookingConfirmation";
 import CancelBooking from './components/pages/cancel-booking/CancelBooking.jsx';
 
+import AddAvailability from './components/pages/add-availability/AddAvailability.jsx';
+
 import RoutingAccess from "./enums/RoutingAccess";
 import UrlBasePath from "./enums/UrlBasePath";
 
@@ -120,6 +122,7 @@ export const App = () => (
                             <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}><ProfilePage/></ProtectedRoute>
                         }
                     />
+                    <Route path="/add-availability" element={<AddAvailability/>}/>
 
                     {/*todo: general settings and change password pages here too*/}
                     <Route

@@ -5,6 +5,7 @@
  */
 
 import React, {useState} from 'react';
+import {useNavigate} from "react-router-dom";
 import {PlusIcon,} from "@heroicons/react/24/outline";
 
 import Button from "../../../button/Button";
@@ -20,6 +21,8 @@ import BookingListView from "../../../booking/BookingListView";
  * @param username {string} - username of the current user's profile
  */
 export const ArtistBookingsTab = ({username}) => {
+    const navigateTo = useNavigate();
+
     // booking view, calendar or list
     const [bookingView, setBookingView] = useState("list"); // todo: calendar view
 
@@ -163,7 +166,8 @@ export const ArtistBookingsTab = ({username}) => {
                     {/*add availability button on the right*/}
                     <Button
                         className="flex flex-row gap-x-1.5 min-w-48 items-center justify-center
-                        bg-secondary-purple hover:bg-secondary-purple-hover">
+                        bg-secondary-purple hover:bg-secondary-purple-hover" 
+                        onClick={() => navigateTo('/add-availability/')}>
                         <PlusIcon className="icon-base"/> Add Availability
                     </Button>
                 </div>
