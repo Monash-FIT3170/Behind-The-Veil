@@ -26,6 +26,8 @@ import {
     startOfHour
 } from "date-fns";
 import { useParams, useNavigate } from "react-router-dom";
+import Tippy from '@tippyjs/react/headless';
+import QuestionMarkCircleIcon from "@heroicons/react/16/solid/QuestionMarkCircleIcon";
 
 /**
  * Page for artist to add availability
@@ -159,6 +161,27 @@ const AddAvailability = () => {
 
     const availableTimes = getAvailableTimes(inputs.date);
 
+    //tooltip
+    const toolTipText = (
+        <div className="text-center">
+            Brides can only select from available hours (green) that you set. Please note that the available hour denote 
+            when the services start and does not account for travel time. You may need to account for extra travel time.
+        </div>
+    );
+
+    const toolTip = (
+        <span className="content-center ml-2">
+            <Tippy render={attrs => (
+                <div className="box border border-main-blue rounded-lg mt-1 px-6 py-6 white-glass-base shadow-lg w-[500px]"
+                    tabIndex="-1" {...attrs}>
+                    {toolTipText}
+                </div>
+            )}>
+                <QuestionMarkCircleIcon className="tooltip-icon size-4 text-light-grey-hover"/>
+            </Tippy>
+        </span>
+    );
+
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
             <PreviousButton/>
@@ -205,15 +228,17 @@ const AddAvailability = () => {
                             {/* available time buttons */}
                             {/* <div className="flex sm:flex-grow sm:justify-center"> */}
                             <div className="flex flex-col flex-grow gap-1">
-                                <label
-                                    htmlFor={timeInputId}
-                                    className="large-text text-our-black"
-                                >
-                                    Select Available Hours
-                                </label>
+                                <div className="flex flex-row">
+                                    <label
+                                        htmlFor={timeInputId}
+                                        className="large-text text-our-black"
+                                    >
+                                        Select Available Hours
+                                    </label>
+                                    {toolTip}
+                                </div>
                                 <div className="flex flex-col gap-4">
                                     <div id={timeInputId} className="grid grid-cols-2 gap-2">
-
                                         {/* if there are available times, render the time input buttons */}
                                         {!Array.isArray(availableTimes) || availableTimes.length === 0 ?
                                             <span className={"main-text text-dark-grey text-center col-span-2 mt-4"}>No available times</span> :
@@ -222,7 +247,6 @@ const AddAvailability = () => {
                                                 const activeStyle = "bg-confirmed-colour text-white hover:bg-confirmed-colour";
                                                 const isActive = inputs.times.some(t => isEqual(t, time));
                                                 const className = isActive ? `${baseStyle} ${activeStyle}` : baseStyle;
-
                                                 return (
                                                     <Button
                                                         key={time}
