@@ -11,7 +11,6 @@ import Button from "../../button/Button";
 import AvailabilityCalendar, {VALID_INTERVAL} from "../../../components/availabilityCalendar/AvailabilityCalendar.jsx";
 import Input from "../../input/Input";
 import PreviousButton from "../../button/PreviousButton";
-import mockAvailability from "./mockAvailability.json"
 import {
     addDays,
     eachHourOfInterval,
@@ -36,20 +35,48 @@ const AddAvailability = () => {
     const { artistUsername } = useParams();
     const navigateTo = useNavigate();
 
-    const MOCK_AVAILABILITY = {
-        "_id": "2648fb26-bd00-45ab-b62e-f88c37c6a994",
-        "availabilityTimes":{
-            "2024-08-10": [12,13,14,15,16],
-            "2024-08-11": [12,13,14,15,16]
+    const MOCK_AVAILABILITY = [
+        {
+            "_id": "2648fb26-bd00-45ab-b62e-f88c37c6a994",
+            "availabilityTimes":{
+                "2024-08-10": [12,13,14,15,16],
+                "2024-08-11": [12,13,14,15,16]
+            },
+            "artistUsername": "aboydon3"
         },
-        "artistUsername": "aboydon5"
+        {
+            "_id": "512a128b-7353-4db1-9f87-b6faff90f179",
+            "availabilityTimes":{
+                "2024-08-10": [12,13,14,15,16],
+                "2024-08-11": [12,13,14,15,16]
+            },
+            "artistUsername": "aboydon4"
+        },
+        {
+            "_id": "e0e8dbf7-edea-483d-ad6c-15203da132ba",
+            "availabilityTimes":{
+                "2024-08-10": [12,13,14,15,16],
+                "2024-08-11": [12,13,14,15,16]
+            },
+            "artistUsername": "aboydon5"
+        }
+    ]
+
+    const initialAvailability = MOCK_AVAILABILITY.find(entry => entry.artistUsername === artistUsername) || {
+        _id: useId(),
+        availabilityTimes: {},
+        artistUsername: artistUsername
     };
 
     // form input values
     const [inputs, setInputs] = useState({
         date: startOfDay(new Date()),
-        time: "",
+        times: [],
     });
+
+    const [availability, setAvailability] = useState(
+        initialAvailability.availabilityTimes
+    );
 
     // id's
     const dateInputId = useId();
@@ -74,8 +101,30 @@ const AddAvailability = () => {
         return hours
     };
 
-    const handleSubmit = (event) => {
-        navigateTo(`/booking-summary?${query}`);
+    const handleSave = (event) => {
+        //event.preventDefault();
+
+        const dateKey = format(inputs.date, "yyyy-MM-dd");
+        //const newAvailability = { ...availability };
+
+        if (!initialAvailability.availabilityTimes[dateKey]) {
+            initialAvailability.availabilityTimes[dateKey] = [];
+        }
+
+        inputs.times.forEach((time) => {
+            const hour = time.getHours();
+            if (!initialAvailability.availabilityTimes[dateKey].includes(hour)) {
+                initialAvailability.availabilityTimes[dateKey].push(hour);
+            }
+        });
+
+        // add new availability to db
+        const existingIndex = MOCK_AVAILABILITY.findIndex(entry => entry.artistUsername === initialAvailability.artistUsername);
+        if (existingIndex !== -1) {
+            MOCK_AVAILABILITY[existingIndex] = initialAvailability;
+        } else {
+            MOCK_AVAILABILITY.push(initialAvailability);
+        }
     }
 
     const handleManualDateInput = (event) => {
@@ -117,18 +166,16 @@ const AddAvailability = () => {
             {/* Main container for content */}
             <div className="flex flex-col gap-4 xl:px-40">
                 {/* input form */}
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSave}>
                     <div className="flex flex-col gap-4">
                         {/* date/time */}
                         <div className="flex flex-col md:flex-row gap-4 md:gap-10">
                             {/* date input + calendar */}
-                            <div
-                                className="flex flex-col flex-grow gap-1 md:max-w-[350px] lg:max-w-[420px] xl:lg:max-w-[490px]">
+                            <div className="flex flex-col flex-grow gap-1 md:max-w-[350px] lg:max-w-[420px] xl:lg:max-w-[490px]">
                                 <div className="flex flex-col gap-4">
                                     <Input
                                         id={dateInputId}
-                                        label={<label htmlFor={dateInputId} className="main-text text-our-black">Select
-                                            Date</label>}
+                                        label={<label htmlFor={dateInputId} className="main-text text-our-black">Select Date</label>}
                                         placeholder="DD-MM-YYYY"
                                         name="date"
                                         value={formatDateInput(inputs.date) || ""}
@@ -175,10 +222,8 @@ const AddAvailability = () => {
                                         availableTimes.map((time) => {
                                             const baseStyle = "w-full";
                                             const activeStyle = "bg-dark-grey text-white hover:bg-dark-grey";
-                                            const className =
-                                                isEqual(inputs.time, time)
-                                                    ? `${baseStyle} ${activeStyle}`
-                                                    : baseStyle;
+                                            const isActive = inputs.times.some(t => isEqual(t, time));
+                                            const className = isActive ? `${baseStyle} ${activeStyle}` : baseStyle;
 
                                             return (
                                                 <Button
@@ -186,9 +231,12 @@ const AddAvailability = () => {
                                                     className={className}
                                                     onClick={() => {
                                                         setInputs((i) => {
+                                                            const times = isActive
+                                                                ? i.times.filter(t => !isEqual(t, time))
+                                                                : [...i.times, time];
                                                             return {
                                                                 ...i,
-                                                                time: time,
+                                                                times,
                                                             };
                                                         });
                                                     }}
