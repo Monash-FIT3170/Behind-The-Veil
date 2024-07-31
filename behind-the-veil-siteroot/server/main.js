@@ -15,15 +15,17 @@ import "/imports/api/publications/users.js";
 import "/imports/api/collections/images.js";
 import "/imports/api/methods/images.js";
 import "/imports/api/publications/images";
-import {emailUser, emailPass, mailUrl, fromUser} from "./secrets.js"
+
+// file in the same folder containing creds for mail server
+// import {emailUser, emailPass, mailUrl, fromUser} from "./secrets.js"
 
 
 // Leave for now for any methods that need to be called on start up.
 Meteor.startup(async () => {
 
     if (Meteor.isServer) {
-        process.env.MAIL_URL = mailUrl;
-        Accounts.emailTemplates.from = fromUser;
+        // process.env.MAIL_URL = mailUrl;
+        // Accounts.emailTemplates.from = fromUser;
 
         // change email template for verifying password
         Accounts.emailTemplates.verifyEmail = {
