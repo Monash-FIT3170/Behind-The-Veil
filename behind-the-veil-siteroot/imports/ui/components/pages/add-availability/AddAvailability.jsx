@@ -4,7 +4,7 @@
  * Contributors: Laura
  */
 
-import React, {useEffect, useId, useState} from "react";
+import React, {useId, useState} from "react";
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
@@ -28,10 +28,8 @@ import QuestionMarkCircleIcon from "@heroicons/react/16/solid/QuestionMarkCircle
 /**
  * Page for artist to add availability
  */
-
 const AddAvailability = () => {
     const { artistUsername } = useParams();
-    const navigateTo = useNavigate();
 
     const MOCK_AVAILABILITY = [
         {
@@ -65,7 +63,7 @@ const AddAvailability = () => {
     const timeInputId = useId();
 
     /**
-     * Calculate available times that the user can select, based on date, duration, and existing bookings
+     * Calculate available times that the user can select, based on date
      * @param {Date} date day at which we want the available time slots
      * @returns array of date objects that correspond to available times, on the hour
      */
@@ -87,7 +85,6 @@ const AddAvailability = () => {
         event.preventDefault();
 
         const dateKey = format(inputs.date, "yyyy-MM-dd");
-        //const newAvailability = { ...availability };
 
         if (!initialAvailability.availabilityTimes[dateKey]) {
             initialAvailability.availabilityTimes[dateKey] = [];
@@ -100,7 +97,7 @@ const AddAvailability = () => {
             }
         });
 
-        // add new availability to db
+        // TODO: add/update availability in database
         const existingIndex = MOCK_AVAILABILITY.findIndex(entry => entry.artistUsername === initialAvailability.artistUsername);
         if (existingIndex !== -1) {
             MOCK_AVAILABILITY[existingIndex] = initialAvailability;
