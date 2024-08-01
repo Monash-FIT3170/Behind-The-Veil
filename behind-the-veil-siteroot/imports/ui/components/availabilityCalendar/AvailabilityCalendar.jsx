@@ -1,7 +1,7 @@
 /**
  * File Description: Request Booking calendar component
- * File version: 1.1
- * Contributors: Josh, Laura
+ * File version: 1.0
+ * Contributors: Josh
  */
 
 import React from "react";

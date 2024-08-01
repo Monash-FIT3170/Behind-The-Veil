@@ -40,23 +40,7 @@ const AddAvailability = () => {
                 "2024-08-10": [12,13,14,15,16],
                 "2024-08-11": [12,13,14,15,16]
             },
-            "artistUsername": "laura3"
-        },
-        {
-            "_id": "512a128b-7353-4db1-9f87-b6faff90f179",
-            "availabilityTimes":{
-                "2024-08-10": [12,13,14,15,16],
-                "2024-08-11": [12,13,14,15,16]
-            },
-            "artistUsername": "aboydon4"
-        },
-        {
-            "_id": "e0e8dbf7-edea-483d-ad6c-15203da132ba",
-            "availabilityTimes":{
-                "2024-08-10": [12,13,14,15,16],
-                "2024-08-11": [12,13,14,15,16]
-            },
-            "artistUsername": "aboydon5"
+            "artistUsername": "username"
         }
     ]
 

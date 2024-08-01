@@ -72,7 +72,7 @@ export const BookingStatusDisplay = ({bookingStatus}) => {
         <span className="content-center ml-2">
             <Tippy render={attrs => (
                 <div className="box border border-main-blue rounded-lg mt-1 px-6 py-6 white-glass-base shadow-lg w-[500px]"
-                     tabIndex="-1" {...attrs}>
+                    tabIndex="-1" {...attrs}>
                     {toolTipText}
                 </div>
             )}>

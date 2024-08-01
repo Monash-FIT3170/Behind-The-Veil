@@ -1,7 +1,7 @@
 /**
  * File Description: Request Booking page
- * File version: 1.3
- * Contributors: Josh, Nikki, Laura
+ * File version: 1.2
+ * Contributors: Josh, Nikki
  */
 
 import React, {useEffect, useId, useState} from "react";
