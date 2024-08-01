@@ -104,7 +104,7 @@ const AddAvailability = () => {
     };
 
     const handleSave = (event) => {
-        //event.preventDefault();
+        event.preventDefault();
 
         const dateKey = format(inputs.date, "yyyy-MM-dd");
         //const newAvailability = { ...availability };
@@ -245,7 +245,8 @@ const AddAvailability = () => {
                                             availableTimes.map((time) => {
                                                 const baseStyle = "w-full";
                                                 const activeStyle = "bg-confirmed-colour text-white hover:bg-confirmed-colour";
-                                                const isActive = inputs.times.some(t => isEqual(t, time));
+                                                const dateKey = format(inputs.date, "yyyy-MM-dd");
+                                                const isActive = availability[dateKey] && availability[dateKey].includes(time.getHours());
                                                 const className = isActive ? `${baseStyle} ${activeStyle}` : baseStyle;
                                                 return (
                                                     <Button
@@ -254,13 +255,23 @@ const AddAvailability = () => {
                                                         onClick={() => {
                                                             setInputs((i) => {
                                                                 const times = isActive
-                                                                    ? i.times.filter(t => !isEqual(t, time))
+                                                                    ? i.times.filter(t => t.getHours() !== time.getHours())
                                                                     : [...i.times, time];
                                                                 return {
                                                                     ...i,
                                                                     times,
                                                                 };
                                                             });
+                                                            const updatedAvailability = { ...availability };
+                                                            if (isActive) {
+                                                                updatedAvailability[dateKey] = updatedAvailability[dateKey].filter(hour => hour !== time.getHours());
+                                                            } else {
+                                                                if (!updatedAvailability[dateKey]) {
+                                                                    updatedAvailability[dateKey] = [];
+                                                                }
+                                                                updatedAvailability[dateKey].push(time.getHours());
+                                                            }
+                                                            setAvailability(updatedAvailability);
                                                         }}
                                                     >
                                                         {format(time, 'p')}
