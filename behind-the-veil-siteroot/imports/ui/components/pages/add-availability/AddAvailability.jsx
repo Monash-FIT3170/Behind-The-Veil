@@ -12,18 +12,14 @@ import AvailabilityCalendar, {VALID_INTERVAL} from "../../../components/availabi
 import Input from "../../input/Input";
 import PreviousButton from "../../button/PreviousButton";
 import {
-    addDays,
     eachHourOfInterval,
     format,
-    isAfter,
     isDate,
-    isEqual,
     isValid,
     isWithinInterval,
     parse,
     set,
-    startOfDay,
-    startOfHour
+    startOfDay
 } from "date-fns";
 import { useParams, useNavigate } from "react-router-dom";
 import Tippy from '@tippyjs/react/headless';
