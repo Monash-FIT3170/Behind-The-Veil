@@ -10,7 +10,7 @@ import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
 import {ArrowRightIcon} from "@heroicons/react/24/outline";
-import RequestBookingCalendar, {VALID_INTERVAL} from "./RequestBookingCalendar/RequestBookingCalendar.jsx";
+import AvailabilityCalendar, {VALID_INTERVAL} from "../../../components/availabilityCalendar/AvailabilityCalendar.jsx";
 import Input from "../../input/Input";
 import PreviousButton from "../../button/PreviousButton";
 import mockBookings from './mockBookings.json'
@@ -299,7 +299,7 @@ const RequestBooking = () => {
                                         onChange={handleManualDateInput}
                                     />
                                     {/* calendar component */}
-                                    <RequestBookingCalendar
+                                    <AvailabilityCalendar
                                         value={isValid(inputs.date) && isDate(inputs.date) ? inputs.date : null}
                                         onChange={(date) => {
                                             setInputs((i) => {
