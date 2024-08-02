@@ -32,6 +32,8 @@ import PaymentDetails from "./components/pages/request-booking/PaymentDetails";
 import BookingSummary from "./components/pages/request-booking/BookingSummary";
 import BookingConfirmation from "./components/pages/request-booking/BookingConfirmation";
 
+import AddAvailability from './components/pages/add-availability/AddAvailability.jsx';
+
 import RoutingAccess from "./enums/RoutingAccess";
 import UrlBasePath from "./enums/UrlBasePath";
 import AddEditServicePage from "./components/pages/service/AddEditServicePage.jsx";
@@ -126,6 +128,7 @@ export const App = () => (
                             </ProtectedRoute>
                         }
                     />
+                    <Route path="/add-availability/:artistUsername" element={<AddAvailability/>}/>
                     {/*todo: general settings and change password pages here too*/}
                     <Route
                         path={`/${UrlBasePath.PROFILE}/settings`}
