@@ -1,7 +1,7 @@
 /**
  * File Description: Service Area for artists within the settings page
- * File version: 1.2
- * Contributors: Hirun, Nikki
+ * File version: 1.3
+ * Contributors: Hirun, Nikki, Ryan
  */
 import React from "react";
 import WhiteBackground from "../../../whiteBackground/WhiteBackground.jsx";
@@ -10,6 +10,7 @@ import Tabs from "../../../tabs/Tabs.jsx";
 import PreviousButton from "../../../button/PreviousButton";
 import ArtistServiceArea from "./ArtistServiceArea";
 import {getUserInfo} from "../../../util";
+import ChangePasswordTab from "./ChangePasswordTab";
 
 /**
  * Settings page for all users
@@ -34,7 +35,7 @@ export const ProfileSettingsPage = () => {
                     ]}
                     tabPanels={[
                         <span key={"account-details"}>Account details tab</span>,
-                        <span key={"change-password"}>Change password tab</span>,
+                        <ChangePasswordTab key={"change-password"} />,
                     ]}
                 />
             </WhiteBackground>
@@ -55,7 +56,7 @@ export const ProfileSettingsPage = () => {
                     ]}
                     tabPanels={[
                         <span key={"account-details"}>Account details tab</span>,
-                        <span key={"change-password"}>Change password tab</span>,
+                        <ChangePasswordTab key={"change-password"} />,
                         <ArtistServiceArea key={"service-area"}/>
                     ]}
                 />
