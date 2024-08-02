@@ -36,7 +36,6 @@ const CreateAccountPage = () => {
         }
 
         // Password validation criteria
-        // const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&+/,|<>{})(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
         const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
         if (!passwordRegex.test(password)) {
             alert('Password must contain at least one number, one special character, one lowercase letter, one uppercase letter, and be at least 8 characters long.');
@@ -134,7 +133,6 @@ const CreateAccountPage = () => {
                         Please ensure your password has at least:
                         <ul className={"list-disc list-inside"}>
                             <li className={"ml-2"}>a number (0-9)</li>
-                            {/* <li className={"ml-2"}>a special character (e.g. % & ! )</li> */}
                             <li className={"ml-2"}>a special character (!@#$%^&*(),.?":{}|)</li>
                             <li className={"ml-2"}>a lowercase letter (a-z)</li>
                             <li className={"ml-2"}>an uppercase letter (A-Z)</li>
