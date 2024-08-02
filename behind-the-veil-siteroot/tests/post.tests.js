@@ -42,9 +42,9 @@ if (Meteor.isClient) {
                     // thru the method until it finds an end (there is none)
                 );
             }).then(postId => {
-                assert.notStrictEqual(postId, undefined);
+                assert.notStrictEqual(postId, undefined, "Post ID is undefined");
                 const post = PostCollection.findOne(postId);
-                assert.notStrictEqual(post, undefined);
+                assert.notStrictEqual(post, null, "Post does not exist in the collection");
             }).catch(error => {
                 assert.fail("Error adding post. Returned with error:" + error.message);
             });

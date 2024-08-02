@@ -16,13 +16,13 @@ Meteor.methods({
      * @returns {string} The unique ID of the newly created post (postId).
      */
     "add_post": function (postDate, postDescription, artistUsername) {
-        PostCollection.insert(
+        return PostCollection.insert(
             {
                 "postDate": postDate,
                 "postDescription": postDescription,
                 "artistUsername": artistUsername,
             }
-        )
+        );
     },
     /**
      * Retrieves a single post instance from the database based on the post ID.
