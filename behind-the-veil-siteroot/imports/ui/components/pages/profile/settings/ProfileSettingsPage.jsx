@@ -1,17 +1,17 @@
 /**
  * File Description: Service Area for artists within the settings page
- * File version: 1.1
- * Contributors: Hirun, Nikki
+ * File version: 1.3
+ * Contributors: Hirun, Nikki, Ryan
  */
-import React, {useState} from "react";
-import {Tracker} from "meteor/tracker";
-import {Meteor} from "meteor/meteor";
+import React from "react";
 import WhiteBackground from "../../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../../enums/PageLayout";
 import Tabs from "../../../tabs/Tabs.jsx";
 import PreviousButton from "../../../button/PreviousButton";
 import AccountDetails from "./AccountDetails.jsx";
 import ArtistServiceArea from "./ArtistServiceArea";
+import {getUserInfo} from "../../../util";
+import ChangePasswordTab from "./ChangePasswordTab";
 
 /**
  * Settings page for all users
@@ -19,44 +19,7 @@ import ArtistServiceArea from "./ArtistServiceArea";
 export const ProfileSettingsPage = () => {
 
     // get current user information
-    const [userInfo, setUserInfo] = useState(
-        {
-            "username": null,
-            "email": null,
-            "alias": null,
-            "type": null
-        }
-    );
-
-    // tracker for the required user data updates
-    Tracker.autorun(() => {
-        const user = Meteor.user();
-
-        if (user) {
-            // user data is returned (sometimes it takes a while)
-            const username = user.username;
-            const email = user.emails[0].address;
-            const userAlias = user.profile.alias;
-            const userType = user.profile.type;
-
-            // check if an update to the current user info is required or not (this is needed to prevent inf loop)
-            if (
-                userInfo.username !== username ||
-                userInfo.email !== email ||
-                userInfo.alias !== userAlias ||
-                userInfo.type !== userType
-            ) {
-                setUserInfo(
-                    {
-                        "username": user.username,
-                        "email": user.emails[0].address,
-                        "alias": user.profile.alias,
-                        "type": user.profile.type
-                    }
-                )
-            }
-        }
-    })
+    const userInfo = getUserInfo();
 
     // display tabs depending on user account type (brides don't have service area settings tab)
     if (userInfo.type === "bride") {
@@ -73,7 +36,7 @@ export const ProfileSettingsPage = () => {
                     ]}
                     tabPanels={[
                         <AccountDetails key={"account-details"}/>,
-                        <span key={"change-password"}>Change password tab</span>,
+                        <ChangePasswordTab key={"change-password"} />,
                     ]}
                 />
             </WhiteBackground>
@@ -94,7 +57,7 @@ export const ProfileSettingsPage = () => {
                     ]}
                     tabPanels={[
                         <AccountDetails key={"account-details"}/>,
-                        <span key={"change-password"}>Change password tab</span>,
+                        <ChangePasswordTab key={"change-password"} />,
                         <ArtistServiceArea key={"service-area"}/>
                     ]}
                 />

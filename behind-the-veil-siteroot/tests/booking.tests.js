@@ -5,8 +5,8 @@
  */
 const assert = require('assert');
 import {resetDatabase} from 'meteor/xolvio:cleaner';
-import "../imports/api/methods/booking";
-import BookingCollection from "../imports/api/collections/booking";
+import "../imports/api/methods/bookings";
+import BookingCollection from "../imports/api/collections/bookings";
 
 /**
  * Test suite for client-side booking methods.

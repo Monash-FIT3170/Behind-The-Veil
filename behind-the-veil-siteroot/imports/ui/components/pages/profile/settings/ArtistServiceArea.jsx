@@ -4,9 +4,10 @@
  * Contributors: Hirun, Nikki
  */
 import React from "react";
+import {CheckIcon} from "@heroicons/react/24/outline";
+
 import Input from "../../../input/Input";
 import Button from "../../../button/Button.jsx";
-import {CheckIcon} from "@heroicons/react/24/outline";
 
 /**
  * This page allows the artist to enter a location as well as provide a radius in which they can travel from that location
@@ -17,30 +18,26 @@ import {CheckIcon} from "@heroicons/react/24/outline";
 export const ArtistServiceArea = () => {
 
     return (
-        <div className="flex flex-col items-left justify-center gap-y-8">
+        <div className="flex flex-col items-left justify-center gap-y-6 pl-[5%] lg:pl-[15%]">
             <div className="flex flex-col items-left justify-center md:flex-row md:items-center md:justify-start gap-6">
 
                 {/*Service Location input*/}
-                <div className="flex flex-col items-left gap-y-2">
-                    <div className="large-text">Service Location</div>
-                    <Input
-                        type="text"
-                        placeholder="Please enter a location"
-                        className="lg:w-[40vw] sm:w-96"
-                    />
-                </div>
+                <Input
+                    type="text"
+                    label={<label className={"main-text"}>Service Location</label>}
+                    placeholder="Please enter a location"
+                    className="lg:w-[40vw] sm:w-96"
+                />
 
                 {/*Radius input*/}
-                <div className="flex flex-col items-left gap-y-2">
-                    <div className="large-text">Radius (km)</div>
-                    <Input
-                        type="number"
-                        min={1}
-                        max={99}
-                        placeholder="e.g. 12.5"
-                        className="w-24"
-                    />
-                </div>
+                <Input
+                    type="number"
+                    label={<label className={"main-text"}>Radius (km)</label>}
+                    min={1}
+                    max={99}
+                    placeholder="e.g. 12.5"
+                    className="w-24"
+                />
             </div>
 
             {/* Save changes button*/}

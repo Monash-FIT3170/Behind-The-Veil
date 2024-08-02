@@ -22,25 +22,25 @@ export const ArtistDashboardTab = ({username}) => {
                 dashboardCardTitle="Total Customers - Lifetime"
                 dashboardCardValue="273"
                 dashboardCardDesc="Celebrate your achievement in helping brides with their special day!"
-            ></DashboardCard>
+            />
             <DashboardCard
                 key="customer-month"
                 dashboardCardTitle="Total Customers - This Month"
                 dashboardCardDesc="People you have glowed up this month!"
                 dashboardCardValue="5"
-            ></DashboardCard>
+            />
             <DashboardCard
                 key="earnings-received"
                 dashboardCardTitle="Total Earnings"
                 dashboardCardDesc="Count your dollars!"
                 dashboardCardValue="$32,760"
-            ></DashboardCard>
+            />
             <DashboardCard
                 key="earnings-pending"
                 dashboardCardTitle="Pending Earnings"
                 dashboardCardDesc="Cash currently in transit!"
                 dashboardCardValue="$480"
-            ></DashboardCard>
+            />
         </div>
     );
 };

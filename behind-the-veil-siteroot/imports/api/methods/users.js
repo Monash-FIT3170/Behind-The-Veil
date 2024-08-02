@@ -23,17 +23,26 @@ Meteor.methods({
         const user = Accounts.findUserByUsername(username);
         Accounts.sendVerificationEmail(user._id);
     },
+
     /**
-     * Changes the email address associated with a user.
-     * @param {string} email - new email to be associated with the user.
+     * @param userId - ID of the user to be updated
+     * @param oldEmail - old email of user to remove
+     * @param newEmail - new email to be added
      */
-    "update_email": function (email) {
-        var user = Meteor.user();
-        var oldEmail = user.emails;
-        if(oldEmail != null){
-            Accounts.removeEmail(user._id, user.emails[0].address)
-        }
-        Accounts.addEmail(user._id, email);
+    "update_email": function (userId, oldEmail, newEmail) {
+        // remove old email and add the new one in
+        Accounts.removeEmail(userId, oldEmail)
+        Accounts.addEmail(userId, newEmail);
    },
+    /**
+     * Changes the alias associated with a user.
+     * @param userId - ID of the user to be updated
+     * @param newAlias - new alias/name to update to
+     */
+    "update_alias": function (userId, newAlias) {
+        UserCollection.update(userId, {$set: {"profile.alias": newAlias}});
+    },
+
+
 })
 
