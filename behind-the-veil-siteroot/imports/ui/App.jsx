@@ -13,19 +13,22 @@ import ProfileSettingsPage from "./components/pages/profile/settings/ProfileSett
 
 import ServicesPage from "./components/pages/service/ServicesPage.jsx";
 import SpecificServicePage from "./components/pages/service/SpecificServicePage.jsx";
-
 import ArtistsPage from "./components/pages/artist/ArtistsPage.jsx";
 import MessagesPage from "./components/pages/messages/MessagesPage.jsx";
+
 import LoginPage from "./components/pages/login/LoginPage.jsx";
 import RegisterPage from "./components/pages/register/RegisterPage.jsx";
-import RequestBooking from "./components/pages/request-booking/RequestBooking.jsx";
-import PaymentDetails from "./components/pages/request-booking/PaymentDetails";
-import CancelBooking from "./components/pages/cancel-booking/CancelBooking.jsx";
 import CreateAccountPage from "./components/pages/register/CreateAccountPage";
 import ActivateAccountPage from "./components/pages/register/ActivateAccountPage";
 import ForgotPasswordPage from "./components/pages/forgotPassword/ForgotPasswordPage";
 import ResetPasswordPage from "./components/pages/forgotPassword/ResetPasswordPage";
 import ResetCompletePage from "./components/pages/forgotPassword/ResetCompletePage";
+
+import BookingDetailsPage from "./components/pages/request-booking/BookingDetailsPage";
+import CancelBooking from "./components/pages/cancel-booking/CancelBooking.jsx";
+
+import RequestBooking from "./components/pages/request-booking/RequestBooking.jsx";
+import PaymentDetails from "./components/pages/request-booking/PaymentDetails";
 import BookingSummary from "./components/pages/request-booking/BookingSummary";
 import BookingConfirmation from "./components/pages/request-booking/BookingConfirmation";
 
@@ -37,11 +40,11 @@ export const App = () => (
     <div>
         {/*This is the navigation bar on every Page*/}
         <Router>
-            <NavigationBar />
+            <NavigationBar/>
             <main className="main-content">
                 <Routes>
                     {/* removed once dev is finished*/}
-                    <Route path={`/${UrlBasePath.EXAMPLES}`} element={<Examples />} />
+                    <Route path={`/${UrlBasePath.EXAMPLES}`} element={<Examples/>}/>
                     {/*routes that any user can access*/}
                     <Route path={`/${UrlBasePath.HOME}`} element={<HomePage />} />
                     <Route path="*" element={<NonExistingPage />} /> {/*default path for all other non-routed paths*/}
@@ -149,13 +152,16 @@ export const App = () => (
                             </ProtectedRoute>
                         }
                     />
+                    {/* booking related */}
+                    <Route path="/booking/:bookingId" element={<BookingDetailsPage/>}/>
+
                     {/*requesting booking flow*/}
                     <Route path={`/${UrlBasePath.SERVICES}/:serviceId/request-booking`} element={<RequestBooking />} />
                     <Route path="/booking-summary" element={<BookingSummary />} />
                     <Route path="/payment-details" element={<PaymentDetails />} />
                     <Route path="/booking-confirmation" element={<BookingConfirmation />} />
                     {/* TODO: haven't implemented actual flow to get here yet */}
-                    <Route path="/cancel-booking" element={<CancelBooking />} />
+                    <Route path="/cancel-booking" element={<CancelBooking/>}/>
                 </Routes>
             </main>
         </Router>
