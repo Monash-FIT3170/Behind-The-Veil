@@ -124,7 +124,7 @@ const AddAvailability = () => {
         }
 
         // else, just update date input with the raw value
-        //setInputs((i) => ({...i, date: dateInput}));
+        setInputs((i) => ({...i, date: dateInput}));
         return
     }
 
