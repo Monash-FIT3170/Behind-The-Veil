@@ -22,6 +22,7 @@ import UrlBasePath from "../../../enums/UrlBasePath";
 import BackButton from "../../button/BackButton";
 import ServiceAreaTab from "./artistTabs/ServiceAreaTab";
 import PreviousButton from "../../button/PreviousButton";
+import ArtistServicesTab from "../profile/artistTabs/ArtistServicesTab";
 
 /**
  * Displays a page for a specific artist (similar to profile but external view)
@@ -91,16 +92,18 @@ const SpecificArtistPage = () => {
                         tabs={[
                             <span key={1}>Services</span>,
                             <span key={2}>Service Area</span>,
-                            <span key={3}>Reviews</span>,
+                            <span key={3}>Gallery</span>,
+                            <span key={4}>Reviews</span>,
                         ]}
                         tabPanels={[
-                            <ServicesTab key={"services"} username={artistUsername}/>,
+                            <ArtistServicesTab external={true} key={"services"} username={artistUsername}/>,
                             <ServiceAreaTab key={"service-area"}
                                             serviceLocation={artistData.profile.artistServiceLocation}
                                             serviceRadius={artistData.profile.artistServiceRadius} />,
-                            <span key={3}>Reviews</span>,
+                            <span key={3}>Gallery</span>,
+                            <span key={4}>Reviews</span>,
                         ]}
-                        tabsClassName="lg:flex lg:justify-between lg:px-[20%] xl:px-[30%] 2xl:px-[32%]"
+                        tabsClassName="lg:flex lg:justify-between lg:px-[15%] xl:px-[20%] 2xl:px-[25%]"
                     />
                 }
             </WhiteBackground>

@@ -69,6 +69,10 @@ export function getUserInfo() {
 
 export function getServices(service_publication, params, filter) {
 
+    console.log("service_publication", service_publication)
+    console.log("params", params)
+    console.log("filter", filter)
+
     // get service data from database
     const isLoadingUserServices = useSubscribe(service_publication, ...params);
 
@@ -85,17 +89,25 @@ export function getServices(service_publication, params, filter) {
 
     // manual aggregation of each service with their image
     for (let i = 0; i < servicesData.length; i++) {
+        let foundMatch = false;
 
         // then aggregate with the ALL images that belong to it
         for (let j = 0; j < imagesData.length; j++) {
-            // find matching image for the service
 
+            // find matching image for the service
             if (imagesData[j].imageType === "service" && servicesData[i]._id === imagesData[j].target_id) {
                 servicesData[i].serviceImageData = imagesData[j].imageData;
+                foundMatch = true;
                 break;
             }
         }
+
+        // if not found any images, replace with default
+        if (!foundMatch) {
+            servicesData[i].serviceImageData = "/imageNotFound.png";
+        }
     }
+    console.log("servicesData", servicesData)
 
     return [isLoading, servicesData]
 }
