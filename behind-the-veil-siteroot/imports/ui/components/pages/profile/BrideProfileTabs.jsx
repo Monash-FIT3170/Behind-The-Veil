@@ -7,7 +7,7 @@
 import React from 'react';
 import {useSubscribe, useTracker} from "meteor/react-meteor-data";
 
-import BookingCollection from "../../../../api/collections/booking";
+import BookingCollection from "../../../../api/collections/bookings";
 import ServiceCollection from "../../../../api/collections/services";
 import ImageCollection from "../../../../api/collections/images";
 

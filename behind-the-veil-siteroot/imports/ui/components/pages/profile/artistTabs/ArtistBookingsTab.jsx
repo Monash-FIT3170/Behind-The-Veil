@@ -8,7 +8,7 @@ import React, {useState} from 'react';
 import {PlusIcon,} from "@heroicons/react/24/outline";
 import {useSubscribe, useTracker} from "meteor/react-meteor-data";
 
-import BookingCollection from "../../../../../api/collections/booking";
+import BookingCollection from "../../../../../api/collections/bookings";
 import ImageCollection from "../../../../../api/collections/images";
 import ServiceCollection from "../../../../../api/collections/services";
 

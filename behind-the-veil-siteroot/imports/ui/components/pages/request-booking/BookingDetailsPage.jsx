@@ -18,7 +18,7 @@ import {
     XCircleIcon,
 } from "@heroicons/react/24/outline";
 
-import BookingCollection from "/imports/api/collections/booking";
+import BookingCollection from "/imports/api/collections/bookings";
 
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import Button from "../../button/Button";

@@ -3,7 +3,7 @@
  * File version: 1.1
  * Contributors: Neth, Nikki
  */
-import { BookingCollection } from "../collections/booking";
+import { BookingCollection } from "../collections/bookings";
 
 Meteor.methods({
     "add_booking": function (startDateTime, duration, location, price, status, brideUsername, artistUsername, serviceId) {

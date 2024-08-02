@@ -4,7 +4,7 @@
  * Contributors: Neth, Nikki
  */
 import {Meteor} from 'meteor/meteor'
-import BookingCollection from "../collections/booking";
+import BookingCollection from "../collections/bookings";
 
 /**
  * Publishes all bookings associated with a specific user to the client.
