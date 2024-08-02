@@ -177,8 +177,8 @@ export const ArtistBookingsTab = ({username}) => {
                         {/*add availability button on the right*/}
                         <Button
                             className="flex flex-row gap-x-1.5 min-w-48 items-center justify-center
-                        bg-secondary-purple hover:bg-secondary-purple-hover" 
-                        onClick={() => navigateTo(`/add-availability/${username}`)}>
+                            bg-secondary-purple hover:bg-secondary-purple-hover" 
+                            onClick={() => navigateTo(`/add-availability/${username}`)}>
                             <PlusIcon className="icon-base"/> Add Availability
                         </Button>
                     </div>
