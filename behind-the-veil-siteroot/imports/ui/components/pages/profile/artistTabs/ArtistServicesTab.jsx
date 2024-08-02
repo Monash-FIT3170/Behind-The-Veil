@@ -1,24 +1,22 @@
 /**
- * File Description: Artist My-Services Tab
+ * File Description: Artist's Services Tab
  * File version: 1.2
  * Contributors: Lucas Sharp, Nikki
  */
 
-import React, { useState } from "react";
-import { useSubscribe, useTracker } from "meteor/react-meteor-data";
-import { useNavigate } from "react-router-dom";
-import ServiceCollection from "/imports/api/collections/services";
-import { PlusIcon } from "@heroicons/react/24/outline";
+import React, {useState} from "react";
+import {useLocation, useNavigate} from "react-router-dom";
+import {PlusIcon} from "@heroicons/react/24/outline";
 import Button from "../../../button/Button.jsx";
 import ServiceCard from "../../../card/ServiceCard.jsx";
-import ImageCollection from "../../../../../api/collections/images";
 import ArtistServicesFilter from "../../../../enums/ArtistServicesFilter";
 import Loader from "../../../loader/Loader";
 import Pagination from "../../../pagination/Pagination";
 import UrlBasePath from "../../../../enums/UrlBasePath.tsx";
+import {getServices} from "../../../util";
 
 /**
- * Service tab of an artist's profile
+ * Service tab of an artist's profile. Loads differently depending on if viewed by artist profile, or externally.
  *
  * @param username {string} - username of the current user's profile
  */
@@ -27,40 +25,16 @@ export const ArtistServicesTab = ({ username }) => {
 
     const [itemsPerPage, setItemsPerPage] = useState(10);
 
-    // todo: change to subscribing to all_user_services() after demo, currently displaying all services for every user
-    const isLoadingUserServices = useSubscribe("all_services", username);
-
-    // get service data from database
-    let servicesData = useTracker(() => {
-        return ServiceCollection.find().fetch();
-    });
-
-    const isLoadingServiceImages = useSubscribe('service_images', []);
-    const isLoading = isLoadingUserServices() || isLoadingServiceImages();
-
-    let imagesData = useTracker(() => {
-        return ImageCollection.find({ imageType: "service" }).fetch();
-    });
-
-    // manual aggregation of each service with their image
-    for (let i = 0; i < servicesData.length; i++) {
-        // then aggregate with the ALL images that belong to it
-        for (let j = 0; j < imagesData.length; j++) {
-            // find matching image for the service
-
-            if (imagesData[j].imageType === "service" && servicesData[i]._id === imagesData[j].target_id) {
-                servicesData[i].serviceImageData = imagesData[j].imageData;
-                break;
-            }
-        }
-    }
+    // todo: change to subscribing to all_user_services after can add service, currently displaying all services for every user
+    const serviceFilter = {} // {{ artistUsername:username }}
+    const [isLoading, servicesData] = getServices("all_services", username, serviceFilter)
 
     // Creating the state of the filter for the service cards (defaults to All)
     const [filterType, setFilterType] = useState(ArtistServicesFilter.ALL);
 
     if (isLoading) {
         // is loading, display loader
-        return <Loader loadingText={"Services are loading . . ."} isLoading={isLoading} size={100} speed={1.5} />;
+        return <Loader loadingText={"Services are loading . . ."} isLoading={isLoading} size={100} speed={1.5}/>;
     } else {
         // filtered bookings array based on the selected filter
         const filteredServices = servicesData.filter((service) => {
@@ -99,7 +73,8 @@ export const ArtistServicesTab = ({ username }) => {
                 {/*top button row*/}
                 <div className={"flex flex-col-reverse gap-y-6 items lg:flex-row lg:items-center lg:justify-between"}>
                     {/* filter buttons on the left*/}
-                    <div className="w-full sm:w-2/5 flex flex-wrap sm:flex-nowrap gap-5 items-center justify-center sm:justify-start">
+                    <div
+                        className="w-full sm:w-2/5 flex flex-wrap sm:flex-nowrap gap-5 items-center justify-center sm:justify-start">
                         <Button
                             className={
                                 filterType === ArtistServicesFilter.ALL
@@ -142,7 +117,7 @@ export const ArtistServicesTab = ({ username }) => {
                             className="flex flex-row gap-x-1.5 min-w-48 items-center justify-center bg-secondary-purple hover:bg-secondary-purple-hover"
                             onClick={() => navigateTo(`/${UrlBasePath.SERVICES}/addservice`)}
                         >
-                            <PlusIcon className="icon-base" /> Add Service
+                            <PlusIcon className="icon-base"/> Add Service
                         </Button>
                     </div>
                 </div>

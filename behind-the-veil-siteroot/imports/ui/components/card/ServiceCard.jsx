@@ -92,7 +92,7 @@ export const ServiceCard = ({
                         <div className="main-text text-dark-grey max-h-[1.5rem] max-w-full line-clamp-1 break-all">
                             Artist: {artistAlias} ( @{artistUsername} )
                         </div>
-                    )}
+                    }
                 </div>
 
                 {/* image on the right side for service*/}

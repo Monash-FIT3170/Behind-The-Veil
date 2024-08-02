@@ -4,9 +4,12 @@
  * Contributors: Nikki
  */
 
-import React, {useState} from "react";
+import {useState} from "react";
+import {useSubscribe, useTracker} from "meteor/react-meteor-data";
 import {Tracker} from "meteor/tracker";
 import {Meteor} from "meteor/meteor";
+import ServiceCollection from "../../api/collections/services";
+import ImageCollection from "../../api/collections/images";
 
 /**
  * Retrieves current logged-in user's information
@@ -63,3 +66,38 @@ export function getUserInfo() {
     console.log("Current logged in user:" + JSON.stringify(userInfo))
     return userInfo;
 }
+
+export function getServices(service_publication, params, filter) {
+
+    // get service data from database
+    const isLoadingUserServices = useSubscribe(service_publication, ...params);
+
+    let servicesData = useTracker(() => {
+        return ServiceCollection.find(filter).fetch();
+    });
+
+    const isLoadingServiceImages = useSubscribe('service_images', []);
+    const isLoading = isLoadingUserServices() || isLoadingServiceImages();
+
+    let imagesData = useTracker(() => {
+        return ImageCollection.find({imageType: "service"}).fetch();
+    });
+
+    // manual aggregation of each service with their image
+    for (let i = 0; i < servicesData.length; i++) {
+
+        // then aggregate with the ALL images that belong to it
+        for (let j = 0; j < imagesData.length; j++) {
+            // find matching image for the service
+
+            if (imagesData[j].imageType === "service" && servicesData[i]._id === imagesData[j].target_id) {
+                servicesData[i].serviceImageData = imagesData[j].imageData;
+                break;
+            }
+        }
+    }
+
+    return [isLoading, servicesData]
+}
+
+

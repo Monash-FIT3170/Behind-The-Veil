@@ -5,14 +5,11 @@
  */
 
 import React, {useState} from "react";
-import {useSubscribe, useTracker} from "meteor/react-meteor-data";
-
-import ServiceCollection from "/imports/api/collections/services";
-import ImageCollection from "../../../../../api/collections/images";
 
 import ServiceCard from "../../../card/ServiceCard.jsx";
 import Loader from "../../../loader/Loader";
 import Pagination from "../../../pagination/Pagination";
+import {getServices} from "../../../util";
 
 
 /**
@@ -23,37 +20,13 @@ import Pagination from "../../../pagination/Pagination";
 export const ServicesTab = ({username}) => {
     const [itemsPerPage, setItemsPerPage] = useState(10);
 
-    // get service data from database
-    const isLoadingUserServices = useSubscribe("all_user_active_services", username);
-    let servicesData = useTracker(() => {
-        return ServiceCollection.find({
-            $and: [
-                { artistUsername:username },
-                { serviceActive: true }
-            ]
-        }).fetch();
-    });
-
-    const isLoadingServiceImages = useSubscribe('service_images', []);
-    const isLoading = isLoadingUserServices() || isLoadingServiceImages();
-
-    let imagesData = useTracker(() => {
-        return ImageCollection.find({"imageType": "service"}).fetch();
-    });
-
-    // manual aggregation of each service with their image
-    for (let i = 0; i < servicesData.length; i++) {
-
-        // then aggregate with the ALL images that belong to it
-        for (let j = 0; j < imagesData.length; j++) {
-            // find matching image for the service
-
-            if (imagesData[j].imageType === "service" && servicesData[i]._id === imagesData[j].target_id) {
-                servicesData[i].serviceImageData = imagesData[j].imageData;
-                break;
-            }
-        }
+    const serviceFilter = {
+        $and: [
+            { artistUsername:username },
+            { serviceActive: true }
+        ]
     }
+    const [isLoading, servicesData] = getServices("active_services", username, serviceFilter)
 
     if (isLoading) {
         // is loading, display loader
