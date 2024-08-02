@@ -10,6 +10,7 @@ import {Tracker} from "meteor/tracker";
 import {Meteor} from "meteor/meteor";
 import ServiceCollection from "../../api/collections/services";
 import ImageCollection from "../../api/collections/images";
+import UserCollection from "../../api/collections/users";
 
 /**
  * Retrieves current logged-in user's information
@@ -67,7 +68,15 @@ export function getUserInfo() {
     return userInfo;
 }
 
-export function getServices(service_publication, params, filter) {
+/**
+ * Used for a list of services (not for one specific service, or else its not as optimised (?)
+ *
+ * @param service_publication
+ * @param params
+ * @param filter
+ * @returns {*[]}
+ */
+export function getServices(service_publication, params, filter, requireArtist = false) {
 
     console.log("service_publication", service_publication)
     console.log("params", params)
@@ -75,35 +84,54 @@ export function getServices(service_publication, params, filter) {
 
     // get service data from database
     const isLoadingUserServices = useSubscribe(service_publication, ...params);
-
     let servicesData = useTracker(() => {
         return ServiceCollection.find(filter).fetch();
     });
 
     const isLoadingServiceImages = useSubscribe('service_images', []);
-    const isLoading = isLoadingUserServices() || isLoadingServiceImages();
-
     let imagesData = useTracker(() => {
         return ImageCollection.find({imageType: "service"}).fetch();
     });
 
+    let isLoadingArtists = () => false
+    let artistsData = [];
+
+    if (requireArtist) {
+        isLoadingArtists = useSubscribe('all_artists');
+        artistsData = useTracker(() => {
+            return UserCollection.find({"profile.type": "artist"}).fetch();
+        });
+    }
+
+    const isLoading = isLoadingUserServices() || isLoadingArtists() || isLoadingServiceImages();
+
     // manual aggregation of each service with their image
     for (let i = 0; i < servicesData.length; i++) {
-        let foundMatch = false;
+        let foundImageMatch = false;
 
-        // then aggregate with the ALL images that belong to it
+        // aggregate with artist first
+        for (let j = 0; j < artistsData.length; j++) {
+
+            // find matching artist and add their name
+            if (servicesData[i].artistUsername === artistsData[j].username) {
+                servicesData[i].artistAlias = artistsData[j].profile.alias;
+                break;
+            }
+        }
+
+        // then aggregate with the FIRST image that belong to it
         for (let j = 0; j < imagesData.length; j++) {
 
             // find matching image for the service
             if (imagesData[j].imageType === "service" && servicesData[i]._id === imagesData[j].target_id) {
                 servicesData[i].serviceImageData = imagesData[j].imageData;
-                foundMatch = true;
+                foundImageMatch = true;
                 break;
             }
         }
 
         // if not found any images, replace with default
-        if (!foundMatch) {
+        if (!foundImageMatch) {
             servicesData[i].serviceImageData = "/imageNotFound.png";
         }
     }
