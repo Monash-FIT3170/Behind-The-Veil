@@ -1,5 +1,8 @@
 import { Meteor } from 'meteor/meteor';
-import "../imports/api/methods/booking";
+
+import "/imports/api/collections/bookings.js";
+import "/imports/api/methods/bookings.js";
+import "/imports/api/publications/bookings.js";
 
 import "/imports/api/collections/services.js";
 import "/imports/api/methods/services.js";

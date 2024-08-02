@@ -4,24 +4,27 @@
  * Contributors: Lucas Sharp, Nikki
  */
 
-import React, {useState} from "react";
-import {useSubscribe, useTracker} from "meteor/react-meteor-data";
+import React, { useState } from "react";
+import { useSubscribe, useTracker } from "meteor/react-meteor-data";
+import { useNavigate } from "react-router-dom";
 import ServiceCollection from "/imports/api/collections/services";
-import {PlusIcon} from "@heroicons/react/24/outline";
+import { PlusIcon } from "@heroicons/react/24/outline";
 import Button from "../../../button/Button.jsx";
 import ServiceCard from "../../../card/ServiceCard.jsx";
 import ImageCollection from "../../../../../api/collections/images";
 import ArtistServicesFilter from "../../../../enums/ArtistServicesFilter";
 import Loader from "../../../loader/Loader";
 import Pagination from "../../../pagination/Pagination";
-
+import UrlBasePath from "../../../../enums/UrlBasePath.tsx";
 
 /**
  * Service tab of an artist's profile
  *
  * @param username {string} - username of the current user's profile
  */
-export const ArtistServicesTab = ({username}) => {
+export const ArtistServicesTab = ({ username }) => {
+    const navigateTo = useNavigate();
+
     const [itemsPerPage, setItemsPerPage] = useState(10);
 
     // todo: change to subscribing to all_user_services() after demo, currently displaying all services for every user
@@ -33,16 +36,15 @@ export const ArtistServicesTab = ({username}) => {
     });
 
     // todo: only publish images relevant to this list of serviceIds (a group $OR ?? or an $IN operator??)
-    const isLoadingServiceImages = useSubscribe('service_images', []);
+    const isLoadingServiceImages = useSubscribe("service_images", []);
     const isLoading = isLoadingUserServices() || isLoadingServiceImages();
 
     let imagesData = useTracker(() => {
-        return ImageCollection.find({"imageType": "service"}).fetch();
+        return ImageCollection.find({ imageType: "service" }).fetch();
     });
 
     // manual aggregation of each service with their image
     for (let i = 0; i < servicesData.length; i++) {
-
         // then aggregate with the ALL images that belong to it
         for (let j = 0; j < imagesData.length; j++) {
             // find matching image for the service
@@ -59,14 +61,7 @@ export const ArtistServicesTab = ({username}) => {
 
     if (isLoading) {
         // is loading, display loader
-        return (
-            <Loader
-                loadingText={"Services are loading . . ."}
-                isLoading={isLoading}
-                size={100}
-                speed={1.5}
-            />
-        );
+        return <Loader loadingText={"Services are loading . . ."} isLoading={isLoading} size={100} speed={1.5} />;
     } else {
         // filtered bookings array based on the selected filter
         const filteredServices = servicesData.filter((service) => {
@@ -90,7 +85,8 @@ export const ArtistServicesTab = ({username}) => {
                     serviceImageData={service.serviceImageData}
                     artistUsername={username}
                     artistAlias={""}
-                    isEdit={true}/>
+                    isEdit={true}
+                />
             );
         });
 
@@ -100,20 +96,18 @@ export const ArtistServicesTab = ({username}) => {
 
         return (
             <div className="flex flex-col gap-6 mt-2">
-
                 {/*top button row*/}
                 <div className={"flex flex-col-reverse gap-y-6 items lg:flex-row lg:items-center lg:justify-between"}>
-
                     {/* filter buttons on the left*/}
-                    <div
-                        className="w-full sm:w-2/5 flex flex-wrap sm:flex-nowrap gap-5 items-center justify-center sm:justify-start">
+                    <div className="w-full sm:w-2/5 flex flex-wrap sm:flex-nowrap gap-5 items-center justify-center sm:justify-start">
                         <Button
                             className={
                                 filterType === ArtistServicesFilter.ALL
                                     ? activeFilterButtonClasses
                                     : inactiveFilterButtonClasses
                             }
-                            onClick={() => setFilterType(ArtistServicesFilter.ALL)}>
+                            onClick={() => setFilterType(ArtistServicesFilter.ALL)}
+                        >
                             Show All
                         </Button>
                         <Button
@@ -122,7 +116,8 @@ export const ArtistServicesTab = ({username}) => {
                                     ? activeFilterButtonClasses
                                     : inactiveFilterButtonClasses
                             }
-                            onClick={() => setFilterType(ArtistServicesFilter.ACTIVE)}>
+                            onClick={() => setFilterType(ArtistServicesFilter.ACTIVE)}
+                        >
                             Active
                         </Button>
                         <Button
@@ -131,18 +126,23 @@ export const ArtistServicesTab = ({username}) => {
                                     ? activeFilterButtonClasses
                                     : inactiveFilterButtonClasses
                             }
-                            onClick={() => setFilterType(ArtistServicesFilter.INACTIVE)}>
+                            onClick={() => setFilterType(ArtistServicesFilter.INACTIVE)}
+                        >
                             Inactive
                         </Button>
                     </div>
 
                     {/*add service button on the right*/}
                     <div
-                        className={"flex flex-col-reverse items-center justify-center sm:flex-row sm:items-center sm:justify-end gap-6"}>
+                        className={
+                            "flex flex-col-reverse items-center justify-center sm:flex-row sm:items-center sm:justify-end gap-6"
+                        }
+                    >
                         <Button
-                            className="flex flex-row gap-x-1.5 min-w-48 items-center justify-center
-                        bg-secondary-purple hover:bg-secondary-purple-hover">
-                            <PlusIcon className="icon-base"/> Add Service
+                            className="flex flex-row gap-x-1.5 min-w-48 items-center justify-center bg-secondary-purple hover:bg-secondary-purple-hover"
+                            onClick={() => navigateTo(`/${UrlBasePath.SERVICES}/addservice`)}
+                        >
+                            <PlusIcon className="icon-base" /> Add Service
                         </Button>
                     </div>
                 </div>
@@ -150,20 +150,18 @@ export const ArtistServicesTab = ({username}) => {
                 {/*bottom tab with booking*/}
                 <div className="flex flex-col items-center justify-center gap-8">
                     {/*the bookings and pagination*/}
-                    <Pagination
-                        reset={true}
-                        itemsPerPage={itemsPerPage}
-                        displayItems={displayServices}
-                    />
+                    <Pagination reset={true} itemsPerPage={itemsPerPage} displayItems={displayServices} />
 
                     {/*bottom component for the custom item per page*/}
                     <div className="flex flex-row items-center justify-center gap-x-2">
                         Items per page:
-                        <select defaultValue={10}
-                                onChange={(event) => {
-                                    setItemsPerPage(event.target.value)
-                                }}
-                                className="input-base w-20">
+                        <select
+                            defaultValue={10}
+                            onChange={(event) => {
+                                setItemsPerPage(event.target.value);
+                            }}
+                            className="input-base w-20"
+                        >
                             <option value={5}>5</option>
                             <option value={10}>10</option>
                             <option value={25}>25</option>

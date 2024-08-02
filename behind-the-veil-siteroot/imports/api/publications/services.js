@@ -1,6 +1,6 @@
 /**
  * File Description: Service database entity
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Nikki
  */
 
@@ -24,7 +24,11 @@ Meteor.publish("all_user_services", function (username) {
     return ServiceCollection.find({artistUsername:username});
 });
 
-// todo: remove
+/**
+ * Publishes all services.
+ *
+ * @returns {Mongo.Cursor} - A cursor representing the result of all services.
+ */
 Meteor.publish("all_services", function () {
     return ServiceCollection.find();
 });
@@ -32,7 +36,7 @@ Meteor.publish("all_services", function () {
 
 /**
  * Publishes one services based on given service ID to the client.
- * This publication filters bookings based on the provided service ID
+ *
  * @param {string} serviceId - The ID of the service to be published.
  * @returns {Mongo.Cursor} - A cursor representing the result the service to be published.
  */
