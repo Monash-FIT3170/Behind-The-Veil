@@ -126,7 +126,7 @@ export const AccountDetails = () => {
             isError = true;
         }
 
-        if (!allowedFileTypeExtensions.some((ext) => uploadedFile.name.endsWith(ext))) {
+        if (uploadedFile && !allowedFileTypeExtensions.some((ext) => uploadedFile.name.endsWith(ext))) {
             setImageError("Please select a png, jpg, or jpeg file.")
             isError = true;
         }
@@ -169,7 +169,7 @@ export const AccountDetails = () => {
     } else {
         // data is loaded
         return (
-            <div className="flex flex-col items-start justify-center gap-6 mx-auto pl-[5%] lg:pl-[15%]">
+            <div className="flex flex-col items-start justify-center gap-6 pl-[5%] lg:pl-[15%]">
                 {/* Username */}
                 <div className="flex flex-col items-left gap-y-2">
                     <div className="main-text">Username</div>

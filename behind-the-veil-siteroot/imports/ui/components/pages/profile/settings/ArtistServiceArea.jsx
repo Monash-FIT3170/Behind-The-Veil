@@ -4,9 +4,10 @@
  * Contributors: Hirun, Nikki
  */
 import React from "react";
+import {CheckIcon} from "@heroicons/react/24/outline";
+
 import Input from "../../../input/Input";
 import Button from "../../../button/Button.jsx";
-import {CheckIcon} from "@heroicons/react/24/outline";
 
 /**
  * This page allows the artist to enter a location as well as provide a radius in which they can travel from that location
@@ -17,7 +18,7 @@ import {CheckIcon} from "@heroicons/react/24/outline";
 export const ArtistServiceArea = () => {
 
     return (
-        <div className="flex flex-col items-left justify-center gap-y-8 pl-[5%] lg:pl-[15%]">
+        <div className="flex flex-col items-left justify-center gap-y-6 pl-[5%] lg:pl-[15%]">
             <div className="flex flex-col items-left justify-center md:flex-row md:items-center md:justify-start gap-6">
 
                 {/*Service Location input*/}
