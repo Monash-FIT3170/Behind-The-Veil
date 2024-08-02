@@ -36,7 +36,7 @@ export const AddEditServicePage = ({ isEdit }) => {
         navigateTo(`/`);
     }
 
-    const serviceId = isEdit ? new Mongo.ObjectID(useLocation().pathname.split("/")[2]) : "";
+    const serviceId = isEdit ? useLocation().pathname.split("/")[2] : "";
     useEffect(() => {
         if (isEdit) {
             const retrieveService = () => {
@@ -132,15 +132,29 @@ export const AddEditServicePage = ({ isEdit }) => {
     };
 
     const AddEdit = () => {
-        updatedService = {
-            'serviceName': serviceName,
-            'serviceType': serviceType,
-            'serviceDuration': serviceDuration,
-            'servicePrice': servicePrice,
-            'serviceDesc': serviceDescription,
+        const service = {
+            serviceName: serviceName,
+            serviceType: serviceType,
+            serviceDuration: serviceDuration,
+            servicePrice: servicePrice,
+            serviceDesc: serviceDescription,
+            artistUsername: userInfo.username,
         };
-        Meteor.call("update_service_details", serviceId, updatedService);
-        console.log(updatedService);
+        if (isEdit) {
+            Meteor.call("update_service_details", serviceId, service);
+        } else {
+            Meteor.call(
+                "add_service",
+                service.serviceType,
+                service.serviceName,
+                service.serviceDesc,
+                service.servicePrice,
+                service.serviceDuration,
+                service.artistUsername
+            );
+        }
+
+        console.log(service);
     };
 
     return (

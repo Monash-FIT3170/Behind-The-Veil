@@ -15,6 +15,7 @@ import ImageCollection from "../../../../../api/collections/images";
 import ArtistServicesFilter from "../../../../enums/ArtistServicesFilter";
 import Loader from "../../../loader/Loader";
 import Pagination from "../../../pagination/Pagination";
+import UrlBasePath from "../../../../enums/UrlBasePath.tsx";
 
 /**
  * Service tab of an artist's profile
@@ -139,7 +140,7 @@ export const ArtistServicesTab = ({ username }) => {
                     >
                         <Button
                             className="flex flex-row gap-x-1.5 min-w-48 items-center justify-center bg-secondary-purple hover:bg-secondary-purple-hover"
-                            onClick={() => navigateTo("/services/addservice")}
+                            onClick={() => navigateTo(`/${UrlBasePath.SERVICES}/addservice`)}
                         >
                             <PlusIcon className="icon-base" /> Add Service
                         </Button>
