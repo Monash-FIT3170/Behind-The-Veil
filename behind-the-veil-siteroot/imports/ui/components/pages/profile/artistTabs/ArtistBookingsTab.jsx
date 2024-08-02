@@ -160,7 +160,7 @@ export const ArtistBookingsTab = ({username}) => {
                 <div className={"flex flex-col-reverse gap-y-6 items xl:flex-row xl:items-center xl:justify-between"}>
 
                     {/*left side buttons, depends on current view*/}
-                    {bookingView === "list" ? filterButtons : "filter buttons for calendar view"}
+                    {bookingView === "list" ? filterButtons : "top row button for calendar view"}
 
                     {/*right side buttons/drop down*/}
                     <div

@@ -13,14 +13,11 @@ import ProfileSettingsPage from "./components/pages/profile/settings/ProfileSett
 
 import ServicesPage from "./components/pages/service/ServicesPage.jsx";
 import SpecificServicePage from "./components/pages/service/SpecificServicePage.jsx";
-
 import ArtistsPage from "./components/pages/artist/ArtistsPage.jsx";
 import MessagesPage from "./components/pages/messages/MessagesPage.jsx";
+
 import LoginPage from "./components/pages/login/LoginPage.jsx";
 import RegisterPage from "./components/pages/register/RegisterPage.jsx";
-import RequestBooking from "./components/pages/request-booking/RequestBooking.jsx";
-import PaymentDetails from "./components/pages/request-booking/PaymentDetails";
-import CancelBooking from "./components/pages/cancel-booking/CancelBooking.jsx";
 import CreateAccountPage from "./components/pages/register/CreateAccountPage";
 import ActivateAccountPage from "./components/pages/register/ActivateAccountPage";
 import ForgotPasswordPage from "./components/pages/forgotPassword/ForgotPasswordPage";
@@ -28,6 +25,8 @@ import ResetPasswordPage from "./components/pages/forgotPassword/ResetPasswordPa
 import ResetCompletePage from "./components/pages/forgotPassword/ResetCompletePage";
 
 import BookingDetailsPage from "./components/pages/request-booking/BookingDetailsPage";
+import CancelBooking from "./components/pages/cancel-booking/CancelBooking.jsx";
+
 import RequestBooking from "./components/pages/request-booking/RequestBooking.jsx";
 import PaymentDetails from "./components/pages/request-booking/PaymentDetails";
 import BookingSummary from "./components/pages/request-booking/BookingSummary";
