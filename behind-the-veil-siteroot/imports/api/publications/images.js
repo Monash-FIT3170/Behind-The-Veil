@@ -5,7 +5,7 @@
  */
 
 import {Meteor} from 'meteor/meteor'
-import {ImageCollection} from "/imports/api/collections/images";
+import { ImageCollection } from "../collections/images";
 
 /**
  * Publishes images for services.
