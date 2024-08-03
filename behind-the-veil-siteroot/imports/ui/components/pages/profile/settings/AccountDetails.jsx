@@ -114,18 +114,24 @@ export const AccountDetails = () => {
         let newErrors = {}
         let isError = false;
 
+        // check email is valid
         const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
         if (email && !emailRegex.test(email)) {
             newErrors.email = 'Please enter a valid email address.';
             isError = true;
         }
 
+        // check alias is valid
         const alphanumericSpaceRegex = /^[A-Za-z0-9 ]+$/i;
         if (alias && !alphanumericSpaceRegex.test(alias)) {
             newErrors.alias = 'Name/alias cannot contain special character (except spaces).';
             isError = true;
+        } else if (alias && alias.length > 20) {
+            newErrors.alias = 'Alias cannot be longer than 20 characters.';
+            isError = true;
         }
 
+        // check uploaded file is valid
         if (uploadedFile && !allowedFileTypeExtensions.some((ext) => uploadedFile.name.endsWith(ext))) {
             setImageError("Please select a png, jpg, or jpeg file.")
             isError = true;
