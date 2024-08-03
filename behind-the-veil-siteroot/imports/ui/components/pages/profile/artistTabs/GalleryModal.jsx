@@ -1,6 +1,13 @@
+/**
+ * File Description: Artist gallery modal
+ * File version: 1.0
+ * Contributors: Kefei (Phillip) Li
+ * Source/Credit: https://gist.github.com/nimone/c2a86eb3f8b0baae619e23635c741107
+ */
+
 import React from "react";
 
-export default function GalleryModal({ open, onClose }) {
+export default function GalleryModal({ open, onClose, children }) {
   return (
     // backdrop
     <div
@@ -18,15 +25,15 @@ export default function GalleryModal({ open, onClose }) {
           ${open ? "scale-100 opacity-100" : "scale-125 opacity-0"}
         `}
       >
-        <div className="text-center w-56">
-          <div className="mx-auto my-4 w-48">
-            <h3 className="text-lg font-black text-gray-800">Confirm Delete</h3>
-            <p className="text-sm text-gray-500">
-              Are you sure you want to delete this item?
-            </p>
-          </div>
-          <div className="flex gap-4"></div>
+        <div>
+          <img
+            className="h-auto max-w-full rounded-lg object-cover object-center"
+            src="https://images.unsplash.com/photo-1432462770865-65b70566d673?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+            alt="gallery-photo"
+            onClick={() => setOpen(true)}
+          />
         </div>
+        {children}
       </div>
     </div>
   );

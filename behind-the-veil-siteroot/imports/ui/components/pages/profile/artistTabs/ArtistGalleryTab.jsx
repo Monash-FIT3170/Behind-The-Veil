@@ -118,10 +118,14 @@ export const ArtistGalleryTab = ({ username }) => {
               </div>
             </div>
           </div>
+          <div className="z-30">
+            <GalleryModal
+              open={open}
+              onClose={() => setOpen(false)}
+            ></GalleryModal>
+          </div>
         </div>
       </div>
-
-      <GalleryModal open={open} onClose={() => setOpen(false)}></GalleryModal>
     </main>
   );
 };
