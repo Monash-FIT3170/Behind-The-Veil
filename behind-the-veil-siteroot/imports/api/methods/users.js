@@ -43,7 +43,22 @@ Meteor.methods({
         UserCollection.update(userId, {$set: {"profile.alias": newAlias}});
     },
 
+        'update_service_area': function (text, radius) {
+        if (!this.userId) {
+            throw new Meteor.Error('Not authorized.');
+        }
 
+        UserCollection.update(
+            { _id: this.userId }, // Query to find the document for the current user
+            {
+                $set: {
+                    'profile.serviceLocation': text.trim(),
+                    'profile.serviceRadius': radius
+                }
+            },
+            { upsert: true } // Create the document if it doesn't exist
+        );
+    }
 
 })
 
