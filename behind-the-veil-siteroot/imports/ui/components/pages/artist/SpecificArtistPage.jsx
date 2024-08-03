@@ -1,15 +1,12 @@
 /**
  * File Description: Specific Artist page
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Nikki
  */
 
 import React from 'react';
 import {useNavigate, useParams} from "react-router-dom";
-import {useSubscribe, useTracker} from "meteor/react-meteor-data";
 import {PaperAirplaneIcon} from "@heroicons/react/24/outline";
-
-import UserCollection from "../../../../api/collections/users";
 
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
@@ -20,6 +17,8 @@ import Tabs from "../../tabs/Tabs";
 import ServiceAreaTab from "./artistTabs/ServiceAreaTab";
 import PreviousButton from "../../button/PreviousButton";
 import ArtistServicesTab from "../profile/artistTabs/ArtistServicesTab";
+import UrlBasePath from "../../../enums/UrlBasePath";
+import {getSpecificUser} from "../../DatabaseHelper";
 
 /**
  * Displays a page for a specific artist (similar to profile but external view)
@@ -31,22 +30,16 @@ const SpecificArtistPage = () => {
     // get url parameter of the artist username
     const {artistUsername} = useParams();
 
-    // set up subscription and get data from db for this service
-    const isLoadingArtist = useSubscribe('specific_user', artistUsername);
+    // get database entry for artist information
+    const [isLoading, artistData, artistImageData] = getSpecificUser(artistUsername);
 
-    let artistData = useTracker(() => {
-        return UserCollection.find({"username": artistUsername}).fetch()[0];
-    });
-
-    console.log(artistData)
-
-    if (isLoadingArtist()) {
+    if (isLoading) {
         // is loading, display loader
         return (
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
                 <Loader
                     loadingText={"loading . . ."}
-                    isLoading={isLoadingArtist()}
+                    isLoading={isLoading}
                     size={100}
                     speed={1.5}
                 />
@@ -63,7 +56,7 @@ const SpecificArtistPage = () => {
                     <Button
                         className="hidden sm:flex flex-row justify-center items-center gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover"
                         onClick={() => {
-                            navigate('/messages#' + artistUsername);
+                            navigate('/' + UrlBasePath.MESSAGES +'#' + artistUsername);
                         }}>
                         <PaperAirplaneIcon className="icon-base"/>
                         Message
@@ -71,13 +64,16 @@ const SpecificArtistPage = () => {
                 </div>
 
                 {/*Top div where user's info*/}
-                <ProfileDisplay imageData={""} userAlias={artistData.profile.alias} userUsername={artistData.username}/>
+                <ProfileDisplay imageData={artistImageData ? artistImageData.imageData : null}
+                                userAlias={artistData.profile.alias}
+                                userUsername={artistData.username}
+                />
 
                 {/* if the page is too small, the message button moves under the artist's name/image */}
                 <Button
                     className="mx-auto flex sm:hidden flex-row justify-center items-center gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover"
                     onClick={() => {
-                        navigate('/messages#' + artistUsername);
+                        navigate('/' + UrlBasePath.MESSAGES +'#' + artistUsername);
                     }}>
                     <PaperAirplaneIcon className="icon-base"/>
                     Message

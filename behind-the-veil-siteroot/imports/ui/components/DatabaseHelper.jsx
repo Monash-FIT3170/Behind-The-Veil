@@ -144,6 +144,47 @@ export function getBookings(booking_publication, params, filter) {
     return [isLoading, bookingsData]
 }
 
+/**
+ * Used for to get a list of users data (includes their profile image automatically)
+ *
+ * @param user_publication - name of the publication to get users from (determines which subset of user is required)
+ * @param params - the parameters used for that user publication, such as username, etc.
+ * @param filter - the filter used to filter for the specific subset of user (from the subscribed publication) this is an
+ * object with key=user attribute name, value=filter value; e.g. { username: "abcd123" }
+ * @returns {[boolean, Object]} - returns a boolean isLoading that is true when loading, false when finished loading. The object
+ * contains the userData joined with its profile image data.
+ */
+export function getUsers(user_publication, params, filter) {
+
+    // get users from database
+    const isLoadingUsers = useSubscribe(user_publication, ...params);
+    let usersData = useTracker(() => {
+        return UserCollection.find(filter).fetch();
+    });
+
+    // get user profile image from database
+    const isLoadingImages = useSubscribe('profile_images');
+    let imagesData = useTracker(() => {
+        return ImageCollection.find({"imageType": "profile"}).fetch();
+    });
+
+    const isLoading = isLoadingUsers() || isLoadingImages();
+
+    // manual aggregation user data with their image
+    for (let i = 0; i < usersData.length; i++) {
+        for (let j = 0; j < imagesData.length; j++) {
+
+            // find matching image for the artist
+            if (imagesData[j].imageType === "profile" && usersData[i].username === imagesData[j].target_id) {
+                usersData[i].profileImageData = imagesData[j].imageData;
+                break;
+            }
+        }
+    }
+    console.log("usersData", usersData)
+
+    return [isLoading, usersData]
+}
 
 /**
  * Loads a specific service with its relevant service and user data
@@ -162,32 +203,32 @@ export function getSpecificService(serviceId) {
         }).fetch()[0];
     });
 
-    // load the service's data
-    const isLoadingArtist = useSubscribe('specific_user', serviceData ? serviceData.artistUsername : "");
-    let artistData = useTracker(() => {
-        return UserCollection.find({username: serviceData ? serviceData.artistUsername : ""}).fetch()[0];
-    });
-
-
-    // load the service's data
-    const isLoadingServiceImages = useSubscribe('specific_service_images', serviceData ? serviceData._id : "");
+    // get service images from database
+    const isLoadingServiceImages = useSubscribe('specific_service_images', serviceId);
     let serviceImagesData = useTracker(() => {
         return ImageCollection.find({
             $and: [
                 {"imageType": "service"},
-                {"target_id": serviceData ? serviceData._id : ""}
+                {"target_id": serviceId}
             ]
         }).fetch();
     });
 
+    // get artist data + profile image from database
+    const serviceArtistUsername = serviceData ? serviceData.artistUsername : "";
+    const isLoadingArtist = useSubscribe('specific_user', serviceArtistUsername);
+    let artistData = useTracker(() => {
+        return UserCollection.find({
+            username: serviceArtistUsername
+        }).fetch()[0];
+    });
 
-    // load the service's data
-    const isLoadingArtistProfile = useSubscribe('specific_profile_image', serviceData ? serviceData.artistUsername : "");
+    const isLoadingArtistProfile = useSubscribe('specific_profile_image', serviceArtistUsername);
     let profileImageData = useTracker(() => {
         return ImageCollection.find({
             $and: [
                 {"imageType": "profile"},
-                {"target_id": serviceData ? serviceData.artistUsername : ""}
+                {"target_id": serviceArtistUsername}
             ]
         }).fetch()[0];
     });
@@ -197,7 +238,6 @@ export function getSpecificService(serviceId) {
     console.log("service data", [serviceData, artistData, serviceImagesData, profileImageData])
 
     return [isLoading, serviceData, artistData, serviceImagesData, profileImageData]
-
 }
 
 /**
@@ -220,7 +260,7 @@ export function getSpecificBooking(bookingId, userType) {
         }).fetch()[0];
     });
 
-    // load the service's data
+    // get service from database
     const bookingServiceId = bookingData ? bookingData.serviceId : "";
     const isLoadingService = useSubscribe('specific_service', bookingServiceId);
 
@@ -250,4 +290,37 @@ export function getSpecificBooking(bookingId, userType) {
     return [isLoading, bookingData, serviceData, userData]
 }
 
+/**
+ * Loads a specific booking with its relevant service and user data
+ *
+ * @param username - username of the user to get data
+ *
+ * @returns {[boolean, Object, Object]} - returns a boolean isLoading that is true when loading, false when finished loading.
+ * The objects contain userData and the related profile image
+ */
+export function getSpecificUser(username) {
+
+    // will always just get 1 specific user by username
+    const isLoadingUser = useSubscribe('specific_user', username);
+    let userData = useTracker(() => {
+        return UserCollection.find({"username": username}).fetch()[0];
+    });
+
+    // get profile images from database
+    const isLoadingProfileImages = useSubscribe('specific_profile_image', username);
+    let profileImagesData = useTracker(() => {
+        return ImageCollection.find({
+            $and: [
+                {"imageType": "profile"},
+                {"target_id": username}
+            ]
+        }).fetch()[0];
+    });
+
+    const isLoading = isLoadingUser() || isLoadingProfileImages();
+
+    console.log("user data", [userData, profileImagesData])
+
+    return [isLoading, userData, profileImagesData]
+}
 
