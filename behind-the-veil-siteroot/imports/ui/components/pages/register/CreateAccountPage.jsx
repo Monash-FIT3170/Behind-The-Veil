@@ -18,23 +18,45 @@ import UrlBasePath from "../../../enums/UrlBasePath";
 const CreateAccountPage = () => {
     const navigate = useNavigate();
 
-    // get the chosen account type from last page
-    const accountType = new URLSearchParams(useLocation().search).get("type");
-
-    // variables for form input and errors
-    const [username, setUsername] = useState("");
-    const [alias, setAlias] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [retypePassword, setRetypePassword] = useState("");
-
+    // form errors
     const [errors, setErrors] = useState({
+        userType: "",
         username: "",
         alias: "",
         email: "",
         password: "",
         retypePassword: "",
     });
+
+    // get the chosen account type from last page
+    const [accountType, setAccountType] = useState(new URLSearchParams(useLocation().search).get("type"));
+
+    if (accountType !== "bride" && accountType !== "artist") {
+        // if invalid type in url, default to bride
+        setAccountType("bride")
+    }
+
+    // get whether it errored before in the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const isErrorEmail = urlParams.get("error") === "email";
+    const isErrorUsername = urlParams.get("error") === "username";
+
+    // if checks that display error is updated, prevents infinite loop
+    if (!errors.email && isErrorEmail) {
+        let newErrors = {}
+        newErrors.email = "Email already has an account";
+        setErrors(newErrors)
+
+    } else if (!errors.username && isErrorUsername) {
+        let newErrors = {}
+        newErrors.username = "Username taken";
+        setErrors(newErrors)
+
+    } else if (!errors.retypePassword && urlParams.get("error") && !isErrorUsername && !isErrorEmail) {
+        let newErrors = {}
+        newErrors.retypePassword = "Account creation failed";
+        setErrors(newErrors)
+    }
 
     const handleRegister = (event) => {
         event.preventDefault();
@@ -50,6 +72,12 @@ const CreateAccountPage = () => {
 
         let newError = {}
         let isError = false;
+
+        // check account type is checked
+        if (!accountType) {
+            newError.userType = "Please select a type of user"
+            isError = true;
+        }
 
         // Username validation criteria
         const alphanumericRegex = /^[A-Za-z0-9]+$/i;
@@ -128,7 +156,18 @@ const CreateAccountPage = () => {
 
             Accounts.createUser(newUser, (error) => {
                 if (error) {
-                    alert(`Account creation failed: ${error.message}`);
+                    if (error.reason.toLowerCase().includes("email")) {
+                        // email is already taken
+                        window.location.replace("?error=email")
+
+                    } else if (error.reason.toLowerCase().includes("username")) {
+                        // username is already taken
+                        window.location.replace("?error=username")
+
+                    } else {
+                        // other reason
+                        window.location.replace("?error=true")
+                    }
 
                 } else {
                     // verify its email right after it is created
@@ -169,6 +208,33 @@ const CreateAccountPage = () => {
         );
     };
 
+    const RadioInput = ({text, id}) => {
+        // handle change
+        const handleChange = (e) => {
+            const inputValue = e.target.value;
+            setAccountType(inputValue);
+        };
+
+        // set default checked one
+        if (id === accountType) {
+            return (
+                <div className="flex flex-col items-center justify-center gap-1">
+                    <label className="main-text text-dark-grey" htmlFor="artist">{text}</label>
+                    <input checked={true} onChange={handleChange} className={"accent-secondary-purple-hover size-5"} type="radio" id={id} name="type" value={id}/>
+                </div>
+            )
+        } else {
+            return (
+                <div className="flex flex-col items-center justify-center gap-1">
+                    <label className="main-text text-dark-grey" htmlFor="artist">{text}</label>
+                    <input className={"accent-secondary-purple-hover size-5"} onChange={handleChange} type="radio" id={id} name="type" value={id}/>
+                </div>
+            )
+        }
+
+
+    }
+
     return (
         // if window size is SMALLER than a large screen (default variable for large in tailwind lg:1024px),
         // then use center aligned and no visuals on the left so the inputs aren't all squished
@@ -183,6 +249,16 @@ const CreateAccountPage = () => {
 
                     <div className={"flex flex-col gap-y-3 w-4/5 text-left"}>
 
+                        <div className="flex flex-col gap-1">
+                            <label className="main-text">User type</label>
+                            <div className={"flex flex-row gap-x-[15%] items-center justify-center"}>
+                                <RadioInput id={"bride"} text={"Bride"}/>
+                                <RadioInput id={"artist"} text={"Artist"}/>
+                                {errors.userType && <span className="text-cancelled-colour">{errors.userType}</span>}
+                            </div>
+
+                        </div>
+
                         <TextInput labelText="Username" id="username" name="username"
                                    placeholder="Enter your unique username" error={errors.username}/>
                         <TextInput labelText="Name/Alias" id="name" name="name" placeholder="Enter your name or alias"
@@ -192,7 +268,8 @@ const CreateAccountPage = () => {
                         <TextInput labelText="Password" id="password" name="password" placeholder="Enter your password"
                                    type="password" autoComplete="new-password" error={errors.password}/>
                         <TextInput labelText="Retype Password" id="retypePassword" name="retypePassword"
-                                   placeholder="Retype your password" type="password" autoComplete="new-password" error={errors.retypePassword}/>
+                                   placeholder="Retype your password" type="password" autoComplete="new-password"
+                                   error={errors.retypePassword}/>
                     </div>
 
                     {/* Password requirements message */}

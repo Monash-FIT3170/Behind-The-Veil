@@ -19,9 +19,8 @@ Meteor.methods({
      * Finds a user by their _id and emails a verification email
      * @param {string} id - id of the user (mongo DB attribute)
      */
-    "verify_email": function (username) {
-        const user = Accounts.findUserByUsername(username);
-        Accounts.sendVerificationEmail(user._id);
+    "verify_email": function (id) {
+        Accounts.sendVerificationEmail(id);
     },
     /**
      * Changes the email address associated with a user.
