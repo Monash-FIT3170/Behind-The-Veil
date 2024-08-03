@@ -29,6 +29,8 @@ const CreateAccountPage = () => {
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
         const retypePassword = document.getElementById('retypePassword').value;
+        const artistServiceLocation = null;
+        const artistServiceRadius = null;
 
         if (!username || !alias || !email || !password || !retypePassword) {
             alert('Please fill in all required fields.');
@@ -61,7 +63,11 @@ const CreateAccountPage = () => {
             password: password,
             profile: {
                 alias: alias,
-                type: accountType
+                type: accountType,
+                ...(accountType === 'artist' && {
+                    serviceLocation: artistServiceLocation,
+                    serviceRadius: artistServiceRadius
+                })
             }
         };
 
