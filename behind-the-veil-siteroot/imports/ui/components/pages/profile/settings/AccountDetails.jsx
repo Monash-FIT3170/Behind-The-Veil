@@ -7,7 +7,9 @@ import React, {useEffect, useState} from "react";
 import {Meteor} from "meteor/meteor";
 import {useSubscribe, useTracker} from "meteor/react-meteor-data";
 import {ArrowUpTrayIcon, CheckIcon} from "@heroicons/react/24/outline";
+
 import ImageCollection from "../../../../../api/collections/images";
+
 import Input from "../../../input/Input";
 import Button from "../../../button/Button.jsx";
 import ProfilePhoto from "../../../profilePhoto/ProfilePhoto.jsx"
@@ -19,7 +21,6 @@ import Loader from "../../../loader/Loader";
  * The name/alias and email address can be edited using a text input field
  * The profile image can be edited using an image dump
  */
-
 export const AccountDetails = () => {
 
     // get user information and their profile photo
