@@ -17,7 +17,8 @@ import Pagination from "/imports/ui/components/pagination/Pagination.jsx"
 import ServiceCard from "/imports/ui/components/card/ServiceCard.jsx";
 import SearchBar from "/imports/ui/components/searchBar/searchBar.jsx";
 import Loader from "/imports/ui/components/loader/Loader";
-import {getServices} from "../../util";
+
+import {getServices} from "../../DatabaseHelper";
 
 
 /**

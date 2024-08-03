@@ -1,19 +1,21 @@
 /**
  * File Description: Artist's Services Tab
- * File version: 1.2
+ * File version: 2.0
  * Contributors: Lucas Sharp, Nikki
  */
 
 import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {PlusIcon} from "@heroicons/react/24/outline";
+
 import Button from "../../../button/Button.jsx";
 import ServiceCard from "../../../card/ServiceCard.jsx";
 import ArtistServicesFilter from "../../../../enums/ArtistServicesFilter";
 import Loader from "../../../loader/Loader";
 import Pagination from "../../../pagination/Pagination";
 import UrlBasePath from "../../../../enums/UrlBasePath.tsx";
-import {getServices} from "../../../util";
+
+import {getServices} from "../../../DatabaseHelper";
 
 /**
  * Service tab of an artist's profile.
@@ -43,7 +45,7 @@ export const ArtistServicesTab = ({username, external = false}) => {
     } else {
         // viewing your own profile, see all your services
         servicePublication = "all_user_services"
-        serviceFilter = { artistUsername:username }
+        serviceFilter = { artistUsername: username }
     }
     const [isLoading, servicesData] = getServices(servicePublication, [username], serviceFilter)
 
@@ -135,11 +137,7 @@ export const ArtistServicesTab = ({username, external = false}) => {
                 </div>
 
                 {/*add service button on the right*/}
-                <div
-                    className={
-                        "flex flex-col-reverse items-center justify-center sm:flex-row sm:items-center sm:justify-end gap-6"
-                    }
-                >
+                <div className={"flex flex-col-reverse items-center justify-center sm:flex-row sm:items-center sm:justify-end gap-6"}>
                     <Button
                         className="flex flex-row gap-x-1.5 min-w-48 items-center justify-center bg-secondary-purple hover:bg-secondary-purple-hover"
                         onClick={() => navigateTo(`/${UrlBasePath.SERVICES}/addservice`)}
