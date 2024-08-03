@@ -6,7 +6,6 @@
 
 import React from "react";
 import {useNavigate, useParams} from "react-router-dom";
-
 import {
     ArrowPathIcon,
     CheckCircleIcon,
@@ -18,23 +17,18 @@ import {
     XCircleIcon,
 } from "@heroicons/react/24/outline";
 
-import BookingCollection from "/imports/api/collections/bookings";
-
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import Button from "../../button/Button";
 import FormOutput from "./FormOutput";
 import MarkerMap from "../../map/MarkerMap";
 import BackButton from "../../button/BackButton";
-import {useSubscribe, useTracker} from "meteor/react-meteor-data";
-
 import {getUserInfo} from "/imports/ui/components/util"
 import BookingStatus from "../../../enums/BookingStatus";
 import PageLayout from "../../../enums/PageLayout";
 import Loader from "../../loader/Loader";
 import classNames from "classnames";
 import BookingStatusDisplay from "../../booking/BookingStatusDisplay";
-import ServiceCollection from "../../../../api/collections/services";
-import UserCollection from "../../../../api/collections/users";
+import {getSpecificBookings} from "../../DatabaseHelper";
 
 /**
  * Component for displaying booking summary and allowing continuation to the next step.
@@ -48,37 +42,7 @@ const BookingDetailsPage = () => {
     const {bookingId} = useParams();
 
     // get bookings information from database
-    const isLoadingBooking = useSubscribe('specific_booking', bookingId);
-
-    let bookingData = useTracker(() => {
-        return BookingCollection.find().fetch()[0];
-    });
-
-    // load the service's data
-    const isLoadingService = useSubscribe('specific_service', bookingData ? bookingData.serviceId : "");
-
-    // load the other user's data. Load the bride if you're the artist, or load the artist if you're the bride
-    const isLoadingUser = useSubscribe('specific_user', bookingData ?
-        (userInfo.type === "bride" ? bookingData.artistUsername : bookingData.brideUsername)
-        : "");
-
-    // data trackers
-    let serviceData = useTracker(() => {
-        return ServiceCollection.find().fetch()[0];
-    });
-
-    // filter for only the other user's data (if not then you get your own data too)
-    let userData = useTracker(() => {
-        return UserCollection.find(
-            {
-                "username": bookingData ?
-                    (userInfo.type === "bride" ? bookingData.artistUsername : bookingData.brideUsername)
-                    : ""
-            }
-        ).fetch()[0];
-    });
-
-    const isLoading = isLoadingBooking() || isLoadingService() || isLoadingUser();
+    const [isLoading, bookingData, serviceData, userData] = getSpecificBookings(bookingId, userInfo.type);
 
     if (isLoading) {
         // is loading, display loader
@@ -144,7 +108,6 @@ const BookingDetailsPage = () => {
                             <PaperAirplaneIcon className="size-5 min-h-5 min-w-5 stroke-1.5"/>
                             <span className={"flex sm:hidden md:flex small-text"}>Message</span>
                         </Button>
-
                     </div>);
             }
 
