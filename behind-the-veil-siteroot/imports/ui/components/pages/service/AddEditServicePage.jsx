@@ -5,9 +5,7 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { useSubscribe, useTracker } from "meteor/react-meteor-data";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Mongo } from "meteor/mongo";
 
 import { getUserInfo } from "../../util";
 import PageLayout from "/imports/ui/enums/PageLayout";

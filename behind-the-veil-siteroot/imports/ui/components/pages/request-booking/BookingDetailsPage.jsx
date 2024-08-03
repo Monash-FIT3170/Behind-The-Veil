@@ -1,6 +1,6 @@
 /**
  * File Description: Review the booking details page
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Glenn, Nikki
  */
 
@@ -28,7 +28,8 @@ import PageLayout from "../../../enums/PageLayout";
 import Loader from "../../loader/Loader";
 import classNames from "classnames";
 import BookingStatusDisplay from "../../booking/BookingStatusDisplay";
-import {getSpecificBookings} from "../../DatabaseHelper";
+import {getSpecificBooking} from "../../DatabaseHelper";
+import UrlBasePath from "../../../enums/UrlBasePath";
 
 /**
  * Component for displaying booking summary and allowing continuation to the next step.
@@ -42,7 +43,7 @@ const BookingDetailsPage = () => {
     const {bookingId} = useParams();
 
     // get bookings information from database
-    const [isLoading, bookingData, serviceData, userData] = getSpecificBookings(bookingId, userInfo.type);
+    const [isLoading, bookingData, serviceData, userData] = getSpecificBooking(bookingId, userInfo.type);
 
     if (isLoading) {
         // is loading, display loader
@@ -66,7 +67,7 @@ const BookingDetailsPage = () => {
                         <span className={"large-text"}>Booking is not found </span>
 
                         <Button className={"bg-secondary-purple hover:bg-secondary-purple-hover"}
-                                onClick={() => navigateTo("/profile")}>
+                                onClick={() => navigateTo("/" + UrlBasePath.PROFILE)}>
                             Back to my profile
                         </Button>
                     </div>

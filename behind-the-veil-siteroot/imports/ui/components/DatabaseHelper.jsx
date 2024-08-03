@@ -1,6 +1,6 @@
 /**
  * File Description: Database helper functions
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Nikki
  */
 import {useSubscribe, useTracker} from "meteor/react-meteor-data";
@@ -91,7 +91,7 @@ export function getServices(service_publication, params, filter, requireArtist =
  * @param params - the parameters used for that booking publication, such as username, etc.
  * @param filter - the filter used to filter for the specific subset of booking (from the subscribed publication) this is an
  * object with key=booking attribute name, value=filter value; e.g. { username: "abcd123" }
- * @returns [boolean, Object] - returns a boolean isLoading that is true when loading, false when finished loading. The object
+ * @returns {[boolean, Object]} - returns a boolean isLoading that is true when loading, false when finished loading. The object
  * contains the bookingData joined with its serviceData and serviceImage
  */
 export function getBookings(booking_publication, params, filter) {
@@ -145,11 +145,70 @@ export function getBookings(booking_publication, params, filter) {
 }
 
 
-// specific service
+/**
+ * Loads a specific service with its relevant service and user data
+ *
+ * @param serviceId - ID of the service to get data
+ * @returns {[boolean, Object, Object, Object, Object]} - returns a boolean isLoading that is true when loading, false when finished loading.
+ * The objects contain serviceData and serviceImagesData as well as related artistData and their profile image data.
+ */
+export function getSpecificService(serviceId) {
+
+    // will always just get 1 specific service by ID
+    const isLoadingService = useSubscribe('specific_service', serviceId);
+    let serviceData = useTracker(() => {
+        return ServiceCollection.find({
+            _id: serviceId
+        }).fetch()[0];
+    });
+
+    // load the service's data
+    const isLoadingArtist = useSubscribe('specific_user', serviceData ? serviceData.artistUsername : "");
+    let artistData = useTracker(() => {
+        return UserCollection.find({username: serviceData ? serviceData.artistUsername : ""}).fetch()[0];
+    });
 
 
-// specific booking
-export function getSpecificBookings(bookingId, userType) {
+    // load the service's data
+    const isLoadingServiceImages = useSubscribe('specific_service_images', serviceData ? serviceData._id : "");
+    let serviceImagesData = useTracker(() => {
+        return ImageCollection.find({
+            $and: [
+                {"imageType": "service"},
+                {"target_id": serviceData ? serviceData._id : ""}
+            ]
+        }).fetch();
+    });
+
+
+    // load the service's data
+    const isLoadingArtistProfile = useSubscribe('specific_profile_image', serviceData ? serviceData.artistUsername : "");
+    let profileImageData = useTracker(() => {
+        return ImageCollection.find({
+            $and: [
+                {"imageType": "profile"},
+                {"target_id": serviceData ? serviceData.artistUsername : ""}
+            ]
+        }).fetch()[0];
+    });
+
+    const isLoading = isLoadingService() || isLoadingArtist() || isLoadingServiceImages() || isLoadingArtistProfile();
+
+    console.log("service data", [serviceData, artistData, serviceImagesData, profileImageData])
+
+    return [isLoading, serviceData, artistData, serviceImagesData, profileImageData]
+
+}
+
+/**
+ * Loads a specific booking with its relevant service and user data
+ *
+ * @param bookingId - ID of the booking to get data
+ * @param userType - type of current user: either bride or artist
+ * @returns {[boolean, Object, Object, Object]} - returns a boolean isLoading that is true when loading, false when finished loading.
+ * The objects contain bookingData and the related serviceData and userData
+ */
+export function getSpecificBooking(bookingId, userType) {
 
     // will always just get 1 specific booking by ID
     const isLoadingBooking = useSubscribe('specific_booking', bookingId);
