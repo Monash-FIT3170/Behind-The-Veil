@@ -13,9 +13,6 @@ import Button from "../../../button/Button.jsx";
 import ProfilePhoto from "../../../profilePhoto/ProfilePhoto.jsx"
 import {getUserInfo} from "../../../util";
 import Loader from "../../../loader/Loader";
-import {CheckIcon,
-    ArrowUpTrayIcon
-} from "@heroicons/react/24/outline";
 
 /**
  * This page allows both artists and brides to change their name/alias, email address and profile image
