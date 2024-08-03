@@ -26,27 +26,27 @@ import urlBasePath from "../../enums/UrlBasePath";
  * @param artistUsername {string} - Username (e.g. alice_tran1234) of artist that posted the service
  * @param artistAlias {string} - name of artist that posted the service
  * @param isEdit {boolean} - true for "edit service" button, false or null for "view service" button
+ * @param viewArtistDetails {boolean} - true to see artist's name and username, false to hide. Defaults to true.
  * @param cardProps - encompasses all other props supplied and applies them to the card
  */
 export const ServiceCard = ({
-    className,
-    serviceId,
-    serviceName,
-    serviceDesc,
-    servicePrice,
-    serviceImageData,
-    artistUsername,
-    artistAlias,
-    isEdit,
-    ...cardProps
-}) => {
+                                className,
+                                serviceId,
+                                serviceName,
+                                serviceDesc,
+                                servicePrice,
+                                serviceImageData,
+                                artistUsername,
+                                artistAlias,
+                                isEdit,
+                                viewArtistDetails = true,
+                                ...cardProps
+                            }) => {
+
     // variables to handle routing
     const navigateTo = useNavigate();
 
-    const classes = classNames(
-        className,
-        "flex flex-col justify-between w-full sm:min-w-[410px] lg:w-2/5 lg:min-w-78 min-h-56"
-    );
+    const classes = classNames(className, "flex flex-col justify-between w-full min-w-60 lg:w-2/5 lg:min-w-78 min-h-56");
 
     // set button style depending on whether isEdit mode or not
     let viewOrEditButton = "";
@@ -88,11 +88,11 @@ export const ServiceCard = ({
                     </div>
                     {/*only display the artist information if it isnt in edit mode (artist doenst need to see their own
                     information repeated on each service) */}
-                    {isEdit ? null : (
+                    { isEdit || !viewArtistDetails ? null :
                         <div className="main-text text-dark-grey max-h-[1.5rem] max-w-full line-clamp-1 break-all">
                             Artist: {artistAlias} ( @{artistUsername} )
                         </div>
-                    )}
+                    }
                 </div>
 
                 {/* image on the right side for service*/}

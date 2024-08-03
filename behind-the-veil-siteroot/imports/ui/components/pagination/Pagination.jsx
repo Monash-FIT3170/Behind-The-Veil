@@ -68,7 +68,8 @@ export const Pagination = ({externalClassName, internalClassName, itemsPerPage, 
     // Effect of clicking any of the page number buttons navigate the user
     useEffect(() => {
         // click on button
-        navigate("#" + pageNum)
+        window.location.replace("#" + pageNum)
+        // navigate("#" + pageNum)
     }, [pageNum]);
 
     // updating the classes if received any as input
@@ -79,8 +80,10 @@ export const Pagination = ({externalClassName, internalClassName, itemsPerPage, 
 
         <div className={externClasses}>
             <div className={internClasses}>
-                {/*This is the items currently displayed*/}
-                {currentItems}
+                {/*This is the items currently displayed, if there is nothing, display text*/}
+                {currentItems.length !== 0 ?
+                    currentItems :
+                    <span className={"main-text text-dark-grey"}> There are no items here </span>}
             </div>
 
             {/* This is the page number component underneath */}
