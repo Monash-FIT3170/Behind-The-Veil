@@ -99,3 +99,4 @@ meteor npm install --save @babel/runtime react react-dom
   credit: https://stackoverflow.com/questions/38988365/meteor-unexpected-mongo-exit-code-14-restarting-cant-start-mongo-server
 
 Written & tested by Neth, Josh and Nikki
+Mongo error help info added added by Phillip
