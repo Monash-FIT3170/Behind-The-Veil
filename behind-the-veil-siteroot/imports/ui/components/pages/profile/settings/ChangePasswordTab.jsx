@@ -1,13 +1,14 @@
 /**
  * File Description: Change Password Tab within the Settings Page
- * File version: 1.0
- * Contributors: Ryan
+ * File version: 1.1
+ * Contributors: Ryan, Nikki
  */
 import React, { useState } from "react";
 import { Accounts } from 'meteor/accounts-base';
+import { CheckIcon } from "@heroicons/react/24/outline";
+
 import Button from "../../../button/Button.jsx";
 import Input from "../../../input/Input";
-import { CheckIcon } from "@heroicons/react/24/outline";
 
 /**
  * Change password tab within settings
@@ -92,7 +93,7 @@ const ChangePasswordTab = () => {
         };
 
         return (
-            <div className="flex flex-col gap-1 w-full">
+            <div className="flex flex-col gap-1">
                 <Input
                     label={<label htmlFor={id} className="main-text">{labelText}</label>}
                     type={type}
@@ -102,7 +103,7 @@ const ChangePasswordTab = () => {
                     autoComplete={autoComplete}
                     value={value}
                     onChange={handleChange}
-                    className="w-full"
+                    className="lg:w-[40vw] sm:w-96"
                 />
                 {error && <span className="text-cancelled-colour">{error}</span>}
             </div>
@@ -110,8 +111,8 @@ const ChangePasswordTab = () => {
     };
 
     return (
-        <form className="flex flex-col items-center gap-4 p-2.5 w-4/5 max-w-96" onSubmit={handleChangePassword}>
-            <div className="flex flex-col gap-y-3 w-full text-left">
+        <form className="flex flex-col items-left justify-center gap-6 pl-[5%] lg:pl-[15%]" onSubmit={handleChangePassword}>
+            <div className="flex flex-col gap-y-6 w-full text-left">
                 <TextInput
                     labelText="Current Password"
                     id="currentPassword"
