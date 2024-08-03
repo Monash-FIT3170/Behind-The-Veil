@@ -25,9 +25,9 @@ const ChangePasswordTab = () => {
         event.preventDefault();
         setSuccessMessage('');
 
-        const currentPassword = document.getElementById('currentPassword').value;
-        const newPassword = document.getElementById('newPassword').value;
-        const retypeNewPassword = document.getElementById('retypeNewPassword').value;
+        const currentPassword = document.getElementById('currentPassword').value.trim();
+        const newPassword = document.getElementById('newPassword').value.trim();
+        const retypeNewPassword = document.getElementById('retypeNewPassword').value.trim();
 
         // Password validation criteria
         const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
@@ -35,16 +35,16 @@ const ChangePasswordTab = () => {
         let isError = false;
 
         // first check to ensure all text fields have inputs
-        if (!currentPassword.trim() || !newPassword.trim() || !retypeNewPassword.trim()) {
-            if (!currentPassword.trim()) {
+        if (!currentPassword || !newPassword || !retypeNewPassword) {
+            if (!currentPassword) {
                 newErrors.currentPassword = 'Please input your current password.';
                 isError = true;
             }
-            if (!newPassword.trim()) {
+            if (!newPassword) {
                 newErrors.newPassword = 'Please input your new password.';
                 isError = true;
             }
-            if (!retypeNewPassword.trim()) {
+            if (!retypeNewPassword) {
                 newErrors.retypeNewPassword = 'Please retype your new password.';
                 isError = true;
             }
@@ -56,7 +56,7 @@ const ChangePasswordTab = () => {
 
         // second check to ensure the new password matches the requirements regex
         if (!passwordRegex.test(newPassword)) {
-            newErrors.newPassword = 'New password must adhere to requirements';
+            newErrors.newPassword = 'New password must adhere to requirements. Only special characters in the list are permitted';
             isError = true;
         }
         // third check to ensure the new password and retype new password match
@@ -88,7 +88,7 @@ const ChangePasswordTab = () => {
         const [value, setValue] = useState('');
 
         const handleChange = (e) => {
-            const inputValue = e.target.value;
+            const inputValue = e.target.value.trim();
             setValue(inputValue);
         };
 

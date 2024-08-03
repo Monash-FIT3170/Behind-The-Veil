@@ -1,6 +1,6 @@
 /**
  * File Description: Create Account page
- * File version: 1.2
+ * File version: 1.3
  * Contributors: Ryan, Nikki
  */
 
@@ -21,9 +21,25 @@ const CreateAccountPage = () => {
     // get the chosen account type from last page
     const accountType = new URLSearchParams(useLocation().search).get("type");
 
+    // variables for form input and errors
+    const [username, setUsername] = useState("");
+    const [alias, setAlias] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [retypePassword, setRetypePassword] = useState("");
+
+    const [errors, setErrors] = useState({
+        username: "",
+        alias: "",
+        email: "",
+        password: "",
+        retypePassword: "",
+    });
+
     const handleRegister = (event) => {
         event.preventDefault();
 
+        // get user inputs
         const username = document.getElementById('username').value.trim();
         const alias = document.getElementById('name').value.trim();
         const email = document.getElementById('email').value.trim();
@@ -32,82 +48,124 @@ const CreateAccountPage = () => {
         const artistServiceLocation = null;
         const artistServiceRadius = null;
 
-        if (!username || !alias || !email || !password || !retypePassword) {
-            alert('Please fill in all required fields.');
-            return;
+        let newError = {}
+        let isError = false;
+
+        // Username validation criteria
+        const alphanumericRegex = /^[A-Za-z0-9]+$/i;
+        if (!username) {
+            newError.username = 'Please fill in your username.';
+            isError = true;
+
+        } else if (!alphanumericRegex.test(username)) {
+            newError.username = 'Username must only contain letters and numbers.';
+            isError = true;
+
+        } else if (username.length > 20) {
+            newError.username = "Username cannot be longer than 20 characters"
+            isError = true;
+        }
+
+        // Alias validation criteria
+        const alphanumericSpaceRegex = /^[A-Za-z0-9 ]+$/i;
+        if (!alias) {
+            newError.alias = 'Please fill in your alias.';
+            isError = true;
+
+        } else if (!alphanumericSpaceRegex.test(alias)) {
+            newError.alias = 'Alias cannot contain special character (except spaces).';
+            isError = true;
+
+        } else if (alias.length > 20) {
+            newError.alias = 'Alias cannot be longer than 20 characters.';
+            isError = true;
+        }
+
+        // Validate email using Meteor's built-in function
+        const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+        if (!email) {
+            newError.email = 'Please fill in your email.';
+            isError = true;
+
+        } else if (!emailRegex.test(email)) {
+            newError.email = 'Please enter a valid email address.';
+            isError = true;
         }
 
         // Password validation criteria
         const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-        if (!passwordRegex.test(password)) {
-            alert('Password must contain at least one number, one special character, one lowercase letter, one uppercase letter, and be at least 8 characters long.');
-            return;
+        if (!password) {
+            newError.password = 'Please fill in your password.';
+            isError = true;
+
+        } else if (!passwordRegex.test(password)) {
+            newError.password = 'Password must adhere to requirements. Only special characters in the list are permitted.';
+            isError = true;
         }
 
         // Check if retypePassword matches password
-        if (password !== retypePassword) {
-            alert('Passwords do not match.');
-            return;
+        if (!retypePassword) {
+            newError.retypePassword = 'Please type your password again.';
+            isError = true;
+
+        } else if (password !== retypePassword) {
+            newError.retypePassword = 'Passwords do not match.';
+            isError = true;
         }
 
-        const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-        // Validate email using Meteor's built-in function
-        if (!emailRegex.test(email)) {
-            alert('Please enter a valid email address.');
-            return;
+        setErrors(newError)
+
+        if (!isError) {
+            const newUser = {
+                username: username,
+                email: email,
+                password: password,
+                profile: {
+                    alias: alias,
+                    type: accountType
+                }
+            };
+
+            Accounts.createUser(newUser, (error) => {
+                if (error) {
+                    alert(`Account creation failed: ${error.message}`);
+
+                } else {
+                    // verify its email right after it is created
+                    Meteor.call("verify_email", Meteor.userId());
+                    Meteor.logout()
+
+                    // After successful activation, navigate to activation completed page
+                    navigate(`/${UrlBasePath.REGISTER}/accountCreated`);
+                }
+            });
         }
-
-        const newUser = {
-            username: username,
-            email: email,
-            password: password,
-            profile: {
-                alias: alias,
-                type: accountType,
-                ...(accountType === 'artist' && {
-                    artistServiceLocation: artistServiceLocation,
-                    artistServiceRadius: artistServiceRadius
-                })
-            }
-        };
-
-        Accounts.createUser(newUser, (error) => {
-            if (error) {
-                alert(`Account creation failed: ${error.message}`);
-            } else {
-                // TODO send activation code via inputted email
-                console.log('User created successfully!');
-                console.log(Meteor.userId());
-                console.log(Meteor.user());
-                // verify its email right after it is created
-                Meteor.call("verify_email", Meteor.userId());
-                Meteor.logout()
-                // After successful activation, navigate to activation completed page
-                navigate(`/${UrlBasePath.REGISTER}/accountCreated`);
-            }
-        });
     };
 
-    const TextInput = ({labelText, id, name, placeholder, type = 'text', autoComplete = 'off'}) => {
-        const [value, setValue] = useState('');
+    const TextInput = ({labelText, id, name, error, placeholder, type = 'text', autoComplete = 'off'}) => {
+        const existingFormValue = document.getElementById(id) ? document.getElementById(id).value : '';
+        const [value, setValue] = useState(existingFormValue);
 
         const handleChange = (e) => {
-            const inputValue = e.target.value;
+            const inputValue = e.target.value.trim();
             setValue(inputValue);
         };
 
         return (
-            <Input
-                label={<label htmlFor={id} className="main-text">{labelText}</label>}
-                type={type}
-                id={id}
-                name={name}
-                placeholder={placeholder}
-                autoComplete={autoComplete}
-                value={value}
-                onChange={handleChange}
-                className={"w-full"}
-            />
+            <div className="flex flex-col gap-1">
+                <Input
+                    label={<label htmlFor={id} className="main-text">{labelText}</label>}
+                    type={type}
+                    id={id}
+                    name={name}
+                    placeholder={placeholder}
+                    autoComplete={autoComplete}
+                    value={value}
+                    onChange={handleChange}
+                    className={"w-full"}
+                />
+                {error && <span className="text-cancelled-colour">{error}</span>}
+            </div>
         );
     };
 
@@ -120,20 +178,21 @@ const CreateAccountPage = () => {
             <div className={"text-center pt-1"}>
                 <div className="title-text mb-3 sm:mb-8">Create an Account</div>
 
-                <form className={"flex flex-col items-center gap-4 p-2.5"}>
+                <form onSubmit={handleRegister} className={"flex flex-col items-center gap-4 p-2.5"}>
                     {/* Input fields for account creation */}
 
                     <div className={"flex flex-col gap-y-3 w-4/5 text-left"}>
 
                         <TextInput labelText="Username" id="username" name="username"
-                                   placeholder="Enter your unique username"/>
-                        <TextInput labelText="Name/Alias" id="name" name="name" placeholder="Enter your name or alias"/>
+                                   placeholder="Enter your unique username" error={errors.username}/>
+                        <TextInput labelText="Name/Alias" id="name" name="name" placeholder="Enter your name or alias"
+                                   error={errors.alias}/>
                         <TextInput labelText="Email" id="email" name="email" placeholder="Enter your email"
-                                   type="email"/>
+                                   type="email" error={errors.email}/>
                         <TextInput labelText="Password" id="password" name="password" placeholder="Enter your password"
-                                   type="password" autoComplete="new-password"/>
+                                   type="password" autoComplete="new-password" error={errors.password}/>
                         <TextInput labelText="Retype Password" id="retypePassword" name="retypePassword"
-                                   placeholder="Retype your password" type="password" autoComplete="new-password"/>
+                                   placeholder="Retype your password" type="password" autoComplete="new-password" error={errors.retypePassword}/>
                     </div>
 
                     {/* Password requirements message */}
@@ -150,13 +209,13 @@ const CreateAccountPage = () => {
 
                     <div className="hidden small-text text-dark-grey text-left w-4/5">
                         Your email address will only be used to send notifications about your account and bookings.
-                        By clicking Register, you agree for "Behind the Veil" to store and use the above details provided within the
+                        By clicking Register, you agree for "Behind the Veil" to store and use the above details
+                        provided within the
                         "Behind the Veil" application only.
                     </div>
 
                     <Button type={"submit"}
-                            className={"bg-secondary-purple hover:bg-secondary-purple-hover w-1/3 min-w-40"}
-                            onClick={handleRegister}>
+                            className={"bg-secondary-purple hover:bg-secondary-purple-hover w-1/3 min-w-40"}>
                         Register
                     </Button>
                 </form>

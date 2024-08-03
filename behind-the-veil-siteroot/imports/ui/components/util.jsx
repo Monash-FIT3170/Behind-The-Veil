@@ -1,6 +1,6 @@
 /**
  * File Description: General utility functions
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Nikki
  */
 
@@ -36,8 +36,8 @@ export function getUserInfo() {
             // user data is returned (sometimes it takes a while)
             const fetchedUserId = userId;
             const fetchedUsername = user.username;
-            const fetchedEmail = user.emails[0].address;
-            const fetchedEmailVerified = user.emails[0].verified;
+            const fetchedEmail = user.emails[0] ? user.emails[0].address : null
+            const fetchedEmailVerified = user.emails[0] ? user.emails[0].verified : null;
             const fetchedAlias = user.profile.alias;
             const fetchedType = user.profile.type;
 
