@@ -76,7 +76,6 @@ const CalendarPopupContent = ({
 
                 {bookingStatus === BookingStatus.PENDING && (
                     <>
-                        {/* button to specific booking detail page*/}
                         <Button className="flex flex-row gap-x-2 justify-center items-center
                             bg-light-gray hover:bg-secondary-purple-hover transition duration-500"
                             onClick={() => { }}
@@ -84,7 +83,6 @@ const CalendarPopupContent = ({
                             <CheckCircleIcon className="h-6 w-6 min-h-6 min-w-6" />
                             Confirm
                         </Button>
-                        {/* button to specific booking detail page*/}
                         <Button className="flex flex-row gap-x-2 justify-center items-center
                             bg-white hover:bg-light-gray-hover border-light-gray border-2 transition duration-500"
                             onClick={() => { }}
@@ -96,7 +94,6 @@ const CalendarPopupContent = ({
                 )}
 
                 {bookingStatus === BookingStatus.CONFIRMED && (
-                    // button to specific booking detail page
                     <Button className="flex flex-row gap-x-2 justify-center items-center
                             bg-white hover:bg-secondary-purple-hover border-light-gray border-2 transition duration-500"
                         onClick={() => { }}
