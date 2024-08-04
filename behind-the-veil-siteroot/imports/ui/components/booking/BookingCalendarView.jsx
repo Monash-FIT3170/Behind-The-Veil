@@ -71,34 +71,6 @@ moment.locale("ko", {
 
 const localizer = momentLocalizer(moment);
 
-// TODO: delete this
-const myEventsList = [
-  {
-    bookingStartDateTime: new Date("2024-07-06T05:30:00"),
-    bookingEndDateTime: new Date("2024-07-06T07:30:00"),
-    brideUsername: "Dolly Parton",
-    bookingStatus: BookingStatus.PENDING,
-    bookingTime: "Fri 22/03/23 10:00AM - 12:00PM",
-    bookingLocation: "123 Arts Studio, Painting Avenue 555, NSW",
-  },
-  {
-    bookingStartDateTime: new Date("2024-07-21T10:00:00"),
-    bookingEndDateTime: new Date("2024-07-21T12:00:00"),
-    brideUsername: "Jo",
-    bookingStatus: BookingStatus.PENDING_CANCELLATION,
-    bookingTime: "Sun 21/07/24 10:00AM - 12:00PM",
-    bookingLocation: "Somewhere else",
-  },
-  {
-    bookingStartDateTime: new Date("2024-07-16T18:00:00"),
-    bookingEndDateTime: new Date("2024-07-16T20:00:00"),
-    brideUsername: "Annie",
-    bookingStatus: BookingStatus.CONFIRMED,
-    bookingTime: "Tue 16/07/24 6:00PM - 8:00PM",
-    bookingLocation: "Another place",
-  },
-];
-
 const calendarStyle = () => {
   return {
     style: {
@@ -193,6 +165,7 @@ const BookingCalendarView = ({ bookingsData }) => {
       />
 
       <CalendarPopup
+        bookingId={activeEventDetails?._id}
         bookingStatus={activeEventDetails?.bookingStatus}
         brideName={activeEventDetails?.brideUsername}
         bookingTime={activeEventDetails?.bookingTime}

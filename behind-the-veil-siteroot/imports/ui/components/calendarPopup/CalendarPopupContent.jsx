@@ -21,7 +21,7 @@ const ViewDetailsButton = ({ bookingId }) => {
         <Button
             className="flex flex-row gap-x-2 justify-center items-center
                     bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500"
-            onClick={() => navigateTo('/service/' + bookingId)}
+            onClick={() => navigateTo('/booking/' + bookingId)}
         >
             <DocumentMagnifyingGlassIcon className="h-6 w-6 min-h-6 min-w-6" />
             View Details
@@ -30,13 +30,13 @@ const ViewDetailsButton = ({ bookingId }) => {
 }
 
 const CalendarPopupContent = ({
+    bookingId,
     bookingStatus,
     brideName,
     bookingTime,
     bookingLocation,
     onClose
 }) => {
-
     return (
         <>
             {/* close button */}
@@ -106,7 +106,7 @@ const CalendarPopupContent = ({
                     </Button>
                 )}
 
-                <ViewDetailsButton />
+                <ViewDetailsButton bookingId={bookingId} />
             </div>
         </>
     )

@@ -10,6 +10,7 @@ import { arrow, autoPlacement, autoUpdate, FloatingArrow, offset, shift, useClic
 
 
 const CalendarPopup = ({
+    bookingId,
     bookingStatus,
     brideName,
     bookingTime,
@@ -58,6 +59,7 @@ const CalendarPopup = ({
                     width={ARROW_WIDTH}
                 />
                 <CalendarPopupContent
+                    bookingId={bookingId}
                     bookingStatus={bookingStatus}
                     brideName={brideName}
                     bookingTime={bookingTime}
