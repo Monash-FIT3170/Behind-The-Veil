@@ -2,7 +2,7 @@
  * File Description: Artist gallery modal
  * File version: 1.0
  * Contributors: Kefei (Phillip) Li
- * Source/Credit: https://gist.github.com/nimone/c2a86eb3f8b0baae619e23635c741107
+ * Reference/Cite: https://gist.github.com/nimone/c2a86eb3f8b0baae619e23635c741107
  */
 
 import React from "react";

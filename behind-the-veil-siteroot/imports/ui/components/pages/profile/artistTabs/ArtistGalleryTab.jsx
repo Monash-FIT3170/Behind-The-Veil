@@ -13,6 +13,8 @@ import { useState } from "react";
 import Pagination from "/imports/ui/components/pagination/Pagination.jsx";
 import Loader from "/imports/ui/components/loader/Loader";
 
+// import { getGalleryImages } from "";
+
 /**
  * Gallery tab of an artist's profile
  *
@@ -21,6 +23,8 @@ import Loader from "/imports/ui/components/loader/Loader";
 export const ArtistGalleryTab = ({ username }) => {
   const [open, setOpen] = useState(false);
   const plusIcon = <PlusIcon className="icon-base" />;
+  // const galleryImgData = getGalleryImages("post_images", [], username);
+  // console.log(galleryImgData);
   // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
   // When completing the dynamic version for this page, probably a good idea to setup the photos as components and importing them in.
   return (
