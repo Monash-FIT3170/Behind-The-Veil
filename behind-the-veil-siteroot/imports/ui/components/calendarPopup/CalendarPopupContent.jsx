@@ -92,28 +92,21 @@ const CalendarPopupContent = ({
                             <XCircleIcon className="h-6 w-6 min-h-6 min-w-6" />
                             Reject
                         </Button>
-                        <ViewDetailsButton />
                     </>
                 )}
 
                 {bookingStatus === BookingStatus.CONFIRMED && (
-                    <>
-                        {/* button to specific booking detail page*/}
-                        <Button className="flex flex-row gap-x-2 justify-center items-center
+                    // button to specific booking detail page
+                    <Button className="flex flex-row gap-x-2 justify-center items-center
                             bg-white hover:bg-secondary-purple-hover border-light-gray border-2 transition duration-500"
-                            onClick={() => { }}
-                        >
-                            <XCircleIcon className="h-6 w-6 min-h-6 min-w-6" />
-                            Cancel Booking
-                        </Button>
-                        <ViewDetailsButton />
-                    </>
+                        onClick={() => { }}
+                    >
+                        <XCircleIcon className="h-6 w-6 min-h-6 min-w-6" />
+                        Cancel Booking
+                    </Button>
                 )}
 
-                {bookingStatus === BookingStatus.PENDING_CANCELLATION && (
-                    <ViewDetailsButton />
-                )}
-
+                <ViewDetailsButton />
             </div>
         </>
     )
