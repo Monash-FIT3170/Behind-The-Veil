@@ -11,6 +11,8 @@ import Button from "../../../button/Button";
 import GalleryModal from "./GalleryModal";
 import { useState } from "react";
 
+import { getGalleryImages } from "../../../DatabaseHelper";
+
 // import { getGalleryImages } from "";
 
 /**
@@ -21,8 +23,9 @@ import { useState } from "react";
 export const ArtistGalleryTab = ({ username }) => {
   const [open, setOpen] = useState(false);
   const plusIcon = <PlusIcon className="icon-base" />;
-  // const galleryImgData = getGalleryImages("post_images", [], username);
-  // console.log(galleryImgData);
+  const galleryImgData = getGalleryImages("post_images", [], username);
+  console.log(username);
+  console.log(galleryImgData);
   // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
   // When completing the dynamic version for this page, probably a good idea to setup the photos as components and importing them in.
   return (
@@ -126,6 +129,7 @@ export const ArtistGalleryTab = ({ username }) => {
             <GalleryModal
               open={open}
               onClose={() => setOpen(false)}
+              children={galleryImgData[1]}
             ></GalleryModal>
           </div>
         </div>
