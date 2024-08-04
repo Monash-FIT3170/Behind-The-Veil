@@ -14,6 +14,7 @@ import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import moment from "moment";
 import CalendarPopup from "../calendarPopup/CalendarPopup.jsx";
+import BookingStatus from "../../enums/BookingStatus";
 
 const CustomToolbar = ({ label, onNavigate }) => {
   return (
@@ -44,7 +45,7 @@ const CustomToolbar = ({ label, onNavigate }) => {
 };
 
 const formats = {
-  monthHeaderFormat: (date, culture, localizer) => {
+  monthHeaderFormat: (date) => {
     const month = moment(date).format("MMMM");
     const year = moment(date).format("YYYY");
     return `${month} ${year}`;
@@ -76,7 +77,7 @@ const myEventsList = [
     start: new Date("2024-07-06T05:30:00"),
     end: new Date("2024-07-06T07:30:00"),
     brideName: "Dolly Parton",
-    bookingStatus: "Pending",
+    bookingStatus: BookingStatus.PENDING,
     bookingTime: "Fri 22/03/23 10:00AM - 12:00PM",
     bookingLocation: "123 Arts Studio, Painting Avenue 555, NSW",
   },
@@ -84,7 +85,7 @@ const myEventsList = [
     start: new Date("2024-07-21T10:00:00"),
     end: new Date("2024-07-21T12:00:00"),
     brideName: "Jo",
-    bookingStatus: "Closed",
+    bookingStatus: BookingStatus.PENDING_CANCELLATION,
     bookingTime: "Sun 21/07/24 10:00AM - 12:00PM",
     bookingLocation: "Somewhere else",
   },
@@ -92,7 +93,7 @@ const myEventsList = [
     start: new Date("2024-07-16T18:00:00"),
     end: new Date("2024-07-16T20:00:00"),
     brideName: "Annie",
-    bookingStatus: "Confirmed",
+    bookingStatus: BookingStatus.CONFIRMED,
     bookingTime: "Tue 16/07/24 6:00PM - 8:00PM",
     bookingLocation: "Another place",
   },
@@ -135,9 +136,9 @@ const BookingCalendarView = () => {
         events={myEventsList}
         eventPropGetter={(myEventsList) => {
           let backgroundColor;
-          if (myEventsList.bookingStatus === "Confirmed") {
+          if (myEventsList.bookingStatus === BookingStatus.CONFIRMED) {
             backgroundColor = "green";
-          } else if (myEventsList.bookingStatus === "Pending") {
+          } else if (myEventsList.bookingStatus === BookingStatus.PENDING) {
             backgroundColor = "blue";
           } else {
             backgroundColor = "red";
