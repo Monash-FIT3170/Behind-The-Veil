@@ -10,8 +10,7 @@ export enum BookingStatus {
   REJECTED = 'rejected',
   CANCELLED = 'cancelled',
   COMPLETED = 'completed',
-  OVERDUE = 'overdue',
-  PENDING_CANCELLATION = 'pending cancellation'
+  OVERDUE = 'overdue'
 }
 
 export default BookingStatus;
