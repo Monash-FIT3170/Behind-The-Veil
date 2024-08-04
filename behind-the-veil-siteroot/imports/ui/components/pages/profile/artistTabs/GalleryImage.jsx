@@ -6,4 +6,4 @@
 
 import { GalleryModal } from "./GalleryModal";
 
-export default function GalleryImage({ open, onClose, children }) {}
+export default function GalleryImage({ imgSrc }) {}

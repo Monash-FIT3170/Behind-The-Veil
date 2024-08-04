@@ -22,6 +22,7 @@ import { getGalleryImages } from "../../../DatabaseHelper";
  */
 export const ArtistGalleryTab = ({ username }) => {
   const [open, setOpen] = useState(false);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const plusIcon = <PlusIcon className="icon-base" />;
   const galleryImgData = getGalleryImages("post_images", [], username);
   console.log(username);
@@ -125,13 +126,13 @@ export const ArtistGalleryTab = ({ username }) => {
               </div>
             </div>
           </div>
-          <div className="z-30">
-            <GalleryModal
-              open={open}
-              onClose={() => setOpen(false)}
-              children={galleryImgData[1]}
-            ></GalleryModal>
-          </div>
+        </div>
+        <div className="z-30">
+          <GalleryModal
+            open={open}
+            onClose={() => setOpen(false)}
+            children={galleryImgData[1]}
+          ></GalleryModal>
         </div>
       </div>
     </main>

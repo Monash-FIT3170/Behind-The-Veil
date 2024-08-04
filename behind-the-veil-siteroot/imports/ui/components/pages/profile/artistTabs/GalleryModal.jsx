@@ -25,13 +25,17 @@ export default function GalleryModal({ open, onClose, children }) {
           ${open ? "scale-100 opacity-100" : "scale-125 opacity-0"}
         `}
       >
-        <div>
-          <img
-            className="h-auto max-w-full rounded-lg object-cover object-center"
-            src={children}
-            alt="gallery-photo"
-            onClick={() => setOpen(true)}
-          />
+        <div className="columns-2">
+          <div className="w-full h-full">
+            <img
+              className="w-full h-full object-cover"
+              src={children}
+              alt="gallery-photo"
+              onClick={() => setOpen(true)}
+            />
+          </div>
+
+          <div>hello</div>
         </div>
       </div>
     </div>
