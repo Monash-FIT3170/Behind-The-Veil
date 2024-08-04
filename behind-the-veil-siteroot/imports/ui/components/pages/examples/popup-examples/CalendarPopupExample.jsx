@@ -40,7 +40,7 @@ const CalendarPopupExample = () => {
         },
         {
             bookingId: '2',
-            bookingStatus: BookingStatus.PENDING_CANCELLATION,
+            bookingStatus: BookingStatus.CANCELLED,
             brideName: 'Charlie',
             bookingTime: 'Sat 23/03/23 10:00AM - 12:00PM',
             bookingLocation: 'Another place',
