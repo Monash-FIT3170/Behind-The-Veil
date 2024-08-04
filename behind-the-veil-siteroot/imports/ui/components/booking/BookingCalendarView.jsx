@@ -15,6 +15,7 @@ import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import moment from "moment";
 import CalendarPopup from "../calendarPopup/CalendarPopup.jsx";
 import BookingStatus from "../../enums/BookingStatus";
+import { addHours, format } from 'date-fns'
 
 const CustomToolbar = ({ label, onNavigate }) => {
   return (
@@ -70,29 +71,28 @@ moment.locale("ko", {
 
 const localizer = momentLocalizer(moment);
 
-// TODO: need to retrieve this data from actual database. Some transformations may be required to
-// get each event object into this format
+// TODO: delete this
 const myEventsList = [
   {
-    start: new Date("2024-07-06T05:30:00"),
-    end: new Date("2024-07-06T07:30:00"),
-    brideName: "Dolly Parton",
+    bookingStartDateTime: new Date("2024-07-06T05:30:00"),
+    bookingEndDateTime: new Date("2024-07-06T07:30:00"),
+    brideUsername: "Dolly Parton",
     bookingStatus: BookingStatus.PENDING,
     bookingTime: "Fri 22/03/23 10:00AM - 12:00PM",
     bookingLocation: "123 Arts Studio, Painting Avenue 555, NSW",
   },
   {
-    start: new Date("2024-07-21T10:00:00"),
-    end: new Date("2024-07-21T12:00:00"),
-    brideName: "Jo",
+    bookingStartDateTime: new Date("2024-07-21T10:00:00"),
+    bookingEndDateTime: new Date("2024-07-21T12:00:00"),
+    brideUsername: "Jo",
     bookingStatus: BookingStatus.PENDING_CANCELLATION,
     bookingTime: "Sun 21/07/24 10:00AM - 12:00PM",
     bookingLocation: "Somewhere else",
   },
   {
-    start: new Date("2024-07-16T18:00:00"),
-    end: new Date("2024-07-16T20:00:00"),
-    brideName: "Annie",
+    bookingStartDateTime: new Date("2024-07-16T18:00:00"),
+    bookingEndDateTime: new Date("2024-07-16T20:00:00"),
+    brideUsername: "Annie",
     bookingStatus: BookingStatus.CONFIRMED,
     bookingTime: "Tue 16/07/24 6:00PM - 8:00PM",
     bookingLocation: "Another place",
@@ -115,7 +115,33 @@ const HeaderCellContent = ({ label }) => {
   return <div style={customStyles}>{label}</div>;
 };
 
-const BookingCalendarView = () => {
+// format the bookings data from the db so that it can be consumed by react-big-calendar component
+const formatBookings = (bookingsData) => {
+  if (!Array.isArray(bookingsData) || bookingsData.length === 0) return []
+
+  const formattedBookings = bookingsData.map((booking) => {
+
+    // calculate booking end time
+    const bookingEndDateTime = addHours(booking.bookingStartDateTime, booking.bookingDuration)
+    
+    // generate formatted booking time string
+    const formattedDate = format(booking.bookingStartDateTime, "E dd/MM/yyyy")
+    const formattedStartTime = format(booking.bookingStartDateTime, "h:mma")
+    const formattedEndTime = format(bookingEndDateTime, "h:mma")
+    const bookingTime = `${formattedDate} ${formattedStartTime} - ${formattedEndTime}`
+
+    // add booking end time and formatted booking time string
+    return {
+      ...booking, // include original booking data
+      bookingEndDateTime,
+      bookingTime
+    }
+  })
+
+  return formattedBookings
+}
+
+const BookingCalendarView = ({ bookingsData }) => {
   const [activeEvent, setActiveElement] = useState(null); // stores the event element in the DOM that was clicked on
   const [activeEventDetails, setPopupContent] = useState(null); // stores the details of the event that was cliocked on
 
@@ -129,11 +155,13 @@ const BookingCalendarView = () => {
     setPopupContent(event);
   };
 
+  const events = formatBookings(bookingsData)
+
   return (
     <div>
       <Calendar
         localizer={localizer}
-        events={myEventsList}
+        events={events}
         eventPropGetter={(myEventsList) => {
           let backgroundColor;
           if (myEventsList.bookingStatus === BookingStatus.CONFIRMED) {
@@ -147,9 +175,9 @@ const BookingCalendarView = () => {
           return { style: { backgroundColor } };
         }}
         onSelectEvent={handleSelectEvent}
-        startAccessor="start"
-        endAccessor="end"
-        titleAccessor="brideName"
+        startAccessor="bookingStartDateTime"
+        endAccessor="bookingEndDateTime"
+        titleAccessor="brideUsername"
         formats={formats}
         style={{ height: "85vh", margin: "50px" }}
         views={{ month: true }}
@@ -165,7 +193,7 @@ const BookingCalendarView = () => {
 
       <CalendarPopup
         bookingStatus={activeEventDetails?.bookingStatus}
-        brideName={activeEventDetails?.brideName}
+        brideName={activeEventDetails?.brideUsername}
         bookingTime={activeEventDetails?.bookingTime}
         bookingLocation={activeEventDetails?.bookingLocation}
         onClose={closePopup}

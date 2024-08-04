@@ -189,7 +189,7 @@ export const ArtistBookingsTab = ({username}) => {
                     bookingView === "list" ?
                         // rendering filtered bookings based on the applied filter
                         <BookingListView displayBookings={displayedBookingsJsx}/> :
-                        <BookingCalendarView />
+                        <BookingCalendarView bookingsData={bookingsData}/>
                 }
             </div>
         )
