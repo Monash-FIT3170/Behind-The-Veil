@@ -8,7 +8,18 @@ import React, { useRef } from "react";
 import CalendarPopupContent from "./CalendarPopupContent";
 import { arrow, autoPlacement, autoUpdate, FloatingArrow, offset, shift, useClick, useFloating, useInteractions } from "@floating-ui/react";
 
-
+/**
+ * Popup that is displayed upon clicking a booking event in the calendar.
+ * This component serves mainly as a wrapper, controlling the popup logic.
+ * 
+ * @param bookingId id of booking (used for routing)
+ * @param bookingStatus current booking status
+ * @param brideName bride name (used for popup title)
+ * @param bookingTime formatted booking time string
+ * @param bookingLocation location of booking
+ * @param activeElement the DOM element that the popup is positioned in reference to. Should be a state (or null if popup is hidden)
+ * @param onClose close handler callback
+ */
 const CalendarPopup = ({
     bookingId,
     bookingStatus,

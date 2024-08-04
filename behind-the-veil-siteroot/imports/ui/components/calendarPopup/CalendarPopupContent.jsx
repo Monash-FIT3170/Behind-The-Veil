@@ -29,6 +29,16 @@ const ViewDetailsButton = ({ bookingId }) => {
     )
 }
 
+/**
+ * Component that contains the content of the calendar popup. Displays brief info + buttons.
+ * 
+ * @param bookingId id of booking (used for routing)
+ * @param bookingStatus current booking status
+ * @param brideName bride name (used for popup title)
+ * @param bookingTime formatted booking time string
+ * @param bookingLocation location of booking
+ * @param onClose close handler callback
+ */
 const CalendarPopupContent = ({
     bookingId,
     bookingStatus,
