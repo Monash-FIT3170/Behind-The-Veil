@@ -10,8 +10,6 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 import Button from "../../../button/Button";
 import GalleryModal from "./GalleryModal";
 import { useState } from "react";
-import Pagination from "/imports/ui/components/pagination/Pagination.jsx";
-import Loader from "/imports/ui/components/loader/Loader";
 
 // import { getGalleryImages } from "";
 
@@ -35,7 +33,6 @@ export const ArtistGalleryTab = ({ username }) => {
             {plusIcon} Add Photo
           </Button>
         </div>
-        <div></div>
         <div className="px-10 relative flex flex-col gap-3">
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             <div className="grid gap-4">
@@ -46,15 +43,6 @@ export const ArtistGalleryTab = ({ username }) => {
                   alt="gallery-photo"
                   onClick={() => setOpen(true)}
                 />
-              </div>
-              <div className="z-30">
-                <GalleryModal
-                  open={open}
-                  onClose={() => setOpen(false)}
-                  children={
-                    "https://images.unsplash.com/photo-1432462770865-65b70566d673?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-                  }
-                ></GalleryModal>
               </div>
               <div>
                 <img
@@ -133,6 +121,12 @@ export const ArtistGalleryTab = ({ username }) => {
                 />
               </div>
             </div>
+          </div>
+          <div className="z-30">
+            <GalleryModal
+              open={open}
+              onClose={() => setOpen(false)}
+            ></GalleryModal>
           </div>
         </div>
       </div>
