@@ -13,7 +13,9 @@ import ArtistBookingsTab from "./artistTabs/ArtistBookingsTab";
 import ArtistServicesTab from "./artistTabs/ArtistServicesTab";
 
 /**
- * Component for artist profile tabs
+ * Component for artist's profile tabs
+ *
+ * @param userInfo - logged-in user information passed in
  */
 export const ArtistProfileTabs = ({userInfo}) => {
 
