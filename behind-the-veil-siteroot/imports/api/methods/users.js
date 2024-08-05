@@ -47,7 +47,8 @@ Meteor.methods({
      * Updates the service area for the current user.
      * This method sets the service location and radius for the artistuser's profile.
      * The method requires the user to be logged in.
-     *
+     * 
+     * @param {string} userId - The ID of the user for whom to update the service area.
      * @param {string} text - The new service location as a text string.
      * @param {number} radius - The new service radius in the desired unit
      */

@@ -32,7 +32,6 @@ if (Meteor.isClient) {
             });
             Meteor.call('update_service_area', userId, 'clayton', 20 );
             const updatedUser = UserCollection.findOne(userId);
-            console.log(updatedUser)
             assert.strictEqual(updatedUser.profile.artistServiceLocation, 'clayton');
             assert.strictEqual(updatedUser.profile.artistServiceRadius, 20);
         });
