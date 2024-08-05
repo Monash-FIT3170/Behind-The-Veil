@@ -32,7 +32,7 @@ export const ArtistServiceArea = () => {
         setSuccessMessage('');
         setErrorMessage('')
 
-        if (!location || !radius) {
+        if (!radius || location.trim() === '') {
             setErrorMessage('Please fill in all fields');
         } else {
             return new Promise((resolve, reject) => {
