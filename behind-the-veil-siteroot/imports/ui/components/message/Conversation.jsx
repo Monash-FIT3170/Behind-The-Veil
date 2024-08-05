@@ -1,67 +1,117 @@
 /**
  * File Description: Direct Message Conversation Component of Messages Page
- * File version: 1.1
- * Contributors: Nishan
+ * File version: 1.2
+ * Contributors: Nishan, Vicky
  */
 
 import React, {useRef, useState} from 'react';
+import { Meteor } from 'meteor/meteor';
+import {useSubscribe, useTracker } from 'meteor/react-meteor-data';
+
+import MessageCollection from "/imports/api/collections/messages";
+import ImageCollection from "/imports/api/collections/images";
+import "/imports/api/methods/messages";
+import {getUserInfo} from "../../../ui/components/util"
+
 import Card from '../card/Card';
 import ProfilePhoto from '../profilePhoto/ProfilePhoto';
 import Input from "../input/Input";
 import {PaperAirplaneIcon} from '@heroicons/react/24/outline';
 import Button from "../button/Button";
 
-export const Conversation = ({user}) => {
+export const Conversation = ({chat}) => {
+     // get current user information
+     const userInfo = getUserInfo();
 
     const [formValue, setFormValue] = useState('');
-    // TODO: set up subscription to messages here
+    // set up subscription to messages for the particular chat
+    const isLoadingMessages = useSubscribe('all_chat_messages', chat._id);
+    const isLoadingUserImages = useSubscribe('profile_images');
+    const isLoading = isLoadingMessages() || isLoadingUserImages();
 
-    // TODO: replace messages with the messages db 
-    const [messages, setMessages] = useState([]);
+    // get data from db
+    let messagesData = useTracker(() => {
+        return MessageCollection.find({ chatId: chat._id }).fetch();
+    });
+    let usersImagesData = useTracker(() => {
+        return ImageCollection.find().fetch;
+    })
 
-    // TODO: Sort messages based on sent date (oldest to newest)
+    // sort messages based on sent date (oldest to newest)
+    // TODO: this might not sort descending (oldest to newest) (check with UI later)
+    messagesData.sort(function(dateOne, dateTwo) {
+       let keyOne = dateOne.messageSentTime;
+       let keyTwo = dateTwo.messageSentTime;
+       // Compare the 2 dates
+       if (keyOne > keyTwo) return -1;
+       if (keyOne < keyTwo) return 1;
+       return 0;
+     });
+
+
     const conversationRef = useRef(null);
 
     const sendMessage = (event) => {
         event.preventDefault();
         if (formValue.trim() === '') return;
-        // TODO: call update chat method (for latest message and date) and call insert message method
-        // for messages db
-        setMessages(prevMessages => [...prevMessages, {text: formValue, sender: 'me'}]);
-        setFormValue('');
-        let heightToScroll = conversationRef?.current.scrollHeight + 50 // TODO: check, might have to adjust the value or code
-        setTimeout(() => {
-            conversationRef?.current.scrollTo({left: 0, top: heightToScroll, behaviour: "smooth"})
-        }, 5)
+        
+        // insert the message using the Message database method
+        try {
+            const messageSentTime = new Date();
+            const messageContent = formValue;
+            const messageRead = false; // TODO: figure out how to set message to read when the other user is on the app at the same time
+            const photoId = userInfo.username; // TODO: check if its the user's username for the image or if its the actual id in the db
+            const chatId = chat._id;
+
+            // wrap meteor.call in a promise
+            const messageId = new Promise((resolve, reject) => {
+                // asynchronous operation
+                Meteor.call('add_message', messageSentTime, messageContent, messageRead, photoId, userUsername, chatId, (error, result) => {
+                    if (error) {
+                        reject(error); // if there's an error, go to the catch block
+                    } else {
+                        resolve(result); // if there's no error, continue with the rest of the block
+                    }
+                });
+            });
+            setFormValue('');
+            let heightToScroll = conversationRef?.current.scrollHeight + 50 // TODO: check, might have to adjust the value or code
+            setTimeout(() => {
+                conversationRef?.current.scrollTo({left: 0, top: heightToScroll, behaviour: "smooth"})
+            }, 5)
+        } catch (error) {
+            console.log("Error adding message. Returned with error:" + error.message)
+        }
+        
     };
 
     return (
         <div className="flex flex-col fixed top-0 bottom-0 left-0 right-0">
             <div
-                className='ml-4 w-11/12 message-receiver-name-text border-b-2 pt-3 pb-1 mb-8 pl-6 border-main-blue'>{user.name}
+                className='ml-4 w-11/12 message-receiver-name-text border-b-2 pt-3 pb-1 mb-8 pl-6 border-main-blue'>{userInfo.username}
             </div>
             <div className="flex-1 overflow-y-auto p-4" ref={conversationRef}>
                 <div>
-                    {user.messages.map((message, index) => (
+                    {messagesData.map((message, index) => (
                         <div key={index}>
-                            <div className={`${message.sender === 'me' ? 'flex  justify-end' : 'flex'}`}>
-                                {message.sender !== 'me' && (
+                            <div className={`${message.userUsername === userInfo.username ? 'flex  justify-end' : 'flex'}`}>
+                                {message.userUsername !== userInfo.username  && (
                                     <ProfilePhoto
-                                        className={`${message.sender === 'me' ? 'order-last flex' : ''} min-win-[10%] shrink-0`}></ProfilePhoto>
+                                        className={`${message.userUsername === userInfo.username ? 'order-last flex' : ''} min-win-[10%] shrink-0`}></ProfilePhoto>
                                 )}
                                 <Card
-                                    className={`my-2 rounded-3xl max-w-[80%] border-transparent ${message.sender === 'me' ? ' bg-main-blue' : 'bg-light-grey'} `}>
-                                    {message.text}
+                                    className={`my-2 rounded-3xl max-w-[80%] border-transparent ${message.userUsername === userInfo.username ? ' bg-main-blue' : 'bg-light-grey'} `}>
+                                    {message.messageContent}
                                 </Card>
                             </div>
                         </div>
 
                     ))}
 
-                    {messages.map((message, index) => (
+                    {messagesData.map((message, index) => (
                         <div key={index} className="flex justify-end">
-                            <Card className={`my-2 rounded-3xl max-w-[80%] h-auto overflow-hidden ${message.sender === 'me' ? ' bg-main-blue' : 'bg-light-grey'}`}>
-                                <div>{message.text}</div>
+                            <Card className={`my-2 rounded-3xl max-w-[80%] h-auto overflow-hidden ${message.userUsername === userInfo.username ? ' bg-main-blue' : 'bg-light-grey'}`}>
+                                <div>{message.messageContent}</div>
                             </Card>
                         </div>
                     ))}

@@ -1,6 +1,6 @@
 /**
  * File Description: Messages page
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Vicky
  */
 
@@ -10,13 +10,16 @@ import {Tracker} from "meteor/tracker";
 import {Meteor} from "meteor/meteor";
 
 import ChatCollection from "/imports/api/collections/chats";
-import MessageCollection from "/imports/api/collections/messages";
 import ImageCollection from '../../../../api/collections/images.js';
+import "../../../../api/methods/chats.js"
 
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Conversation from '../../message/Conversation';
 import MessagesPreview from '../../message/MessagesPreview';
+import Loader from "/imports/ui/components/loader/Loader";
+import Button from "../../button/Button.jsx";
+
 import {getUserInfo} from "../../util.jsx"
 
 /**
@@ -69,38 +72,23 @@ export const MessagesPage = () => {
     })
 
     // manual aggregation into chatsData with the other user's images
-    // for (let i = 0; i < chatsData.length; i++) {
-    //     // aggregate with user images
-    //     // find the other user's username 
-    //     if (chatsData.brideUsername != userInfo.username) {
-    //         const otherUser = brideUsername;
-    //     }
-    //     else {
-    //         const otherUser = artistUsername;
-    //     }
+    for (let i = 0; i < chatsData.length; i++) {
+        // find the other user's username
+        const otherUser = chatsData.brideUsername != userInfo.username ? chatsData.brideUsername : chatsData.artistUsername;
 
-    //     for (let j = 0; j < usersImagesData.length; j++) {
-    //         // find the other user and add their image
-    //         if (servicesData[i].artistUsername === usersData[j].username) {
-    //             servicesData[i].artistAlias = usersData[j].profile.alias;
-    //             break;
-    //         }
-    //     }
-    //     // then aggregate with the FIRST image (cover)
-    //     for (let j = 0; j < imagesData.length; j++) {
-    //         // find matching image for the service
-
-    //         if (imagesData[j].imageType === "service" && servicesData[i]._id === imagesData[j].target_id) {
-    //             servicesData[i].serviceImageData = imagesData[j].imageData;
-    //             break;
-    //         }
-    //     }
-    // }
+        for (let j = 0; j < usersImagesData.length; j++) {
+            // find the other user's image and add their image to the chat data
+            if (usersImagesData[j].targetId == otherUser) {
+                chatsData[i].otherUserImage = usersImagesData[j].imageData;
+                break;
+            }
+        }
+    }
 
     // TODO: this might not sort ascending (check with UI later)
     chatsData.sort(function(dateOne, dateTwo) {
-        let keyOne = new Date(dateOne.chatUpdatedDate);
-        let keyTwo = new Date(dateTwo.chatUpdatedDate);
+        let keyOne = dateOne.chatUpdatedDate;
+        let keyTwo = dateTwo.chatUpdatedDate;
         // Compare the 2 dates
         if (keyOne < keyTwo) return -1;
         if (keyOne > keyTwo) return 1;
@@ -121,12 +109,42 @@ export const MessagesPage = () => {
         setSelectedConversationIndex(index);
     };
 
+    const handleButtonClick = () => {
+        console.log("Start new conversation button was clicked");
+        // insert the message using the Message database method
+        try {
+            const brideUsername = "bride123";
+            const artistUsername = "hello";
+            const chatUpdatedDate = new Date(); 
+            const chatLastMessage = "dummy data first message"; 
+
+            // wrap meteor.call in a promise
+            const chatId = new Promise((resolve, reject) => {
+                // asynchronous operation
+                Meteor.call('create_chat', brideUsername, artistUsername, chatUpdatedDate, chatLastMessage, (error, result) => {
+                    if (error) {
+                        reject(error); // if there's an error, go to the catch block
+                    } else {
+                        resolve(result); // if there's no error, continue with the rest of the block
+                    }
+                });
+            });
+            console.log("Chat successfully added with id: " + chatId);
+        } catch (error) {
+            console.log("Error adding message. Returned with error:" + error.message);
+        }
+    }
+
     // TODO: if statement to check if chats have been loaded yet (do the below inside the if statement)
     // note: chats has a chatLastMessage attribute that can be used to display a message preview on the left side
     // TODO: double check that the chats are listed in order of the dates
-    const newMsgPreviewsComponents = users.map((user, index) => <MessagesPreview key = {index} data = {user} onClick={() => handlePreviewClick(index)}></MessagesPreview>);
+    //const newMsgPreviewsComponents = users.map((user, index) => <MessagesPreview key = {index} data = {user} onClick={() => handlePreviewClick(index)}></MessagesPreview>);
+    const newMsgPreviewsComponents = chatsData.map((chat, index) => <MessagesPreview key = {index} data = {chat} onClick={() => handlePreviewClick(index)}></MessagesPreview>);
 
+
+    // TODO: place this in an if statement that checks if the page is ready or not
     return (
+        // <div>hello from the first one</div>
         // if window size is SMALLER than a medium screen (default variable for medium in tailwind sm:768px),
         // then have the contacts/list of people on separate screens than the conversation
         <WhiteBackground pageLayout={window.innerWidth <= 768 ? PageLayout.SMALL_CENTER : PageLayout.MESSAGES_PAGE}>
@@ -136,11 +154,46 @@ export const MessagesPage = () => {
             </div>
             {/*you MUST keep this div and put everything on the right side inside of it*/}
             <div>
-                {/* TODO: change user= to chat=, selectedConversationIndex to chatId */}
-                <Conversation user={users[selectedConversationIndex]}/> 
+                {/* TODO: selectedConversationIndex to chatId */}
+                {chatsData.length > 0 ? (
+                    <Conversation chat={chatsData[selectedConversationIndex]} />) : 
+                    (<Button onClick={handleButtonClick}>Start a new conversation</Button>)
+                    }
             </div>
         </WhiteBackground>
     );
+    // TODO: check why the following statement never returns true
+    // // checks if the page and data has loaded
+    // if (document.readyState === "complete" && !isLoading) {
+    //     return (
+    //         // <div>hello from the first one</div>
+    //         // if window size is SMALLER than a medium screen (default variable for medium in tailwind sm:768px),
+    //         // then have the contacts/list of people on separate screens than the conversation
+    //         <WhiteBackground pageLayout={window.innerWidth <= 768 ? PageLayout.SMALL_CENTER : PageLayout.MESSAGES_PAGE}>
+    //             {/*you MUST keep this div and put everything on the left side inside of it*/}
+    //             <div className="flex flex-col gap-3">
+    //                 {newMsgPreviewsComponents}
+    //             </div>
+    //             {/*you MUST keep this div and put everything on the right side inside of it*/}
+    //             <div>
+    //                 {/* TODO: selectedConversationIndex to chatId */}
+    //                 <Conversation chat={chatsData[selectedConversationIndex]}/> 
+    //             </div>
+    //         </WhiteBackground>
+    //     );
+    // } else {
+    //     // is loading, display loader
+    //     return (
+    //         <WhiteBackground pageLayout={window.innerWidth <= 768 ? PageLayout.SMALL_CENTER : PageLayout.MESSAGES_PAGE}>
+    //             <Loader
+    //                 loadingText={"Messages are loading . . ."}
+    //                 isLoading={isLoading}
+    //                 size={100}
+    //                 speed={1.5}
+    //             />
+    //         </WhiteBackground>
+    //     );
+    // }
 };
 
 export default MessagesPage;

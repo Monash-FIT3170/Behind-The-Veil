@@ -1,4 +1,5 @@
 import assert from "assert";
+import './chat.tests.js';
 import './booking.tests.js';
 import './post.tests.js';
 import './users.tests.js';
