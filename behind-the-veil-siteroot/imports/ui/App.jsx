@@ -14,6 +14,7 @@ import ProfileSettingsPage from "./components/pages/profile/settings/ProfileSett
 import ServicesPage from "./components/pages/service/ServicesPage.jsx";
 import SpecificServicePage from "./components/pages/service/SpecificServicePage.jsx";
 import ArtistsPage from "./components/pages/artist/ArtistsPage.jsx";
+import SpecificArtistPage from "./components/pages/artist/SpecificArtistPage";
 import MessagesPage from "./components/pages/messages/MessagesPage.jsx";
 
 import LoginPage from "./components/pages/login/LoginPage.jsx";
@@ -48,11 +49,15 @@ export const App = () => (
                     {/* removed once dev is finished*/}
                     <Route path={`/${UrlBasePath.EXAMPLES}`} element={<Examples/>}/>
                     {/*routes that any user can access*/}
-                    <Route path={`/${UrlBasePath.HOME}`} element={<HomePage />} />
-                    <Route path="*" element={<NonExistingPage />} /> {/*default path for all other non-routed paths*/}
-                    <Route path={`/${UrlBasePath.SERVICES}`} element={<ServicesPage />} />
-                    <Route path={`/${UrlBasePath.SERVICES}/:serviceId`} element={<SpecificServicePage />} />
-                    <Route path={`/${UrlBasePath.ARTISTS}`} element={<ArtistsPage />} />
+                    <Route path={`/${UrlBasePath.HOME}`} element={<HomePage/>}/>
+                    <Route path="*" element={<NonExistingPage/>}/> {/*default path for all other non-routed paths*/}
+
+                    <Route path={`/${UrlBasePath.SERVICES}`} element={<ServicesPage/>}/>
+                    <Route path={`/${UrlBasePath.SERVICES}/:serviceId`} element={<SpecificServicePage/>}/>
+
+                    <Route path={`/${UrlBasePath.ARTISTS}`} element={<ArtistsPage/>}/>
+                    <Route path={`/${UrlBasePath.ARTISTS}/:artistUsername`} element={<SpecificArtistPage/>}/>
+
                     {/*routes that NOT authenticated users can access*/}
                     <Route
                         path={`/${UrlBasePath.LOGIN}`}

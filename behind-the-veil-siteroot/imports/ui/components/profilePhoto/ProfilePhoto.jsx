@@ -15,14 +15,9 @@ import {UserCircleIcon} from "@heroicons/react/20/solid"
  * @param artistPhotoData artist profile photo's data from database
  * @param hoverEffect {boolean} false to disable hover effects, defaults to true
  */
-export const ProfilePhoto = ({className, artistPhotoData, hoverEffect}) => {
+export const ProfilePhoto = ({className, artistPhotoData, hoverEffect=true}) => {
     // todo change depending on actual photo data format from database
     const classes = classNames(className, "relative h-[10vh] w-[10vh]");
-
-    // hover effects is by default on, except if it is set to off
-    if (hoverEffect === undefined) {
-        hoverEffect = true;
-    }
 
     // if the profile image data is available
     if (artistPhotoData) {

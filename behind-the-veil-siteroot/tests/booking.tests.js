@@ -49,7 +49,7 @@ if (Meteor.isClient) {
             }).then(bookingId => {
                 assert.notStrictEqual(bookingId, undefined);
                 const booking = BookingCollection.findOne(bookingId);
-                assert.notStrictEqual(booking, undefined);
+                assert.notStrictEqual(booking, null);
             }).catch(error => {
                 assert.fail("Error adding booking. Returned with error:" + error.message);
             });

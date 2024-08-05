@@ -7,11 +7,11 @@ import React from "react";
 import WhiteBackground from "../../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../../enums/PageLayout";
 import Tabs from "../../../tabs/Tabs.jsx";
-import PreviousButton from "../../../button/PreviousButton";
 import AccountDetails from "./AccountDetails.jsx";
 import ArtistServiceArea from "./ArtistServiceArea";
 import {getUserInfo} from "../../../util";
 import ChangePasswordTab from "./ChangePasswordTab";
+import BackButton from "../../../button/BackButton";
 
 /**
  * Settings page for all users
@@ -25,7 +25,7 @@ export const ProfileSettingsPage = () => {
     if (userInfo.type === "bride") {
         return (
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-                <PreviousButton/>
+                <BackButton/>
                 <div className="flex flex-row flex-nowrap items-center">
                     <div className="title-text text-center sm:-mt-10 mb-5 grow">Settings</div>
                 </div>
@@ -38,6 +38,7 @@ export const ProfileSettingsPage = () => {
                         <AccountDetails key={"account-details"}/>,
                         <ChangePasswordTab key={"change-password"} />,
                     ]}
+                    tabsClassName="lg:flex lg:justify-between lg:px-[25%] xl:px-[30%] 2xl:px-[35%]"
                 />
             </WhiteBackground>
         );
@@ -45,7 +46,7 @@ export const ProfileSettingsPage = () => {
         // artist
         return (
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-                <PreviousButton/>
+                <BackButton/>
                 <div className="flex flex-row flex-nowrap items-center">
                     <div className="title-text text-center sm:-mt-10 mb-5 grow">Settings</div>
                 </div>
@@ -60,6 +61,7 @@ export const ProfileSettingsPage = () => {
                         <ChangePasswordTab key={"change-password"} />,
                         <ArtistServiceArea key={"service-area"}/>
                     ]}
+                    tabsClassName="lg:flex lg:justify-between lg:px-[15%] xl:px-[20%] 2xl:px-[25%]"
                 />
             </WhiteBackground>
         );
