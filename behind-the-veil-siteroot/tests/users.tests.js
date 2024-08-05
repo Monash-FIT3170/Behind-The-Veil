@@ -26,14 +26,15 @@ if (Meteor.isClient) {
                 profile: {
                     alias: 'test',
                     type: 'artist',
-                    serviceLocation: '',
-                    serviceRadius: 0,
+                    artistServiceLocation: '',
+                    artistserviceRadius: 0,
                 },
             });
             Meteor.call('update_service_area', userId, 'clayton', 20 );
             const updatedUser = UserCollection.findOne(userId);
-            assert.strictEqual(updatedUser.profile.serviceLocation, 'clayton');
-            assert.strictEqual(updatedUser.profile.serviceRadius, 20);
+            console.log(updatedUser)
+            assert.strictEqual(updatedUser.profile.artistServiceLocation, 'clayton');
+            assert.strictEqual(updatedUser.profile.artistServiceRadius, 20);
         });
 
 

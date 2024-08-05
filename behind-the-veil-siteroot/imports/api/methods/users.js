@@ -51,13 +51,13 @@ Meteor.methods({
      * @param {string} text - The new service location as a text string.
      * @param {number} radius - The new service radius in the desired unit
      */
-    'update_service_area': function ( userId ,text, radius) {
+    'update_service_area': function (userId ,text, radius) {
         UserCollection.update(
             { _id: userId },
             {
                 $set: {
-                    'profile.serviceLocation': text.trim(),
-                    'profile.serviceRadius': radius
+                    'profile.artistServiceLocation': text.trim(),
+                    'profile.artistServiceRadius': radius
                 }
             },
         );

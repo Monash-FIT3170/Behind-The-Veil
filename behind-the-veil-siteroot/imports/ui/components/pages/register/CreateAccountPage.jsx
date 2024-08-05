@@ -65,8 +65,8 @@ const CreateAccountPage = () => {
                 alias: alias,
                 type: accountType,
                 ...(accountType === 'artist' && {
-                    serviceLocation: artistServiceLocation,
-                    serviceRadius: artistServiceRadius
+                    artistServiceLocation: artistServiceLocation,
+                    artistServiceRadius: artistServiceRadius
                 })
             }
         };
