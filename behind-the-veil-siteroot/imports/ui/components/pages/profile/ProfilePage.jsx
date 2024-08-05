@@ -31,7 +31,6 @@ export const ProfilePage = () => {
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
             {/*Settings buttons*/}
             <div className="flex items-center justify-end w-full ">
-                {/*todo: route button to settings page*/}
                 <Button
                     className="flex flex-row justify-center items-center gap-x-1.5 sm:w-36"
                     onClick={() => {

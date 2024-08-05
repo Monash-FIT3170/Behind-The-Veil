@@ -5,7 +5,7 @@
  */
 
 import { Meteor } from "meteor/meteor";
-import { ServiceCollection } from "/imports/api/collections/services";
+import { ServiceCollection } from "../collections/services";
 
 Meteor.methods({
     /**
