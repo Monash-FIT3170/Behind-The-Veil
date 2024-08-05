@@ -43,20 +43,23 @@ Meteor.methods({
         UserCollection.update(userId, {$set: {"profile.alias": newAlias}});
     },
 
-        'update_service_area': function (text, radius) {
-        if (!this.userId) {
-            throw new Meteor.Error('Not authorized.');
-        }
-
+    /**
+     * Updates the service area for the current user.
+     * This method sets the service location and radius for the artistuser's profile.
+     * The method requires the user to be logged in.
+     *
+     * @param {string} text - The new service location as a text string.
+     * @param {number} radius - The new service radius in the desired unit
+     */
+    'update_service_area': function ( userId ,text, radius) {
         UserCollection.update(
-            { _id: this.userId }, // Query to find the document for the current user
+            { _id: userId },
             {
                 $set: {
                     'profile.serviceLocation': text.trim(),
                     'profile.serviceRadius': radius
                 }
             },
-            { upsert: true } // Create the document if it doesn't exist
         );
     }
 

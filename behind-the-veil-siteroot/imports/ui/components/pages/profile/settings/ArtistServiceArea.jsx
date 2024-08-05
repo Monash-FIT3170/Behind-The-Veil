@@ -21,7 +21,6 @@ import "/imports/api/methods/users";
  */
 
 export const ArtistServiceArea = () => {
-
     const user = useTracker(() => Meteor.user());
     const [text, setText] = useState('');
     const [radius, setRadius] = useState('');
@@ -40,7 +39,7 @@ export const ArtistServiceArea = () => {
             alert('Please enter a valid location and radius');
             return;
         } else {
-            Meteor.call('update_service_area', text, radius);
+            Meteor.call('update_service_area', user._id, text, radius);
             confirm('Service area updated!');
         }
         setOverlayVisible(false)
@@ -57,7 +56,7 @@ export const ArtistServiceArea = () => {
                 <Input
                     type="text"
                     label={<label className={"main-text"}>Service Location</label>}
-                    placeholder="Please enter a location"
+                    placeholder={user.profile.serviceLocation}
                     className="lg:w-[40vw] sm:w-96"
                     value={text}
                     onChange={(e) => setText(e.target.value)}
@@ -69,7 +68,7 @@ export const ArtistServiceArea = () => {
                     label={<label className={"main-text"}>Radius (km)</label>}
                     min={1}
                     max={99}
-                    placeholder="e.g. 12.5"
+                    placeholder={user.profile.serviceRadius}
                     className="w-24"
                     value={radius}
                     onChange={(e) => setRadius(e.target.value)}
