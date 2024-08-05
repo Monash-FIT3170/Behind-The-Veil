@@ -1,6 +1,8 @@
 import assert from "assert";
 import './booking.tests.js';
 import './post.tests.js';
+import './users.tests.js'
+
 
 describe("behind-the-veil-siteroot", function () {
   it("package.json has correct name", async function () {
