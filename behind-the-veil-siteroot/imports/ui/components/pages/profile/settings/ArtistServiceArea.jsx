@@ -9,7 +9,6 @@ import {CheckIcon} from "@heroicons/react/24/outline";
 import Input from "../../../input/Input";
 import Button from "../../../button/Button.jsx";
 
-import Card from '../../../card/Card';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import "/imports/api/methods/users";
@@ -22,87 +21,71 @@ import "/imports/api/methods/users";
 
 export const ArtistServiceArea = () => {
     const user = useTracker(() => Meteor.user());
-    const [text, setText] = useState('');
+
+    const [location, setLocation] = useState('');
     const [radius, setRadius] = useState('');
 
-    const [overlayVisible, setOverlayVisible] = useState(false);
-    const handleSaveChangesOverlay = () => {
-        setOverlayVisible(true);
-    };
+    const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const handleSaveChanges = (event) => {
+        event.preventDefault();
+        setSuccessMessage('');
+        setErrorMessage('')
 
-    const handleSaveChanges = () => {
-        if (radius < 0) {
-            alert('Radius can\'t be negative');
-            return;
-        }
-        if (!text || !radius) {
-            alert('Please enter a valid location and radius');
-            return;
+        if (!location || !radius) {
+            setErrorMessage('Please fill in all fields');
         } else {
-            Meteor.call('update_service_area', user._id, text, radius);
-            confirm('Service area updated!');
+            return new Promise((resolve, reject) => {
+                Meteor.call('update_service_area', user._id, location, radius,
+                    (error) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            setLocation('');
+                            setRadius(''); 
+                            setSuccessMessage('Service Area changed successfully!');
+                            resolve(user._id);
+                        }
+                    }
+                );
+            })
         }
-        setOverlayVisible(false)
+
     };
 
-    const handleCloseOverlay = () => {
-        setOverlayVisible(false);
-    };
     return (
-        <div className="flex flex-col items-left justify-center gap-y-6 pl-[5%] lg:pl-[15%]">
+        <form className="flex flex-col items-left justify-center gap-y-6 pl-[5%] lg:pl-[15%]" onSubmit={handleSaveChanges}>
             <div className="flex flex-col items-left justify-center md:flex-row md:items-center md:justify-start gap-6">
-
                 {/*Service Location input*/}
                 <Input
                     type="text"
                     label={<label className={"main-text"}>Service Location</label>}
-                    placeholder={user.profile.serviceLocation}
+                    placeholder={user.profile.artistServiceLocation}
                     className="lg:w-[40vw] sm:w-96"
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
                 />
-
                 {/*Radius input*/}
                 <Input
                     type="number"
                     label={<label className={"main-text"}>Radius (km)</label>}
                     min={1}
                     max={99}
-                    placeholder={user.profile.serviceRadius}
+                    placeholder={user.profile.artistServiceRadius}
                     className="w-24"
                     value={radius}
                     onChange={(e) => setRadius(e.target.value)}
                 />
             </div>
-
+            {/* show error and successMessage */}
+            {errorMessage && <span className="text-cancelled-colour -mt-2">{errorMessage}</span>}
+            {successMessage && <div className="text-green-500 -mt-2">{successMessage}</div>}
             {/* Save changes button*/}
-            <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2" onClick={handleSaveChangesOverlay}>
+            <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2" type="submit">
                 <CheckIcon className="icon-base" />
                 Save Changes
             </Button>
-            {overlayVisible && (
-                <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50">
-
-                    <Card className="bg-white p-20 rounded-md">
-                        {/* Content of the card */}
-                        <div className='text-center'>
-                            <p className='title-text'>Save Changes?</p>
-                            <p className='medium-text my-4 '>Press cancel to keep editing</p>
-                        </div>
-                        <div className='flex justify-between'>
-                            <Button onClick={handleSaveChanges} className="flex bg-secondary-purple px-8 hover:bg-secondary-purple-hover">
-                                <CheckIcon className='icon-base mr-1'></CheckIcon>
-                                Yes
-                            </Button>
-                            <Button onClick={handleCloseOverlay}
-                                className="flex px-8 hover:bg-secondary-purple-hover">
-                                Cancel
-                            </Button>
-                        </div>
-                    </Card>
-                </div>
-            )}
-        </div>
+        </form>
     );
 };
 
