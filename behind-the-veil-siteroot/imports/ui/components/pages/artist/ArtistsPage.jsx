@@ -12,7 +12,7 @@ import ArtistCard from "../../card/ArtistCard";
 import Pagination from "../../pagination/Pagination";
 import SearchBar from "/imports/ui/components/searchBar/searchBar.jsx";
 import Loader from "../../loader/Loader";
-import {getUsers} from "../../DatabaseHelper";
+import {useUsers} from "../../DatabaseHelper";
 
 /**
  * Page of a list of Artist cards for users to see
@@ -24,7 +24,7 @@ export const ArtistsPage = () => {
 
     // get artist data
     const userFilter = {"profile.type": "artist"}
-    const {isLoading, usersData} = getUsers("all_artists", [], userFilter)
+    const {isLoading, usersData} = useUsers("all_artists", [], userFilter)
 
     // map data into artist cards
     const displayedArtistJsx = usersData.map((user) => (

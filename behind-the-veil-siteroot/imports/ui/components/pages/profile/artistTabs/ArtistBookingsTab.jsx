@@ -15,7 +15,7 @@ import BookingFilter from "../../../../enums/ArtistBookingsFilter";
 import BookingListView from "../../../booking/BookingListView";
 import BookingCalendarView from "../../../booking/BookingCalendarView";
 import Loader from "../../../loader/Loader";
-import {getBookings} from "../../../DatabaseHelper";
+import {useBookings} from "../../../DatabaseHelper";
 
 
 /**
@@ -41,7 +41,7 @@ export const ArtistBookingsTab = ({username}) => {
             { "artistUsername": username }
         ]
     }
-    const {isLoading, bookingsData} = getBookings("all_user_bookings", [username], bookingFilter);
+    const {isLoading, bookingsData} = useBookings("all_user_bookings", [username], bookingFilter);
 
     // filters
     const availableFilters = Object.values(BookingFilter);

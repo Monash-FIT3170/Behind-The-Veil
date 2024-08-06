@@ -11,7 +11,7 @@ import Loader from "../../../components/loader/Loader";
 import BookingListView from "../../../components/booking/BookingListView";
 import BookingCard from "../../../components/card/BookingCard";
 import BookingStatus from "../../../../ui/enums/BookingStatus";
-import {getBookings} from "../../DatabaseHelper";
+import {useBookings} from "../../DatabaseHelper";
 
 /**
  * Component for bride's profile tabs
@@ -27,7 +27,7 @@ export const BrideProfileTabs = ({userInfo}) => {
             { "artistUsername": userInfo.username }
         ]
     }
-    const {isLoading, bookingsData} = getBookings("all_user_bookings", [userInfo.username], bookingFilter);
+    const {isLoading, bookingsData} = useBookings("all_user_bookings", [userInfo.username], bookingFilter);
 
     // wait for bookings data to be loaded
     if (isLoading) {

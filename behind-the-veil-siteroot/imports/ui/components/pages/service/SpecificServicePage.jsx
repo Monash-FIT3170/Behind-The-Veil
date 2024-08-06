@@ -16,7 +16,7 @@ import Card from "../../card/Card";
 import FormOutput from "../request-booking/FormOutput";
 import PreviousButton from "../../button/PreviousButton";
 import UrlBasePath from "../../../enums/UrlBasePath";
-import {getSpecificService} from "../../DatabaseHelper";
+import {useSpecificService} from "../../DatabaseHelper";
 
 /**
  * Displays a page for a specific service
@@ -40,7 +40,7 @@ const SpecificServicePage = () => {
     const {serviceId} = useParams();
 
     // get service data from database
-    const {isLoading, serviceData, artistData, serviceImagesData, profileImageData} = getSpecificService(serviceId);
+    const {isLoading, serviceData, artistData, serviceImagesData, profileImageData} = useSpecificService(serviceId);
 
     const imageUrls = serviceImagesData.map((image) => (
         image.imageData

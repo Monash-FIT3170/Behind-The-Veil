@@ -28,7 +28,7 @@ import PageLayout from "../../../enums/PageLayout";
 import Loader from "../../loader/Loader";
 import classNames from "classnames";
 import BookingStatusDisplay from "../../booking/BookingStatusDisplay";
-import {getSpecificBooking} from "../../DatabaseHelper";
+import {useSpecificBooking} from "../../DatabaseHelper";
 import UrlBasePath from "../../../enums/UrlBasePath";
 
 /**
@@ -43,7 +43,7 @@ const BookingDetailsPage = () => {
     const {bookingId} = useParams();
 
     // get bookings information from database
-    const {isLoading, bookingData, serviceData, userData} = getSpecificBooking(bookingId, userInfo.type);
+    const {isLoading, bookingData, serviceData, userData} = useSpecificBooking(bookingId, userInfo.type);
 
     if (isLoading) {
         // is loading, display loader

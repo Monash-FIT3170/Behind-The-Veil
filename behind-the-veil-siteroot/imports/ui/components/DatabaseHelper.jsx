@@ -21,7 +21,7 @@ import BookingCollection from "../../api/collections/bookings";
  * @returns {Object} - returns an object containing: boolean isLoading that is true when loading, false when finished loading.
  * The serviceData object joined with its serviceImage and (if required) artistData
  */
-export function getServices(service_publication, params, filter, requireArtist = false) {
+export function useServices(service_publication, params, filter, requireArtist = false) {
 
     // get service data from database
     const isLoadingUserServices = useSubscribe(service_publication, ...params);
@@ -92,7 +92,7 @@ export function getServices(service_publication, params, filter, requireArtist =
  * @returns {Object} - returns an object containing: boolean isLoading that is true when loading, false when finished loading.
  * The bookingData object joined with its serviceData and serviceImage
  */
-export function getBookings(booking_publication, params, filter) {
+export function useBookings(booking_publication, params, filter) {
 
     // get bookings from database
     const isLoadingBooking = useSubscribe(booking_publication, ...params);
@@ -152,7 +152,7 @@ export function getBookings(booking_publication, params, filter) {
  * @returns {Object} - returns an object containing: boolean isLoading that is true when loading, false when finished loading.
  * The userData object joined with its profile image data.
  */
-export function getUsers(user_publication, params, filter) {
+export function useUsers(user_publication, params, filter) {
 
     // get users from database
     const isLoadingUsers = useSubscribe(user_publication, ...params);
@@ -189,7 +189,7 @@ export function getUsers(user_publication, params, filter) {
  * @returns {Object} - returns an object containing: boolean isLoading that is true when loading, false when finished loading.
  * The objects contain serviceData and serviceImagesData as well as related artistData and their profile image data.
  */
-export function getSpecificService(serviceId) {
+export function useSpecificService(serviceId) {
 
     // will always just get 1 specific service by ID
     const isLoadingService = useSubscribe('specific_service', serviceId);
@@ -241,7 +241,7 @@ export function getSpecificService(serviceId) {
  * @returns  {Object} - returns an object containing: boolean isLoading that is true when loading, false when finished loading.
  * The objects contain bookingData and the related serviceData and userData
  */
-export function getSpecificBooking(bookingId, userType) {
+export function useSpecificBooking(bookingId, userType) {
 
     // will always just get 1 specific booking by ID
     const isLoadingBooking = useSubscribe('specific_booking', bookingId);
@@ -288,7 +288,7 @@ export function getSpecificBooking(bookingId, userType) {
  * @returns  {Object} - returns an object containing: boolean isLoading that is true when loading, false when finished loading.
  * The objects contain userData and the related profile image
  */
-export function getSpecificUser(username) {
+export function useSpecificUser(username) {
 
     // will always just get 1 specific user by username
     const isLoadingUser = useSubscribe('specific_user', username);

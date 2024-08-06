@@ -18,7 +18,7 @@ import ServiceAreaTab from "./artistTabs/ServiceAreaTab";
 import PreviousButton from "../../button/PreviousButton";
 import ArtistServicesTab from "../profile/artistTabs/ArtistServicesTab";
 import UrlBasePath from "../../../enums/UrlBasePath";
-import {getSpecificUser} from "../../DatabaseHelper";
+import {useSpecificUser} from "../../DatabaseHelper";
 
 /**
  * Displays a page for a specific artist (similar to profile but external view)
@@ -31,7 +31,7 @@ const SpecificArtistPage = () => {
     const {artistUsername} = useParams();
 
     // get database entry for artist information
-    const {isLoading, userData, profileImagesData} = getSpecificUser(artistUsername);
+    const {isLoading, userData, profileImagesData} = useSpecificUser(artistUsername);
 
     if (isLoading) {
         // is loading, display loader
