@@ -14,7 +14,7 @@ import {Meteor} from "meteor/meteor";
  *
  * @returns an object containing the information of the user including username, email, alias, user type.
  */
-export function getUserInfo() {
+export function useUserInfo() {
     // get current user information
     const [userInfo, setUserInfo] = useState(
         {

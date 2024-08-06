@@ -10,7 +10,7 @@ import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/outline";
 import React from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {Accounts} from "meteor/accounts-base";
-import {getUserInfo} from "../../util";
+import {useUserInfo} from "../../util";
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import Button from "../../button/Button";
 import UrlBasePath from "../../../enums/UrlBasePath";
@@ -29,7 +29,7 @@ export const EmailVerifyPage = () => {
     const [loading, setLoading] = React.useState(true);
 
     // get user information
-    const userInfo = getUserInfo();
+    const userInfo = useUserInfo();
 
     // meteor method to verify a token
     Accounts.verifyEmail(

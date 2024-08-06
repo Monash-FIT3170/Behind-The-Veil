@@ -9,7 +9,7 @@ import { useSubscribe, useTracker } from "meteor/react-meteor-data";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Mongo } from "meteor/mongo";
 
-import { getUserInfo } from "../../util";
+import { useUserInfo } from "../../util";
 import PageLayout from "/imports/ui/enums/PageLayout";
 import WhiteBackground from "/imports/ui/components/whiteBackground/WhiteBackground.jsx";
 import BackButton from "../../button/BackButton";
@@ -31,7 +31,7 @@ export const AddEditServicePage = ({ isEdit }) => {
     const [servicePrice, setServicePrice] = useState(0);
     const [serviceDescription, setServiceDescription] = useState("");
 
-    userInfo = getUserInfo();
+    userInfo = useUserInfo();
     if (userInfo.type !== "artist") {
         navigateTo(`/`);
     }

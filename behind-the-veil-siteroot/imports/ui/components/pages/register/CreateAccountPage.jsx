@@ -219,14 +219,14 @@ const CreateAccountPage = () => {
         if (id === accountType) {
             return (
                 <div className="flex flex-col items-center justify-center gap-1">
-                    <label className="main-text text-dark-grey" htmlFor="artist">{text}</label>
+                    <label className="main-text text-dark-grey" htmlFor={id}>{text}</label>
                     <input checked={true} onChange={handleChange} className={"accent-secondary-purple-hover size-5"} type="radio" id={id} name="type" value={id}/>
                 </div>
             )
         } else {
             return (
                 <div className="flex flex-col items-center justify-center gap-1">
-                    <label className="main-text text-dark-grey" htmlFor="artist">{text}</label>
+                    <label className="main-text text-dark-grey" htmlFor={id}>{text}</label>
                     <input className={"accent-secondary-purple-hover size-5"} onChange={handleChange} type="radio" id={id} name="type" value={id}/>
                 </div>
             )
