@@ -1,40 +1,64 @@
 /**
  * File Description: AddEditServices page
- * File version: 1.0
- * Contributors: Lucas
+ * File version: 1.1
+ * Contributors: Lucas, Nikki
  */
 
-import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
 
-import { getUserInfo } from "../../util";
+import {getUserInfo} from "../../util";
 import PageLayout from "/imports/ui/enums/PageLayout";
 import WhiteBackground from "/imports/ui/components/whiteBackground/WhiteBackground.jsx";
 import BackButton from "../../button/BackButton";
 import Input from "../../input/Input";
 import Button from "../../button/Button";
 
-import { CheckIcon, XMarkIcon, TrashIcon } from "@heroicons/react/24/outline";
+import {CheckIcon, TrashIcon, XMarkIcon} from "@heroicons/react/24/outline";
+import UrlBasePath from "../../../enums/UrlBasePath";
+import {Modal} from "react-responsive-modal";
 
-export const AddEditServicePage = ({ isEdit }) => {
+export const AddEditServicePage = ({isEdit}) => {
     const navigateTo = useNavigate();
 
+    // text for title/save button
     const title = isEdit ? "Edit Service" : "Add New Service";
     const button = isEdit ? "Edit Service" : "Add Service";
 
+    // input and error variables
     const [serviceName, setServiceName] = useState("");
     const [serviceType, setServiceType] = useState("None");
     const [serviceDuration, setServiceDuration] = useState(0);
     const [servicePrice, setServicePrice] = useState(0);
     const [serviceDescription, setServiceDescription] = useState("");
 
-    // check user owns service + user is an artist, else redirect to home
+    const [errors, setErrors] = useState({
+        serviceName: "",
+        serviceType: "",
+        serviceDuration: "",
+        servicePrice: "",
+        serviceDescription: "",
+        images: ""
+    })
+
+    // end status modal
+    const [open, setOpen] = useState(false);
+    const onOpenModal = () => setOpen(true);
+    const onCloseModal = () => setOpen(false);
+    const [isSuccess, setSuccess] = useState(false);
+
+    // get current user information
     const userInfo = getUserInfo();
+
+    // if user is not an artist, navigate them away
     if (userInfo.type !== "artist") {
         navigateTo(`/`);
     }
 
-    const serviceId = isEdit ? useLocation().pathname.split("/")[2] : "";
+    // get service ID from url
+    const {serviceId} = isEdit ? useParams() : "";
+
+    // load in existing service information if it is editing
     useEffect(() => {
         if (isEdit) {
             const retrieveService = () => {
@@ -51,7 +75,7 @@ export const AddEditServicePage = ({ isEdit }) => {
 
             retrieveService().then((service) => {
                 if (service.artistUsername !== userInfo.username) {
-                    navigateTo(`/`);
+                    navigateTo("/" + UrlBasePath.PROFILE);
                 }
                 setServiceName(service.serviceName);
                 setServiceType(service.serviceType);
@@ -63,12 +87,16 @@ export const AddEditServicePage = ({ isEdit }) => {
     }, []);
 
     const [filesArray, setFilesArray] = useState([]);
-    const [fileRejected, setFileRejected] = useState(false);
     const [images, setImages] = useState([]);
     const allowedFileTypeExtensions = [".png", ".jpg", ".jpeg"];
 
+    /**
+     * function to read uploaded file and preview it
+     * @param file - file read
+     */
     const readAndPreview = (file) => {
         const reader = new FileReader();
+
         reader.addEventListener(
             "load",
             () => {
@@ -84,7 +112,8 @@ export const AddEditServicePage = ({ isEdit }) => {
                             className={"flex justify-center items-center w-12"}
                             onClick={() => removeFile(file)}
                         >
-                            <XMarkIcon className="size-5 hover:bg-white-hover active:bg-light-grey-hover transition duration-200 ease-in-out"></XMarkIcon>
+                            <XMarkIcon
+                                className="size-5 hover:bg-white-hover active:bg-light-grey-hover transition duration-200 ease-in-out"></XMarkIcon>
                         </button>
                     </div>
                 );
@@ -107,11 +136,13 @@ export const AddEditServicePage = ({ isEdit }) => {
     };
 
     const handleFileChange = (event) => {
-        setFileRejected(false);
         const files = Array.from(event.target.files);
+
         const validFiles = files.filter((file) => {
             if (!allowedFileTypeExtensions.some((ext) => file.name.endsWith(ext))) {
-                setFileRejected(true);
+                let newError = {...errors}
+                newError.image = "Invalid file format not accepted (Accepted: png, jgp and jpeg)";
+                setErrors(newError);
                 return false;
             }
             return true;
@@ -119,116 +150,237 @@ export const AddEditServicePage = ({ isEdit }) => {
 
         if (validFiles) {
             setFilesArray((prevFiles) => {
-                const newFiles = Array.from(new Set([...prevFiles, ...validFiles]));
-                return newFiles;
+                return Array.from(new Set([...prevFiles, ...validFiles]));
             });
             validFiles.forEach(readAndPreview);
         }
     };
 
-    const AddEdit = () => {
-        const service = {
-            serviceName: serviceName,
-            serviceType: serviceType,
-            serviceDuration: serviceDuration,
-            servicePrice: servicePrice,
-            serviceDesc: serviceDescription,
-            artistUsername: userInfo.username,
-        };
-        if (isEdit) {
-            Meteor.call("update_service_details", serviceId, service);
-        } else {
-            Meteor.call(
-                "add_service",
-                service.serviceType,
-                service.serviceName,
-                service.serviceDesc,
-                service.servicePrice,
-                service.serviceDuration,
-                service.artistUsername
-            );
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        // input validation
+        let newErrors = {};
+        let isError = false;
+
+        // Check for empty fields in each field. Make sure nothing is empty
+        if (!serviceName) {
+            newErrors.serviceName = "Please input a serviceName";
+            isError = true;
+        }
+        if (serviceType === "None") {
+            newErrors.serviceType = "Please select a service type"
+            isError = true;
+        }
+        if (servicePrice <= 0) {
+            newErrors.servicePrice = "Please input a valid service price"
+            isError = true;
+        }
+        if (serviceDuration <= 0 || serviceDuration > 24) {
+            newErrors.serviceDuration = "Please input a valid service duration between (0.5 - 24 hours)"
+            isError = true;
+        }
+        if (!serviceDescription) {
+            newErrors.serviceDescription = "Please input a service description"
+            isError = true;
+        }
+        if (images.length === 0) {
+            newErrors.images = "You must select an image for your service"
+            isError = true;
         }
 
-        console.log(service);
+        console.log(newErrors)
+        setErrors(newErrors);
+
+        if (!isError) {
+
+            const service = {
+                serviceName: serviceName,
+                serviceType: serviceType,
+                serviceDuration: serviceDuration,
+                servicePrice: servicePrice,
+                serviceDesc: serviceDescription,
+                artistUsername: userInfo.username,
+            };
+
+            // edit
+            new Promise((resolve, reject) => {
+
+                if (isEdit) {
+                    Meteor.call("update_service_details", serviceId, service,
+                        (error, result) => {
+                            if (error) {
+                                reject(`Error: ${error.message}`);
+                                setSuccess(false)
+
+                            } else {
+                                resolve(result);
+                                setSuccess(true)
+                            }
+                        });
+                } else {
+
+                    Meteor.call("add_service",
+                        serviceType,
+                        serviceName,
+                        serviceDescription,
+                        servicePrice,
+                        serviceDuration,
+                        userInfo.username,
+                        (error, result) => {
+                            if (error) {
+                                reject(`Error: ${error.message}`);
+                                setSuccess(false)
+
+                            } else {
+                                resolve(result);
+                                setSuccess(true)
+                            }
+                        });
+                }
+
+
+            }).catch(() => {
+                // there was an error
+                setSuccess(false)
+            });
+
+            onOpenModal()
+        }
     };
 
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-            <BackButton />
+            <BackButton to={"/" + UrlBasePath.PROFILE}/>
             <div className="flex items-center justify-center">
-                <div className="flex flex-col w-[60%] gap-2">
+                <div className="flex flex-col w-[60%] gap-6">
                     <p className="title-text">{title}</p>
-                    <Input
-                        type="text"
-                        label={<label className="main-text">Service Name</label>}
-                        value={serviceName}
-                        onChange={(e) => setServiceName(e.target.value)}
-                    />
-                    <label className="main-text" for="type">
-                        Service Type
-                    </label>
-                    <select
-                        value={serviceType}
-                        className="flex flex-col gap-1 input-base"
-                        name="type"
-                        onChange={(e) => setServiceType(e.target.value)}
-                    >
-                        <option value="None">Please select an option</option>
-                        <option value="Hair">Hair</option>
-                        <option value="Makeup">Makeup</option>
-                    </select>
-                    <Input
-                        className="md:w-[18%]"
-                        type="number"
-                        min="0"
-                        step="0.5"
-                        label={<label className="main-text">Duration (Hours)</label>}
-                        value={serviceDuration}
-                        onChange={(e) => setServiceDuration(e.target.value)}
-                    />
-                    <Input
-                        className="md:w-[18%]"
-                        type="number"
-                        min="0"
-                        label={<label className="main-text">Price (AUD)</label>}
-                        value={servicePrice}
-                        onChange={(e) => setServicePrice(e.target.value)}
-                    />
-                    <Input
-                        type="text"
-                        label={<label className="main-text">Description</label>}
-                        value={serviceDescription}
-                        onChange={(e) => setServiceDescription(e.target.value)}
-                    />
-                    <div className="flex flex-row">
+
+                    <div className="flex flex-col gap-1">
                         <Input
-                            className="text-opacity-0 border-r-0 rounded-r-none w-[130px]"
-                            type="file"
-                            accept={allowedFileTypeExtensions?.join(",")}
-                            label={<label className="main-text">Photos</label>}
-                            onChange={handleFileChange}
-                            multiple
+                            type="text"
+                            label={<label className="main-text">Service Name</label>}
+                            value={serviceName}
+                            onChange={(e) => setServiceName(e.target.value)}
                         />
-                        <TrashIcon
-                            className="input-base border-l-0 rounded-l-none h-[48px] w-[48px] mt-[28px] size-5 hover:bg-white-hover active:bg-light-grey-hover transition duration-200 ease-in-out"
-                            onClick={removeAllFiles}
-                        ></TrashIcon>
+                        {errors.serviceName && <span className="text-cancelled-colour">{errors.serviceName}</span>}
                     </div>
-                    <div className="grid grid-cols-2 gap-2" id="preview">
+
+                    <div className="flex flex-col gap-1">
+                        <div className="flex flex-col gap-1">
+                            <label className="main-text" htmlFor="type">Service Type</label>
+                            <select
+                                name="type"
+                                value={serviceType}
+                                className="flex flex-col gap-1 input-base  md:w-1/2 md:max-w-72"
+                                onChange={(e) => setServiceType(e.target.value)}
+                            >
+                                <option value="None">Please select an option</option>
+                                <option value="Hair">Hair</option>
+                                <option value="Makeup">Makeup</option>
+                            </select>
+                        </div>
+                        {errors.serviceType && <span className="text-cancelled-colour">{errors.serviceType}</span>}
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                        <Input
+                            className="md:w-1/2 md:max-w-72"
+                            type="number"
+                            min="0"
+                            step="0.5"
+                            label={<label className="main-text">Duration (Hours)</label>}
+                            value={serviceDuration}
+                            onChange={(e) => setServiceDuration(e.target.value)}
+                        />
+                        {errors.serviceDuration &&
+                            <span className="text-cancelled-colour">{errors.serviceDuration}</span>}
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                        <Input
+                            className="md:w-1/2 md:max-w-72"
+                            type="number"
+                            min="0.00"
+                            step='0.50'
+                            label={<label className="main-text">Price (AUD)</label>}
+                            value={servicePrice}
+                            onChange={(e) => setServicePrice(e.target.value)}
+                        />
+                        {errors.servicePrice && <span className="text-cancelled-colour">{errors.servicePrice}</span>}
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                        <label className="main-text">Description</label>
+                        <textarea className="input-base h-48"
+                                  value={serviceDescription}
+                                  onChange={(e) => setServiceDescription(e.target.value)}
+                        />
+                        {errors.serviceDescription &&
+                            <span className="text-cancelled-colour">{errors.serviceDescription}</span>}
+                    </div>
+
+                    {/* file upload area */}
+                    <div className="flex flex-col gap-1">
+                        <div className="flex flex-row">
+                            <Input
+                                className="text-opacity-0 border-r-0 rounded-r-none w-[130px]"
+                                type="file"
+                                accept={allowedFileTypeExtensions?.join(",")}
+                                label={<label className="main-text">Photos</label>}
+                                onChange={handleFileChange}
+                                onClick={(event) => {
+                                    // this is to allow the same file to be selected again after reset
+                                    event.target.value = null
+                                }}
+                                multiple
+                            />
+                            <TrashIcon
+                                className="input-base border-l-0 rounded-l-none h-[48px] w-[48px] mt-[28px] size-5 hover:bg-white-hover active:bg-light-grey-hover transition duration-200 ease-in-out"
+                                onClick={removeAllFiles}
+                            ></TrashIcon>
+                        </div>
+                        {errors.images && <span className="text-cancelled-colour">{errors.images}</span>}
+                    </div>
+
+
+                    <div className="grid md:grid-cols-2 gap-5" id="preview">
                         {images}
                     </div>
 
                     <Button
                         className="flex bg-secondary-purple hover:bg-secondary-purple-hover mt-[15px]"
-                        onClick={AddEdit}
+                        onClick={handleSubmit}
                     >
-                        <CheckIcon className="size-[25px]" />
+                        <CheckIcon className="icon-base"/>
                         {button}
                     </Button>
                 </div>
             </div>
+
+            <Modal classNames={{
+                modal: "w-[480px] h-[300px] rounded-[45px] bg-glass-panel-background border border-main-blue"
+            }} open={open} onClose={onCloseModal} center showCloseIcon={false}>
+                <div className="flex flex-col justify-center items-center h-full gap-y-10">
+                    <h2 className="text-center title-text">
+                        {(isEdit ? "Modification" : "Creation") + " was " + (isSuccess ? "Successful" : "Failed")}
+                    </h2>
+                    <Button
+                        className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[25px] pe-[25px] flex gap-1"
+                        onClick={() => {
+                            onCloseModal()
+                            if (isSuccess) {
+                                navigateTo("/" + UrlBasePath.PROFILE)
+                            }
+                        }}>
+                        <CheckIcon className="icon-base"/>
+                        Confirm
+                    </Button>
+                </div>
+            </Modal>
         </WhiteBackground>
-    );
+    )
+        ;
 };
 
 export default AddEditServicePage;

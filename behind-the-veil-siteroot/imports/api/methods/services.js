@@ -29,8 +29,8 @@ Meteor.methods({
         });
     },
 
-    get_service: function (serviceid) {
-        const service = ServiceCollection.findOne({ _id: serviceid });
+    get_service: function (serviceId) {
+        const service = ServiceCollection.findOne({ _id: serviceId });
 
         if (!service) {
             throw new Meteor.Error("service-not-found", "Service not found.");
