@@ -41,7 +41,7 @@ export const ArtistBookingsTab = ({username}) => {
             { "artistUsername": username }
         ]
     }
-    const [isLoading, bookingsData] = getBookings("all_user_bookings", [username], bookingFilter);
+    const {isLoading, bookingsData} = getBookings("all_user_bookings", [username], bookingFilter);
 
     // filters
     const availableFilters = Object.values(BookingFilter);
@@ -59,14 +59,14 @@ export const ArtistBookingsTab = ({username}) => {
         <div
             className="w-full sm:w-2/5 flex flex-wrap sm:flex-nowrap gap-5 items-center justify-center sm:justify-start">
             {
-                availableFilters.map((filter, index) => {
+                availableFilters.map((filter) => {
                     const baseStyle = "w-1/2 min-w-28 rounded-md p-2 hover:bg-secondary-purple";
                     const activeStyle = "bg-secondary-purple";
                     const className = selectedFilter === filter ? `${baseStyle} ${activeStyle}` : baseStyle;
 
                     return (
                         <Button
-                            key={index}
+                            key={filter}
                             className={className}
                             onClick={() => setSelectedFilter(filter)}>
                             {filter}

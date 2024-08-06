@@ -18,8 +18,8 @@ import BookingCollection from "../../api/collections/bookings";
  * @param filter - the filter used to filter for the specific subset of services (from the subscribed publication) this is an
  * object with key=service attribute name, value=filter value; e.g. { artistUsername: "abcd123" }
  * @param requireArtist - whether artist data is required
- * @returns [boolean, Object] - returns a boolean isLoading that is true when loading, false when finished loading. The object
- * contains the serviceData joined with its serviceImage and (if required) artistData
+ * @returns {Object} - returns an object containing: boolean isLoading that is true when loading, false when finished loading.
+ * The serviceData object joined with its serviceImage and (if required) artistData
  */
 export function getServices(service_publication, params, filter, requireArtist = false) {
 
@@ -79,9 +79,7 @@ export function getServices(service_publication, params, filter, requireArtist =
             servicesData[i].serviceImageData = "/imageNotFound.png";
         }
     }
-    console.log("servicesData", servicesData)
-
-    return [isLoading, servicesData]
+    return {isLoading, servicesData}
 }
 
 /**
@@ -91,8 +89,8 @@ export function getServices(service_publication, params, filter, requireArtist =
  * @param params - the parameters used for that booking publication, such as username, etc.
  * @param filter - the filter used to filter for the specific subset of booking (from the subscribed publication) this is an
  * object with key=booking attribute name, value=filter value; e.g. { username: "abcd123" }
- * @returns {[boolean, Object]} - returns a boolean isLoading that is true when loading, false when finished loading. The object
- * contains the bookingData joined with its serviceData and serviceImage
+ * @returns {Object} - returns an object containing: boolean isLoading that is true when loading, false when finished loading.
+ * The bookingData object joined with its serviceData and serviceImage
  */
 export function getBookings(booking_publication, params, filter) {
 
@@ -138,10 +136,10 @@ export function getBookings(booking_publication, params, filter) {
             }
         }
     }
-
-    console.log("bookingsData", bookingsData)
-
-    return [isLoading, bookingsData]
+    return {
+        isLoading: isLoading,
+        bookingsData: bookingsData
+    }
 }
 
 /**
@@ -151,8 +149,8 @@ export function getBookings(booking_publication, params, filter) {
  * @param params - the parameters used for that user publication, such as username, etc.
  * @param filter - the filter used to filter for the specific subset of user (from the subscribed publication) this is an
  * object with key=user attribute name, value=filter value; e.g. { username: "abcd123" }
- * @returns {[boolean, Object]} - returns a boolean isLoading that is true when loading, false when finished loading. The object
- * contains the userData joined with its profile image data.
+ * @returns {Object} - returns an object containing: boolean isLoading that is true when loading, false when finished loading.
+ * The userData object joined with its profile image data.
  */
 export function getUsers(user_publication, params, filter) {
 
@@ -181,16 +179,14 @@ export function getUsers(user_publication, params, filter) {
             }
         }
     }
-    console.log("usersData", usersData)
-
-    return [isLoading, usersData]
+    return {isLoading, usersData}
 }
 
 /**
  * Loads a specific service with its relevant service and user data
  *
  * @param serviceId - ID of the service to get data
- * @returns {[boolean, Object, Object, Object, Object]} - returns a boolean isLoading that is true when loading, false when finished loading.
+ * @returns {Object} - returns an object containing: boolean isLoading that is true when loading, false when finished loading.
  * The objects contain serviceData and serviceImagesData as well as related artistData and their profile image data.
  */
 export function getSpecificService(serviceId) {
@@ -234,10 +230,7 @@ export function getSpecificService(serviceId) {
     });
 
     const isLoading = isLoadingService() || isLoadingArtist() || isLoadingServiceImages() || isLoadingArtistProfile();
-
-    console.log("service data", [serviceData, artistData, serviceImagesData, profileImageData])
-
-    return [isLoading, serviceData, artistData, serviceImagesData, profileImageData]
+    return {isLoading, serviceData, artistData, serviceImagesData, profileImageData}
 }
 
 /**
@@ -245,7 +238,7 @@ export function getSpecificService(serviceId) {
  *
  * @param bookingId - ID of the booking to get data
  * @param userType - type of current user: either bride or artist
- * @returns {[boolean, Object, Object, Object]} - returns a boolean isLoading that is true when loading, false when finished loading.
+ * @returns  {Object} - returns an object containing: boolean isLoading that is true when loading, false when finished loading.
  * The objects contain bookingData and the related serviceData and userData
  */
 export function getSpecificBooking(bookingId, userType) {
@@ -285,17 +278,14 @@ export function getSpecificBooking(bookingId, userType) {
 
     const isLoading = isLoadingBooking() || isLoadingService() || isLoadingUser();
 
-    console.log("booking data", [bookingData, serviceData, userData])
-
-    return [isLoading, bookingData, serviceData, userData]
+    return {isLoading, bookingData, serviceData, userData}
 }
 
 /**
  * Loads a specific booking with its relevant service and user data
  *
  * @param username - username of the user to get data
- *
- * @returns {[boolean, Object, Object]} - returns a boolean isLoading that is true when loading, false when finished loading.
+ * @returns  {Object} - returns an object containing: boolean isLoading that is true when loading, false when finished loading.
  * The objects contain userData and the related profile image
  */
 export function getSpecificUser(username) {
@@ -319,8 +309,6 @@ export function getSpecificUser(username) {
 
     const isLoading = isLoadingUser() || isLoadingProfileImages();
 
-    console.log("user data", [userData, profileImagesData])
-
-    return [isLoading, userData, profileImagesData]
+    return {isLoading, userData, profileImagesData}
 }
 

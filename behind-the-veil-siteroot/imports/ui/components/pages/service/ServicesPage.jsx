@@ -24,7 +24,7 @@ export const ServicesPage = () => {
 
     // set up subscription (publication is in the "publication" folder)
     const serviceFilter = { serviceActive: true }
-    const [isLoading, servicesData] = getServices("active_services", [], serviceFilter, true )
+    const {isLoading, servicesData} = getServices("active_services", [], serviceFilter, true )
 
     // map data into service cards
     const displayedServicesJsx = servicesData.map((service) => (

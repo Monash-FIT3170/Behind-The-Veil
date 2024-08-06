@@ -31,7 +31,7 @@ const SpecificArtistPage = () => {
     const {artistUsername} = useParams();
 
     // get database entry for artist information
-    const [isLoading, artistData, artistImageData] = getSpecificUser(artistUsername);
+    const {isLoading, userData, profileImagesData} = getSpecificUser(artistUsername);
 
     if (isLoading) {
         // is loading, display loader
@@ -64,9 +64,9 @@ const SpecificArtistPage = () => {
                 </div>
 
                 {/*Top div where user's info*/}
-                <ProfileDisplay imageData={artistImageData ? artistImageData.imageData : null}
-                                userAlias={artistData.profile.alias}
-                                userUsername={artistData.username}
+                <ProfileDisplay imageData={profileImagesData ? profileImagesData.imageData : null}
+                                userAlias={userData.profile.alias}
+                                userUsername={userData.username}
                 />
 
                 {/* if the page is too small, the message button moves under the artist's name/image */}
@@ -91,8 +91,8 @@ const SpecificArtistPage = () => {
                         tabPanels={[
                             <ArtistServicesTab external={true} key={"services"} username={artistUsername}/>,
                             <ServiceAreaTab key={"service-area"}
-                                            serviceLocation={artistData.profile.artistServiceLocation}
-                                            serviceRadius={artistData.profile.artistServiceRadius} />,
+                                            serviceLocation={userData.profile.artistServiceLocation}
+                                            serviceRadius={userData.profile.artistServiceRadius} />,
                             <span key={3}>Gallery - link to normal Gallery tab AFTER it is done (do not create a new one)</span>,
                             <span key={4}>Reviews</span>,
                         ]}

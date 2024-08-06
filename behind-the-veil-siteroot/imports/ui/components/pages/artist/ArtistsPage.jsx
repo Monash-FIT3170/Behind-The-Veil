@@ -24,10 +24,10 @@ export const ArtistsPage = () => {
 
     // get artist data
     const userFilter = {"profile.type": "artist"}
-    const [isLoading, artistsData] = getUsers("all_artists", [], userFilter)
+    const {isLoading, usersData} = getUsers("all_artists", [], userFilter)
 
     // map data into artist cards
-    const displayedArtistJsx = artistsData.map((user) => (
+    const displayedArtistJsx = usersData.map((user) => (
         <ArtistCard
             key={user.username}
             artistUsername={user.username}

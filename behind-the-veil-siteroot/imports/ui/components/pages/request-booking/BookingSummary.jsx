@@ -90,7 +90,7 @@ const BookingSummary = () => {
                     if (key === 'Date') {
                         value = value[2]
                     }
-                    return <FormOutput key={index} textColor="text-dark-grey" haveHelpText={false} label={key} input={value}></FormOutput>;
+                    return <FormOutput key={key} textColor="text-dark-grey" haveHelpText={false} label={key} input={value}></FormOutput>;
                 })}
                 {/* Display deposit required */}
                 <FormOutput className='deposit-input' key={queryData().length} label='Deposit Required' input='$120.00' textColor="text-cancelled-colour" haveHelpText={true} tipText={tipText} />

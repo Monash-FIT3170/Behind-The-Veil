@@ -21,14 +21,13 @@ import {getBookings} from "../../DatabaseHelper";
 export const BrideProfileTabs = ({userInfo}) => {
 
     // get bookings information from database
-    // get bookings information from database
     const bookingFilter = {
         $or: [
             { "brideUsername": userInfo.username },
             { "artistUsername": userInfo.username }
         ]
     }
-    const [isLoading, bookingsData] = getBookings("all_user_bookings", [userInfo.username], bookingFilter);
+    const {isLoading, bookingsData} = getBookings("all_user_bookings", [userInfo.username], bookingFilter);
 
     // wait for bookings data to be loaded
     if (isLoading) {
@@ -74,9 +73,9 @@ export const BrideProfileTabs = ({userInfo}) => {
 
         // map every booking to a JSX object
         for (let status in bookings) {
-            bookings[status] = bookings[status].map((booking, index) => (
+            bookings[status] = bookings[status].map((booking) => (
                 <BookingCard
-                    key={index}
+                    key={booking._id}
                     bookingId={booking._id}
                     serviceName={booking.serviceName}
                     serviceDesc={booking.serviceDesc}

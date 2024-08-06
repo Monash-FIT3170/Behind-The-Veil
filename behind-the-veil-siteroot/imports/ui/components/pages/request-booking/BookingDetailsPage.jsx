@@ -43,7 +43,7 @@ const BookingDetailsPage = () => {
     const {bookingId} = useParams();
 
     // get bookings information from database
-    const [isLoading, bookingData, serviceData, userData] = getSpecificBooking(bookingId, userInfo.type);
+    const {isLoading, bookingData, serviceData, userData} = getSpecificBooking(bookingId, userInfo.type);
 
     if (isLoading) {
         // is loading, display loader

@@ -47,7 +47,7 @@ export const ArtistServicesTab = ({username, external = false}) => {
         servicePublication = "all_user_services"
         serviceFilter = { artistUsername: username }
     }
-    const [isLoading, servicesData] = getServices(servicePublication, [username], serviceFilter)
+    const {isLoading, servicesData} = getServices(servicePublication, [username], serviceFilter)
 
 
     // Creating the state of the filter for the service cards (defaults to All)
