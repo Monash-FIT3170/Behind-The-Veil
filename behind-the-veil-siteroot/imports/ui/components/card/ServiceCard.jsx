@@ -7,12 +7,11 @@
 import React from "react";
 import classNames from "classnames";
 import { useNavigate } from "react-router-dom";
-
 import { CalendarDaysIcon, PencilIcon } from "@heroicons/react/24/outline";
 
 import Card from "./Card";
 import Button from "../button/Button";
-import urlBasePath from "../../enums/UrlBasePath";
+import urlBasePath, {UrlBasePath} from "../../enums/UrlBasePath";
 
 /**
  * Component that displays brief service details on the Services page
@@ -61,7 +60,7 @@ export const ServiceCard = ({
         mainButton = (
             <Button
                 className={buttonBaseClasses}
-                onClick={() => navigateTo(`/${urlBasePath.SERVICES}/${serviceId}/editservice`)}
+                onClick={() => navigateTo(`/${UrlBasePath.PROFILE}/editService/${serviceId}`)}
             >
                 <PencilIcon className="icon-base" />
                 {viewOrEditButton}
