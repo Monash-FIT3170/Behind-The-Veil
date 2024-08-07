@@ -17,6 +17,7 @@ import PaginationExample from "./pagination-example/PaginationExample";
 import InputExamples from "./input-examples/InputExamples.jsx";
 import LoaderExamples from "./loaderExamples/LoaderExamples";
 import ModalExamples from "./modal-examples/ModalExamples";
+import PopupExamples from "./popup-examples/PopupExamples.jsx";
 
 /**
  * Page to showcase examples
@@ -35,6 +36,7 @@ const Examples = () => {
             <MapExamples/>
             <PaginationExample/>
             <LoaderExamples/>
+            <PopupExamples />
         </WhiteBackground>
     );
 };
