@@ -43,7 +43,26 @@ Meteor.methods({
         UserCollection.update(userId, {$set: {"profile.alias": newAlias}});
     },
 
-
+    /**
+     * Updates the service area for the current user.
+     * This method sets the service location and radius for the artistuser's profile.
+     * The method requires the user to be logged in.
+     * 
+     * @param {string} userId - The ID of the user for whom to update the service area.
+     * @param {string} text - The new service location as a text string.
+     * @param {number} radius - The new service radius in the desired unit
+     */
+    'update_service_area': function (userId ,text, radius) {
+        UserCollection.update(
+            { _id: userId },
+            {
+                $set: {
+                    'profile.artistServiceLocation': text.trim(),
+                    'profile.artistServiceRadius': radius
+                }
+            },
+        );
+    }
 
 })
 
