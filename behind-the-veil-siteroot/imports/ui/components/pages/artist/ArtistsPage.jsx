@@ -5,9 +5,12 @@
  */
 
 import React, {useState} from 'react';
+import {useLocation} from "react-router-dom";
+import URLSearchParams from "@ungap/url-search-params";
+import {removeStopwords} from "stopword";
 
-import PageLayout from "../../../enums/PageLayout";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
+import PageLayout from "../../../enums/PageLayout";
 import ArtistCard from "../../card/ArtistCard";
 import Pagination from "../../pagination/Pagination";
 import SearchBar from "/imports/ui/components/searchBar/searchBar.jsx";
@@ -26,23 +29,36 @@ export const ArtistsPage = () => {
     const userFilter = {"profile.type": "artist"}
     const {isLoading, usersData} = useUsers("all_artists", [], userFilter)
 
-    // map data into artist cards
-    const displayedArtistJsx = usersData.map((user) => (
-        <ArtistCard
-            key={user.username}
-            artistUsername={user.username}
-            artistAlias={user.profile.alias}
-            artistProfileImageData={user.profileImageData}/>)
-    )
+    // get any search parameters and filter
+    let searchInput = new URLSearchParams(useLocation().search).get("search");
+    searchInput = searchInput ? searchInput.trim() : ''
+
+    // filter then map data into artist cards
+    const displayedArtistJsx = usersData
+        .filter((user) => {
+            return user.profile.alias.includes(searchInput) || user.username.includes(searchInput)
+        })
+        .map((user) => (
+            <ArtistCard
+                key={user.username}
+                artistUsername={user.username}
+                artistAlias={user.profile.alias}
+                artistProfileImageData={user.profileImageData}/>)
+        )
+
     // checks if the page and data has loaded
     if (document.readyState === "complete" && !isLoading) {
+
         return (
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
                 <span className={"title-text text-center"}>Artists</span>
 
-                {/*todo: functional search bar*/}
                 <div className="flex flex-col items-center mb-10">
-                    <SearchBar/>
+                    <SearchBar placeholder={"Search artist name or username"}
+                               defaultType={"artists"}
+                               startingValue={searchInput}
+                               suggestionsDown={true}
+                    />
                 </div>
 
                 <div className="flex flex-col items-center justify-center gap-y-5">
@@ -73,11 +89,6 @@ export const ArtistsPage = () => {
         return (
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
                 <span className={"title-text text-center"}>Artists</span>
-
-                {/*todo: functional search bar*/}
-                <div className="flex flex-col items-center mb-10">
-                    <SearchBar/>
-                </div>
 
                 <Loader
                     loadingText={"Artists are loading . . ."}
