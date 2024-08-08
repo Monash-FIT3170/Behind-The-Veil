@@ -1,17 +1,12 @@
 /**
  * File Description: Artist bookings tab
- * File version: 1.2
+ * File version: 1.3
  * Contributors: Kefei (Phillip) Li, Laura, Nikki
  */
 
 import React, {useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import {PlusIcon,} from "@heroicons/react/24/outline";
-import {useSubscribe, useTracker} from "meteor/react-meteor-data";
-
-import BookingCollection from "../../../../../api/collections/bookings";
-import ImageCollection from "../../../../../api/collections/images";
-import ServiceCollection from "../../../../../api/collections/services";
 
 import Button from "../../../button/Button";
 import BookingCard from "../../../card/BookingCard";
@@ -20,6 +15,7 @@ import BookingFilter from "../../../../enums/ArtistBookingsFilter";
 import BookingListView from "../../../booking/BookingListView";
 import BookingCalendarView from "../../../booking/BookingCalendarView";
 import Loader from "../../../loader/Loader";
+import {useBookings} from "../../../DatabaseHelper";
 
 
 /**
@@ -39,51 +35,13 @@ export const ArtistBookingsTab = ({username}) => {
     };
 
     // get bookings information from database
-    const isLoadingBooking = useSubscribe('all_user_bookings', username);
-    const isLoadingService = useSubscribe('all_services');
-    const isLoadingServiceImage = useSubscribe('service_images');
-
-    let bookingsData = useTracker(() => {
-
-        return BookingCollection.find({
-            $or: [
-                { "brideUsername": username },
-                { "artistUsername": username }
-            ]
-        }).fetch();
-    });
-
-    let servicesData = useTracker(() => {
-        return ServiceCollection.find().fetch();
-    });
-
-    let imagesData = useTracker(() => {
-        return ImageCollection.find({"imageType": "service"}).fetch();
-    });
-
-    const isLoading = isLoadingBooking() || isLoadingService() || isLoadingServiceImage();
-
-    // manual aggregation into bookingsData with its services and images
-    for (let i = 0; i < bookingsData.length; i++) {
-
-        // aggregate with service first
-        for (let j = 0; j < servicesData.length; j++) {
-            // find matching service ID
-            if (bookingsData[i].serviceId === servicesData[j]._id) {
-                bookingsData[i].serviceName = servicesData[j].serviceName;
-                bookingsData[i].serviceDesc = servicesData[j].serviceDesc;
-                break;
-            }
-        }
-        // then aggregate with the FIRST service image (cover)
-        for (let j = 0; j < imagesData.length; j++) {
-            // find matching image for the service
-            if (imagesData[j].imageType === "service" && bookingsData[i].serviceId === imagesData[j].target_id) {
-                bookingsData[i].serviceImageData = imagesData[j].imageData;
-                break;
-            }
-        }
+    const bookingFilter = {
+        $or: [
+            { "brideUsername": username },
+            { "artistUsername": username }
+        ]
     }
+    const {isLoading, bookingsData} = useBookings("all_user_bookings", [username], bookingFilter);
 
     // filters
     const availableFilters = Object.values(BookingFilter);
@@ -101,14 +59,14 @@ export const ArtistBookingsTab = ({username}) => {
         <div
             className="w-full sm:w-2/5 flex flex-wrap sm:flex-nowrap gap-5 items-center justify-center sm:justify-start">
             {
-                availableFilters.map((filter, index) => {
+                availableFilters.map((filter) => {
                     const baseStyle = "w-1/2 min-w-28 rounded-md p-2 hover:bg-secondary-purple";
                     const activeStyle = "bg-secondary-purple";
                     const className = selectedFilter === filter ? `${baseStyle} ${activeStyle}` : baseStyle;
 
                     return (
                         <Button
-                            key={index}
+                            key={filter}
                             className={className}
                             onClick={() => setSelectedFilter(filter)}>
                             {filter}
