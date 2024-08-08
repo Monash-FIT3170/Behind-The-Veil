@@ -194,7 +194,6 @@ export const AddEditServicePage = ({isEdit}) => {
             isError = true;
         }
 
-        console.log(newErrors)
         setErrors(newErrors);
 
         if (!isError) {
@@ -365,14 +364,15 @@ export const AddEditServicePage = ({isEdit}) => {
             </div>
 
             <Modal classNames={{
-                modal: "w-[480px] h-[300px] rounded-[45px] bg-glass-panel-background border border-main-blue"
+                modal: "w-[550px] h-[300px] rounded-[45px] bg-glass-panel-background border border-main-blue"
             }} open={open} onClose={onCloseModal} center showCloseIcon={false}>
                 <div className="flex flex-col justify-center items-center h-full gap-y-10">
-                    <h2 className="text-center title-text">
-                        {(isEdit ? "Modification" : "Creation") + " was " + (isSuccess ? "Successful" : "Failed")}
+                    <h2 className="text-center title-text px-4">
+                        {(isEdit ? "Modification" : "Creation") + (isSuccess ? "was Successful" : " Failed")}
                     </h2>
                     <Button
-                        className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[25px] pe-[25px] flex gap-1"
+                        className={"btn-base ps-[25px] pe-[25px] flex gap-1 " +
+                            (isSuccess ? "bg-secondary-purple hover:bg-secondary-purple-hover" : "")}
                         onClick={() => {
                             onCloseModal()
                             if (isSuccess) {
@@ -380,7 +380,7 @@ export const AddEditServicePage = ({isEdit}) => {
                             }
                         }}>
                         <CheckIcon className="icon-base"/>
-                        Confirm
+                        {isSuccess ? "Confirm" : "Close"}
                     </Button>
                 </div>
             </Modal>

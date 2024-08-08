@@ -45,8 +45,6 @@ export const ServiceCard = ({
     // variables to handle routing
     const navigateTo = useNavigate();
 
-    let a = (<div className={"min-w-80"}></div>)
-
     const classes = classNames(className, "flex flex-col justify-between w-full min-w-60 lg:w-2/5 lg:min-w-[350px] min-h-56");
 
     // set button style depending on whether isEdit mode or not
