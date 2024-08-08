@@ -101,9 +101,9 @@ const SpecificServicePage = () => {
 
                                 {/* Image */}
                                 <img className="rounded-2xl object-contain
-                                 h-full w-4/5
+                                 h-[600px] w-4/5
                                  sm:min-w-[500px]
-                                 xl:min-w-[300px] xl:max-w-[400px] xl:max-h-[600px]
+                                 xl:min-w-[300px] xl:max-w-[400px]
                                  2xl:min-w-[500px] 2xl:max-w-[600px]"
                                      src={imageUrls[currentImageIndex]}
                                      alt="Service image"

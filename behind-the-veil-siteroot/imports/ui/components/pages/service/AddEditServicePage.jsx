@@ -89,6 +89,8 @@ export const AddEditServicePage = ({isEdit}) => {
     const [filesArray, setFilesArray] = useState([]);
     const [images, setImages] = useState([]);
     const allowedFileTypeExtensions = [".png", ".jpg", ".jpeg"];
+    const [fileRejected, setFileRejected] = useState(false);
+    const [fileRejectedMessage, setFileRejectedMessage] = useState("");
 
     /**
      * function to read uploaded file and preview it
@@ -136,22 +138,25 @@ export const AddEditServicePage = ({isEdit}) => {
     };
 
     const handleFileChange = (event) => {
+        setFileRejected(false);
         const files = Array.from(event.target.files);
 
         const validFiles = files.filter((file) => {
-            if (!allowedFileTypeExtensions.some((ext) => file.name.endsWith(ext))) {
-                let newError = {...errors}
-                newError.image = "Invalid file format not accepted (Accepted: png, jgp and jpeg)";
-                setErrors(newError);
+            if (!allowedFileTypeExtensions.some((ext) => file.name.toLowerCase().endsWith(ext.toLowerCase()))) {
+                setFileRejected(true);
+                setFileRejectedMessage("File must be of type/s (" + allowedFileTypeExtensions.join(", ") + ")");
+                return false;
+            } else if (filesArray.some((f) => f.name === file.name && f.size === file.size)) {
+                setFileRejected(true);
+                setFileRejectedMessage("File has already been uploaded!");
                 return false;
             }
             return true;
         });
 
         if (validFiles) {
-            setFilesArray((prevFiles) => {
-                return Array.from(new Set([...prevFiles, ...validFiles]));
-            });
+
+            setFilesArray((prevFiles) => Array.from(new Set([...prevFiles, ...validFiles])));
             validFiles.forEach(readAndPreview);
         }
     };
@@ -302,7 +307,7 @@ export const AddEditServicePage = ({isEdit}) => {
                             className="md:w-1/2 md:max-w-72"
                             type="number"
                             min="0.00"
-                            step='0.50'
+                            step="0.50"
                             label={<label className="main-text">Price (AUD)</label>}
                             value={servicePrice}
                             onChange={(e) => setServicePrice(e.target.value)}
@@ -340,6 +345,7 @@ export const AddEditServicePage = ({isEdit}) => {
                                 onClick={removeAllFiles}
                             ></TrashIcon>
                         </div>
+                        {fileRejected && <span className="text-cancelled-colour">{fileRejectedMessage}</span>}
                         {errors.images && <span className="text-cancelled-colour">{errors.images}</span>}
                     </div>
 
