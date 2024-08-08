@@ -15,7 +15,7 @@ import Loader from "../../../loader/Loader";
 import Pagination from "../../../pagination/Pagination";
 import UrlBasePath from "../../../../enums/UrlBasePath.tsx";
 
-import {getServices} from "../../../DatabaseHelper";
+import {useServices} from "../../../DatabaseHelper";
 
 /**
  * Service tab of an artist's profile.
@@ -47,7 +47,7 @@ export const ArtistServicesTab = ({username, external = false}) => {
         servicePublication = "all_user_services"
         serviceFilter = { artistUsername: username }
     }
-    const [isLoading, servicesData] = getServices(servicePublication, [username], serviceFilter)
+    const {isLoading, servicesData} = useServices(servicePublication, [username], serviceFilter)
 
 
     // Creating the state of the filter for the service cards (defaults to All)

@@ -59,9 +59,14 @@ in the above command, replace:
 Example commands to import everything (with port 3001)
 
 ```
+mongoimport -h localhost:3001 --db meteor --collection services --file mockdata/services15.json --jsonArray
 mongoimport -h localhost:3001 --db meteor --collection services --file mockdata/services50.json --jsonArray
+
 mongoimport -h localhost:3001 --db meteor --collection users --file mockdata/artists50.json --jsonArray
 mongoimport -h localhost:3001 --db meteor --collection users --file mockdata/brides50.json --jsonArray
+
+mongoimport -h localhost:3001 --db meteor --collection bookings --file mockdata/bookings12.json --jsonArray
+
 mongoimport -h localhost:3001 --db meteor --collection images --file mockdata/user_images50.json --jsonArray
 mongoimport -h localhost:3001 --db meteor --collection images --file mockdata/service_images100.json --jsonArray
 ```

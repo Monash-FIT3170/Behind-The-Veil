@@ -87,3 +87,7 @@
  background-color: transparent;
  border: none !important;
 }
+
+.rbc-row-content {
+  z-index: auto;
+}

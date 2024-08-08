@@ -5,9 +5,7 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { useSubscribe, useTracker } from "meteor/react-meteor-data";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Mongo } from "meteor/mongo";
 
 import { useUserInfo } from "../../util";
 import PageLayout from "/imports/ui/enums/PageLayout";
@@ -17,7 +15,6 @@ import Input from "../../input/Input";
 import Button from "../../button/Button";
 
 import { CheckIcon, XMarkIcon, TrashIcon } from "@heroicons/react/24/outline";
-import UrlBasePath from "../../../enums/UrlBasePath";
 
 export const AddEditServicePage = ({ isEdit }) => {
     const navigateTo = useNavigate();
@@ -31,7 +28,7 @@ export const AddEditServicePage = ({ isEdit }) => {
     const [servicePrice, setServicePrice] = useState(0);
     const [serviceDescription, setServiceDescription] = useState("");
 
-    userInfo = useUserInfo();
+    const userInfo = useUserInfo();
     if (userInfo.type !== "artist") {
         navigateTo(`/`);
     }
@@ -63,9 +60,6 @@ export const AddEditServicePage = ({ isEdit }) => {
             });
         }
     }, []);
-
-    // check user owns service + user is a artist, else redirect to home
-    // after rebase: const userInfo = getUserData();
 
     const [filesArray, setFilesArray] = useState([]);
     const [fileRejected, setFileRejected] = useState(false);

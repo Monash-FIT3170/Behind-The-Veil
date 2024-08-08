@@ -1,58 +1,52 @@
 /**
  * File Description: Bookings CALENDAR view for Artist's profile
- * File version: 1.0
- * Contributors: Anusha Yadav
+ * File version: 1.1
+ * Contributors: Anusha Yadav, Josh Loong
  */
 
-import React from 'react';
+import React, { useState } from "react";
 
-import { BookingStatus } from '../../enums/BookingStatus';
-import Button from "../button/Button";
-
-import WhiteBackground from "../whiteBackground/WhiteBackground.jsx";
-import PageLayout from "../../enums/PageLayout";
-
-import { Calendar, momentLocalizer } from 'react-big-calendar';
+import { Calendar, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./Calendar.css";
 import "./CalendarToolbar.css";
-import {ChevronRightIcon} from "@heroicons/react/24/outline"
-import {ChevronLeftIcon} from "@heroicons/react/24/outline"
-import moment from 'moment';
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import { ChevronLeftIcon } from "@heroicons/react/24/outline";
+import moment from "moment";
+import CalendarPopup from "../calendarPopup/CalendarPopup.jsx";
+import BookingStatus from "../../enums/BookingStatus";
+import { addHours, format } from 'date-fns'
 
 const CustomToolbar = ({ label, onNavigate }) => {
   return (
     <div className="medium-text">
-
-        <div className="custom-toolbar" >
-          <span className="toolbar-label">{label}</span>
-          <button
-            className="toolbar-button prev bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"
-            onClick={() => onNavigate("PREV")}
-          >
-            <ChevronLeftIcon className="icon-base"/>
-          </button>
-          <button
-            className="toolbar-button next bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"
-            onClick={() => onNavigate("NEXT")}
-          >
-            <ChevronRightIcon className="icon-base"/>
-
-          </button>
-          <button
-            className="toolbar-button today"
-            onClick={() => onNavigate("TODAY")}
-          >
-            Today
-          </button>
-        </div>
+      <div className="custom-toolbar">
+        <span className="toolbar-label">{label}</span>
+        <button
+          className="toolbar-button prev bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"
+          onClick={() => onNavigate("PREV")}
+        >
+          <ChevronLeftIcon className="icon-base" />
+        </button>
+        <button
+          className="toolbar-button next bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"
+          onClick={() => onNavigate("NEXT")}
+        >
+          <ChevronRightIcon className="icon-base" />
+        </button>
+        <button
+          className="toolbar-button today"
+          onClick={() => onNavigate("TODAY")}
+        >
+          Today
+        </button>
+      </div>
     </div>
   );
 };
 
-
 const formats = {
-  monthHeaderFormat: (date, culture, localizer) => {
+  monthHeaderFormat: (date) => {
     const month = moment(date).format("MMMM");
     const year = moment(date).format("YYYY");
     return `${month} ${year}`;
@@ -75,85 +69,112 @@ moment.locale("ko", {
   },
 });
 
-
-
-const localizer = momentLocalizer(moment)
-
-const myEventsList = [
-  {
-    start: new Date("2024-07-06T05:30:00"),
-    end: new Date("2024-07-06T07:30:00"),
-    title: "Dolly Parton",
-    status: "Pending",
-  },
-
-  {
-    start: new Date("2024-07-21T10:00:00"),
-    end: new Date("2024-07-21T12:00:00"),
-    title: "Jo",
-    status: "Closed",
-  },
-
-  {
-    start: new Date("2024-07-16T18:30:00"),
-    end: new Date("2024-07-16T20:30:00"),
-    title: "Annie",
-    color: "green",
-    status: "Confirmed",
-  },
-];
+const localizer = momentLocalizer(moment);
 
 const calendarStyle = () => {
   return {
     style: {
-      backgroundColor: 'white',
+      backgroundColor: "white",
     },
   };
 };
 
 const HeaderCellContent = ({ label }) => {
   const customStyles = {
-    color: 'grey',
+    color: "grey",
   };
 
   return <div style={customStyles}>{label}</div>;
 };
 
-const BookingCalendarView = (props) => (
-  <div>
-    <Calendar
-      localizer={localizer}
-      events={myEventsList}
-      eventPropGetter={(myEventsList) => {
-        let backgroundColor;
-          if (myEventsList.status === 'Confirmed') {
-            backgroundColor = 'green';
-          } else if (myEventsList.status === 'Pending') {
-            backgroundColor = 'blue';
+// format the bookings data from the db so that it can be consumed by react-big-calendar component
+const formatBookings = (bookingsData) => {
+  if (!Array.isArray(bookingsData) || bookingsData.length === 0) return []
+
+  const formattedBookings = bookingsData.map((booking) => {
+
+    // calculate booking end time
+    const bookingEndDateTime = addHours(booking.bookingStartDateTime, booking.bookingDuration)
+    
+    // generate formatted booking time string
+    const formattedDate = format(booking.bookingStartDateTime, "E dd/MM/yyyy")
+    const formattedStartTime = format(booking.bookingStartDateTime, "h:mma")
+    const formattedEndTime = format(bookingEndDateTime, "h:mma")
+    const bookingTime = `${formattedDate} ${formattedStartTime} - ${formattedEndTime}`
+
+    // add booking end time and formatted booking time string
+    return {
+      ...booking, // include original booking data
+      bookingEndDateTime,
+      bookingTime
+    }
+  })
+
+  return formattedBookings
+}
+
+const BookingCalendarView = ({ bookingsData }) => {
+  const [activeEvent, setActiveElement] = useState(null); // stores the event element in the DOM that was clicked on
+  const [activeEventDetails, setPopupContent] = useState(null); // stores the details of the event that was cliocked on
+
+  const closePopup = () => {
+    setActiveElement(null);
+    setPopupContent(null);
+  };
+
+  const handleSelectEvent = (event, nativeEvent) => {
+    setActiveElement(nativeEvent.target);
+    setPopupContent(event);
+  };
+
+  const events = formatBookings(bookingsData)
+
+  return (
+    <div>
+      <Calendar
+        localizer={localizer}
+        events={events}
+        eventPropGetter={(myEventsList) => {
+          let backgroundColor;
+          if (myEventsList.bookingStatus === BookingStatus.CONFIRMED) {
+            backgroundColor = "green";
+          } else if (myEventsList.bookingStatus === BookingStatus.PENDING) {
+            backgroundColor = "blue";
           } else {
-            backgroundColor = 'red';
+            backgroundColor = "red";
           }
 
-        return { style: { backgroundColor } }
-      }}
+          return { style: { backgroundColor } };
+        }}
+        onSelectEvent={handleSelectEvent}
+        startAccessor="bookingStartDateTime"
+        endAccessor="bookingEndDateTime"
+        titleAccessor="brideUsername"
+        formats={formats}
+        style={{ height: "85vh", margin: "50px" }}
+        views={{ month: true }}
+        step={155}
+        dayPropGetter={calendarStyle}
+        components={{
+          toolbar: CustomToolbar,
+          month: {
+            header: HeaderCellContent,
+          },
+        }}
+        onNavigate={closePopup}
+      />
 
-      startAccessor="start"
-      endAccessor="end"
-      formats={formats}
-      style={{ height: "85vh", margin: "50px"}}
-      views={{ month: true }}
-      step={155}
-      dayPropGetter={calendarStyle}
-      components={{
-      toolbar: CustomToolbar,
-      month: {
-      header: HeaderCellContent,
-      },
-  }}
+      <CalendarPopup
+        bookingId={activeEventDetails?._id}
+        bookingStatus={activeEventDetails?.bookingStatus}
+        brideName={activeEventDetails?.brideUsername}
+        bookingTime={activeEventDetails?.bookingTime}
+        bookingLocation={activeEventDetails?.bookingLocation}
+        onClose={closePopup}
+        activeElement={activeEvent}
+      />
+    </div>
+  );
+};
 
-    />
-  </div>
-);
-
-
-export default BookingCalendarView
+export default BookingCalendarView;
