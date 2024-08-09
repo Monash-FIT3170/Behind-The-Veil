@@ -22,7 +22,7 @@ import Button from "../../button/Button";
 import FormOutput from "./FormOutput";
 import MarkerMap from "../../map/MarkerMap";
 import BackButton from "../../button/BackButton";
-import {getUserInfo} from "/imports/ui/components/util"
+import {useUserInfo} from "/imports/ui/components/util"
 import BookingStatus from "../../../enums/BookingStatus";
 import PageLayout from "../../../enums/PageLayout";
 import Loader from "../../loader/Loader";

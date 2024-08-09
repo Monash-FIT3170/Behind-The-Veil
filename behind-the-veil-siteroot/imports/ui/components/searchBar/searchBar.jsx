@@ -73,14 +73,20 @@ const SearchBar = ({
     };
 
     const onClickInput = () => {
-        // Filter suggestions based on input value
-        const filteredSuggestions = fullSuggestions.filter(suggestion => {
-            // filter suggestions based on main or sub
-            const matchMain = suggestion.main.toLowerCase().includes(inputValue.toLowerCase());
-            const matchSub = suggestion.sub ? suggestion.sub.toLowerCase().includes(inputValue.toLowerCase()) : false;
-            return matchMain || matchSub;
-        });
-        setFilteredSuggestions(filteredSuggestions);
+        // if it has any input, display suggestions
+        if (inputValue !== "") {
+            // Filter suggestions based on input value
+            const filteredSuggestions = fullSuggestions.filter(suggestion => {
+                // filter suggestions based on main or sub
+                const matchMain = suggestion.main.toLowerCase().includes(inputValue.toLowerCase());
+                const matchSub = suggestion.sub ? suggestion.sub.toLowerCase().includes(inputValue.toLowerCase()) : false;
+                return matchMain || matchSub;
+            });
+
+            setFilteredSuggestions(filteredSuggestions);
+        } else {
+            setFilteredSuggestions([]);
+        }
     }
 
     // handler for when user clicks OFF the search bar input (hide the suggestions)
@@ -104,20 +110,24 @@ const SearchBar = ({
 
     // update suggestions on input change
     useEffect(() => {
-        // if a suggestion has been selected, clear the list of suggestions and do the search call (reload results)
-        if (selectedSuggestions) {
-            setFilteredSuggestions([]);
-            setSelectedSuggestions(false) // reset state
-            handleButtonClickOrSubmit()
+        if (inputValue !== '') {
+            // if a suggestion has been selected, clear the list of suggestions and do the search call (reload results)
+            if (selectedSuggestions) {
+                setFilteredSuggestions([]);
+                setSelectedSuggestions(false) // reset state
+                handleButtonClickOrSubmit()
+            } else {
+                // If a suggestion has NOT been selected, filter suggestions based on input value
+                const filteredSuggestions = fullSuggestions.filter(suggestion => {
+                    // filter suggestions based on if it matches either main or sub criteria
+                    const matchMain = suggestion.main.toLowerCase().includes(inputValue.toLowerCase());
+                    const matchSub = suggestion.sub ? suggestion.sub.toLowerCase().includes(inputValue.toLowerCase()) : false;
+                    return matchMain || matchSub;
+                });
+                setFilteredSuggestions(filteredSuggestions);
+            }
         } else {
-            // If a suggestion has NOT been selected, filter suggestions based on input value
-            const filteredSuggestions = fullSuggestions.filter(suggestion => {
-                // filter suggestions based on if it matches either main or sub criteria
-                const matchMain = suggestion.main.toLowerCase().includes(inputValue.toLowerCase());
-                const matchSub = suggestion.sub ? suggestion.sub.toLowerCase().includes(inputValue.toLowerCase()) : false;
-                return matchMain || matchSub;
-            });
-            setFilteredSuggestions(filteredSuggestions);
+            setFilteredSuggestions([]);
         }
     }, [inputValue])
 
@@ -153,39 +163,43 @@ const SearchBar = ({
 
         // load initial full suggestions the first time page loads, and sort it
         if (!loadedFullSuggestions) {
-            console.log("I AM HERE")
             setFullSuggestions(useSearchSuggestions(searchType, usersData, servicesData)
                 .sort((a, b) => a.main.localeCompare(b.main)));
             setLoadedFullSuggestions(true)
         }
 
         // load the css of the suggestions depending on if it goes UP or down
-        let ulClassnames = "w-[298px] sm:w-[calc(35vw+48px)] z-[29] absolute "
-        let liClassnames = "bg-white w-full h-10 border-light-grey border-2 border-t-0 p-2 main-text text-dark-grey " +
+        let ulClassnames = "w-[246px] sm:w-[calc(35vw+48px)] z-[29] absolute flex"
+        let liClassnames = "bg-white w-full h-10 border-light-grey border-2 p-2 main-text text-dark-grey " +
             "line-clamp-1 break-words hover:bg-white-hover transition duration-300 ease-in-out cursor-pointer"
 
         if (suggestionsDown) {
-            ulClassnames = classNames(ulClassnames, "top-48");
-
+            ulClassnames = classNames(ulClassnames, "top-48 flex-col");
+            liClassnames = classNames(liClassnames, "border-t-0");
         } else {
-            ulClassnames = classNames(ulClassnames, "-bottom-[253px]");
+            //
+            ulClassnames = classNames(ulClassnames, "bottom-[390px] sm:bottom-[334px] md:bottom-[274px] flex-col-reverse");
+            liClassnames = classNames(liClassnames, "border-b-0");
         }
 
         return (
-            <div className="flex flex-col md:flex-row items-start justify-center gap-3">
-                <div id={"search-input"} className={"flex flex-col items-center justify-center"} onBlur={onBurInput}>
+            <div className="flex flex-col items-center justify-start md:flex-row md:items-start md:justify-center gap-3">
+                {/* input + suggestion div */}
+                <div className={"flex flex-col items-center justify-center"} onBlur={onBurInput}>
+
                     <form className="flex h-12" onSubmit={handleButtonClickOrSubmit}>
                         {/* The search input field (i.e. the search bar) */}
                         <Input
                             {...searchBarProps}
                             type="search"
-                            id={"suggestions"}
-                            className={classNames("rounded-r-none border-r-0 w-[250px] sm:w-[35vw]", classnames)}
+                            id={"search-input"}
+                            className={classNames("rounded-r-none border-r-0 w-[200px] sm:w-[35vw]", classnames)}
                             placeholder={placeholder}
                             value={inputValue}
                             onChange={handleInputChange}
                             onClick={onClickInput}
                         />
+
                         {/* The reset button which resets the value of the search input field to an empty string */}
                         <button type="button"
                                 className={"input-base flex justify-center items-center w-12 border-l-0 rounded-l-none"}
@@ -194,7 +208,8 @@ const SearchBar = ({
                         hover:bg-white-hover active:bg-light-grey-hover transition duration-200 ease-in-out"></XMarkIcon>
                         </button>
                     </form>
-                    {/* auto complete component */}
+
+                    {/* suggestion component */}
                     <ul className={ulClassnames}>
                         {filteredSuggestions ?
                             filteredSuggestions.map((suggestion, index) => (
@@ -211,6 +226,7 @@ const SearchBar = ({
                     </ul>
                 </div>
 
+                {/* search button + search type */}
                 <div className="flex flex-row items-center justify-center gap-3">
                     <select defaultValue={defaultType} onChange={handleSearchTypeChange} className="input-base w-28">
                         <option value="artists">Artists</option>

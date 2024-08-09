@@ -148,7 +148,7 @@ export const HomePage = () => {
             </div>
 
             {/* Container for the search bar, drop down and search button */}
-            <div className="container mx-auto sm:px-20">
+            <div className="z-50 container mx-auto sm:px-20">
                 <SearchBar placeholder={"Search services or artists"}
                            defaultType={"services" }
                            startingValue={""}
@@ -176,6 +176,9 @@ export const HomePage = () => {
                     </Link>
                 </form>
             </div>
+
+            {/* this is required for the search bar to not move weirdly */}
+            <div className={"h-[50px]"} />
         </WhiteBackground>
     );
 };
