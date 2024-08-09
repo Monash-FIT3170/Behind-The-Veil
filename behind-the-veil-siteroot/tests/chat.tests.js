@@ -50,5 +50,21 @@ if (Meteor.isClient) {
                 assert.fail("Error adding chat. Returned with error:" + error.message);
             });
         });
+        /**
+         * Test case to check if a chat can be updated successfully.
+         */
+        it('can update chat details', function () {
+            const chatId = ChatCollection.insert({
+                brideUsername:  'bride123',
+                artistUsername: 'artist456',
+                chatUpdatedDate: new Date(),
+                chatLastMessage: 'last chat message'
+            });
+            const newDate = new Date();
+            Meteor.call('update_chat', chatId, newDate, 'new last chat message');
+            const updatedChat = ChatCollection.findOne(chatId);
+            assert.strictEqual(updatedChat.chatUpdatedDate.getTime(), newDate.getTime());
+            assert.strictEqual(updatedChat.chatLastMessage, 'new last chat message');
+        });
     });
 }
