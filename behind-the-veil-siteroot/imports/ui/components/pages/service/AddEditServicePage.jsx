@@ -7,7 +7,7 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 
-import {getUserInfo} from "../../util";
+import { useUserInfo } from "../../util";
 import PageLayout from "/imports/ui/enums/PageLayout";
 import WhiteBackground from "/imports/ui/components/whiteBackground/WhiteBackground.jsx";
 import BackButton from "../../button/BackButton";
@@ -48,7 +48,7 @@ export const AddEditServicePage = ({isEdit}) => {
     const [isSuccess, setSuccess] = useState(false);
 
     // get current user information
-    const userInfo = getUserInfo();
+    const userInfo = useUserInfo();
 
     // if user is not an artist, navigate them away
     if (userInfo.type !== "artist") {

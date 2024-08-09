@@ -13,7 +13,7 @@ import ImageCollection from "../../../../../api/collections/images";
 import Input from "../../../input/Input";
 import Button from "../../../button/Button.jsx";
 import ProfilePhoto from "../../../profilePhoto/ProfilePhoto.jsx"
-import {getUserInfo} from "../../../util";
+import {useUserInfo} from "../../../util";
 import Loader from "../../../loader/Loader";
 
 /**
@@ -24,7 +24,7 @@ import Loader from "../../../loader/Loader";
 export const AccountDetails = () => {
 
     // get user information and their profile photo
-    const userInfo = getUserInfo();
+    const userInfo = useUserInfo();
 
     // get current profile image
     const isLoadingProfileImage = useSubscribe('specific_profile_image', userInfo);

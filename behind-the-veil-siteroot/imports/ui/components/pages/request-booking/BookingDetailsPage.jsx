@@ -37,7 +37,7 @@ import UrlBasePath from "../../../enums/UrlBasePath";
 const BookingDetailsPage = () => {
     // Navigate hook for redirecting to another page
     const navigateTo = useNavigate();
-    const userInfo = getUserInfo();
+    const userInfo = useUserInfo();
 
     // grab the service ID from the URL
     const {bookingId} = useParams();
