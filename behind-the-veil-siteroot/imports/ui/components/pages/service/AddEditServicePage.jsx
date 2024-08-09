@@ -7,7 +7,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-import { getUserInfo } from "../../util";
+import { useUserInfo } from "../../util";
 import PageLayout from "/imports/ui/enums/PageLayout";
 import WhiteBackground from "/imports/ui/components/whiteBackground/WhiteBackground.jsx";
 import BackButton from "../../button/BackButton";
@@ -28,8 +28,7 @@ export const AddEditServicePage = ({ isEdit }) => {
     const [servicePrice, setServicePrice] = useState(0);
     const [serviceDescription, setServiceDescription] = useState("");
 
-    // check user owns service + user is an artist, else redirect to home
-    const userInfo = getUserInfo();
+    const userInfo = useUserInfo();
     if (userInfo.type !== "artist") {
         navigateTo(`/`);
     }

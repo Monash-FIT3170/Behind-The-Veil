@@ -1,6 +1,6 @@
 /**
  * File Description: General utility functions
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Nikki
  */
 
@@ -14,15 +14,16 @@ import {Meteor} from "meteor/meteor";
  *
  * @returns an object containing the information of the user including username, email, alias, user type.
  */
-export function getUserInfo() {
+export function useUserInfo() {
     // get current user information
     const [userInfo, setUserInfo] = useState(
         {
             "id": null,
-            "alias": null,
             "username": null,
-            "type": null,
-            "email": null
+            "email": null,
+            "emailVerified": null,
+            "alias": null,
+            "type": null
         }
     );
 
@@ -35,7 +36,8 @@ export function getUserInfo() {
             // user data is returned (sometimes it takes a while)
             const fetchedUserId = userId;
             const fetchedUsername = user.username;
-            const fetchedEmail = user.emails[0].address;
+            const fetchedEmail = user.emails[0] ? user.emails[0].address : null
+            const fetchedEmailVerified = user.emails[0] ? user.emails[0].verified : null;
             const fetchedAlias = user.profile.alias;
             const fetchedType = user.profile.type;
 
@@ -44,6 +46,7 @@ export function getUserInfo() {
                 userInfo.id !== fetchedUserId ||
                 userInfo.username !== fetchedUsername ||
                 userInfo.email !== fetchedEmail ||
+                userInfo.emailVerified !== fetchedEmailVerified ||
                 userInfo.alias !== fetchedAlias ||
                 userInfo.type !== fetchedType
             ) {
@@ -52,6 +55,7 @@ export function getUserInfo() {
                         "id": fetchedUserId,
                         "username": fetchedUsername,
                         "email": fetchedEmail,
+                        "emailVerified": fetchedEmailVerified,
                         "alias": fetchedAlias,
                         "type": fetchedType
                     }

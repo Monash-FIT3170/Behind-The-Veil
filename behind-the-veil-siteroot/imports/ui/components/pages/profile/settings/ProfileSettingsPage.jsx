@@ -9,7 +9,7 @@ import PageLayout from "../../../../enums/PageLayout";
 import Tabs from "../../../tabs/Tabs.jsx";
 import AccountDetails from "./AccountDetails.jsx";
 import ArtistServiceArea from "./ArtistServiceArea";
-import {getUserInfo} from "../../../util";
+import {useUserInfo} from "../../../util";
 import ChangePasswordTab from "./ChangePasswordTab";
 import BackButton from "../../../button/BackButton";
 
@@ -19,7 +19,7 @@ import BackButton from "../../../button/BackButton";
 export const ProfileSettingsPage = () => {
 
     // get current user information
-    const userInfo = getUserInfo();
+    const userInfo = useUserInfo();
 
     // display tabs depending on user account type (brides don't have service area settings tab)
     if (userInfo.type === "bride") {
