@@ -56,7 +56,7 @@ export const AddEditServicePage = ({isEdit}) => {
     }
 
     // get service ID from url
-    const {serviceId} = isEdit ? useParams() : "";
+    const {serviceId} = useParams();
 
     // load in existing service information if it is editing
     useEffect(() => {
