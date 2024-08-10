@@ -9,6 +9,7 @@ import ServiceCollection from "../../api/collections/services";
 import ImageCollection from "../../api/collections/images";
 import UserCollection from "../../api/collections/users";
 import BookingCollection from "../../api/collections/bookings";
+import PostCollection from "../../api/collections/posts";
 
 /**
  * Used for to get a list of service data (includes their image and/or artist data automatically)
@@ -38,6 +39,7 @@ export function useServices(
   let imagesData = useTracker(() => {
     return ImageCollection.find({ imageType: "service" }).fetch();
   });
+  console.log(imagesData);
 
   // get artist data from database, if needed
   let isLoadingArtists = () => false;

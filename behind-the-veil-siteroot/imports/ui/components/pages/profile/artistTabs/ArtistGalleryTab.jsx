@@ -10,12 +10,9 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 import Button from "../../../button/Button";
 import GalleryModalOld from "./GalleryModalOld";
 import { useState } from "react";
-import { Gallery } from "react-grid-gallery";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
 import { getGalleryImages } from "../../../DatabaseHelper";
-
-// import { getGalleryImages } from "";
 
 /**
  * Gallery tab of an artist's profile
@@ -26,7 +23,7 @@ export const ArtistGalleryTab = ({ username }) => {
   const [open, setOpen] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const plusIcon = <PlusIcon className="icon-base" />;
-  const galleryImgData = getGalleryImages("post_images", [], username);
+  const galleryImgData = getGalleryImages(username);
   console.log(username);
   console.log(galleryImgData);
   // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
