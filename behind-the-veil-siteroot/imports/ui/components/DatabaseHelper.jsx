@@ -27,198 +27,145 @@ export function useServices(
   filter,
   requireArtist = false
 ) {
-  export function getServices(
-    service_publication,
-    params,
-    filter,
-    requireArtist = false
-  ) {
-    console.log("service_publication", service_publication);
-    console.log("params", params);
-    console.log("filter", filter);
+  // get service data from database
+  const isLoadingUserServices = useSubscribe(service_publication, ...params);
+  let servicesData = useTracker(() => {
+    return ServiceCollection.find(filter).fetch();
+  });
 
-    // get service data from database
-    const isLoadingUserServices = useSubscribe(service_publication, ...params);
-    let servicesData = useTracker(() => {
-      return ServiceCollection.find(filter).fetch();
+  // get service images from database
+  const isLoadingServiceImages = useSubscribe("service_images", []);
+  let imagesData = useTracker(() => {
+    return ImageCollection.find({ imageType: "service" }).fetch();
+  });
+
+  // get artist data from database, if needed
+  let isLoadingArtists = () => false;
+  let artistsData = [];
+
+  if (requireArtist) {
+    isLoadingArtists = useSubscribe("all_artists");
+    artistsData = useTracker(() => {
+      return UserCollection.find({ "profile.type": "artist" }).fetch();
     });
-
-    // get service images from database
-    const isLoadingServiceImages = useSubscribe("service_images", []);
-    let imagesData = useTracker(() => {
-      return ImageCollection.find({ imageType: "service" }).fetch();
-    });
-
-    // get artist data from database, if needed
-    let isLoadingArtists = () => false;
-    let artistsData = [];
-
-    if (requireArtist) {
-      isLoadingArtists = useSubscribe("all_artists");
-      artistsData = useTracker(() => {
-        return UserCollection.find({ "profile.type": "artist" }).fetch();
-      });
-    }
-
-    const isLoading =
-      isLoadingUserServices() || isLoadingArtists() || isLoadingServiceImages();
-
-    // manual aggregation of each service with their image
-    for (let i = 0; i < servicesData.length; i++) {
-      let foundImageMatch = false;
-
-      // aggregate with artist first
-      for (let j = 0; j < artistsData.length; j++) {
-        // find matching artist and add their name
-        if (servicesData[i].artistUsername === artistsData[j].username) {
-          servicesData[i].artistAlias = artistsData[j].profile.alias;
-          break;
-        }
-      }
-
-      // variable for loading
-      const isLoading =
-        isLoadingUserServices() ||
-        isLoadingArtists() ||
-        isLoadingServiceImages();
-
-      // manual aggregation of each service with their image
-      for (let i = 0; i < servicesData.length; i++) {
-        let foundImageMatch = false;
-
-        // aggregate with artist first
-        for (let j = 0; j < artistsData.length; j++) {
-          // find matching artist and add their name
-          if (servicesData[i].artistUsername === artistsData[j].username) {
-            servicesData[i].artistAlias = artistsData[j].profile.alias;
-            break;
-          }
-        }
-
-        // then aggregate with the FIRST image that belong to it
-        for (let j = 0; j < imagesData.length; j++) {
-          // find matching image for the service
-          if (
-            imagesData[j].imageType === "service" &&
-            servicesData[i]._id === imagesData[j].target_id
-          ) {
-            servicesData[i].serviceImageData = imagesData[j].imageData;
-            foundImageMatch = true;
-            break;
-          }
-        }
-
-        // if not found any images, replace with default
-        if (!foundImageMatch) {
-          servicesData[i].serviceImageData = "/imageNotFound.png";
-        }
-      }
-      return { isLoading, servicesData };
-    }
-
-    /**
-     * Used for to get a list of bookings data (includes their image and service data automatically)
-     *
-     * @param booking_publication - name of the publication to get bookings from (determines which subset of booking is required)
-     * @param params - the parameters used for that booking publication, such as username, etc.
-     * @param filter - the filter used to filter for the specific subset of booking (from the subscribed publication) this is an
-     * object with key=booking attribute name, value=filter value; e.g. { username: "abcd123" }
-     * @returns {Object} - returns an object containing: boolean isLoading that is true when loading, false when finished loading.
-     * The bookingData object joined with its serviceData and serviceImage
-     */
-    export function useBookings(booking_publication, params, filter) {
-      // get bookings from database
-      const isLoadingBooking = useSubscribe(booking_publication, ...params);
-      let bookingsData = useTracker(() => {
-        return BookingCollection.find(filter).fetch();
-      });
-
-      // get services from database
-      const isLoadingService = useSubscribe("all_services");
-      let servicesData = useTracker(() => {
-        return ServiceCollection.find().fetch();
-      });
-
-      // get service images from database
-      const isLoadingServiceImage = useSubscribe("service_images");
-      let imagesData = useTracker(() => {
-        return ImageCollection.find({ imageType: "service" }).fetch();
-      });
-
-      // variable for loading
-      const isLoading =
-        isLoadingBooking() || isLoadingService() || isLoadingServiceImage();
-
-      // manual aggregation into bookingsData with its services and images
-      for (let i = 0; i < bookingsData.length; i++) {
-        // aggregate with service first
-        for (let j = 0; j < servicesData.length; j++) {
-          // find matching service ID
-          if (bookingsData[i].serviceId === servicesData[j]._id) {
-            bookingsData[i].serviceName = servicesData[j].serviceName;
-            bookingsData[i].serviceDesc = servicesData[j].serviceDesc;
-            break;
-          }
-        }
-        // then aggregate with the FIRST service image (cover)
-        for (let j = 0; j < imagesData.length; j++) {
-          // find matching image for the service
-          if (
-            imagesData[j].imageType === "service" &&
-            bookingsData[i].serviceId === imagesData[j].target_id
-          ) {
-            bookingsData[i].serviceImageData = imagesData[j].imageData;
-            break;
-          }
-        }
-      }
-      return {
-        isLoading: isLoading,
-        bookingsData: bookingsData,
-      };
-    }
-
-    /**
-     * Used for to get a list of users data (includes their profile image automatically)
-     *
-     * @param user_publication - name of the publication to get users from (determines which subset of user is required)
-     * @param params - the parameters used for that user publication, such as username, etc.
-     * @param filter - the filter used to filter for the specific subset of user (from the subscribed publication) this is an
-     * object with key=user attribute name, value=filter value; e.g. { username: "abcd123" }
-     * @returns {Object} - returns an object containing: boolean isLoading that is true when loading, false when finished loading.
-     * The userData object joined with its profile image data.
-     */
-    export function useUsers(user_publication, params, filter) {
-      // get users from database
-      const isLoadingUsers = useSubscribe(user_publication, ...params);
-      let usersData = useTracker(() => {
-        return UserCollection.find(filter).fetch();
-      });
-      // then aggregate with the FIRST image that belong to it
-      for (let j = 0; j < imagesData.length; j++) {
-        // find matching image for the service
-        if (
-          imagesData[j].imageType === "service" &&
-          servicesData[i]._id === imagesData[j].target_id
-        ) {
-          servicesData[i].serviceImageData = imagesData[j].imageData;
-          foundImageMatch = true;
-          break;
-        }
-      }
-
-      // if not found any images, replace with default
-      if (!foundImageMatch) {
-        servicesData[i].serviceImageData = "/imageNotFound.png";
-      }
-    }
-    console.log("servicesData", servicesData);
-
-    return [isLoading, servicesData];
   }
 
-  // many bookings
-  export function getBookings(booking_publication, params, filter) {}
+  // variable for loading
+  const isLoading =
+    isLoadingUserServices() || isLoadingArtists() || isLoadingServiceImages();
+
+  // manual aggregation of each service with their image
+  for (let i = 0; i < servicesData.length; i++) {
+    let foundImageMatch = false;
+
+    // aggregate with artist first
+    for (let j = 0; j < artistsData.length; j++) {
+      // find matching artist and add their name
+      if (servicesData[i].artistUsername === artistsData[j].username) {
+        servicesData[i].artistAlias = artistsData[j].profile.alias;
+        break;
+      }
+    }
+
+    // then aggregate with the FIRST image that belong to it
+    for (let j = 0; j < imagesData.length; j++) {
+      // find matching image for the service
+      if (
+        imagesData[j].imageType === "service" &&
+        servicesData[i]._id === imagesData[j].target_id
+      ) {
+        servicesData[i].serviceImageData = imagesData[j].imageData;
+        foundImageMatch = true;
+        break;
+      }
+    }
+
+    // if not found any images, replace with default
+    if (!foundImageMatch) {
+      servicesData[i].serviceImageData = "/imageNotFound.png";
+    }
+  }
+  return { isLoading, servicesData };
+}
+
+/**
+ * Used for to get a list of bookings data (includes their image and service data automatically)
+ *
+ * @param booking_publication - name of the publication to get bookings from (determines which subset of booking is required)
+ * @param params - the parameters used for that booking publication, such as username, etc.
+ * @param filter - the filter used to filter for the specific subset of booking (from the subscribed publication) this is an
+ * object with key=booking attribute name, value=filter value; e.g. { username: "abcd123" }
+ * @returns {Object} - returns an object containing: boolean isLoading that is true when loading, false when finished loading.
+ * The bookingData object joined with its serviceData and serviceImage
+ */
+export function useBookings(booking_publication, params, filter) {
+  // get bookings from database
+  const isLoadingBooking = useSubscribe(booking_publication, ...params);
+  let bookingsData = useTracker(() => {
+    return BookingCollection.find(filter).fetch();
+  });
+
+  // get services from database
+  const isLoadingService = useSubscribe("all_services");
+  let servicesData = useTracker(() => {
+    return ServiceCollection.find().fetch();
+  });
+
+  // get service images from database
+  const isLoadingServiceImage = useSubscribe("service_images");
+  let imagesData = useTracker(() => {
+    return ImageCollection.find({ imageType: "service" }).fetch();
+  });
+
+  // variable for loading
+  const isLoading =
+    isLoadingBooking() || isLoadingService() || isLoadingServiceImage();
+
+  // manual aggregation into bookingsData with its services and images
+  for (let i = 0; i < bookingsData.length; i++) {
+    // aggregate with service first
+    for (let j = 0; j < servicesData.length; j++) {
+      // find matching service ID
+      if (bookingsData[i].serviceId === servicesData[j]._id) {
+        bookingsData[i].serviceName = servicesData[j].serviceName;
+        bookingsData[i].serviceDesc = servicesData[j].serviceDesc;
+        break;
+      }
+    }
+    // then aggregate with the FIRST service image (cover)
+    for (let j = 0; j < imagesData.length; j++) {
+      // find matching image for the service
+      if (
+        imagesData[j].imageType === "service" &&
+        bookingsData[i].serviceId === imagesData[j].target_id
+      ) {
+        bookingsData[i].serviceImageData = imagesData[j].imageData;
+        break;
+      }
+    }
+  }
+  return {
+    isLoading: isLoading,
+    bookingsData: bookingsData,
+  };
+}
+
+/**
+ * Used for to get a list of users data (includes their profile image automatically)
+ *
+ * @param user_publication - name of the publication to get users from (determines which subset of user is required)
+ * @param params - the parameters used for that user publication, such as username, etc.
+ * @param filter - the filter used to filter for the specific subset of user (from the subscribed publication) this is an
+ * object with key=user attribute name, value=filter value; e.g. { username: "abcd123" }
+ * @returns {Object} - returns an object containing: boolean isLoading that is true when loading, false when finished loading.
+ * The userData object joined with its profile image data.
+ */
+export function useUsers(user_publication, params, filter) {
+  // get users from database
+  const isLoadingUsers = useSubscribe(user_publication, ...params);
+  let usersData = useTracker(() => {
+    return UserCollection.find(filter).fetch();
+  });
 
   // get user profile image from database
   const isLoadingImages = useSubscribe("profile_images");

@@ -16,7 +16,6 @@ import BrideProfileTabs from "./BrideProfileTabs";
 import ArtistProfileTabs from "./ArtistProfileTabs";
 import UrlBasePath from "../../../enums/UrlBasePath";
 import { useUserInfo } from "../../util";
-import { getUserInfo } from "../../util";
 
 /**
  * The general profile page (changes for content depending on user type)
@@ -25,7 +24,7 @@ export const ProfilePage = () => {
   const navigate = useNavigate();
 
   // get current user information
-  const userInfo = getUserInfo();
+  const userInfo = useUserInfo();
 
   return (
     <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
