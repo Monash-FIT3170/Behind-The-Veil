@@ -80,4 +80,6 @@ mongoimport -h localhost:3001 --db meteor --collection bookings --file mockdata/
 mongoimport -h localhost:3001 --db meteor --collection images --file mockdata/user_images50.json --jsonArray
 mongoimport -h localhost:3001 --db meteor --collection images --file mockdata/service_images100.json --jsonArray
 mongoimport -h localhost:3001 --db meteor --collection images --file mockdata/post_images_user30.json --jsonArray
+mongoimport -h localhost:3001 --db meteor --collection post --file mockdata/post_user50.json --jsonArray
+mongoimport -h localhost:3001 --db meteor --collection images --file mockdata/post_images_user50.json --jsonArray
 ```
