@@ -1,28 +1,28 @@
 /**
  * File Description: Search Bar React component
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Lucas, Nikki
  */
 
-import React, {useEffect, useMemo, useState} from "react";
+import React, {useMemo, useState} from "react";
 import {MagnifyingGlassIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import "./searchBar.css";
 import Input from "../input/Input";
 import Button from "../button/Button";
 import UrlBasePath from "../../enums/UrlBasePath";
 import {useNavigate} from "react-router-dom";
 import {useServices, useUsers} from "../DatabaseHelper";
 import {getSearchSuggestions} from "../util";
+import "./searchBar.css";
 
 /**
  * General Search Bar component for all required instances of the searching in the app.
  * Works with enter button on keyboard (Requires a separate button for users who use mouse click)
- * @param className custom classes for the search input field
- * @param defaultType
- * @param placeholder
- * @param startingValue
- * @param suggestionsDown
+ * @param className - custom classes for the search input field
+ * @param defaultType - the default search type; either 'services' or 'artist'
+ * @param placeholder - placeholder text for search bar
+ * @param startingValue - initial value/search input inside search bar
+ * @param suggestionsDown - true if suggestions propagates downwards, false if upwards (upwards ONLY configured for home page)
  * @param searchBarProps encompasses all other props supplied and applies them to the search input field
  */
 const SearchBar = ({
@@ -53,7 +53,6 @@ const SearchBar = ({
 
     // variables set up for suggestions
     const [filteredSuggestions, setFilteredSuggestions] = useState([]);
-    const [selectedSuggestions, setSelectedSuggestions] = useState(false);
     const maxSuggestion = 10;
     const fullSuggestions = useMemo(
         () => {
@@ -89,8 +88,8 @@ const SearchBar = ({
                 const matchSub = suggestion.sub ? suggestion.sub.toLowerCase().includes(inputValue.toLowerCase()) : false;
                 return matchMain || matchSub;
             });
-
             setFilteredSuggestions(filteredSuggestions);
+
         } else {
             setFilteredSuggestions([]);
         }
@@ -117,21 +116,14 @@ const SearchBar = ({
 
         // update suggestions based on input value
         if (newInput !== '') {
-            // if a suggestion has been selected, clear the list of suggestions and do the search call (reload results)
-            if (selectedSuggestions) {
-                setFilteredSuggestions([]);
-                setSelectedSuggestions(false) // reset state
-                handleButtonClickOrSubmit()
-            } else {
-                // If a suggestion has NOT been selected, filter suggestions based on input value
-                const filteredSuggestions = fullSuggestions.filter(suggestion => {
-                    // filter suggestions based on if it matches either main or sub criteria
-                    const matchMain = suggestion.main.toLowerCase().includes(newInput.toLowerCase());
-                    const matchSub = suggestion.sub ? suggestion.sub.toLowerCase().includes(newInput.toLowerCase()) : false;
-                    return matchMain || matchSub;
-                });
-                setFilteredSuggestions(filteredSuggestions);
-            }
+            const filteredSuggestions = fullSuggestions.filter(suggestion => {
+                // filter suggestions based on if it matches either main or sub criteria
+                const matchMain = suggestion.main.toLowerCase().includes(newInput.toLowerCase());
+                const matchSub = suggestion.sub ? suggestion.sub.toLowerCase().includes(newInput.toLowerCase()) : false;
+                return matchMain || matchSub;
+            });
+            setFilteredSuggestions(filteredSuggestions);
+
         } else {
             setFilteredSuggestions([]);
         }
@@ -155,7 +147,6 @@ const SearchBar = ({
     // on input change above
     const handleSuggestionSelect = (value) => {
         setInputValue(value.main);
-        setSelectedSuggestions(true) // this ensures code goes through a different logic branch than for normal input change
         setFilteredSuggestions([]);
         handleButtonClickOrSubmit(null, value.main)
     };
@@ -177,7 +168,8 @@ const SearchBar = ({
         }
 
         return (
-            <div className="flex flex-col items-center justify-start md:flex-row md:items-start md:justify-center gap-3">
+            <div
+                className="flex flex-col items-center justify-start md:flex-row md:items-start md:justify-center gap-3">
                 {/* input + suggestion div */}
                 <div className={"flex flex-col items-center justify-center"} onBlur={onBlurInput}>
 
