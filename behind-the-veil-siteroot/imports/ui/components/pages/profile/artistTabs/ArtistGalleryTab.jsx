@@ -1,7 +1,7 @@
 /**
  * File Description: Artist gallery tab
  * File version: 1.1
- * Contributors: Kefei (Phillip) Li, Nikki
+ * Contributors: Phillip, Nikki
  */
 
 import React from "react";
@@ -21,22 +21,19 @@ import { getGalleryImages } from "../../../DatabaseHelper";
  */
 export const ArtistGalleryTab = ({ username }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [selectedImage, setSelectedImage] = useState(null);
   const plusIcon = <PlusIcon className="icon-base" />;
-  const galleryImgData = getGalleryImages("post_images", [], username);
+  const galleryImgData = getGalleryImages(username);
   // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
   // When completing the dynamic version for this page, probably a good idea to setup the photos as components and importing them in.
 
-  const handleImageClick = (src) => {
-    setIsOpen(true);
-    console.log(src);
-  };
-
   function closeModal() {
+    setSelectedImage(null);
     setIsOpen(false);
   }
 
-  function openModal() {
+  function openModal(image) {
+    setSelectedImage(image);
     setIsOpen(true);
   }
 
@@ -71,7 +68,8 @@ export const ArtistGalleryTab = ({ username }) => {
                   <div className="col-span-2">
                     <img
                       className="w-full h-full object-cover"
-                      src={galleryImgData[0]}
+                      src={selectedImage}
+                      alt="Selected Image for Modal"
                     ></img>
                   </div>
                   <div>
@@ -110,7 +108,8 @@ export const ArtistGalleryTab = ({ username }) => {
                 width: "100%",
                 display: "block",
               }}
-              onClick={openModal}
+              onClick={() => openModal(image)}
+              alt={"Gallery Image ${i}"}
               // onClick={() => handleImageClick(image)}
             />
           ))}
