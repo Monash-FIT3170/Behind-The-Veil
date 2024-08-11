@@ -362,3 +362,10 @@ export function useArtistDashboardData(username) {
     totalCustomersThisMonth,
   };
 }
+
+export function useUserPosts(username) {
+  const isLoadingPost = useSubscribe("specific_posts", []);
+  let postData = useTracker(() => {
+    return PostCollection.find({ artistUsername: username }).fetch();
+  });
+}
