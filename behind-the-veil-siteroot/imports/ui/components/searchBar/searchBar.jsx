@@ -13,7 +13,7 @@ import Button from "../button/Button";
 import UrlBasePath from "../../enums/UrlBasePath";
 import {useNavigate} from "react-router-dom";
 import {useServices, useUsers} from "../DatabaseHelper";
-import {useSearchSuggestions} from "../util";
+import {getSearchSuggestions} from "../util";
 
 /**
  * General Search Bar component for all required instances of the searching in the app.
@@ -56,7 +56,7 @@ const SearchBar = ({
     const [loadedFullSuggestions, setLoadedFullSuggestions] = useState(false);
     const [filteredSuggestions, setFilteredSuggestions] = useState([]);
     const [selectedSuggestions, setSelectedSuggestions] = useState(false);
-    const [maxSuggestion, setMaxSuggestion] = useState(10);
+    const maxSuggestion = 10;
 
     /**
      * this function is used when the user wants to submit the value in the search bar, either by enter key or a button
@@ -90,7 +90,7 @@ const SearchBar = ({
     }
 
     // handler for when user clicks OFF the search bar input (hide the suggestions)
-    const onBurInput = (event) => {
+    const onBlurInput = (event) => {
         // get the element that user has clicked on
         const clickTarget = event.relatedTarget;
 
@@ -133,7 +133,7 @@ const SearchBar = ({
 
     // on search type change
     useEffect(() => {
-        setFullSuggestions(useSearchSuggestions(searchType, usersData, servicesData)
+        setFullSuggestions(getSearchSuggestions(searchType, usersData, servicesData)
             .sort((a, b) => a.main.localeCompare(b.main)));
         setFilteredSuggestions([]);
     }, [searchType])
@@ -163,13 +163,13 @@ const SearchBar = ({
 
         // load initial full suggestions the first time page loads, and sort it
         if (!loadedFullSuggestions) {
-            setFullSuggestions(useSearchSuggestions(searchType, usersData, servicesData)
+            setFullSuggestions(getSearchSuggestions(searchType, usersData, servicesData)
                 .sort((a, b) => a.main.localeCompare(b.main)));
             setLoadedFullSuggestions(true)
         }
 
         // load the css of the suggestions depending on if it goes UP or down
-        let ulClassnames = "w-[246px] sm:w-[calc(35vw+48px)] z-[29] absolute flex"
+        let ulClassnames = "w-[248px] sm:w-[calc(35vw+48px)] z-[29] absolute flex"
         let liClassnames = "bg-white w-full h-10 border-light-grey border-2 p-2 main-text text-dark-grey " +
             "line-clamp-1 break-words hover:bg-white-hover transition duration-300 ease-in-out cursor-pointer"
 
@@ -185,7 +185,7 @@ const SearchBar = ({
         return (
             <div className="flex flex-col items-center justify-start md:flex-row md:items-start md:justify-center gap-3">
                 {/* input + suggestion div */}
-                <div className={"flex flex-col items-center justify-center"} onBlur={onBurInput}>
+                <div className={"flex flex-col items-center justify-center"} onBlur={onBlurInput}>
 
                     <form className="flex h-12" onSubmit={handleButtonClickOrSubmit}>
                         {/* The search input field (i.e. the search bar) */}

@@ -77,7 +77,7 @@ export function useUserInfo() {
  * @param servicesData - all relevant services data to get suggestions for
  * @returns {*[]} an array of objects. each object has a main and a sub attribute, both used as suggestions.
  */
-export function useSearchSuggestions(type, usersData, servicesData) {
+export function getSearchSuggestions(type, usersData, servicesData) {
 
     // data is loaded, get auto suggestion completion words
     let allKeyWords = []
