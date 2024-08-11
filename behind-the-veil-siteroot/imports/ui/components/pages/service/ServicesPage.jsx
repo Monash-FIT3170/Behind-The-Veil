@@ -36,7 +36,8 @@ export const ServicesPage = () => {
     // map data into service cards
     const displayedServicesJsx = servicesData
         .filter((service) => {
-            return service.serviceName.includes(searchInput) || service.serviceDesc.includes(searchInput)
+            return service.serviceName.toLowerCase().includes(searchInput.toLowerCase()) ||
+                service.serviceDesc.toLowerCase().includes(searchInput.toLowerCase())
         })
         .map((service) => (
             <ServiceCard

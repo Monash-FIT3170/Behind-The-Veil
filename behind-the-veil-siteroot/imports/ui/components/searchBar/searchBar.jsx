@@ -4,7 +4,7 @@
  * Contributors: Lucas, Nikki
  */
 
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {MagnifyingGlassIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import "./searchBar.css";
@@ -52,22 +52,29 @@ const SearchBar = ({
     const {isLoading: isLoadingServices, servicesData} = useServices("active_services", [], serviceFilter, true)
 
     // variables set up for suggestions
-    const [fullSuggestions, setFullSuggestions] = useState([]);
-    const [loadedFullSuggestions, setLoadedFullSuggestions] = useState(false);
     const [filteredSuggestions, setFilteredSuggestions] = useState([]);
     const [selectedSuggestions, setSelectedSuggestions] = useState(false);
     const maxSuggestion = 10;
+    const fullSuggestions = useMemo(
+        () => {
+            return getSearchSuggestions(searchType, usersData, servicesData)
+        },
+        [searchType]
+    );
 
     /**
      * this function is used when the user wants to submit the value in the search bar, either by enter key or a button
      * Alter this function with whatever data manipulation is needed to be done with the input value
+     *
+     * If not provided with a new Value, the function looks for the state of inputValue (which may not be updated yet)
      */
-    const handleButtonClickOrSubmit = (event) => {
+    const handleButtonClickOrSubmit = (event, newValue) => {
         event ? event.preventDefault() : null; // This line is important as it prevents the automatic submit for forms which reloads the page
+
         if (searchType === "services") {
-            navigate("/" + UrlBasePath.SERVICES + "/?search=" + inputValue)
+            navigate("/" + UrlBasePath.SERVICES + "/?search=" + (newValue ? newValue : inputValue))
         } else if (searchType === "artists") {
-            navigate("/" + UrlBasePath.ARTISTS + "/?search=" + inputValue);
+            navigate("/" + UrlBasePath.ARTISTS + "/?search=" + (newValue ? newValue : inputValue));
         }
         setFilteredSuggestions([]);
     };
@@ -105,12 +112,11 @@ const SearchBar = ({
 
     // this function updates the state when input changes
     const handleInputChange = (event) => {
-        setInputValue(event.target.value);
-    };
+        const newInput = event.target.value;
+        setInputValue(newInput);
 
-    // update suggestions on input change
-    useEffect(() => {
-        if (inputValue !== '') {
+        // update suggestions based on input value
+        if (newInput !== '') {
             // if a suggestion has been selected, clear the list of suggestions and do the search call (reload results)
             if (selectedSuggestions) {
                 setFilteredSuggestions([]);
@@ -120,8 +126,8 @@ const SearchBar = ({
                 // If a suggestion has NOT been selected, filter suggestions based on input value
                 const filteredSuggestions = fullSuggestions.filter(suggestion => {
                     // filter suggestions based on if it matches either main or sub criteria
-                    const matchMain = suggestion.main.toLowerCase().includes(inputValue.toLowerCase());
-                    const matchSub = suggestion.sub ? suggestion.sub.toLowerCase().includes(inputValue.toLowerCase()) : false;
+                    const matchMain = suggestion.main.toLowerCase().includes(newInput.toLowerCase());
+                    const matchSub = suggestion.sub ? suggestion.sub.toLowerCase().includes(newInput.toLowerCase()) : false;
                     return matchMain || matchSub;
                 });
                 setFilteredSuggestions(filteredSuggestions);
@@ -129,19 +135,14 @@ const SearchBar = ({
         } else {
             setFilteredSuggestions([]);
         }
-    }, [inputValue])
-
-    // on search type change
-    useEffect(() => {
-        setFullSuggestions(getSearchSuggestions(searchType, usersData, servicesData)
-            .sort((a, b) => a.main.localeCompare(b.main)));
-        setFilteredSuggestions([]);
-    }, [searchType])
-
+    };
 
     // search type input handler
     const handleSearchTypeChange = (event) => {
         setSearchType(event.target.value);
+
+        // on change search type, also clear current suggestions
+        setFilteredSuggestions([]);
     };
 
     // Function that resets the input value of the search bar
@@ -156,18 +157,11 @@ const SearchBar = ({
         setInputValue(value.main);
         setSelectedSuggestions(true) // this ensures code goes through a different logic branch than for normal input change
         setFilteredSuggestions([]);
+        handleButtonClickOrSubmit(null, value.main)
     };
 
     // when finished loading data
     if (!isLoadingServices && !isLoadingArtists) {
-
-        // load initial full suggestions the first time page loads, and sort it
-        if (!loadedFullSuggestions) {
-            setFullSuggestions(getSearchSuggestions(searchType, usersData, servicesData)
-                .sort((a, b) => a.main.localeCompare(b.main)));
-            setLoadedFullSuggestions(true)
-        }
-
         // load the css of the suggestions depending on if it goes UP or down
         let ulClassnames = "w-[248px] sm:w-[calc(35vw+48px)] z-[29] absolute flex"
         let liClassnames = "bg-white w-full h-10 border-light-grey border-2 p-2 main-text text-dark-grey " +

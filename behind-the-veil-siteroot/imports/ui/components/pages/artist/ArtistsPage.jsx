@@ -7,7 +7,6 @@
 import React, {useState} from 'react';
 import {useLocation} from "react-router-dom";
 import URLSearchParams from "@ungap/url-search-params";
-import {removeStopwords} from "stopword";
 
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
@@ -36,7 +35,8 @@ export const ArtistsPage = () => {
     // filter then map data into artist cards
     const displayedArtistJsx = usersData
         .filter((user) => {
-            return user.profile.alias.includes(searchInput) || user.username.includes(searchInput)
+            return user.profile.alias.toLowerCase().includes(searchInput.toLowerCase()) ||
+                user.username.toLowerCase().includes(searchInput.toLowerCase())
         })
         .map((user) => (
             <ArtistCard
