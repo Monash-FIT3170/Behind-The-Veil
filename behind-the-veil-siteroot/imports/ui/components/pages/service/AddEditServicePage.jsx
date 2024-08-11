@@ -368,7 +368,7 @@ export const AddEditServicePage = ({isEdit}) => {
             }} open={open} onClose={onCloseModal} center showCloseIcon={false}>
                 <div className="flex flex-col justify-center items-center h-full gap-y-10">
                     <h2 className="text-center title-text px-4">
-                        {(isEdit ? "Modification" : "Creation") + (isSuccess ? "was Successful" : " Failed")}
+                        {(isEdit ? "Modification" : "Creation") + (isSuccess ? " was Successful" : " Failed")}
                     </h2>
                     <Button
                         className={"btn-base ps-[25px] pe-[25px] flex gap-1 " +
