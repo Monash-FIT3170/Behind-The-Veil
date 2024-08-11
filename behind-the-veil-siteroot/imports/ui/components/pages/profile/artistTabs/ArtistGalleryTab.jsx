@@ -8,7 +8,6 @@ import React from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 
 import Button from "../../../button/Button";
-import GalleryModalOld from "./GalleryModalOld";
 import { Fragment, useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { Dialog, Transition } from "@headlessui/react";
@@ -25,8 +24,6 @@ export const ArtistGalleryTab = ({ username }) => {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const plusIcon = <PlusIcon className="icon-base" />;
   const galleryImgData = getGalleryImages("post_images", [], username);
-  console.log(username);
-  console.log(galleryImgData);
   // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
   // When completing the dynamic version for this page, probably a good idea to setup the photos as components and importing them in.
 
@@ -45,13 +42,6 @@ export const ArtistGalleryTab = ({ username }) => {
 
   return (
     <div className="relative">
-      {/* <div className="sticky z-30">
-        <GalleryModalOld
-          open={isOpen}
-          onClose={() => setIsOpen(false)}
-          children={galleryImgData[1]}
-        ></GalleryModalOld>
-      </div> */}
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-30" onClose={closeModal}>
           <Transition.Child
@@ -77,11 +67,11 @@ export const ArtistGalleryTab = ({ username }) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="grid grid-cols-3 gap-4 w-5/6 transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="grid grid-cols-3 gap-4 w-5/6 transform overflow-hidden rounded-md bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <div className="col-span-2">
                     <img
                       className="w-full h-full object-cover"
-                      src={galleryImgData[1]}
+                      src={galleryImgData[0]}
                     ></img>
                   </div>
                   <div>
