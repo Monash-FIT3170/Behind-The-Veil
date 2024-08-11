@@ -17,8 +17,3 @@ Meteor.publish('all_artist_posts', function(username) {
     // Check if the userid matches the artistUsername
     return PostCollection.find({"artistUsername": username});
 });
-
-Meteor.publish('post_description', function(description) {
-    // Check if the userid matches the artistUsername
-    return PostCollection.find({"postDescription": username});
-});

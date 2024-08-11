@@ -5,7 +5,8 @@
  */
 
 import React from "react";
-import { PlusIcon } from "@heroicons/react/24/outline";
+import { PlusIcon, TrashIcon, PencilIcon } from "@heroicons/react/24/outline";
+import { ProfileGalleryDisplay } from "../../../profilePhoto/ProfileGalleryDisplay";
 
 import Button from "../../../button/Button";
 import { Fragment, useState } from "react";
@@ -13,6 +14,7 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { Dialog, Transition } from "@headlessui/react";
 
 import { getGalleryImages, useUserPost } from "../../../DatabaseHelper";
+import { useUserInfo } from "../../../util";
 
 /**
  * Gallery tab of an artist's profile
@@ -23,7 +25,13 @@ export const ArtistGalleryTab = ({ username }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const plusIcon = <PlusIcon className="icon-base" />;
+  const trashIcon = <TrashIcon className="icon-base" />;
+  const pencilIcon = <PencilIcon className="icon-base" />;
   const galleryImgData = getGalleryImages(username);
+
+  // get current user information
+  const userInfo = useUserInfo();
+  console.log(userInfo.username);
 
   // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
   // When completing the dynamic version for this page, probably a good idea to setup the photos as components and importing them in.
@@ -64,27 +72,45 @@ export const ArtistGalleryTab = ({ username }) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="grid grid-cols-3 gap-4 w-5/6 transform overflow-hidden rounded-md bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <div className="col-span-2">
+                <Dialog.Panel
+                  className="grid grid-cols-5 gap-4 w-3/5 transform overflow-hidden rounded-md bg-white p-6 text-left align-middle shadow-xl transition-all"
+                  style={{ maxHeight: "80vh" }}
+                >
+                  <div className="col-span-4">
                     <img
                       className="w-full h-full object-cover"
+                      style={{ maxHeight: "75vh", objectFit: "contain" }}
                       src={selectedImage}
                       alt="Selected Image for Modal"
                     ></img>
                   </div>
-                  <div>
+                  <div class="relative">
                     <Dialog.Title
                       as="h3"
                       className="text-xl font-medium leading-6 text-gray-900"
                     >
-                      Payment successful
+                      ##Insert Date Here##
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        Your payment has been successfully submitted. We’ve sent
-                        you an email with all of the details of your order.
+                        Maecenas leo odio, condimentum id, luctus nec, molestie
+                        sed, justo. Pellentesque viverra pede ac diam
                       </p>
                     </div>
+                    <div className="flex flex-col items-center mt-10 mb-2 pb-10">
+                      <Button className="bg-secondary-purple hover:bg-secondary-purple-hover mt-2 w-32 flex justify-center">
+                        {pencilIcon} <span className="ml-2">Edit</span>
+                      </Button>
+                      <Button className="mt-2 w-32 flex justify-center">
+                        {trashIcon} <span className="ml-2">Delete</span>
+                      </Button>
+                    </div>
+                    <ProfileGalleryDisplay
+                      className={"mt-5"}
+                      imageData={""}
+                      userAlias={userInfo.alias}
+                      userUsername={userInfo.username}
+                    ></ProfileGalleryDisplay>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
