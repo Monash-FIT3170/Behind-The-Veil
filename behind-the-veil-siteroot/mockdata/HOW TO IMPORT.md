@@ -79,14 +79,11 @@ mongoimport -h localhost:3001 --db meteor --collection bookings --file mockdata/
 
 mongoimport -h localhost:3001 --db meteor --collection images --file mockdata/user_images50.json --jsonArray
 mongoimport -h localhost:3001 --db meteor --collection images --file mockdata/service_images100.json --jsonArray
-mongoimport -h localhost:3001 --db meteor --collection images --file mockdata/post_images_user30.json --jsonArray
-mongoimport -h localhost:3001 --db meteor --collection posts --file mockdata/post_user50.json --jsonArray
-mongoimport -h localhost:3001 --db meteor --collection images --file mockdata/post_images_user50.json --jsonArray
-mongoimport -h localhost:3001 --db meteor --collection images --file mockdata/abs_image_post_user50.json --jsonArray
-mongoimport -h localhost:3001 --db meteor --collection images --file mockdata/abc_image_post_user50.json --jsonArray
+mongoimport -h localhost:3001 --db meteor --collection images --file mockdata/galleryImages50_abc.json --jsonArray
+mongoimport -h localhost:3001 --db meteor --collection posts --file mockdata/post50_abc.json --jsonArray
 ```
 
-mongoexport -h localhost:3001 --db meteor --collection images --out=output.txt
+mongoexport -h localhost:3001 --db meteor --collection posts --out=output.txt
 
 ```
 

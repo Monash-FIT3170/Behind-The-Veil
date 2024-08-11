@@ -12,7 +12,7 @@ import { Fragment, useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { Dialog, Transition } from "@headlessui/react";
 
-import { getGalleryImages } from "../../../DatabaseHelper";
+import { getGalleryImages, useUserPost } from "../../../DatabaseHelper";
 
 /**
  * Gallery tab of an artist's profile
@@ -24,11 +24,11 @@ export const ArtistGalleryTab = ({ username }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const plusIcon = <PlusIcon className="icon-base" />;
   const galleryImgData = getGalleryImages(username);
+
   // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
   // When completing the dynamic version for this page, probably a good idea to setup the photos as components and importing them in.
 
   function closeModal() {
-    setSelectedImage(null);
     setIsOpen(false);
   }
 
@@ -110,7 +110,6 @@ export const ArtistGalleryTab = ({ username }) => {
               }}
               onClick={() => openModal(image)}
               alt={"Gallery Image ${i}"}
-              // onClick={() => handleImageClick(image)}
             />
           ))}
         </Masonry>

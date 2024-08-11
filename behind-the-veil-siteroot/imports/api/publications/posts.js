@@ -1,10 +1,10 @@
 /**
  * File Description: Post database entity
  * File version: 1.0
- * Contributors: Vicky
+ * Contributors: Vicky, Phillip
  */
 import {Meteor} from 'meteor/meteor'
-import PostCollection from "../collections/posts";
+import { PostCollection } from "../collections/posts";
 
 /**
  * Publishes all posts associated with a specific user to the client.
@@ -15,5 +15,10 @@ import PostCollection from "../collections/posts";
  */
 Meteor.publish('all_artist_posts', function(username) {
     // Check if the userid matches the artistUsername
-    return PostCollection.find({"artistUsername": "username"});
+    return PostCollection.find({"artistUsername": username});
+});
+
+Meteor.publish('post_description', function(description) {
+    // Check if the userid matches the artistUsername
+    return PostCollection.find({"postDescription": username});
 });

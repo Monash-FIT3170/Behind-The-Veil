@@ -363,9 +363,12 @@ export function useArtistDashboardData(username) {
   };
 }
 
-export function useUserPosts(username) {
-  const isLoadingPost = useSubscribe("specific_posts", []);
+export function useUserPost(username) {
+  const isLoadingPost = useSubscribe("all_artist_posts", username);
   let postData = useTracker(() => {
     return PostCollection.find({ artistUsername: username }).fetch();
   });
+  console.log(postData);
+
+  return postData;
 }
