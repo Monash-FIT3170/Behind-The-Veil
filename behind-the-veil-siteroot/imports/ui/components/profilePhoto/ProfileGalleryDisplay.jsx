@@ -11,7 +11,7 @@ export const ProfileGalleryDisplay = ({
 }) => {
   const classes = classNames(
     className,
-    "flex grid grid-cols-3 gap-4 relative absolute bottom-0 pb-8"
+    "flex grid grid-cols-3 gap-4 relative bottom-0 pb-8"
     // "flex flex-col items-center justify-center"
   );
   return (
