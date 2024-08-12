@@ -152,7 +152,7 @@ export const BookingCard = ({
                 // if a booking is confirmed, add "cancel" button
                 additionalButtons.push(
                     <Button className={purpleButtonClass}
-                        onClick={() => navigateTo('/cancel-booking' + bookingId)}>
+                        onClick={() => navigateTo('/cancel-booking')}>
                         <XCircleIcon className="icon-base"/>
                         Cancel
                     </Button>
