@@ -5,7 +5,7 @@
  */
 
 import React, {useState} from "react";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import ServiceDetailsHeader from "../../service-details-header/ServiceDetailsHeader";
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
@@ -26,6 +26,8 @@ import UserCollection from "../../../../api/collections/users";
  */
 
 const CancelBooking = () => {
+    const navigateTo = useNavigate();
+
     const [inputReason, setInputReason] = useState("");
     const [errors, setErrors] = useState("");
     const userInfo = getUserInfo();
@@ -59,8 +61,9 @@ const CancelBooking = () => {
         }
     }
 
+    //todo: Change status of the booking to CANCELLED
     const confirmCancellation = () => {
-        navigateTo(`/booking-confirmation`);
+        navigateTo(`/profile`);
     }
 
     // grab the service ID from the URL
@@ -165,12 +168,10 @@ const CancelBooking = () => {
                         <div className="flex justify-center items-center h-full">
                             <div className="flex flex-col">
                                 <h2 className="text-center title-text">
-                                    Cpnfirm?
+                                    Confirm cancellation
                                 </h2>
-                                {/*TODO: Add price to the modal*/}
-                                    <p className="text-center medium-text">You are about make a payment of
-                                        $120.00.</p>
-                                    <p className="text-center medium-text">Are you sure?</p>
+                                <p className="text-center medium-text">You are about to cancel the booking</p>
+                                <p className="text-center medium-text">Are you sure?</p>
                                 <div className="flex justify-center space-x-6 mt-5">
                                     <Button className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[25px] pe-[25px] flex gap-1" onClick={confirmCancellation}>
                                         <CheckIcon className="icon-base" />
