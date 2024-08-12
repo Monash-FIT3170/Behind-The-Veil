@@ -5,6 +5,7 @@
  */
 
 import React, {useState} from "react";
+import {useParams} from "react-router-dom";
 import ServiceDetailsHeader from "../../service-details-header/ServiceDetailsHeader";
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
@@ -34,6 +35,9 @@ const CancelBooking = () => {
         event.preventDefault()
         alert("Cancelling booking for reason: " + inputReason);
     }
+
+    // grab the service ID from the URL
+    const {bookingId} = useParams();
 
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
