@@ -37,7 +37,7 @@ const CancelBooking = () => {
 
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-            <BackButton/>
+            <BackButton to={"/profile"}/>
 
             {/* Main container for content */}
             <div className="flex flex-col gap-4 xl:px-40">
