@@ -232,7 +232,8 @@ const BookingDetailsPage = () => {
                         if (bookingDatetime >= now) { // checks that service date is after now (not yet)
                             // if booking date has not passed yet
                             actionButtons.push(
-                                <Button className={buttonClass}>
+                                <Button className={buttonClass}
+                                    onClick={() => navigateTo('/cancel-booking')}>
                                     <NoSymbolIcon className="icon-base"/>
                                     Cancel
                                 </Button>
