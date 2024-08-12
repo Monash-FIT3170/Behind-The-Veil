@@ -10,11 +10,12 @@ import ServiceDetailsHeader from "../../service-details-header/ServiceDetailsHea
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
-import {CheckIcon} from "@heroicons/react/24/outline"
+import {CheckIcon, NoSymbolIcon} from "@heroicons/react/24/outline"
 import BackButton from "../../button/BackButton";
 import {useSubscribe, useTracker} from "meteor/react-meteor-data";
 import Loader from "../../loader/Loader";
 import {getUserInfo} from "/imports/ui/components/util"
+import {Modal} from 'react-responsive-modal';
 
 import BookingCollection from "/imports/api/collections/bookings";
 import ServiceCollection from "../../../../api/collections/services";
@@ -25,23 +26,41 @@ import UserCollection from "../../../../api/collections/users";
  */
 
 const CancelBooking = () => {
-    const MOCK_CANCEL_BOOKING_DETAILS = {
-        service: "Bachelorette Glam Experience",
-        date: "Tuesday, 12 May, 2024",
-        artist: "Jane Doe",
-        price: "$120"
-    }
-
     const [inputReason, setInputReason] = useState("");
+    const [errors, setErrors] = useState("");
     const userInfo = getUserInfo();
+
+    const [open, setOpen] = useState(false);
+
+    const onOpenModal = () => setOpen(true);
+    const onCloseModal = () => setOpen(false);
 
     function handleInputChange(event) {
         setInputReason(event.target.value);
     }
 
     function handleCancelBooking(event) {
-        event.preventDefault()
-        alert("Cancelling booking for reason: " + inputReason);
+        event.preventDefault();
+        let newErrors = {};
+        let isError = false;
+
+        // Check for empty fields in each field. Make sure nothing is empty
+        if (!inputReason.trim()) {
+            newErrors.inputReason = "Please input a reason";
+            isError = true;
+        }
+
+        // Update errors state with new error messages
+        setErrors(newErrors);
+
+        // Proceed if there are no errors
+        if (!isError) {
+            onOpenModal()
+        }
+    }
+
+    const confirmCancellation = () => {
+        navigateTo(`/booking-confirmation`);
     }
 
     // grab the service ID from the URL
@@ -106,7 +125,6 @@ const CancelBooking = () => {
             return (
                 <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
                     <BackButton to={"/profile"}/>
-
                     {/* Main container for content */}
                     <div className="flex flex-col gap-4 xl:px-40">
                         <div className="large-text">Cancel Booking</div>
@@ -126,6 +144,7 @@ const CancelBooking = () => {
                                     placeholder="Enter Your Reason"
                                     onChange={handleInputChange}
                                     rows={4} cols={40}/>
+                            {errors.inputReason && <span className="text-cancelled-colour">{errors.inputReason}</span>}
                         </div>
 
                         {/* button */}
@@ -140,7 +159,31 @@ const CancelBooking = () => {
                             </div>
                         </div>
                     </div>
-
+                    <Modal classNames={{
+                        modal: "w-[480px] h-[300px] rounded-[45px] bg-glass-panel-background border border-main-blue"
+                    }} open={open} onClose={onCloseModal} center showCloseIcon={false}>
+                        <div className="flex justify-center items-center h-full">
+                            <div className="flex flex-col">
+                                <h2 className="text-center title-text">
+                                    Cpnfirm?
+                                </h2>
+                                {/*TODO: Add price to the modal*/}
+                                    <p className="text-center medium-text">You are about make a payment of
+                                        $120.00.</p>
+                                    <p className="text-center medium-text">Are you sure?</p>
+                                <div className="flex justify-center space-x-6 mt-5">
+                                    <Button className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[25px] pe-[25px] flex gap-1" onClick={confirmCancellation}>
+                                        <CheckIcon className="icon-base" />
+                                        Confirm
+                                    </Button>
+                                    <Button className="btn-base ps-[25px] pe-[25px] flex gap-1" onClick={onCloseModal}>
+                                        <NoSymbolIcon className="icon-base" />
+                                        Cancel
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </Modal>
                 </WhiteBackground>
             );
         }
