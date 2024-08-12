@@ -73,13 +73,17 @@ export const ArtistGalleryTab = ({ username }) => {
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel
-                  className="grid grid-cols-5 gap-4 w-3/5 transform overflow-hidden rounded-md bg-white p-6 text-left align-middle shadow-xl transition-all"
+                  className="grid grid-cols-5 gap-4 w-3/5 transform overflow-hidden rounded-md bg-white p-4 text-left align-middle shadow-xl transition-all"
                   style={{ maxHeight: "80vh" }}
                 >
                   <div className="col-span-4">
                     <img
-                      className="w-full h-full object-cover"
-                      style={{ maxHeight: "75vh", objectFit: "contain" }}
+                      className="w-full h-full object-cover mx-auto"
+                      style={{
+                        maxHeight: "70vh",
+                        maxWidth: "90vh",
+                        objectFit: "contain",
+                      }}
                       src={selectedImage}
                       alt="Selected Image for Modal"
                     ></img>

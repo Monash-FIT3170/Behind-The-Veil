@@ -15,5 +15,5 @@ import { PostCollection } from "../collections/posts";
  */
 Meteor.publish('all_artist_posts', function(username) {
     // Check if the userid matches the artistUsername
-    return PostCollection.find({"artistUsername": username});
+    return PostCollection.find({artistUsername: username});
 });
