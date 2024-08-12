@@ -5,11 +5,6 @@
  */
 
 import React, {useState} from 'react';
-import {useSubscribe, useTracker} from "meteor/react-meteor-data"
-
-import ServiceCollection from "/imports/api/collections/services";
-import UserCollection from "/imports/api/collections/users";
-import ImageCollection from "/imports/api/collections/images";
 
 import PageLayout from "/imports/ui/enums/PageLayout";
 import WhiteBackground from "/imports/ui/components/whiteBackground/WhiteBackground.jsx";
@@ -17,9 +12,7 @@ import Pagination from "/imports/ui/components/pagination/Pagination.jsx"
 import ServiceCard from "/imports/ui/components/card/ServiceCard.jsx";
 import SearchBar from "/imports/ui/components/searchBar/searchBar.jsx";
 import Loader from "/imports/ui/components/loader/Loader";
-
-import {getServices} from "../../DatabaseHelper";
-
+import {useServices} from "../../DatabaseHelper";
 
 /**
  * Page of a list of Service cards for users to see
@@ -31,7 +24,7 @@ export const ServicesPage = () => {
 
     // set up subscription (publication is in the "publication" folder)
     const serviceFilter = { serviceActive: true }
-    const [isLoading, servicesData] = getServices("active_services", [], serviceFilter, true )
+    const {isLoading, servicesData} = useServices("active_services", [], serviceFilter, true )
 
     // map data into service cards
     const displayedServicesJsx = servicesData.map((service) => (

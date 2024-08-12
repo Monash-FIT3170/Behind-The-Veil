@@ -1,21 +1,18 @@
 /**
  * File Description: Artists page
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Nikki
  */
 
 import React, {useState} from 'react';
-import {useSubscribe, useTracker} from "meteor/react-meteor-data";
 
 import PageLayout from "../../../enums/PageLayout";
-import UserCollection from "../../../../api/collections/users";
-import ImageCollection from "../../../../api/collections/images";
-
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import ArtistCard from "../../card/ArtistCard";
 import Pagination from "../../pagination/Pagination";
 import SearchBar from "/imports/ui/components/searchBar/searchBar.jsx";
 import Loader from "../../loader/Loader";
+import {useUsers} from "../../DatabaseHelper";
 
 /**
  * Page of a list of Artist cards for users to see
@@ -25,31 +22,9 @@ export const ArtistsPage = () => {
     // default number of items on each page
     const [itemsPerPage, setItemsPerPage] = useState(25);
 
-    // set up subscription (publication is in the "publication" folder)
-    const isLoadingArtists = useSubscribe('all_artists');
-    const isLoadingImages = useSubscribe('profile_images');
-    const isLoading = isLoadingArtists() || isLoadingImages();
-
-    // get data from db
-    let usersData = useTracker(() => {
-        return UserCollection.find({"profile.type": "artist"}).fetch();
-    });
-    let imagesData = useTracker(() => {
-        return ImageCollection.find({"imageType": "profile"}).fetch();
-    });
-
-
-    // manual aggregation into serviceData with its artist and images
-    for (let i = 0; i < usersData.length; i++) {
-
-        for (let j = 0; j < imagesData.length; j++) {
-            // find matching image for the artist
-            if (imagesData[j].imageType === "profile" && usersData[i].username === imagesData[j].target_id) {
-                usersData[i].profileImageData = imagesData[j].imageData;
-                break;
-            }
-        }
-    }
+    // get artist data
+    const userFilter = {"profile.type": "artist"}
+    const {isLoading, usersData} = useUsers("all_artists", [], userFilter)
 
     // map data into artist cards
     const displayedArtistJsx = usersData.map((user) => (

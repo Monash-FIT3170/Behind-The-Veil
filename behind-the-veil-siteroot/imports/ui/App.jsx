@@ -20,7 +20,7 @@ import MessagesPage from "./components/pages/messages/MessagesPage.jsx";
 import LoginPage from "./components/pages/login/LoginPage.jsx";
 import RegisterPage from "./components/pages/register/RegisterPage.jsx";
 import CreateAccountPage from "./components/pages/register/CreateAccountPage";
-import ActivateAccountPage from "./components/pages/register/ActivateAccountPage";
+
 import ForgotPasswordPage from "./components/pages/forgotPassword/ForgotPasswordPage";
 import ResetPasswordPage from "./components/pages/forgotPassword/ResetPasswordPage";
 import ResetCompletePage from "./components/pages/forgotPassword/ResetCompletePage";
@@ -38,6 +38,8 @@ import AddAvailability from './components/pages/add-availability/AddAvailability
 import RoutingAccess from "./enums/RoutingAccess";
 import UrlBasePath from "./enums/UrlBasePath";
 import AddEditServicePage from "./components/pages/service/AddEditServicePage.jsx";
+import EmailVerifyPage from "./components/pages/register/EmailVerifyPage.jsx";
+import LinkSentPage from "./components/pages/forgotPassword/LinkSentPage";
 
 export const App = () => (
     <div>
@@ -83,12 +85,14 @@ export const App = () => (
                             </ProtectedRoute>
                         }
                     />
+
+                    <Route path="/verify-email/:token" element={<EmailVerifyPage/>}/>
+
                     <Route
-                        path={`/${UrlBasePath.REGISTER}/activateAccount`}
+                        path={`/${UrlBasePath.REGISTER}/accountCreated`}
                         element={
-                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_OUT_ONLY}>
-                                <ActivateAccountPage />
-                            </ProtectedRoute>
+                            <ProtectedRoute
+                                accessReq={RoutingAccess.SIGNED_OUT_ONLY}><LinkSentPage/></ProtectedRoute>
                         }
                     />
                     <Route
@@ -99,6 +103,15 @@ export const App = () => (
                             </ProtectedRoute>
                         }
                     />
+
+                    <Route
+                        path={`/${UrlBasePath.FORGOT_PASSWORD}/link-sent`}
+                        element={
+                            <ProtectedRoute
+                                accessReq={RoutingAccess.SIGNED_OUT_ONLY}><LinkSentPage/></ProtectedRoute>
+                        }
+                    />
+
                     <Route
                         path={`/${UrlBasePath.RESET_PASSWORD}/:token`}
                         element={
@@ -108,7 +121,7 @@ export const App = () => (
                         }
                     />
                     <Route
-                        path={`/${UrlBasePath.RESET_PASSWORD}/complete`}
+                        path={`/${UrlBasePath.FORGOT_PASSWORD}/complete`}
                         element={
                             <ProtectedRoute accessReq={RoutingAccess.SIGNED_OUT_ONLY}>
                                 <ResetCompletePage />

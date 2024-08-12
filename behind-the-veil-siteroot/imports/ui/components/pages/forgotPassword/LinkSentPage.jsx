@@ -1,31 +1,30 @@
 /**
- * File Description: Activate Account page
- * File version: 1.2
- * Contributors: Ryan, Nikki
+ * File Description: Link Sent page
+ * File version: 2.0
+ * Contributors:  Ryan, Nikki
  */
 
 import React from 'react';
 import {useLocation, useNavigate} from "react-router-dom";
 import {ArrowRightIcon, EnvelopeIcon} from "@heroicons/react/24/outline";
-
-import URLSearchParams from "@ungap/url-search-params";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
 import UrlBasePath from "../../../enums/UrlBasePath";
 
-// TODO: Match code to one sent via email, then activate users account
-const ActivateAccountPage = () => {
+/**
+ * Page that displays user has successfully sent link to email
+ */
+const LinkSentPage = () => {
     const navigate = useNavigate();
-    const username = new URLSearchParams(useLocation().search).get("username");
 
-    // method called to email user verification email
-    Meteor.call("verify_email", username);
+    // check URL, if you're on the reset password url or account created page
+    const urlBase = useLocation().pathname.split('/')[1];
 
     return (
         <WhiteBackground pageLayout={PageLayout.SMALL_CENTER}>
 
-            <div className="title-text text-center">Activate Your Account</div>
+            <div className="title-text text-center">{urlBase === UrlBasePath.REGISTER ? "Verify Your Email" : "Password Reset Link Sent"}</div>
 
             <div className={"flex flex-col items-center justify-center gap-y-3 p-2.5"}>
                 <div className={"flex items-center justify-center"}>
@@ -38,13 +37,8 @@ const ActivateAccountPage = () => {
                     <div className={"main-text"}>
                         Please access the
                         <span className={"text-pending-colour"}> link </span>
-                        sent to your email to activate your account!
+                        sent to your email to {urlBase === UrlBasePath.REGISTER ? "verify your email" : "reset your password"}!
                     </div>
-                </div>
-
-                {/* TODO: Remove this div below once email activation has been implemented */}
-                <div className={"main-text text-dark-grey mb-2.5"}>
-                    **The email API has not been completed yet**
                 </div>
 
                 <Button className={"bg-secondary-purple hover:bg-secondary-purple-hover  w-1/3 min-w-40"}
@@ -58,4 +52,4 @@ const ActivateAccountPage = () => {
     );
 };
 
-export default ActivateAccountPage;
+export default LinkSentPage;

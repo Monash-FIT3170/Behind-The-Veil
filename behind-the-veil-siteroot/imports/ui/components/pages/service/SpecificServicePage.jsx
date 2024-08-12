@@ -1,15 +1,11 @@
 /**
  * File Description: Specific Services page
- * File version: 1.4
+ * File version: 1.5
  * Contributors: Nhu, Nikki
  */
 
 import React, {useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import ServiceCollection from "../../../../api/collections/services";
-import UserCollection from "../../../../api/collections/users";
-import ImageCollection from "../../../../api/collections/images";
-import {useSubscribe, useTracker} from "meteor/react-meteor-data";
 import {CalendarDaysIcon, ChevronLeftIcon, ChevronRightIcon, Squares2X2Icon} from "@heroicons/react/24/outline";
 
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
@@ -20,6 +16,7 @@ import Card from "../../card/Card";
 import FormOutput from "../request-booking/FormOutput";
 import PreviousButton from "../../button/PreviousButton";
 import UrlBasePath from "../../../enums/UrlBasePath";
+import {useSpecificService} from "../../DatabaseHelper";
 
 /**
  * Displays a page for a specific service
@@ -42,44 +39,13 @@ const SpecificServicePage = () => {
     // grab the service ID from the URL
     const {serviceId} = useParams();
 
-    // set up subscription and get data from db for this service
-    const isLoadingService = useSubscribe('specific_service', serviceId);
-
-    let serviceData = useTracker(() => {
-        return ServiceCollection.find({"_id": serviceId}).fetch()[0];
-    });
-
-    // grab the artist and image data depending on if service is loaded or not
-    const isLoadingArtist = useSubscribe('specific_user', serviceData ? serviceData.artistUsername : "");
-    const isLoadingServiceImages = useSubscribe('specific_service_images', serviceData ? serviceData._id : "");
-    const isLoadingArtistProfile = useSubscribe('specific_profile_image', serviceData ? serviceData.artistUsername : "");
-    const isLoading = isLoadingService() || isLoadingArtist() || isLoadingServiceImages() || isLoadingArtistProfile();
-
-    let artistData = useTracker(() => {
-        return UserCollection.find({username: serviceData ? serviceData.artistUsername : ""}).fetch()[0];
-    });
-
-    let serviceImagesData = useTracker(() => {
-        return ImageCollection.find({
-            $and: [
-                {"imageType": "service"},
-                {"target_id": serviceData ? serviceData._id : ""}
-            ]
-        }).fetch();
-    });
-
-    let profileImagesData = useTracker(() => {
-        return ImageCollection.find({
-            $and: [
-                {"imageType": "profile"},
-                {"target_id": serviceData ? serviceData.artistUsername : ""}
-            ]
-        }).fetch()[0];
-    });
+    // get service data from database
+    const {isLoading, serviceData, artistData, serviceImagesData, profileImageData} = useSpecificService(serviceId);
 
     const imageUrls = serviceImagesData.map((image) => (
         image.imageData
     ))
+
     const durationTip = "Duration does not include travel. It is the required time to performing the service for the bride.";
 
     if (isLoading) {
@@ -88,7 +54,7 @@ const SpecificServicePage = () => {
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
                 <Loader
                     loadingText={"loading . . ."}
-                    isLoading={isLoadingService()}
+                    isLoading={isLoading}
                     size={100}
                     speed={1.5}
                 />
@@ -104,7 +70,7 @@ const SpecificServicePage = () => {
                         <span className={"large-text"}>Service is not found </span>
 
                         <Button className={"bg-secondary-purple hover:bg-secondary-purple-hover"}
-                                onClick={() => navigateTo("/services")}>
+                                onClick={() => navigateTo("/" + UrlBasePath.SERVICES)}>
                             Back to all services
                         </Button>
                     </div>
@@ -186,7 +152,7 @@ const SpecificServicePage = () => {
                         {/* User Info Container */}
                         <Card
                             className="flex flex-row items-center justify-center space-x-2 w-fit sm:min-w-[450px] rounded-2xl">
-                            <img src={profileImagesData.imageData} alt="Artist profile image"
+                            <img src={profileImageData.imageData} alt="Artist profile image"
                                  className="rounded-[10px] object-cover size-24"
                                  onError={({currentTarget}) => {
                                      currentTarget.onError = null; // prevent infinite loop

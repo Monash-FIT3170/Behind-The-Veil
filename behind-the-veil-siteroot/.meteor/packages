@@ -25,3 +25,4 @@ peerlibrary:assert
 meteortesting:mocha
 accounts-base
 accounts-password
+email
