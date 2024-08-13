@@ -7,6 +7,7 @@
 import {useState} from "react";
 import {Tracker} from "meteor/tracker";
 import {Meteor} from "meteor/meteor";
+import {removeStopwords} from "stopword";
 
 /**
  * Retrieves current logged-in user's information
@@ -66,4 +67,41 @@ export function useUserInfo() {
 
     console.log("Current logged in user:" + JSON.stringify(userInfo))
     return userInfo;
+}
+
+/**
+ * Gets a list of objects containing all the suggestions for the search bar
+ *
+ * @param type - either services or artists (which category to get suggestions for)
+ * @param usersData - all relevant user data to get suggestions for
+ * @param servicesData - all relevant services data to get suggestions for
+ * @returns {*[]} an array of objects. each object has a main and a sub attribute, both used as suggestions.
+ */
+export function getSearchSuggestions(type, usersData, servicesData) {
+
+    // data is loaded, get auto suggestion completion words
+    let allKeyWords = []
+    if (type === 'artists') {
+
+        for (let i=0; i<usersData.length; i++) {
+            // add in keywords from username and alias
+            let userObject = {}
+            userObject.main = usersData[i].username
+            userObject.sub = usersData[i].profile.alias
+            allKeyWords.push(userObject)
+        }
+
+    } else if (type === 'services') {
+
+        for (let i=0; i<servicesData.length; i++) {
+            // add in keywords from username and alias
+            let userObject = {}
+            //  allKeyWords.concat(artistsData[i].profile.alias.)
+            userObject.main = servicesData[i].serviceName;
+            userObject.sub = removeStopwords(servicesData[i].serviceDesc.split(' ')).join(" ");
+            allKeyWords.push(userObject)
+        }
+
+    }
+    return allKeyWords
 }

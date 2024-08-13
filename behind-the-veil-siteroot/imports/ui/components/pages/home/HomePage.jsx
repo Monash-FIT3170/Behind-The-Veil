@@ -1,16 +1,15 @@
 /**
  * File Description: Home page
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Lucas, Nikki
  */
 
 import React, {useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {
     ChevronLeftIcon,
     ChevronRightIcon,
     IdentificationIcon,
-    MagnifyingGlassIcon,
     PaintBrushIcon,
     SparklesIcon,
 } from "@heroicons/react/24/outline";
@@ -30,17 +29,10 @@ const images = [
 
 /**
  * Home page which is also the landing page for the app.
- *
- * TODO: functioning search bar functionality
  */
 export const HomePage = () => {
     // Starts the index for the image array at 0
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-    // creates a state of the input value for the search bar
-    const [inputValue, setInputValue] = useState("");
-    const [searchType, setSearchType] = useState("services");
-    let navigate = useNavigate();
 
     // Shifts the index for the image array down 1, or to the final index (array.length - 1) if the index is at 0
     const goToPreviousImage = () => {
@@ -56,28 +48,6 @@ export const HomePage = () => {
         );
     };
 
-    /**
-     * this function is used when the user wants to submit the value in the search bar, either by enter key or a button
-     * Alter this function with whatever data manipulation is needed to be done with the input value
-     */
-    const handleButtonClickOrSubmit = (event) => {
-        event.preventDefault(); // This line is important as it prevents the automatic submit for forms which reloads the page
-        if (searchType === "services") {
-            navigate("/" + UrlBasePath.SERVICES)
-        } else if (searchType === "artists") {
-            navigate("/" + UrlBasePath.ARTISTS)
-        }
-    };
-
-    // this function updates the state when input changes
-    const handleInputChange = (event) => {
-        setInputValue(event.target.value);
-    };
-
-    const handleSearchTypeChange = (event) => {
-        setSearchType(event.target.value);
-    };
-
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
             {/* Container for the images and the left and right buttons for sort through images */}
@@ -91,6 +61,7 @@ export const HomePage = () => {
                 <div className="inline-flex justify-center w-full sm:w-4/6 h-full">
                     <div className="hidden lg:flex lg:items-start lg:justify-end lg:h-full">
                         <img
+                            alt={"cover image of a bride"}
                             src={
                                 images[
                                     currentImageIndex === 0
@@ -105,10 +76,11 @@ export const HomePage = () => {
                         <img
                             src={images[currentImageIndex]}
                             className="object-cover w-full h-96 sm:w-96 rounded-[2rem] z-10 shadow-2xl"
-                        />
+                            alt={"cover image of a bride"}/>
                     </div>
                     <div className="hidden lg:flex lg:items-start lg:h-full">
                         <img
+                            alt={"cover image of a bride"}
                             src={
                                 images[
                                     currentImageIndex === images.length - 1
@@ -176,29 +148,12 @@ export const HomePage = () => {
             </div>
 
             {/* Container for the search bar, drop down and search button */}
-            <div className="container mx-auto px-20">
-                <div className="flex flex-col md:flex-row items-center justify-center gap-3">
-
-                    <SearchBar
-                        value={inputValue}
-                        onChange={handleInputChange}
-                        handleSubmit={handleButtonClickOrSubmit}
-                        placeholderName="Name, Description, etc..."
-                    ></SearchBar>
-
-                    <div className="flex flex-row items-center justify-center gap-3">
-                        <select defaultValue={"services"} onChange={handleSearchTypeChange} className="input-base w-28">
-                            <option value="artists">Artists</option>
-                            <option value="services">Services</option>
-                        </select>
-                        <Button
-                            className="flex justify-center items-center rounded-full h-12 w-12 p-2
-                            bg-secondary-purple hover:bg-secondary-purple-hover"
-                            onClick={handleButtonClickOrSubmit}>
-                            <MagnifyingGlassIcon className="icon-base"/>
-                        </Button>
-                    </div>
-                </div>
+            <div className="z-50 container mx-auto sm:px-20">
+                <SearchBar placeholder={"Search services or artists"}
+                           defaultType={"services" }
+                           startingValue={""}
+                           suggestionsDown={false}
+                />
             </div>
 
             {/* Container for the Browse services and Browse artists buttons */}
@@ -221,6 +176,9 @@ export const HomePage = () => {
                     </Link>
                 </form>
             </div>
+
+            {/* this is required for the search bar to not move weirdly */}
+            <div className={"h-[50px]"} />
         </WhiteBackground>
     );
 };
