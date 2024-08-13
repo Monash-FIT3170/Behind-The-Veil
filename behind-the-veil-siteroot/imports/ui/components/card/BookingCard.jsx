@@ -139,15 +139,6 @@ export const BookingCard = ({
                 );
                 break;
             case BookingStatus.CONFIRMED:
-                // if a booking is confirmed, add "cancel" button
-                additionalButtons.push(
-                    <Button className={purpleButtonClass}
-                        onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
-                        <XCircleIcon className="icon-base"/>
-                        Cancel
-                    </Button>
-                );
-                break;
             case BookingStatus.OVERDUE:
                 // if a booking is confirmed, add "cancel" button
                 additionalButtons.push(

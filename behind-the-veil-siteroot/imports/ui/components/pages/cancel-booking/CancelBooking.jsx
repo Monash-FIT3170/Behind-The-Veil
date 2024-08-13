@@ -14,7 +14,7 @@ import {CheckIcon, NoSymbolIcon} from "@heroicons/react/24/outline"
 import BackButton from "../../button/BackButton";
 import {useSubscribe, useTracker} from "meteor/react-meteor-data";
 import Loader from "../../loader/Loader";
-import {getUserInfo} from "/imports/ui/components/util"
+import {useUserInfo} from "/imports/ui/components/util"
 import {Modal} from 'react-responsive-modal';
 
 import BookingCollection from "/imports/api/collections/bookings";
@@ -30,7 +30,7 @@ const CancelBooking = () => {
 
     const [inputReason, setInputReason] = useState("");
     const [errors, setErrors] = useState("");
-    const userInfo = getUserInfo();
+    const userInfo = useUserInfo();
 
     const [open, setOpen] = useState(false);
 
