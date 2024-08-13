@@ -73,8 +73,8 @@ export const Pagination = ({externalClassName, internalClassName, itemsPerPage, 
     }, [pageNum]);
 
     // updating the classes if received any as input
-    const externClasses = classNames(externalClassName, "flex flex-col gap-y-10");
-    const internClasses = classNames(internalClassName, "flex flex-row gap-10 items-center justify-center flex-wrap");
+    const externClasses = classNames(externalClassName, "flex flex-col gap-y-10 w-full");
+    const internClasses = classNames(internalClassName, "flex flex-row gap-10 items-center justify-center flex-wrap w-full");
 
     return (
 
