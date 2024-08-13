@@ -158,7 +158,7 @@ export const App = () => (
                     />
                     {/*Add and Edit Service Pages for Artist*/}
                     <Route
-                        path={`/${UrlBasePath.SERVICES}/addservice`}
+                        path={`/${UrlBasePath.PROFILE}/addService`}
                         element={
                             <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}>
                                 <AddEditServicePage />
@@ -166,7 +166,7 @@ export const App = () => (
                         }
                     />
                     <Route
-                        path={`/${UrlBasePath.SERVICES}/:serviceId/editservice`}
+                        path={`/${UrlBasePath.PROFILE}/editService/:serviceId`}
                         element={
                             <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}>
                                 <AddEditServicePage isEdit />

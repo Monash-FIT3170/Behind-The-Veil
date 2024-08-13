@@ -140,8 +140,7 @@ export const ArtistServicesTab = ({username, external = false}) => {
                 <div className={"flex flex-col-reverse items-center justify-center sm:flex-row sm:items-center sm:justify-end gap-6"}>
                     <Button
                         className="flex flex-row gap-x-1.5 min-w-48 items-center justify-center bg-secondary-purple hover:bg-secondary-purple-hover"
-                        onClick={() => navigateTo(`/${UrlBasePath.SERVICES}/addservice`)}
-                    >
+                        onClick={() => navigateTo(`/${UrlBasePath.PROFILE}/addService`)}>
                         <PlusIcon className="icon-base"/> Add Service
                     </Button>
                 </div>

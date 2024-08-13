@@ -89,7 +89,7 @@ const SpecificServicePage = () => {
                     <div className="flex flex-col xl:flex-row xl:items-start justify-center w-full gap-y-10">
 
                         {/* Left side: image carousel with navigation buttons */}
-                        <div className="flex flex-col items-center justify-start gap-y-8">
+                        <div className={ imageUrls.length ? "flex flex-col items-center justify-start gap-y-8" : "hidden"}>
 
                             <div className={"flex flex-row items-center justify-center"}>
 
@@ -99,19 +99,19 @@ const SpecificServicePage = () => {
                                     <ChevronLeftIcon className="size-10 stroke-[4] text-dark-grey"/>
                                 </Button>
 
-                            {/* Image */}
-                            <img className="rounded-2xl object-contain
-                             h-full w-4/5
-                             sm:min-w-[500px]
-                             xl:min-w-[300px] xl:max-w-[400px] xl:max-h-[600px]
-                             2xl:min-w-[500px] 2xl:max-w-[600px]"
-                                 src={imageUrls[currentImageIndex]}
-                                 alt="Service image"
-                                 onError={({currentTarget}) => {
-                                     currentTarget.onError = null; // prevent infinite loop
-                                     currentTarget.src = '/imageNotFound.png';
-                                 }}
-                            />
+                                {/* Image */}
+                                <img className="rounded-2xl object-contain
+                                 h-[600px] w-4/5
+                                 sm:min-w-[500px]
+                                 xl:min-w-[300px] xl:max-w-[400px]
+                                 2xl:min-w-[500px] 2xl:max-w-[600px]"
+                                     src={imageUrls[currentImageIndex]}
+                                     alt="Service image"
+                                     onError={({currentTarget}) => {
+                                         currentTarget.onError = null; // prevent infinite loop
+                                         currentTarget.src = '/imageNotFound.png';
+                                     }}
+                                />
 
                                 {/* Forward Button */}
                                 <Button onClick={handleNextClick}
@@ -147,18 +147,19 @@ const SpecificServicePage = () => {
                             </div>
                         </div>
 
-                    {/* Right side - User Info and Details */}
-                    <div className="flex flex-col gap-y-10 items-center justify-center">
-                        {/* User Info Container */}
-                        <Card
-                            className="flex flex-row items-center justify-center space-x-2 w-fit sm:min-w-[450px] rounded-2xl">
-                            <img src={profileImageData.imageData} alt="Artist profile image"
-                                 className="rounded-[10px] object-cover size-24"
-                                 onError={({currentTarget}) => {
-                                     currentTarget.onError = null; // prevent infinite loop
-                                     currentTarget.src = '/imageNotFound.png';
-                                 }}
-                            />
+                        {/* Right side - User Info and Details */}
+                        <div className="flex flex-col gap-y-10 items-center justify-center">
+                            {/* User Info Container */}
+                            <Card
+                                className="flex flex-row items-center justify-center space-x-2 w-fit sm:min-w-[450px] rounded-2xl">
+                                <img src={profileImageData ? profileImageData.imageData : new Error()}
+                                     alt="Artist profile image"
+                                     className="rounded-[10px] object-cover size-24"
+                                     onError={({currentTarget}) => {
+                                         currentTarget.onError = null; // prevent infinite loop
+                                         currentTarget.src = '/imageNotFound.png';
+                                     }}
+                                />
 
                                 <div className="flex flex-col items-start justify-center gap-y-1 w-full">
                                     <div className="flex flex-col items-start justify-center gap-y-1 pl-3">
@@ -166,13 +167,13 @@ const SpecificServicePage = () => {
                                         <span
                                             className="medium-text text-dark-grey line-clamp-1"> @{artistData.username}</span>
                                     </div>
-                                <Button
-                                    className="flex flex-row gap-2 min-w-40 w-full justify-center items-center mt-2"
-                                    onClick={() => navigateTo(`/${UrlBasePath.ARTISTS}/${artistData.username}`)}>
-                                    {/*this is the BRIDE's view of the artist, not the artist profile*/}
-                                    <Squares2X2Icon className={"icon-base"}/>
-                                    All services
-                                </Button>
+                                    <Button
+                                        className="flex flex-row gap-2 min-w-40 w-full justify-center items-center mt-2"
+                                        onClick={() => navigateTo(`/${UrlBasePath.ARTISTS}/${artistData.username}`)}>
+                                        {/*this is the BRIDE's view of the artist, not the artist profile*/}
+                                        <Squares2X2Icon className={"icon-base"}/>
+                                        All services
+                                    </Button>
                                 </div>
                             </Card>
 
@@ -190,12 +191,12 @@ const SpecificServicePage = () => {
 
                             </div>
 
-                        <Button className="flex flex-row gap-x-2 justify-center items-center w-4/5 sm:w-1/3 min-w-60
+                            <Button className="flex flex-row gap-x-2 justify-center items-center w-4/5 sm:w-1/3 min-w-60
                             bg-secondary-purple hover:bg-secondary-purple-hover"
-                                onClick={() => navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/request-booking`)}>
-                            <CalendarDaysIcon className="icon-base"/>
-                            Request Booking
-                        </Button>
+                                    onClick={() => navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/request-booking`)}>
+                                <CalendarDaysIcon className="icon-base"/>
+                                Request Booking
+                            </Button>
                         </div>
                     </div>
                 </WhiteBackground>
