@@ -13,6 +13,8 @@ import ServiceCard from "/imports/ui/components/card/ServiceCard.jsx";
 import SearchBar from "/imports/ui/components/searchBar/searchBar.jsx";
 import Loader from "/imports/ui/components/loader/Loader";
 import {useServices} from "../../DatabaseHelper";
+import URLSearchParams from "@ungap/url-search-params";
+import {useLocation} from "react-router-dom";
 
 /**
  * Page of a list of Service cards for users to see
@@ -23,22 +25,32 @@ export const ServicesPage = () => {
     const [itemsPerPage, setItemsPerPage] = useState(10);
 
     // set up subscription (publication is in the "publication" folder)
-    const serviceFilter = { serviceActive: true }
-    const {isLoading, servicesData} = useServices("active_services", [], serviceFilter, true )
+    const serviceFilter = {serviceActive: true}
+    const {isLoading, servicesData} = useServices("active_services", [], serviceFilter, true)
+
+    // get any search parameters and filter
+    let searchInput = new URLSearchParams(useLocation().search).get("search");
+    searchInput = searchInput ? searchInput.trim() : ''
+
 
     // map data into service cards
-    const displayedServicesJsx = servicesData.map((service) => (
-        <ServiceCard
-            key={service._id}
-            serviceId={service._id}
-            serviceName={service.serviceName}
-            serviceDesc={service.serviceDesc}
-            servicePrice={service.servicePrice}
-            artistUsername={service.artistUsername}
-            serviceImageData={service.serviceImageData}
-            artistAlias={service.artistAlias}
-        />)
-    )
+    const displayedServicesJsx = servicesData
+        .filter((service) => {
+            return service.serviceName.toLowerCase().includes(searchInput.toLowerCase()) ||
+                service.serviceDesc.toLowerCase().includes(searchInput.toLowerCase())
+        })
+        .map((service) => (
+            <ServiceCard
+                key={service._id}
+                serviceId={service._id}
+                serviceName={service.serviceName}
+                serviceDesc={service.serviceDesc}
+                servicePrice={service.servicePrice}
+                artistUsername={service.artistUsername}
+                serviceImageData={service.serviceImageData}
+                artistAlias={service.artistAlias}
+            />)
+        )
 
     // checks if the page and data has loaded
     if (document.readyState === "complete" && !isLoading) {
@@ -47,9 +59,12 @@ export const ServicesPage = () => {
 
                 <span className={"title-text text-center"}>Services</span>
 
-                {/*todo: functional search bar*/}
                 <div className="flex flex-col items-center mb-10">
-                    <SearchBar/>
+                    <SearchBar placeholder={"Search service name or description"}
+                               defaultType={"services" }
+                               startingValue={searchInput}
+                               suggestionsDown={true}
+                    />
                 </div>
 
                 <div className="flex flex-col items-center justify-center gap-y-5">
@@ -80,11 +95,6 @@ export const ServicesPage = () => {
         return (
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
                 <span className={"title-text text-center"}>Services</span>
-
-                {/*todo: functional search bar*/}
-                <div className="flex flex-col items-center mb-10">
-                    <SearchBar/>
-                </div>
 
                 <Loader
                     loadingText={"Services are loading . . ."}
