@@ -12,11 +12,13 @@ import {ArrowRightIcon} from "@heroicons/react/24/outline";
 import FormOutput from "./FormOutput";
 import {addHours, enAU, format} from "date-fns";
 import PreviousButton from "../../button/PreviousButton";
+import {getUserInfo} from "../../util";
 
 /**
  * Component for displaying booking summary and allowing continuation to the next step.
  */
 const BookingSummary = () => {
+    let currentUser = getUserInfo();
 
     const tipText = "Full deposit for a service is required. If the booking is cancelled or rejected, the full fee will be refunded.";
     /**
@@ -26,18 +28,18 @@ const BookingSummary = () => {
      * @returns {Array<Date>} - Array containing start date, end date, and formatted date range string.
      */
     const getStartAndEndDate = (startDateTime, serviceDuration) => {
-        const endDateTime = addHours(startDateTime, serviceDuration)
+        const endDateTime = addHours(startDateTime, serviceDuration);
 
         // format day in the form of: "Thu 21/03/23"
-        const dayString = format(startDateTime, 'E P', { locale: enAU })
+        const dayString = format(startDateTime, 'E P', { locale: enAU });
 
         // format time interval in the form of: "10:00 AM - 12:00 PM"
-        const timeIntervalString = `${format(startDateTime, 'p', { locale: enAU })} - ${format(endDateTime, 'p', { locale: enAU })}`
+        const timeIntervalString = `${format(startDateTime, 'p', { locale: enAU })} - ${format(endDateTime, 'p', { locale: enAU })}`;
 
         // formatted string is in the form of: "Thu 21/03/23 10:00 AM - 12:00 PM"
-        const formattedString = `${dayString} ${timeIntervalString}`
+        const formattedString = `${dayString} ${timeIntervalString}`;
 
-        return [startDateTime, endDateTime, formattedString]
+        return [startDateTime, endDateTime, formattedString];
     };
 
     /**
@@ -52,9 +54,8 @@ const BookingSummary = () => {
         const location = urlParams.get('location');
         const dateTime = urlParams.get('time');
 
-        // TODO: bride and artist details should be queried from database
         return {
-            'Bride Name': 'Jane Doe',
+            'Bride Name': currentUser.alias,
             'Artist Name': 'Alice Tran',
             'Service': 'Bachelorette Glam Experience',
             'Location': location,
@@ -69,9 +70,9 @@ const BookingSummary = () => {
      */
     const handleSubmit = () => {
         // pass the data to the next page via the url
-        const query = new URLSearchParams(queryData()).toString();
+        const query = new URLSearchParams(queryData().toString());
         navigateTo(`/payment-details?${query}`);
-    }
+    };
 
     // Navigate hook for redirecting to another page
     const navigateTo = useNavigate();

@@ -80,7 +80,6 @@ const PaymentDetails = () => {
                         sum += n;
                         alternate = !alternate;
                     }
-                    console.log("Luhn check sum:", sum); // Debugging log
                     if (sum % 10 !== 0) {
                         errorMessage = "Invalid card number";
                     }
