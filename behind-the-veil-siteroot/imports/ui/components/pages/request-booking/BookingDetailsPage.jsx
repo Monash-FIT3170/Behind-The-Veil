@@ -262,7 +262,7 @@ const BookingDetailsPage = () => {
                             <FormOutput
                                 textColor="text-dark-grey"
                                 label="Ref"
-                                input={bookingData._id._str}
+                                input={bookingData._id}
                             />
 
                             {/*either bride or artist information + message button*/}

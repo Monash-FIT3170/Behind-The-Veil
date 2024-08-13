@@ -178,9 +178,9 @@ export const App = () => (
 
                     {/*requesting booking flow*/}
                     <Route path={`/${UrlBasePath.SERVICES}/:serviceId/request-booking`} element={<RequestBooking />} />
-                    <Route path="/booking-summary" element={<BookingSummary />} />
-                    <Route path="/payment-details" element={<PaymentDetails />} />
-                    <Route path="/booking-confirmation" element={<BookingConfirmation />} />
+                    <Route path={`/${UrlBasePath.SERVICES}/:serviceId/booking-summary`} element={<BookingSummary />} />
+                    <Route path={`/${UrlBasePath.SERVICES}/:serviceId/payment-details`} element={<PaymentDetails />} />
+                    <Route path={`/${UrlBasePath.SERVICES}/:serviceId/booking-confirmation`} element={<BookingConfirmation />} />
                     {/* TODO: haven't implemented actual flow to get here yet */}
                     <Route path="/cancel-booking/:bookingId" element={<CancelBooking/>}/>
                 </Routes>
