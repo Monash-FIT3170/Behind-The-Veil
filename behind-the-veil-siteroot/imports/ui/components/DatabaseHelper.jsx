@@ -361,7 +361,12 @@ export function useArtistDashboardData(username) {
     totalCustomersLifetime,
     totalCustomersThisMonth,
   };
-export function useGalleryImagesSrc(username) {
+}
+//  * Collects all data relevent to load gallery images
+//  *
+//  * @param {*} username - username of the user to get data
+//  * @returns - an array with index 0 denoting image source and index 1 denoting corresponding post data (all information related to post)
+//  */
 export function useGalleryTotalCollection(username) {
   const isLoadingImages = useSubscribe("post_images", []);
   let imageDataArray = useTracker(() => {
@@ -387,6 +392,12 @@ export function useGalleryTotalCollection(username) {
   return [imageSourceArray, postData];
 }
 
+/**
+ * Collects all posts (inclusive of all relevant data) relating to the user
+ *
+ * @param {*} username - username of the user to get data
+ * @returns - all the post data that belongs to user
+ */
 export function useUserPosts(username) {
   const isLoadingPost = useSubscribe("specific_artist_posts", username);
   let postData = useTracker(() => {
