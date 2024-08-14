@@ -362,37 +362,36 @@ export function useArtistDashboardData(username) {
     totalCustomersThisMonth,
   };
 export function useGalleryImagesSrc(username) {
+export function useGalleryTotalCollection(username) {
   const isLoadingImages = useSubscribe("post_images", []);
   let imageDataArray = useTracker(() => {
     return ImageCollection.find({ imageType: "post" }).fetch();
   });
 
-  const targetIdArray = useUserPostID(username);
-
-  const imageSourceArray = [];
-
-  for (let j = 0; j < targetIdArray.length; j++) {
-    for (let i = 0; i < imageDataArray.length; i++) {
-      if (imageDataArray[i].target_id == targetIdArray[j]) {
-        imageSourceArray.push(imageDataArray[i].imageData);
-      }
-    }
-  }
-  console.log(imageSourceArray);
-
-  return imageSourceArray;
-}
-
-export function useUserPostID(username) {
-  const isLoadingPost = useSubscribe("specific_artist_posts", username);
-  let postData = useTracker(() => {
-    return PostCollection.find({ artistUsername: username }).fetch();
-  });
+  const postData = useUserPosts(username);
 
   const postDataIDArray = [];
   for (let i = 0; i < postData.length; i++) {
     postDataIDArray.push(postData[i]._id);
   }
+  const imageSourceArray = [];
 
-  return postDataIDArray;
+  for (let j = 0; j < postDataIDArray.length; j++) {
+    for (let i = 0; i < imageDataArray.length; i++) {
+      if (imageDataArray[i].target_id == postDataIDArray[j]) {
+        imageSourceArray.push(imageDataArray[i].imageData);
+      }
+    }
+  }
+
+  return [imageSourceArray, postData];
+}
+
+export function useUserPosts(username) {
+  const isLoadingPost = useSubscribe("specific_artist_posts", username);
+  let postData = useTracker(() => {
+    return PostCollection.find({ artistUsername: username }).fetch();
+  });
+
+  return postData;
 }

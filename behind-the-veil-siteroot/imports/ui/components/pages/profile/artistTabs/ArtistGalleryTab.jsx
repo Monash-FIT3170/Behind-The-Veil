@@ -13,7 +13,7 @@ import { Fragment, useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { Dialog, Transition } from "@headlessui/react";
 
-import { useGalleryImagesSrc } from "../../../DatabaseHelper";
+import { useGalleryTotalCollection } from "../../../DatabaseHelper";
 import { useUserInfo } from "../../../util";
 
 /**
@@ -21,16 +21,20 @@ import { useUserInfo } from "../../../util";
  *
  * @param username {string} - username of the current user's profile
  */
-export const ArtistGalleryTab = ({ username }) => {
+export const ArtistGalleryTab = ({ username, external = false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedPostDate, setSelectedPostDate] = useState(null);
+  const [selectedPostDescription, setSelectedPostDescription] = useState(null);
   const plusIcon = <PlusIcon className="icon-base" />;
   const trashIcon = <TrashIcon className="icon-base" />;
   const pencilIcon = <PencilIcon className="icon-base" />;
-  const galleryImgData = useGalleryImagesSrc(username);
+  const galleryImgData = useGalleryTotalCollection(username)[0];
+  const postData = useGalleryTotalCollection(username)[1];
 
   // get current user information
   const userInfo = useUserInfo();
+  console.log(postData[0]);
 
   // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
   // When completing the dynamic version for this page, probably a good idea to setup the photos as components and importing them in.
@@ -39,9 +43,21 @@ export const ArtistGalleryTab = ({ username }) => {
     setIsOpen(false);
   }
 
-  function openModal(image) {
+  function openModal(image, index) {
     setSelectedImage(image);
+    const formattedDate = formatDate(postData[index].postDate);
+    setSelectedPostDate(formattedDate);
+    setSelectedPostDescription(postData[index].postDescription);
     setIsOpen(true);
+  }
+
+  function formatDate(dateInput) {
+    const date = new Date(dateInput);
+    return date.toLocaleDateString("en-AU", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
   }
 
   return (
@@ -92,12 +108,11 @@ export const ArtistGalleryTab = ({ username }) => {
                       as="h3"
                       className="text-xl font-medium leading-6 text-gray-900"
                     >
-                      ##Insert Date Here##
+                      {selectedPostDate}
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        Maecenas leo odio, condimentum id, luctus nec, molestie
-                        sed, justo. Pellentesque viverra pede ac diam
+                        {selectedPostDescription}
                       </p>
                     </div>
                     <div className="flex flex-col items-center mt-10 mb-2 pb-10">
@@ -129,15 +144,15 @@ export const ArtistGalleryTab = ({ username }) => {
       </div>
       <ResponsiveMasonry>
         <Masonry gutter="5px">
-          {galleryImgData.map((image, i) => (
+          {galleryImgData.map((image, index) => (
             <img
-              key={i}
+              key={index}
               src={image}
               style={{
                 width: "100%",
                 display: "block",
               }}
-              onClick={() => openModal(image)}
+              onClick={() => openModal(image, index)}
               alt={"Gallery Image ${i}"}
             />
           ))}
