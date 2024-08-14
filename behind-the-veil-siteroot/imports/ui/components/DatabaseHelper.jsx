@@ -361,14 +361,38 @@ export function useArtistDashboardData(username) {
     totalCustomersLifetime,
     totalCustomersThisMonth,
   };
+export function useGalleryImagesSrc(username) {
+  const isLoadingImages = useSubscribe("post_images", []);
+  let imageDataArray = useTracker(() => {
+    return ImageCollection.find({ imageType: "post" }).fetch();
+  });
+
+  const targetIdArray = useUserPostID(username);
+
+  const imageSourceArray = [];
+
+  for (let j = 0; j < targetIdArray.length; j++) {
+    for (let i = 0; i < imageDataArray.length; i++) {
+      if (imageDataArray[i].target_id == targetIdArray[j]) {
+        imageSourceArray.push(imageDataArray[i].imageData);
+      }
+    }
+  }
+  console.log(imageSourceArray);
+
+  return imageSourceArray;
 }
 
-export function useUserPost(username) {
-  const isLoadingPost = useSubscribe("all_artist_posts", username);
+export function useUserPostID(username) {
+  const isLoadingPost = useSubscribe("specific_artist_posts", username);
   let postData = useTracker(() => {
     return PostCollection.find({ artistUsername: username }).fetch();
   });
-  console.log(postData);
 
-  return postData;
+  const postDataIDArray = [];
+  for (let i = 0; i < postData.length; i++) {
+    postDataIDArray.push(postData[i]._id);
+  }
+
+  return postDataIDArray;
 }

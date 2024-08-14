@@ -13,7 +13,7 @@ import { Fragment, useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { Dialog, Transition } from "@headlessui/react";
 
-import { getGalleryImages, useUserPost } from "../../../DatabaseHelper";
+import { useGalleryImagesSrc } from "../../../DatabaseHelper";
 import { useUserInfo } from "../../../util";
 
 /**
@@ -27,11 +27,10 @@ export const ArtistGalleryTab = ({ username }) => {
   const plusIcon = <PlusIcon className="icon-base" />;
   const trashIcon = <TrashIcon className="icon-base" />;
   const pencilIcon = <PencilIcon className="icon-base" />;
-  const galleryImgData = getGalleryImages(username);
+  const galleryImgData = useGalleryImagesSrc(username);
 
   // get current user information
   const userInfo = useUserInfo();
-  console.log(userInfo.username);
 
   // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
   // When completing the dynamic version for this page, probably a good idea to setup the photos as components and importing them in.
