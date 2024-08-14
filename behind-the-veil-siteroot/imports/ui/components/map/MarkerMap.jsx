@@ -144,7 +144,7 @@ export const MarkerMap = ({ className, location, radius }) => {
         map.current.remove();
       }
     };
-  }, [location, radius, australiaBounds]);
+  }, [location, radius]);
 
   return (
     <div className="flex w-full h-96 overflow-hidden rounded-[45px]">
