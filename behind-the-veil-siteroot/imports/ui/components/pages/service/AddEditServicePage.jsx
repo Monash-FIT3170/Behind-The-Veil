@@ -1,7 +1,7 @@
 /**
  * File Description: AddEditServices page
- * File version: 1.1
- * Contributors: Lucas, Nikki
+ * File version: 1.2
+ * Contributors: Lucas, Nikki, Kyle
  */
 
 import React, {useEffect, useState} from "react";
@@ -14,9 +14,10 @@ import BackButton from "../../button/BackButton";
 import Input from "../../input/Input";
 import Button from "../../button/Button";
 
-import {CheckIcon, TrashIcon, XMarkIcon} from "@heroicons/react/24/outline";
+import {CheckIcon, TrashIcon, XMarkIcon, QuestionMarkCircleIcon} from "@heroicons/react/24/outline";
 import UrlBasePath from "../../../enums/UrlBasePath";
 import {Modal} from "react-responsive-modal";
+import { Tooltip } from 'react-tooltip';
 
 export const AddEditServicePage = ({isEdit}) => {
     const navigateTo = useNavigate();
@@ -46,6 +47,12 @@ export const AddEditServicePage = ({isEdit}) => {
     const onOpenModal = () => setOpen(true);
     const onCloseModal = () => setOpen(false);
     const [isSuccess, setSuccess] = useState(false);
+
+    // delete/archive modal
+    const [openDeleteModal, setOpenDeleteModal] = useState(false);
+    const onOpenDeleteModal = () => setOpenDeleteModal(true);
+    const onCloseDeleteModal = () => setOpenDeleteModal(false);
+
 
     // get current user information
     const userInfo = useUserInfo();
@@ -363,6 +370,18 @@ export const AddEditServicePage = ({isEdit}) => {
                 </div>
             </div>
 
+            <div className="pl-[80%] flex items-center gap-2">
+                {isEdit && (<>
+                        <span className="small-text text-cancelled-colour underline cursor-pointer" onClick={onOpenDeleteModal}>Delete / Archive Service</span>
+
+                        <QuestionMarkCircleIcon className="text-white bg-cancelled-colour p-1 rounded-full w-7 h-7"
+                        data-tooltip-id="delete-archive-tooltip"
+                        data-tooltip-content="If a service has never had any bookings, it will be permanently deleted. If the service has indeed has bookings, it will be archived and can only be accessed by Brides who had booked the service."/>
+
+                        <Tooltip id="delete-archive-tooltip"/>
+                    </>)}
+            </div>
+
             <Modal classNames={{
                 modal: "w-[550px] h-[300px] rounded-[45px] bg-glass-panel-background border border-main-blue"
             }} open={open} onClose={onCloseModal} center showCloseIcon={false}>
@@ -382,6 +401,34 @@ export const AddEditServicePage = ({isEdit}) => {
                         <CheckIcon className="icon-base"/>
                         {isSuccess ? "Confirm" : "Close"}
                     </Button>
+                </div>
+            </Modal>
+
+
+            <Modal classNames={{
+                modal: "w-[550px] h-[300px] rounded-[45px] bg-glass-panel-background border border-main-blue"
+            }} open={openDeleteModal} onClose={onCloseDeleteModal} center showCloseIcon={false}>
+                <div className="flex flex-col justify-center items-center h-full gap-y-10">
+                    <h2 className="text-center title-text px-4">Delete / Archive?</h2>
+                    <span className="small-text text-center">Are you sure you'd like to delete / archive this service?<br></br>This action cannot be reversed.</span>
+                    <div className="flex items-center gap-16">
+                        <Button
+                            className="btn-base ps-[25px] pe-[25px] flex gap-1 bg-secondary-purple hover:bg-secondary-purple-hover"
+                            onClick={() => {
+                                
+                            }}>
+                            <CheckIcon className="icon-base"/>
+                            <span>Yes</span>
+                        </Button>
+                        <Button
+                            className="btn-base ps-[25px] pe-[25px] flex gap-1"
+                            onClick={() => {
+                                onCloseDeleteModal()
+                            }}>
+                            <XMarkIcon className="icon-base"/>
+                            <span>No</span>
+                        </Button>
+                    </div>
                 </div>
             </Modal>
         </WhiteBackground>
