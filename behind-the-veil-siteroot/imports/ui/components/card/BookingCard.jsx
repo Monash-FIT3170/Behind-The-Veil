@@ -68,7 +68,6 @@ export const BookingCard = ({
 
 
     if (userType === 'bride') {
-
         switch (bookingStatus) {
             case BookingStatus.COMPLETED:
                 // if booking is completed, add a "Leave review" or "View review" button
@@ -136,6 +135,17 @@ export const BookingCard = ({
                     <Button className={purpleButtonClass}>
                         <XCircleIcon className="icon-base"/>
                         Reject
+                    </Button>
+                );
+                break;
+            case BookingStatus.CONFIRMED:
+            case BookingStatus.OVERDUE:
+                // if a booking is confirmed, add "cancel" button
+                additionalButtons.push(
+                    <Button className={purpleButtonClass}
+                        onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
+                        <XCircleIcon className="icon-base"/>
+                        Cancel
                     </Button>
                 );
                 break;

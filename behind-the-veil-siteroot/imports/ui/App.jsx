@@ -182,7 +182,7 @@ export const App = () => (
                     <Route path="/payment-details" element={<PaymentDetails />} />
                     <Route path="/booking-confirmation" element={<BookingConfirmation />} />
                     {/* TODO: haven't implemented actual flow to get here yet */}
-                    <Route path="/cancel-booking" element={<CancelBooking/>}/>
+                    <Route path="/cancel-booking/:bookingId" element={<CancelBooking/>}/>
                 </Routes>
             </main>
         </Router>

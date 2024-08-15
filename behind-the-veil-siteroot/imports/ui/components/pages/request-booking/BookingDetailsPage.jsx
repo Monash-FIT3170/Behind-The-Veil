@@ -196,12 +196,23 @@ const BookingDetailsPage = () => {
                         if (bookingDatetime >= now) { // checks that service date is after now (not yet)
                             // if booking date has not passed yet
                             actionButtons.push(
-                                <Button className={buttonClass}>
+                                <Button className={buttonClass}
+                                    onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
                                     <NoSymbolIcon className="icon-base"/>
                                     Cancel
                                 </Button>
                             );
                         }
+                        break;
+                    case BookingStatus.OVERDUE:
+                        // if a booking is overdue, add a "cancel" button if not yet the date
+                        actionButtons.push(
+                            <Button className={buttonClass}
+                                onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
+                                <NoSymbolIcon className="icon-base"/>
+                                Cancel
+                            </Button>
+                        );
                         break;
                     case BookingStatus.PENDING:
                         // if a booking is pending, add "accept" and "reject" buttons
