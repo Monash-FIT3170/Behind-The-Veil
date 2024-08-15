@@ -35,7 +35,7 @@ export const ServiceAreaTab = ({serviceLocation, serviceRadius}) => {
                 </div>
 
                 <div className="w-3/4 lg:w-[600px]">
-                    <MarkerMap location={serviceLocation}/>
+                    <MarkerMap location={serviceLocation} radius={serviceRadius}/>
                 </div>
 
             </div>
