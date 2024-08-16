@@ -34,14 +34,12 @@ export const ArtistDashboardTab = ({username}) => {
                 key="customer-lifetime"
                 dashboardCardTitle="Total Customers - Lifetime"
                 dashboardCardDesc="Celebrate your achievement in helping brides with their special day!"
-                // dashboardCardValue="273"
                 dashboardCardValue={totalCustomersLifetime}
             />
             <DashboardCard
                 key="customer-month"
                 dashboardCardTitle="Total Customers - This Month"
                 dashboardCardDesc="People you have glowed up this month!"
-                // dashboardCardValue="5"
                 dashboardCardValue={totalCustomersThisMonth}
             />
             <DashboardCard
