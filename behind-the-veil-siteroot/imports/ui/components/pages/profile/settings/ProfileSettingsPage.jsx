@@ -12,6 +12,8 @@ import ArtistServiceArea from "./ArtistServiceArea";
 import {useUserInfo} from "../../../util";
 import ChangePasswordTab from "./ChangePasswordTab";
 import BackButton from "../../../button/BackButton";
+import ArtistPayment from "./ArtistPayment.jsx";
+
 
 /**
  * Settings page for all users
@@ -55,11 +57,14 @@ export const ProfileSettingsPage = () => {
                         <span key={1}>Account Details</span>,
                         <span key={2}>Change Password</span>,
                         <span key={3}>Service Area</span>,
+                        <span key={4}>Payment Detail</span>,
+
                     ]}
                     tabPanels={[
                         <AccountDetails key={"account-details"}/>,
                         <ChangePasswordTab key={"change-password"} />,
-                        <ArtistServiceArea key={"service-area"}/>
+                        <ArtistServiceArea key={"service-area"}/>,
+                        <ArtistPayment key={"artist-payment"}/>
                     ]}
                     tabsClassName="lg:flex lg:justify-between lg:px-[15%] xl:px-[20%] 2xl:px-[25%]"
                 />
