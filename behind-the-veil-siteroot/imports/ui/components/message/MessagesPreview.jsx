@@ -7,7 +7,7 @@ import React from "react";
 import Card from "../card/Card";
 import ProfilePhoto from '../profilePhoto/ProfilePhoto';
 
-import {getUserInfo} from "../util"
+import {useUserInfo} from "../util"
 
 // TODO: add pass the chat data profile photo/image here to work with
 
@@ -15,7 +15,7 @@ const MessagesPreview = (props) => {
     const {brideUsername, artistUsername, chatUpdatedDate, chatLastMessage, otherUserImage} = props.data;
     
     // get current user information
-    const userInfo = getUserInfo();
+    const userInfo = useUserInfo();
     // find the other user's username
     const otherUser = brideUsername != userInfo.username ? brideUsername : artistUsername;
 

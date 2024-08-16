@@ -20,53 +20,30 @@ import MessagesPreview from '../../message/MessagesPreview';
 import Loader from "/imports/ui/components/loader/Loader";
 import Button from "../../button/Button.jsx";
 
-import {getUserInfo} from "../../util.jsx"
+import {useUserInfo} from "../../util.jsx"
 
 /**
  * Messages page with all users they've chatted with
  */
-
-const users = [
-    {
-        name: "Annie",
-        profilePic: "url/to/profile/pic",
-        messages: [
-            { text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem ducimus perferendis velit placeat expedita blanditiis est, quae officiis aperiam excepturi quis architecto ullam earum dolore unde incidunt corporis qui amet!", sender: "other", read: true},
-            { text: "Hello", sender: "other", read: true },
-            { text: "Hi", sender: "me", read: true },
-            { text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem ducimus perferendis velit placeat expedita blanditiis est, quae officiis aperiam excepturi quis architecto ullam earum dolore unde incidunt corporis qui amet!", sender: "me", read: true },
-            { text: "Hi, I was wondering if you were the amazing artist that he recommended?", sender: "other", read: true },
-
-        ],
-        userName: 'titan1'
-    },
-    {
-        name: "Mikasa",
-        profilePic: "url/to/profile/pic",
-        messages: [
-            { text: "Hi Alice, I was wondering if you have experience with bridesmaid makeup?", sender: "other", read: false}
-        ],
-        userName: 'ackmn'
-    },
-]
-
 export const MessagesPage = () => {
     // get current user information
-    const userInfo = getUserInfo();
+    const userInfo = useUserInfo();
 
     // set up subscription (publication is in the "publication" folder)
-    const isLoadingChats = useSubscribe('all_user_chats');
+    const isLoadingChats = useSubscribe('all_user_chats', userInfo.username);
     const isLoadingUserImages = useSubscribe('profile_images');
     const isLoading = isLoadingChats() || isLoadingUserImages();
     
     // get data from db
     let chatsData = useTracker(() => {
         return ChatCollection.find({
-            "$or": [
-            { "brideUsername": userInfo.username },
-            { "artistUsername": userInfo.username }
-        ]}).fetch();
+            $or: [
+                { brideUsername: userInfo.username },
+                { artistUsername: userInfo.username }
+            ]
+        }).fetch();
     });
+
     let usersImagesData = useTracker(() => {
         return ImageCollection.find().fetch;
     })
@@ -110,8 +87,7 @@ export const MessagesPage = () => {
     };
 
     const handleButtonClick = () => {
-        console.log("Start new conversation button was clicked");
-        // insert the message using the Message database method
+        //insert the message using the Message database method
         try {
             const brideUsername = "bride123";
             const artistUsername = "hello";
@@ -119,7 +95,7 @@ export const MessagesPage = () => {
             const chatLastMessage = "dummy data first message"; 
 
             // wrap meteor.call in a promise
-            const chatId = new Promise((resolve, reject) => {
+            new Promise((resolve, reject) => {
                 // asynchronous operation
                 Meteor.call('create_chat', brideUsername, artistUsername, chatUpdatedDate, chatLastMessage, (error, result) => {
                     if (error) {
@@ -128,8 +104,9 @@ export const MessagesPage = () => {
                         resolve(result); // if there's no error, continue with the rest of the block
                     }
                 });
+            }).then(() => {
+                console.log("Chat successfully added");
             });
-            console.log("Chat successfully added with id: " + chatId);
         } catch (error) {
             console.log("Error adding message. Returned with error:" + error.message);
         }
@@ -141,6 +118,9 @@ export const MessagesPage = () => {
     //const newMsgPreviewsComponents = users.map((user, index) => <MessagesPreview key = {index} data = {user} onClick={() => handlePreviewClick(index)}></MessagesPreview>);
     const newMsgPreviewsComponents = chatsData.map((chat, index) => <MessagesPreview key = {index} data = {chat} onClick={() => handlePreviewClick(index)}></MessagesPreview>);
 
+    if (!isLoading) {
+    console.log("Database chats data: ", chatsData);
+    }
 
     // TODO: place this in an if statement that checks if the page is ready or not
     return (
