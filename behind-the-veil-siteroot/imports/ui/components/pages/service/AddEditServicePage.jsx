@@ -52,7 +52,6 @@ export const AddEditServicePage = ({isEdit}) => {
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const onOpenDeleteModal = () => setOpenDeleteModal(true);
     const onCloseDeleteModal = () => setOpenDeleteModal(false);
-    const [isSuccessDelete, setSuccessDelete] = useState(false);
 
 
     // get current user information
@@ -277,15 +276,13 @@ export const AddEditServicePage = ({isEdit}) => {
                     (error, result) => {
                         if (error) {
                             reject(`Error: ${error.message}`);
-                            setSuccessDelete(false)
                         } else {
                             resolve(result);
-                            setSuccessDelete(true)
+
+                            // If the deletion (or archiving) is successful, then navigate the user back to the PROFILE page.
+                            navigateTo("/" + UrlBasePath.PROFILE);
                         }
                     });
-            }).catch(() => {
-                // There was an error.
-                setSuccessDelete(false)
             });
 
         } else {
@@ -299,15 +296,13 @@ export const AddEditServicePage = ({isEdit}) => {
                     (error, result) => {
                         if (error) {
                             reject(`Error: ${error.message}`);
-                            setSuccessDelete(false)
                         } else {
                             resolve(result);
-                            setSuccessDelete(true)
+
+                            // If the deletion (or archiving) is successful, then navigate the user back to the PROFILE page.
+                            navigateTo("/" + UrlBasePath.PROFILE);
                         }
                     });
-            }).catch(() => {
-                // There was an error.
-                setSuccessDelete(false)
             });
         }
     };
@@ -469,11 +464,6 @@ export const AddEditServicePage = ({isEdit}) => {
                             onClick={() => {
                                 // If the user confirms deletion (or archiving).
                                 handleDelete()
-
-                                if (isSuccessDelete) {
-                                    // If the deletion (or archiving) is successful, then navigate the user back to the PROFILE page.
-                                    navigateTo("/" + UrlBasePath.PROFILE)
-                                }
                             }}>
                             <CheckIcon className="icon-base"/>
                             <span>Yes</span>
