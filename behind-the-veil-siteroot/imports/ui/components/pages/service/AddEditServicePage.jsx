@@ -7,17 +7,18 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 
-import { useUserInfo } from "../../util";
+import {useUserInfo} from "../../util";
 import PageLayout from "/imports/ui/enums/PageLayout";
 import WhiteBackground from "/imports/ui/components/whiteBackground/WhiteBackground.jsx";
 import BackButton from "../../button/BackButton";
 import Input from "../../input/Input";
 import Button from "../../button/Button";
 
-import {CheckIcon, TrashIcon, XMarkIcon, QuestionMarkCircleIcon} from "@heroicons/react/24/outline";
+import {CheckIcon, TrashIcon, XMarkIcon} from "@heroicons/react/24/outline";
+import QuestionMarkCircleIcon from "@heroicons/react/16/solid/QuestionMarkCircleIcon";
 import UrlBasePath from "../../../enums/UrlBasePath";
 import {Modal} from "react-responsive-modal";
-import { Tooltip } from 'react-tooltip';
+import Tippy from '@tippyjs/react/headless';
 
 export const AddEditServicePage = ({isEdit}) => {
     const navigateTo = useNavigate();
@@ -272,7 +273,7 @@ export const AddEditServicePage = ({isEdit}) => {
                 Meteor.call(
                     "update_service_details",
                     serviceId,
-                    {serviceActive : false},
+                    {serviceActive: false},
                     (error, result) => {
                         if (error) {
                             reject(`Error: ${error.message}`);
@@ -307,8 +308,23 @@ export const AddEditServicePage = ({isEdit}) => {
         }
     };
 
+    const infoText = "If a service has never had any bookings, it will be permanently deleted. " +
+        "If the service has had bookings, it will be archived and can only be accessed by Brides who had booked the service.";
+    const getDeleteHelperElement = (isRed) => (
+        <Tippy render={attrs => (
+            <div
+                className="box border border-cancelled-colour rounded-lg mt-1 px-6 py-6 white-glass-base shadow-lg w-[500px]"
+                tabIndex="-1" {...attrs}>
+                {infoText}
+            </div>
+        )}>
+            <QuestionMarkCircleIcon className={"tooltip-icon size-4 " + (isRed ? "text-cancelled-colour" : "text-light-grey-hover")}/>
+        </Tippy>
+    );
+
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
+
             <BackButton to={"/" + UrlBasePath.PROFILE}/>
             <div className="flex items-center justify-center">
                 <div className="flex flex-col w-[60%] gap-6">
@@ -419,14 +435,10 @@ export const AddEditServicePage = ({isEdit}) => {
 
             <div className="pl-[80%] flex items-center gap-2">
                 {isEdit && (<>
-                        <span className="small-text text-cancelled-colour underline cursor-pointer" onClick={onOpenDeleteModal}>Delete / Archive Service</span>
-
-                        <QuestionMarkCircleIcon className="text-white bg-cancelled-colour p-1 rounded-full w-7 h-7"
-                        data-tooltip-id="delete-archive-tooltip"
-                        data-tooltip-content="If a service has never had any bookings, it will be permanently deleted. If the service has indeed has bookings, it will be archived and can only be accessed by Brides who had booked the service."/>
-
-                        <Tooltip id="delete-archive-tooltip"/>
-                    </>)}
+                    <span className="small-text text-cancelled-colour underline cursor-pointer"
+                          onClick={onOpenDeleteModal}>Delete / Archive Service</span>
+                    {getDeleteHelperElement(true)}
+                </>)}
             </div>
 
             <Modal classNames={{
@@ -457,7 +469,15 @@ export const AddEditServicePage = ({isEdit}) => {
             }} open={openDeleteModal} onClose={onCloseDeleteModal} center showCloseIcon={false}>
                 <div className="flex flex-col justify-center items-center h-full gap-y-10">
                     <h2 className="text-center title-text px-4">Delete / Archive?</h2>
-                    <span className="small-text text-center">Are you sure you'd like to delete / archive this service?<br></br>This action cannot be reversed.</span>
+                    <div className={"flex flex-col gap-1 items-center justify-start"}>
+
+                        <span className="main-text text-center flex flex-row items-center justify-start gap-1">
+                            Are you sure you'd like to delete / archive this service? {getDeleteHelperElement(false)}
+                        </span>
+
+                        <span className={"text-cancelled-colour main-text"}>This action cannot be reversed. </span>
+
+                    </div>
                     <div className="flex items-center gap-16">
                         <Button
                             className="btn-base ps-[25px] pe-[25px] flex gap-1 bg-secondary-purple hover:bg-secondary-purple-hover"
