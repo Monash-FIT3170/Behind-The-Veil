@@ -7,18 +7,23 @@
 import React from "react";
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import Button from "../../button/Button";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {ArrowRightIcon} from "@heroicons/react/24/outline";
 import FormOutput from "./FormOutput";
 import {addHours, enAU, format} from "date-fns";
 import PreviousButton from "../../button/PreviousButton";
-import {getUserInfo} from "../../util";
+import {getUserInfo, useUserInfo} from "../../util";
+import UrlBasePath from "../../../enums/UrlBasePath";
 
 /**
  * Component for displaying booking summary and allowing continuation to the next step.
  */
 const BookingSummary = () => {
-    let currentUser = getUserInfo();
+
+    const userInfo = useUserInfo();
+
+    // grab the service ID from the URL
+    const {serviceId} = useParams();
 
     const tipText = "Full deposit for a service is required. If the booking is cancelled or rejected, the full fee will be refunded.";
     /**
@@ -50,17 +55,16 @@ const BookingSummary = () => {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
 
-        // Extract location, date, and time from URL parameters
-        const location = urlParams.get('location');
+        // Extract date, and time from URL parameters
         const dateTime = urlParams.get('time');
 
         return {
-            'Bride Name': currentUser.alias,
-            'Artist Name': 'Alice Tran',
-            'Service': 'Bachelorette Glam Experience',
-            'Location': location,
+            'Bride Name': userInfo.alias,
+            'Artist Name': urlParams.get('artistName'),
+            'Service': urlParams.get('serviceName'),
+            'Location': urlParams.get('location'),
             'Date': getStartAndEndDate(dateTime, 2), // Hardcoded to be 2-hour duration, can be dynamic
-            'Total Price': '$120.00',
+            'Total Price': `$${urlParams.get('price')}`,
         };
     };
 
@@ -70,9 +74,9 @@ const BookingSummary = () => {
      */
     const handleSubmit = () => {
         // pass the data to the next page via the url
-        const query = new URLSearchParams(queryData().toString());
-        navigateTo(`/payment-details?${query}`);
-    };
+        const query = new URLSearchParams(queryData()).toString();
+        navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/payment-details?${query}`);
+    }
 
     // Navigate hook for redirecting to another page
     const navigateTo = useNavigate();
@@ -94,7 +98,7 @@ const BookingSummary = () => {
                     return <FormOutput key={key} textColor="text-dark-grey" haveHelpText={false} label={key} input={value}></FormOutput>;
                 })}
                 {/* Display deposit required */}
-                <FormOutput className='deposit-input' key={queryData().length} label='Deposit Required' input='$120.00' textColor="text-cancelled-colour" haveHelpText={true} tipText={tipText} />
+                <FormOutput className='deposit-input' key={queryData().length} label='Deposit Required' input={queryData()["Total Price"]} textColor="text-cancelled-colour" haveHelpText={true} tipText={tipText} />
                 <br />
                 {/* Continue button */}
                 <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2" type="submit" onClick={handleSubmit}>

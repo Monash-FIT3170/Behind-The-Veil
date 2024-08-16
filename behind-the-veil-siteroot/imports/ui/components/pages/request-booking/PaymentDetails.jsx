@@ -4,16 +4,20 @@
  * Contributors: Neth, Nikki
  */
 
-import React, { useId, useState } from "react";
+import React, { useId, useEffect, useState} from 'react';
+import { useLocation } from 'react-router-dom';
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
 import { CheckIcon, CurrencyDollarIcon, NoSymbolIcon } from "@heroicons/react/24/outline";
 import Input from "../../input/Input";
-import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
-import { useNavigate } from "react-router-dom";
+import 'react-responsive-modal/styles.css';
+import {Modal} from 'react-responsive-modal';
+import {useNavigate, useParams} from "react-router-dom";
 import PreviousButton from "../../button/PreviousButton";
+import {useUserInfo} from "../../util";
+import BookingStatus from "../../../enums/BookingStatus";
+import UrlBasePath from "../../../enums/UrlBasePath";
 
 /**
  * Component for handling payment details.
@@ -27,7 +31,36 @@ import PreviousButton from "../../button/PreviousButton";
 const PaymentDetails = () => {
     const navigateTo = useNavigate();
 
-    const errorMsg = ["card number", "card holder name", "expiry date", "CVV"];
+    const userInfo = useUserInfo();
+
+    // grab the service ID from the URL
+    const {serviceId} = useParams();
+
+    const location = useLocation();
+    const [details, setDetails] = useState({});
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+
+        // Extracting the parameters
+        const brideName = searchParams.get('Bride Name');
+        const artistName = searchParams.get('Artist Name');
+        const service = searchParams.get('Service');
+        const serviceLocation = searchParams.get('Location');
+        const date = searchParams.get('Date');
+        const totalPrice = searchParams.get('Total Price');
+
+        setDetails({
+            brideName: brideName,
+            artistName: artistName,
+            serviceName: service,
+            location: serviceLocation,
+            date: date,
+            price: totalPrice,
+        });
+    }, [location.search]);
+
+    const errorMsg = ["card number", "card holder name", "expiry date", "CVV"]
 
     const cardNumberId = useId();
     const cardNameId = useId();
@@ -138,9 +171,35 @@ const PaymentDetails = () => {
         }
     };
 
+    const addToBooking = (startDateTime, duration, location, price, status, brideUsername, artistUsername, serviceId) => new Promise((resolve, reject) => {
+        Meteor.call("add_booking",
+            startDateTime,
+            duration,
+            location,
+            price,
+            status,
+            brideUsername,
+            artistUsername,
+            serviceId,
+            // up to here it knows these are its args - it (somehow) also knows that you get back
+            // either an error or a value that is stuffed into bookingID (this can be any name).
+            (error, bookingId) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(bookingId);
+                }
+            } // this something that comes with promises. If reject and resolve are
+            // not present the promise doesn't understand its finished and will keep powering
+            // thru the method until it finds an end (there is none)
+        );
+    });
+
     const confirmPayment = () => {
-        navigateTo(`/booking-confirmation`);
-    };
+        addToBooking(details.date, 2, details.location, details.price, BookingStatus.PENDING, userInfo.username, details.artistUsername, serviceId)
+            .then(r => navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/booking-confirmation`))
+            .catch(reason => console.log(reason));
+    }
 
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
