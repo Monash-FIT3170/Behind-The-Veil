@@ -1,7 +1,7 @@
 /**
  * File Description: Service Area for artists within the settings page
- * File version: 1.3
- * Contributors: Hirun, Nikki, Ryan
+ * File version: 1.4
+ * Contributors: Hirun, Nikki, Ryan, Cameron
  */
 import React from "react";
 import WhiteBackground from "../../../whiteBackground/WhiteBackground.jsx";

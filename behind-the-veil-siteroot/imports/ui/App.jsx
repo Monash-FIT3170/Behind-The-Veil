@@ -10,6 +10,8 @@ import NonExistingPage from "./components/pages/nonExistingPage/NonExistingPage"
 import HomePage from "./components/pages/home/HomePage.jsx";
 import ProfilePage from "./components/pages/profile/ProfilePage";
 import ProfileSettingsPage from "./components/pages/profile/settings/ProfileSettingsPage";
+// import PaymentEditPage from "./components/pages/profile/settings/PaymentEditPage.jsx";
+
 
 import ServicesPage from "./components/pages/service/ServicesPage.jsx";
 import SpecificServicePage from "./components/pages/service/SpecificServicePage.jsx";
@@ -156,6 +158,8 @@ export const App = () => (
                             </ProtectedRoute>
                         }
                     />
+            
+
                     {/*Add and Edit Service Pages for Artist*/}
                     <Route
                         path={`/${UrlBasePath.PROFILE}/addService`}

@@ -1,61 +1,140 @@
 /**
- * File Description: Account Details within the Settings page
- * File version: 1.0
- * Contributors: Kyle, Nikki
+ * File Description: Payment Details tab for the artist
+ * File version: 1.1
+ * Contributors: Cameron
  */
-import React, {useEffect, useState} from "react";
-import {Meteor} from "meteor/meteor";
-import {useSubscribe, useTracker} from "meteor/react-meteor-data";
-import { PaintBrushIcon} from "@heroicons/react/24/outline";
-
-import {useNavigate} from "react-router-dom";
-
+import React, { useState } from "react";
+import { PaintBrushIcon, CheckIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 import Input from "../../../input/Input";
 import Button from "../../../button/Button.jsx";
-import ProfilePhoto from "../../../profilePhoto/ProfilePhoto.jsx"
-import {getUserInfo} from "../../../util";
-import Loader from "../../../loader/Loader";
 
 /**
- * This page allows both artists and brides to change their name/alias, email address and profile image
- * The name/alias and email address can be edited using a text input field
- * The profile image can be edited using an image dump
+ * Payment details tab which artist can edit on their own
  */
-export const PaymentDetailsTab = () => {
-
+export const ArtistPayment = () => {
     const navigateTo = useNavigate();
-    // Updates the values inputted into the text fields, if they have changed and are valid.
-    const handleSave = (event) => {
-         navigateTo(`/payment-details`)
+
+    // State for editing mode and input values
+    const [isEditing, setIsEditing] = useState(false);
+    const [accountName, setAccountName] = useState();
+    const [bsb, setBsb] = useState();
+    const [accountNumber, setAccountNumber] = useState();
+    const [newAccountName, setNewAccountName] = useState(accountName);
+    const [newBsb, setNewBsb] = useState(bsb);
+    const [newAccountNumber, setNewAccountNumber] = useState(accountNumber);
+
+    // Toggle editing mode
+    const handleEditClick = () => {
+        setIsEditing(true);
     };
 
-        return (
-            <div className="flex flex-col items-start justify-center gap-6 pl-[5%] lg:pl-[15%]">
-                {/* Infos */}
-                <div className="flex flex-col items-left gap-y-2">
-                    <div className="main-text text-dark-grey">
+    // Save the updated details
+    const handleSave = (event) => {
+        event.preventDefault();
+        setAccountName(newAccountName);
+        setBsb(newBsb);
+        setAccountNumber(newAccountNumber);
+        setIsEditing(false);
+        //navigateTo(`/settings/payment-edit`); // Redirect or update as needed
+    };
+
+    // Validate and format BSB number to '111-111'
+    const formatBsb = (value) => {
+        // Remove all non-numeric characters
+        const digits = value.replace(/\D/g, '');
+        // Add hyphen after the third digit
+        return digits.length > 3
+            ? `${digits.slice(0, 3)}-${digits.slice(3, 6)}`
+            : digits;
+    };
+
+    // Handler for BSB input change
+    const handleBsbChange = (event) => {
+        const formattedValue = formatBsb(event.target.value);
+        setNewBsb(formattedValue);
+    };
+
+    // Validate and format account number to only numeric values
+    const handleAccountNumberChange = (event) => {
+        const value = event.target.value.replace(/[^0-9]/g, ''); // Allow only digits
+        setNewAccountNumber(value);
+    };
+
+    return (
+        <div className="flex flex-col items-start justify-center gap-6 pl-[5%] lg:pl-[15%]">
+            {/* Infos */}
+            <div className="flex flex-col items-left gap-y-2">
+                {/* Account name box */}
+                <div className="main-text text-dark-grey">
                     Account Name
-                    <span className="text-black ml-7"> Alice Tran</span>
-                    </div>
-                    <div className="main-text text-dark-grey">BSB Number
-                    <span className="text-black ml-11"> 111-222</span>
-                    </div>  
-                    <div className="main-text text-dark-grey">Account Number
-                    <span className="text-black ml-4"> 16338428</span>
-                    </div>
-
+                    <span className="text-black ml-7">
+                        {isEditing ? (
+                            <Input
+                                type="text"
+                                value={newAccountName}
+                                onChange={(e) => setNewAccountName(e.target.value)}
+                                placeholder="Enter Account Name"
+                            />
+                        ) : (
+                            accountName
+                        )}
+                    </span>
                 </div>
+                {/* BSB box */}
+                <div className="main-text text-dark-grey">
+                    BSB Number
+                    <span className="text-black ml-11">
+                        {isEditing ? (
+                            <Input
+                                type="text"
+                                value={newBsb}
+                                onChange={handleBsbChange}
+                                placeholder="Enter BSB Number"
+                            />
+                        ) : (
+                            bsb
+                        )}
+                    </span>
+                </div>
+                {/* Account Num box */}
+                <div className="main-text text-dark-grey">
+                    Account Number
+                    <span className="text-black ml-4">
+                        {isEditing ? (
+                            <Input
+                                type="text"
+                                value={newAccountNumber}
+                                onChange={handleAccountNumberChange}
+                                placeholder="Enter Account Number"
+                            />
+                        ) : (
+                            accountNumber
+                        )}
+                    </span>
+                </div>
+            </div>
 
-                {/* Edit button */}
+            {/* Edit button */}
+            {isEditing ? (
                 <Button
                     className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"
-                    onClick={handleSave}>
-                    <PaintBrushIcon className="icon-base"/>
+                    onClick={handleSave}
+                >
+                    <CheckIcon className="icon-base" />
+                    Save
+                </Button>
+            ) : (
+                <Button
+                    className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"
+                    onClick={handleEditClick}
+                >
+                    <PaintBrushIcon className="icon-base" />
                     Edit Bank Details
                 </Button>
-            </div>
-        );
-    
+            )}
+        </div>
+    );
 };
 
-export default PaymentDetailsTab;
+export default ArtistPayment;
