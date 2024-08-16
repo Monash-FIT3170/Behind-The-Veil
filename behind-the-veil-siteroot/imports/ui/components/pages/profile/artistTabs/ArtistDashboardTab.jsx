@@ -1,7 +1,7 @@
 /**
  * File Description: Artist dashboard tab
- * File version: 1.2
- * Contributors: Kefei (Phillip) Li, Nikki
+ * File version: 1.3
+ * Contributors: Kefei (Phillip) Li, Nikki, Ryan
  */
 
 import React from 'react';

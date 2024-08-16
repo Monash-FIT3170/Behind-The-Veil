@@ -1,7 +1,7 @@
 /**
  * File Description: Database helper functions
- * File version: 1.2
- * Contributors: Nikki
+ * File version: 1.3
+ * Contributors: Nikki, Ryan
  */
 import {useSubscribe, useTracker} from "meteor/react-meteor-data";
 
