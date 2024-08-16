@@ -471,8 +471,8 @@ export const AddEditServicePage = ({isEdit}) => {
                                 // If the user confirms deletion (or archiving).
                                 handleDelete()
                                 if (isSuccessDelete) {
-                                    // If the deletion (or archiving) is successful, then navigate the user back to the SERVICES page.
-                                    navigateTo("/" + UrlBasePath.SERVICES)
+                                    // If the deletion (or archiving) is successful, then navigate the user back to the PROFILE page.
+                                    navigateTo("/" + UrlBasePath.PROFILE)
                                 }
                             }}>
                             <CheckIcon className="icon-base"/>
