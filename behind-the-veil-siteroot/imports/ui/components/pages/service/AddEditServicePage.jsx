@@ -52,6 +52,7 @@ export const AddEditServicePage = ({isEdit}) => {
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const onOpenDeleteModal = () => setOpenDeleteModal(true);
     const onCloseDeleteModal = () => setOpenDeleteModal(false);
+    const [isSuccessDelete, setSuccessDelete] = useState(false);
 
 
     // get current user information
@@ -260,6 +261,58 @@ export const AddEditServicePage = ({isEdit}) => {
         }
     };
 
+    // Handles the delete (or archive) service functionality.
+    const handleDelete = (event) => {
+        event.preventDefault();
+
+        // No need to write a promise - as the Collection "bookings" is only being read and not altered.
+        if (Meteor.call("has_booking_of_service", serviceId)) {
+            // Service is to be archived.
+
+            // Write a promise - as the Collection "services" is being altered.
+            new Promise((resolve, reject) => {
+                Meteor.call(
+                    "update_service_details",
+                    serviceId,
+                    {serviceActive : false},
+                    (error, result) => {
+                        if (error) {
+                            reject(`Error: ${error.message}`);
+                            setSuccessDelete(false)
+                        } else {
+                            resolve(result);
+                            setSuccessDelete(true)
+                        }
+                    });
+            }).catch(() => {
+                // There was an error.
+                setSuccess(false)
+            });
+
+        } else {
+            // Service is to be deleted.
+
+            // Write a promise - as the Collection "services" is being altered.
+            new Promise((resolve, reject) => {
+                Meteor.call(
+                    "delete_service",
+                    serviceId,
+                    (error, result) => {
+                        if (error) {
+                            reject(`Error: ${error.message}`);
+                            setSuccessDelete(false)
+                        } else {
+                            resolve(result);
+                            setSuccessDelete(true)
+                        }
+                    });
+            }).catch(() => {
+                // There was an error.
+                setSuccess(false)
+            });
+        }
+    };
+
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
             <BackButton to={"/" + UrlBasePath.PROFILE}/>
@@ -415,7 +468,12 @@ export const AddEditServicePage = ({isEdit}) => {
                         <Button
                             className="btn-base ps-[25px] pe-[25px] flex gap-1 bg-secondary-purple hover:bg-secondary-purple-hover"
                             onClick={() => {
-                                
+                                // If the user confirms deletion (or archiving).
+                                handleDelete()
+                                if (isSuccessDelete) {
+                                    // If the deletion (or archiving) is successful, then navigate the user back to the SERVICES page.
+                                    navigateTo("/" + UrlBasePath.SERVICES)
+                                }
                             }}>
                             <CheckIcon className="icon-base"/>
                             <span>Yes</span>
@@ -423,6 +481,7 @@ export const AddEditServicePage = ({isEdit}) => {
                         <Button
                             className="btn-base ps-[25px] pe-[25px] flex gap-1"
                             onClick={() => {
+                                // If the user rejects deletion (or archiving), simply close the modal.
                                 onCloseDeleteModal()
                             }}>
                             <XMarkIcon className="icon-base"/>

@@ -54,5 +54,13 @@ Meteor.methods({
             { _id: bookingId },
             { $set: updateObject },
         );
+    },
+
+    /**
+     * If there is a booking that exists with the service that matches the service ID, then the method will return true. If not, the method will return false.
+     * @param {int} serviceId - The ID of the service.
+     */
+    "has_booking_of_service": function (serviceId) {
+        return BookingCollection.some(booking => booking.serviceId == serviceId);
     }
 })
