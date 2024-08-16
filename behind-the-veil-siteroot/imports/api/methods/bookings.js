@@ -61,6 +61,8 @@ Meteor.methods({
      * @param {int} serviceId - The ID of the service.
      */
     "has_booking_of_service": function (serviceId) {
-        return BookingCollection.some(booking => booking.serviceId == serviceId);
+        const booking = BookingCollection.findOne({ serviceId: serviceId });
+    
+        return !!booking;
     }
 })

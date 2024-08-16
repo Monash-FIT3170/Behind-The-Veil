@@ -262,8 +262,7 @@ export const AddEditServicePage = ({isEdit}) => {
     };
 
     // Handles the delete (or archive) service functionality.
-    const handleDelete = (event) => {
-        event.preventDefault();
+    const handleDelete = () => {
 
         // No need to write a promise - as the Collection "bookings" is only being read and not altered.
         if (Meteor.call("has_booking_of_service", serviceId)) {
@@ -286,7 +285,7 @@ export const AddEditServicePage = ({isEdit}) => {
                     });
             }).catch(() => {
                 // There was an error.
-                setSuccess(false)
+                setSuccessDelete(false)
             });
 
         } else {
@@ -308,7 +307,7 @@ export const AddEditServicePage = ({isEdit}) => {
                     });
             }).catch(() => {
                 // There was an error.
-                setSuccess(false)
+                setSuccessDelete(false)
             });
         }
     };
@@ -470,6 +469,7 @@ export const AddEditServicePage = ({isEdit}) => {
                             onClick={() => {
                                 // If the user confirms deletion (or archiving).
                                 handleDelete()
+
                                 if (isSuccessDelete) {
                                     // If the deletion (or archiving) is successful, then navigate the user back to the PROFILE page.
                                     navigateTo("/" + UrlBasePath.PROFILE)
