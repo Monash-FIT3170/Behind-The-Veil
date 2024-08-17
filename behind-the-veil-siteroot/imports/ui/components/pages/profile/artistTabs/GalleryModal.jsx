@@ -102,6 +102,7 @@ const GalleryModal = ({
                   ) : (
                     <span></span>
                   )}
+
                   <ProfileGalleryDisplay
                     className={""}
                     imageData={profileImgSrc}
