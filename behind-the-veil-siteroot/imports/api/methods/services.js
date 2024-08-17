@@ -41,4 +41,16 @@ Meteor.methods({
     update_service_details: function (serviceId, updateObject) {
         ServiceCollection.update({ _id: serviceId }, { $set: updateObject });
     },
+
+    /**
+     * Deletes a service from the database.
+     * @param {int} serviceId - Service ID of the service being deleted.
+     */
+    delete_service: function (serviceId) {
+        if (!ServiceCollection.findOne({ _id: serviceId })) {
+            throw new Meteor.Error("service-not-found", "Service not found.");
+        }
+        
+        ServiceCollection.remove(serviceId);
+    }
 });

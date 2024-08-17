@@ -1,13 +1,13 @@
 /**
  * File Description: AddEditServices page
- * File version: 1.1
- * Contributors: Lucas, Nikki
+ * File version: 1.2
+ * Contributors: Lucas, Nikki, Kyle
  */
 
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 
-import { useUserInfo } from "../../util";
+import {useUserInfo} from "../../util";
 import PageLayout from "/imports/ui/enums/PageLayout";
 import WhiteBackground from "/imports/ui/components/whiteBackground/WhiteBackground.jsx";
 import BackButton from "../../button/BackButton";
@@ -15,8 +15,10 @@ import Input from "../../input/Input";
 import Button from "../../button/Button";
 
 import {CheckIcon, TrashIcon, XMarkIcon} from "@heroicons/react/24/outline";
+import QuestionMarkCircleIcon from "@heroicons/react/16/solid/QuestionMarkCircleIcon";
 import UrlBasePath from "../../../enums/UrlBasePath";
 import {Modal} from "react-responsive-modal";
+import Tippy from '@tippyjs/react/headless';
 
 export const AddEditServicePage = ({isEdit}) => {
     const navigateTo = useNavigate();
@@ -46,6 +48,12 @@ export const AddEditServicePage = ({isEdit}) => {
     const onOpenModal = () => setOpen(true);
     const onCloseModal = () => setOpen(false);
     const [isSuccess, setSuccess] = useState(false);
+
+    // delete/archive modal
+    const [openDeleteModal, setOpenDeleteModal] = useState(false);
+    const onOpenDeleteModal = () => setOpenDeleteModal(true);
+    const onCloseDeleteModal = () => setOpenDeleteModal(false);
+
 
     // get current user information
     const userInfo = useUserInfo();
@@ -253,8 +261,70 @@ export const AddEditServicePage = ({isEdit}) => {
         }
     };
 
+    // Handles the delete (or archive) service functionality.
+    const handleDelete = () => {
+
+        // No need to write a promise - as the Collection "bookings" is only being read and not altered.
+        if (Meteor.call("has_booking_of_service", serviceId)) {
+            // Service is to be archived.
+
+            // Write a promise - as the Collection "services" is being altered.
+            new Promise((resolve, reject) => {
+                Meteor.call(
+                    "update_service_details",
+                    serviceId,
+                    {serviceActive: false},
+                    (error, result) => {
+                        if (error) {
+                            reject(`Error: ${error.message}`);
+                        } else {
+                            resolve(result);
+
+                            // If the deletion (or archiving) is successful, then navigate the user back to the PROFILE page.
+                            navigateTo("/" + UrlBasePath.PROFILE);
+                        }
+                    });
+            });
+
+        } else {
+            // Service is to be deleted.
+
+            // Write a promise - as the Collection "services" is being altered.
+            new Promise((resolve, reject) => {
+                Meteor.call(
+                    "delete_service",
+                    serviceId,
+                    (error, result) => {
+                        if (error) {
+                            reject(`Error: ${error.message}`);
+                        } else {
+                            resolve(result);
+
+                            // If the deletion (or archiving) is successful, then navigate the user back to the PROFILE page.
+                            navigateTo("/" + UrlBasePath.PROFILE);
+                        }
+                    });
+            });
+        }
+    };
+
+    const infoText = "If a service has never had any bookings, it will be permanently deleted. " +
+        "If the service has had bookings, it will be archived and can only be accessed by Brides who had booked the service.";
+    const getDeleteHelperElement = (isRed) => (
+        <Tippy render={attrs => (
+            <div
+                className="box border border-cancelled-colour rounded-lg mt-1 px-6 py-6 white-glass-base shadow-lg w-[500px]"
+                tabIndex="-1" {...attrs}>
+                {infoText}
+            </div>
+        )}>
+            <QuestionMarkCircleIcon className={"tooltip-icon size-4 " + (isRed ? "text-cancelled-colour" : "text-light-grey-hover")}/>
+        </Tippy>
+    );
+
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
+
             <BackButton to={"/" + UrlBasePath.PROFILE}/>
             <div className="flex items-center justify-center">
                 <div className="flex flex-col w-[60%] gap-6">
@@ -363,6 +433,14 @@ export const AddEditServicePage = ({isEdit}) => {
                 </div>
             </div>
 
+            <div className="pl-[80%] flex items-center gap-2">
+                {isEdit && (<>
+                    <span className="small-text text-cancelled-colour underline cursor-pointer"
+                          onClick={onOpenDeleteModal}>Delete / Archive Service</span>
+                    {getDeleteHelperElement(true)}
+                </>)}
+            </div>
+
             <Modal classNames={{
                 modal: "w-[550px] h-[300px] rounded-[45px] bg-glass-panel-background border border-main-blue"
             }} open={open} onClose={onCloseModal} center showCloseIcon={false}>
@@ -382,6 +460,44 @@ export const AddEditServicePage = ({isEdit}) => {
                         <CheckIcon className="icon-base"/>
                         {isSuccess ? "Confirm" : "Close"}
                     </Button>
+                </div>
+            </Modal>
+
+
+            <Modal classNames={{
+                modal: "w-[550px] h-[300px] rounded-[45px] bg-glass-panel-background border border-main-blue"
+            }} open={openDeleteModal} onClose={onCloseDeleteModal} center showCloseIcon={false}>
+                <div className="flex flex-col justify-center items-center h-full gap-y-10">
+                    <h2 className="text-center title-text px-4">Delete / Archive?</h2>
+                    <div className={"flex flex-col gap-1 items-center justify-start"}>
+
+                        <span className="main-text text-center flex flex-row items-center justify-start gap-1">
+                            Are you sure you'd like to delete / archive this service? {getDeleteHelperElement(false)}
+                        </span>
+
+                        <span className={"text-cancelled-colour main-text"}>This action cannot be reversed. </span>
+
+                    </div>
+                    <div className="flex items-center gap-16">
+                        <Button
+                            className="btn-base ps-[25px] pe-[25px] flex gap-1 bg-secondary-purple hover:bg-secondary-purple-hover"
+                            onClick={() => {
+                                // If the user confirms deletion (or archiving).
+                                handleDelete()
+                            }}>
+                            <CheckIcon className="icon-base"/>
+                            <span>Yes</span>
+                        </Button>
+                        <Button
+                            className="btn-base ps-[25px] pe-[25px] flex gap-1"
+                            onClick={() => {
+                                // If the user rejects deletion (or archiving), simply close the modal.
+                                onCloseDeleteModal()
+                            }}>
+                            <XMarkIcon className="icon-base"/>
+                            <span>No</span>
+                        </Button>
+                    </div>
                 </div>
             </Modal>
         </WhiteBackground>
