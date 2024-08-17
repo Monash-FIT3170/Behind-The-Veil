@@ -73,8 +73,8 @@ const GalleryModal = ({
                   ></img>
                 </div>
                 <div class="relative col-span-1">
-                  <Dialog.Title as="h3" className="large-text overflow-hidden">
-                    <div className="flex-grow truncate">{selectedPostDate}</div>
+                  <Dialog.Title as="h3" className="large-text">
+                    {selectedPostDate}
                   </Dialog.Title>
                   <div className="fixed top-2 right-2 p-2 text-gray-500 z-20">
                     <button
