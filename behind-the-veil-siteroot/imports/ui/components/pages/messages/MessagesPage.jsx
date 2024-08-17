@@ -4,8 +4,9 @@
  * Contributors: Vicky
  */
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useSubscribe, useTracker} from "meteor/react-meteor-data"
+import {useNavigate, useParams} from "react-router-dom";
 import {Tracker} from "meteor/tracker";
 import {Meteor} from "meteor/meteor";
 
@@ -67,25 +68,97 @@ export const MessagesPage = () => {
         let keyOne = dateOne.chatUpdatedDate;
         let keyTwo = dateTwo.chatUpdatedDate;
         // Compare the 2 dates
-        if (keyOne < keyTwo) return -1;
-        if (keyOne > keyTwo) return 1;
+        if (keyOne > keyTwo) return -1;
+        if (keyOne < keyTwo) return 1;
         return 0;
-      });
+    });
 
+    // find the username in the url which represents the other user in the conversation
+    const [otherUsername, setOtherUsername] = useState('');
+    useEffect(() => {
+        // get the value after the # which is the username of the user we are chatting with
+        const currentUsername = window.location.hash.slice(1);
+        setOtherUsername(currentUsername);
+    }, [window.location.hash]);
 
-    // TODO: first check if the url has already selected a conversation with someone (from clicking the 
-    // send message button on booking details page), show the conversation with that particular user. if not, default to 
-    // 0 which is latest conversation. [THERE MIGHT BE ANOTHER PAGE THAT ALREADY LOOKS FOR INFO FROM THE URL - LOOK FOR IT]
     // - write a for loop and check for the other user's username to see if it matches the username in the url
     // and then set that conversation/chat as the selectedConversationIndex
     // AND in this for loop, check that the current user's type is not the same as the other user's type. if it is, give them
     // some kind of pop up warning [REFERENCE NETH'S CODE FOR THE POP UP FOR PAYMENT] to tell them that they can't message the other
-    // user and then just bring them back to general messages page
+    // user and then just bring them back to general messages page (routing)
+
+    // set the default conversation to the conversation that was updated most recently
     const [selectedConversationIndex, setSelectedConversationIndex] = useState(0);  // track the conversation selected, initially 0
+    // if the user is already in a conversation with someone (based on the url), show the conversation with 
+    // that user if it exists. if not, create a new chat with that user.
+    
+    // if (!isLoadingChats()) {
+    //     console.log("chats have finished loading");
+    //     console.log("other username: ", otherUsername);
+    // }
+    useEffect(() => {
+        if (otherUsername !== '' && !isLoadingChats()) {
+            let chatFound = false;
+            for (let i = 0; i < chatsData.length; i++) {
+                console.log("Other username: ", otherUsername);
+                console.log("Artist username: ", chatsData[i].artistUsername);
+                console.log("Bride username: ", chatsData[i].brideUsername);
+                if (otherUsername == chatsData[i].artistUsername || otherUsername == chatsData[i].brideUsername) {
+                    console.log("Found the chat");
+                    setSelectedConversationIndex(i);
+                    chatFound = true;
+                    break;
+                }
+            }
+            // if there is no chat, create a new chat
+            if (!chatFound) {
+                console.log("chat wasn't found");
+                //insert the message using the Message database method
+                try {
+                    let brideUsername = "";
+                    let artistUsername = "";
+                    // TODO: do another check to see if the other user's type is artist (because only
+                    // brides and artists can chat to each other)
+                    if (userInfo.type === "bride") {
+                        brideUsername = userInfo.username;
+                        artistUsername = otherUsername;
+                    }
+                    // TODO: same as the above but check if other user is a bride
+                    else if (userInfo.type === "artist") {
+                        brideUsername = otherUsername;
+                        artistUsername = userInfo.username;                
+                    }
+                    // TODO: if neither, show an error message that says that the user cannot chat
+                    // with the other user because of incompatible types
+                    else {
+
+                    }
+                    const chatUpdatedDate = new Date(); 
+                    const chatLastMessage = ""; 
+
+                    // wrap meteor.call in a promise
+                    new Promise((resolve, reject) => {
+                        // asynchronous operation
+                        Meteor.call('create_chat', brideUsername, artistUsername, chatUpdatedDate, chatLastMessage, (error, result) => {
+                            if (error) {
+                                reject(error); // if there's an error, go to the catch block
+                            } else {
+                                resolve(result); // if there's no error, continue with the rest of the block
+                            }
+                        });
+                    }).then(() => {
+                        console.log("Chat successfully added");
+                    });
+                } catch (error) {
+                    console.log("Error adding message. Returned with error:" + error.message);
+                }
+            }
+    }}, [otherUsername, chatsData]);
+
     const handlePreviewClick = (index) => {
         setSelectedConversationIndex(index);
     };
-
+    // TODO: get rid of this function
     const handleButtonClick = () => {
         //insert the message using the Message database method
         try {
@@ -117,10 +190,14 @@ export const MessagesPage = () => {
     // TODO: double check that the chats are listed in order of the dates
     //const newMsgPreviewsComponents = users.map((user, index) => <MessagesPreview key = {index} data = {user} onClick={() => handlePreviewClick(index)}></MessagesPreview>);
     const newMsgPreviewsComponents = chatsData.map((chat, index) => <MessagesPreview key = {index} data = {chat} onClick={() => handlePreviewClick(index)}></MessagesPreview>);
+    // for (let i = 0; i < chatsData.length; i++) {
+    //     console.log(chatsData[i].chatLastMessage);
+    //     console.log(chatsData[i].chatUpdatedDate);
+    // }
 
-    if (!isLoading) {
-    console.log("Database chats data: ", chatsData);
-    }
+    // if (!isLoading) {
+    // console.log("Database chats data: ", chatsData);
+    // }
 
     // TODO: place this in an if statement that checks if the page is ready or not
     return (
@@ -134,7 +211,8 @@ export const MessagesPage = () => {
             </div>
             {/*you MUST keep this div and put everything on the right side inside of it*/}
             <div>
-                {/* TODO: selectedConversationIndex to chatId */}
+                {/* TODO: get rid of the button below - need to show some message that says "no 
+                messages to display here*/}
                 {chatsData.length > 0 ? (
                     <Conversation chat={chatsData[selectedConversationIndex]} />) : 
                     (<Button onClick={handleButtonClick}>Start a new conversation</Button>)

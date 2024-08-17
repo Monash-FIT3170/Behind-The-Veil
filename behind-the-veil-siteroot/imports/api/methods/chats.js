@@ -18,7 +18,6 @@ Meteor.methods({
          * @param {string} chatLastMessage - The last message sent in the chat.
          * @returns {string} The unique ID of the newly created chat.
          */
-        console.log("AAAAAAAA")
         return ChatCollection.insert({
             brideUsername: brideUsername,
             artistUsername: artistUsername,
@@ -42,25 +41,4 @@ Meteor.methods({
             } },
         );
     },
-    // /**
-    //  * Retrieves the other user's username from the database based on the current user's username and
-    //  * the chat ID
-    //  * @param {string} username - The username of the current user
-    //  * @param {string} chatId - The ID of the chat to retrieve.
-    //  * @returns {string|null} - The username of the other user if found, otherwise null.
-    //  */
-    // "get_other_user": function (username, chatId) {
-    //     const chat = ChatCollection.findOne(
-    //         { _id: chatId },
-    //     )
-
-    //     if (chat) {
-    //         // return the other user's username
-    //         return chat.artistUsername === username ? chat.brideUsername : chat.artistUsername;
-    //     }
-        
-    //     return null;
-    // },
-
-
 })

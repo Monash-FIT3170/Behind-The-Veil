@@ -37,7 +37,7 @@ export const Conversation = ({chat}) => {
         return ImageCollection.find().fetch;
     })
 
-    console.log("messagesData", messagesData)
+    // console.log("messagesData", messagesData)
 
     // sort messages based on sent date (oldest to newest)
     messagesData.sort(function(chat1, chat2) {
@@ -50,9 +50,17 @@ export const Conversation = ({chat}) => {
        return 0;
     });
 
-    // get the other user's username
-    // TODO: user this to get the other user's alias
+    // get the other user's username and alias
     const otherUser = chat.artistUsername === userInfo.username ? chat.brideUsername : chat.artistUsername;
+    const [otherUserAlias, setOtherUserAlias] = useState('');
+    
+    Meteor.call('get_alias', otherUser, (error, result) => {
+        if (error) {
+          console.error('Error fetching alias:', error);
+          return;
+        }
+        setOtherUserAlias(result);
+      });
 
     const conversationRef = useRef(null);
 
@@ -60,7 +68,7 @@ export const Conversation = ({chat}) => {
         event.preventDefault();
         if (formValue.trim() === '') return;
         
-        // insert the message using the Message database method
+        // insert the message using the Message database method and update the chat date
         try {
             const messageSentTime = new Date();
             const messageContent = formValue;
@@ -79,6 +87,15 @@ export const Conversation = ({chat}) => {
                     }
                 });
             })
+            new Promise((resolve, reject) => {
+                Meteor.call('update_chat', messageSentTime, messageContent, (error, result) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(result);
+                    }
+                })
+            })
 
             setFormValue('');
             let heightToScroll = conversationRef?.current.scrollHeight + 50 // TODO: check, might have to adjust the value or code
@@ -91,10 +108,14 @@ export const Conversation = ({chat}) => {
         
     };
 
+    // TODO: chat last updated date and message are not being re-rendered in website
+    //console.log("chat last message: " + chat.chatLastMessage);
+
+    // TODO: use the isLoading variable to show the loader if things haven't loaded yet
     return (
         <div className="flex flex-col fixed top-0 bottom-0 left-0 right-0">
             <div
-                className='ml-4 w-11/12 message-receiver-name-text border-b-2 pt-3 pb-1 mb-8 pl-6 border-main-blue'>{otherUser}
+                className='ml-4 w-11/12 message-receiver-name-text border-b-2 pt-3 pb-1 mb-8 pl-6 border-main-blue'>{otherUserAlias}
             </div>
             <div className="flex-1 overflow-y-auto p-4" ref={conversationRef}>
                 <div>
