@@ -18,6 +18,7 @@ import {
 } from "../../../DatabaseHelper";
 import { useUserInfo } from "../../../util";
 import GalleryModal from "./GalleryModal";
+import DeletePostConfirmationModal from "./DeletePostConfirmationModal";
 
 /**
  * Gallery tab of an artist's profile
@@ -25,10 +26,12 @@ import GalleryModal from "./GalleryModal";
  * @param username {string} - username of the current user's profile
  */
 export const ArtistGalleryTab = ({ username, external = false }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedPostDate, setSelectedPostDate] = useState(null);
   const [selectedPostDescription, setSelectedPostDescription] = useState(null);
+  const [selectedPostId, setSelectedPostId] = useState(null);
   const plusIcon = <PlusIcon className="icon-base" />;
   const galleryImgData = useGalleryTotalCollection(username)[0];
   const postData = useGalleryTotalCollection(username)[1];
@@ -36,23 +39,23 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
 
   // get current user information
   const userInfo = useUserInfo();
-  console.log(postData[0]);
 
-  // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
-  // When completing the dynamic version for this page, probably a good idea to setup the photos as components and importing them in.
-
-  function closeModal() {
-    setIsOpen(false);
+  //close the gallery modal
+  function closeGalleryModal() {
+    setIsGalleryModalOpen(false);
   }
 
-  function openModal(image, index) {
+  //open the gallery modal and store all relevant information
+  function openGalleryModal(image, index) {
+    setSelectedPostId(postData[index]._id);
     setSelectedImage(image);
     const formattedDate = formatDate(postData[index].postDate);
     setSelectedPostDate(formattedDate);
     setSelectedPostDescription(postData[index].postDescription);
-    setIsOpen(true);
+    setIsGalleryModalOpen(true);
   }
 
+  //format date to what is expected from figma
   function formatDate(dateInput) {
     const date = new Date(dateInput);
     return date.toLocaleDateString("en-AU", {
@@ -62,11 +65,45 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
     });
   }
 
+  //open the modal to confirm image/post deletion
+  function openDeleteModal() {
+    closeGalleryModal();
+    setIsDeleteModalOpen(true);
+  }
+
+  //close the modal to confirm image/post deletion
+  function closeDeleteModal() {
+    setIsDeleteModalOpen(false);
+  }
+
+  //Deletes the post and the image from the database
+  //also closes the modal
+  function deleteImage() {
+    Meteor.call("remove_post", selectedPostId, (error) => {
+      if (error) {
+        console.error("error removing post", error);
+      } else {
+        console.log("post removed");
+      }
+    });
+
+    Meteor.call("remove_post_image", selectedPostId, (error) => {
+      if (error) {
+        console.error("error removing image", error);
+      } else {
+        console.log("image removed");
+      }
+    });
+
+    closeDeleteModal();
+  }
+
   return (
     <div className="relative">
       <GalleryModal
-        isOpen={isOpen}
-        closeModal={closeModal}
+        isOpen={isGalleryModalOpen}
+        closeModal={closeGalleryModal}
+        openDeleteModal={openDeleteModal}
         selectedImage={selectedImage}
         profileImgSrc={userProfileImageSrc}
         selectedPostDate={selectedPostDate}
@@ -74,6 +111,11 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
         userInfo={userInfo}
         external={external}
       />
+      <DeletePostConfirmationModal
+        isOpen={isDeleteModalOpen}
+        closeModal={closeDeleteModal}
+        deleteImage={deleteImage}
+      ></DeletePostConfirmationModal>
 
       <div className="sticky top-20 z-20 flex justify-end">
         <Button className="absolute top-5 flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover mt-2">
@@ -90,8 +132,8 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
                 width: "100%",
                 display: "block",
               }}
-              onClick={() => openModal(image, index)}
-              alt={"Gallery Image ${i}"}
+              onClick={() => openGalleryModal(image, index)}
+              alt={"Gallery Image " + index}
             />
           ))}
         </Masonry>

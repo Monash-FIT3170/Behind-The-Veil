@@ -1,7 +1,7 @@
 /**
  * File Description: Image database entity
- * File version: 1.0
- * Contributors: Nikki
+ * File version: 1.1
+ * Contributors: Nikki, Phillip
  */
 
 import {Meteor} from "meteor/meteor";
@@ -20,10 +20,20 @@ Meteor.methods({
         ImageCollection.insert(
             {
                 "imageType": type,
-                "targetId": targetId,
+                "target_id": targetId,
                 "imageData": imageData
             }
         )
+    },
+
+    "remove_post_image": function (target_Id){
+        ImageCollection.remove(
+            {
+                "imageType":"post",
+                "target_id": target_Id
+            }
+        )
     }
+
 })
 
