@@ -16,6 +16,10 @@ import "/imports/api/collections/images.js";
 import "/imports/api/methods/images.js";
 import "/imports/api/publications/images";
 
+import "/imports/api/collections/posts.js";
+import "/imports/api/methods/posts.js";
+import "/imports/api/publications/posts";
+
 // file in the same folder containing creds for mail server
 // import {emailUser, emailPass, mailUrl, fromUser} from "./secrets.js"
 
