@@ -4,7 +4,7 @@
  * Contributors: Phillip
  */
 
-import React, { useState } from "react";
+import React from "react";
 import {
   TrashIcon,
   PencilIcon,
@@ -21,7 +21,7 @@ const GalleryModal = ({
   isOpen,
   closeModal,
   selectedImage,
-  selectedIndex,
+  openDeleteModal,
   profileImgSrc,
   selectedPostDate,
   selectedPostDescription,
@@ -98,7 +98,9 @@ const GalleryModal = ({
                       </Button>
                       <Button
                         className="mt-2 w-32 flex justify-center"
-                        onClick={deleteAction}
+                        onClick={() => {
+                          openDeleteModal();
+                        }}
                       >
                         {trashIcon} <span className="ml-2">Delete</span>
                       </Button>

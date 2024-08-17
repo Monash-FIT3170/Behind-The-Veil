@@ -18,6 +18,7 @@ import {
 } from "../../../DatabaseHelper";
 import { useUserInfo } from "../../../util";
 import GalleryModal from "./GalleryModal";
+import DeletePostConfirmationModal from "./DeletePostConfirmationModal";
 
 /**
  * Gallery tab of an artist's profile
@@ -25,9 +26,9 @@ import GalleryModal from "./GalleryModal";
  * @param username {string} - username of the current user's profile
  */
 export const ArtistGalleryTab = ({ username, external = false }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedIndex, setSelectedIndex] = useState(null);
   const [selectedPostDate, setSelectedPostDate] = useState(null);
   const [selectedPostDescription, setSelectedPostDescription] = useState(null);
   const plusIcon = <PlusIcon className="icon-base" />;
@@ -37,22 +38,17 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
 
   // get current user information
   const userInfo = useUserInfo();
-  console.log(postData[0]);
 
-  // Photos Gallery code: https://www.material-tailwind.com/docs/react/gallery
-  // When completing the dynamic version for this page, probably a good idea to setup the photos as components and importing them in.
-
-  function closeModal() {
-    setIsOpen(false);
+  function closeGalleryModal() {
+    setIsGalleryModalOpen(false);
   }
 
-  function openModal(image, index) {
+  function openGalleryModal(image, index) {
     setSelectedImage(image);
-    setSelectedIndex(index);
     const formattedDate = formatDate(postData[index].postDate);
     setSelectedPostDate(formattedDate);
     setSelectedPostDescription(postData[index].postDescription);
-    setIsOpen(true);
+    setIsGalleryModalOpen(true);
   }
 
   function formatDate(dateInput) {
@@ -64,19 +60,32 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
     });
   }
 
+  function openDeleteModal() {
+    setIsDeleteModalOpen(true);
+    closeGalleryModal();
+  }
+
+  function closeDeleteModal() {
+    setIsDeleteModalOpen(false);
+  }
+
   return (
     <div className="relative">
       <GalleryModal
-        isOpen={isOpen}
-        closeModal={closeModal}
+        isOpen={isGalleryModalOpen}
+        closeModal={closeGalleryModal}
+        openDeleteModal={openDeleteModal}
         selectedImage={selectedImage}
-        selectedIndex={selectedIndex}
         profileImgSrc={userProfileImageSrc}
         selectedPostDate={selectedPostDate}
         selectedPostDescription={selectedPostDescription}
         userInfo={userInfo}
         external={external}
       />
+      <DeletePostConfirmationModal
+        isOpen={isDeleteModalOpen}
+        closeModal={closeDeleteModal}
+      ></DeletePostConfirmationModal>
 
       <div className="sticky top-20 z-20 flex justify-end">
         <Button className="absolute top-5 flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover mt-2">
@@ -93,7 +102,7 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
                 width: "100%",
                 display: "block",
               }}
-              onClick={() => openModal(image, index)}
+              onClick={() => openGalleryModal(image, index)}
               alt={"Gallery Image ${i}"}
             />
           ))}
