@@ -40,10 +40,12 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
   // get current user information
   const userInfo = useUserInfo();
 
+  //close the gallery modal
   function closeGalleryModal() {
     setIsGalleryModalOpen(false);
   }
 
+  //open the gallery modal and store all relevant information
   function openGalleryModal(image, index) {
     setSelectedPostId(postData[index]._id);
     setSelectedImage(image);
@@ -53,6 +55,7 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
     setIsGalleryModalOpen(true);
   }
 
+  //format date to what is expected from figma
   function formatDate(dateInput) {
     const date = new Date(dateInput);
     return date.toLocaleDateString("en-AU", {
@@ -62,15 +65,19 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
     });
   }
 
+  //open the modal to confirm image/post deletion
   function openDeleteModal() {
     closeGalleryModal();
     setIsDeleteModalOpen(true);
   }
 
+  //close the modal to confirm image/post deletion
   function closeDeleteModal() {
     setIsDeleteModalOpen(false);
   }
 
+  //Deletes the post and the image from the database
+  //also closes the modal
   function deleteImage() {
     Meteor.call("remove_post", selectedPostId, (error) => {
       if (error) {
