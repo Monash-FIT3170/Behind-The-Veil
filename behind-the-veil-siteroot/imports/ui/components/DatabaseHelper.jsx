@@ -1,7 +1,7 @@
 /**
  * File Description: Database helper functions
- * File version: 1.2
- * Contributors: Nikki
+ * File version: 1.3
+ * Contributors: Nikki, Ryan
  */
 import {useSubscribe, useTracker} from "meteor/react-meteor-data";
 
@@ -312,3 +312,32 @@ export function useSpecificUser(username) {
     return {isLoading, userData, profileImagesData}
 }
 
+/**
+ * Fetches the dashboard statistics for the artist
+ *
+ * @param username {string} - The username of the artist
+ * @returns {Object} - Object containing the dashboard statistics like total customers, total earnings, etc.
+ */
+export function useArtistDashboardData(username) {
+    // Subscribe to the necessary data
+    const isLoadingBookings = useSubscribe('all_user_bookings', username);
+
+    // Fetch the booking data for the artist
+    let bookingData = useTracker(() => {
+        return BookingCollection.find({artistUsername: username}).fetch();
+    });
+
+    // Calculate the necessary statistics
+    const totalCustomersLifetime = bookingData.length;
+    const totalCustomersThisMonth = bookingData.filter(booking => {
+        const bookingDate = new Date(booking.bookingStartDateTime);
+        const currentMonth = new Date().getMonth();
+        return bookingDate.getMonth() === currentMonth;
+    }).length;
+
+    return {
+        isLoading: isLoadingBookings(),
+        totalCustomersLifetime,
+        totalCustomersThisMonth,
+    };
+}
