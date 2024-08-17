@@ -31,4 +31,25 @@ Meteor.publish('all_user_bookings', function (username) {
  */
 Meteor.publish('specific_booking', function (bookingId) {
     return BookingCollection.find({_id: bookingId});
+    // create a mongo ID object to query for ID
+    const idObject = new Mongo.ObjectID(bookingId);
+    return BookingCollection.find({_id: idObject});
+});
+
+Meteor.publish("all_user_complete_bookings", function(username){
+    return BookingCollection.find({
+        $and: [
+            {artistUsername: username},
+            {bookingStatus: "complete"}
+        ]
+    });
+});
+
+Meteor.publish("all_user_pending_bookings", function(username){
+    return BookingCollection.find({
+        $and: [
+            {artistUsername: username},
+            {bookingStatus: "pending"}
+        ]
+    });
 });

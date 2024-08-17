@@ -39,7 +39,6 @@ export function useServices(
   let imagesData = useTracker(() => {
     return ImageCollection.find({ imageType: "service" }).fetch();
   });
-  console.log(imagesData);
 
   // get artist data from database, if needed
   let isLoadingArtists = () => false;
@@ -339,7 +338,7 @@ export function useSpecificUser(username) {
  * @param username {string} - The username of the artist
  * @returns {Object} - Object containing the dashboard statistics like total customers, total earnings, etc.
  */
-export function useArtistDashboardData(username) {
+export function useArtistDashboardCustomerData(username) {
   // Subscribe to the necessary data
   const isLoadingBookings = useSubscribe("all_user_bookings", username);
 
@@ -362,6 +361,7 @@ export function useArtistDashboardData(username) {
     totalCustomersThisMonth,
   };
 }
+
 //  * Collects all data relevent to load gallery images
 //  *
 //  * @param {*} username - username of the user to get data
@@ -409,4 +409,27 @@ export function useUserPosts(username) {
   });
 
   return postData;
+}
+
+export function useArtistDashboardRevenueData(username) {
+  const isLoadingBookings = useSubscribe("all_user_bookings", username);
+
+  // Fetch the booking data for the artist
+  let bookingData = useTracker(() => {
+    return BookingCollection.find({ artistUsername: username }).fetch();
+  });
+
+  let bookingCompleteRevenue = 0;
+  let bookingPendingRevenue = 0;
+
+  for (let i = 0; i < bookingData.length; i++) {
+    if (bookingData[i].bookingStatus == "completed") {
+      bookingCompleteRevenue += bookingData[i].bookingPrice;
+    }
+    if (bookingData[i].bookingStatus == "pending") {
+      bookingPendingRevenue += bookingData[i].bookingPrice;
+    }
+  }
+
+  return [bookingCompleteRevenue, bookingPendingRevenue];
 }
