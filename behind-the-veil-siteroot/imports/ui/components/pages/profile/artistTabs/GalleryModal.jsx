@@ -5,7 +5,11 @@
  */
 
 import React from "react";
-import { TrashIcon, PencilIcon } from "@heroicons/react/24/outline";
+import {
+  TrashIcon,
+  PencilIcon,
+  XCircleIcon,
+} from "@heroicons/react/24/outline";
 import { ProfileGalleryDisplay } from "../../../profilePhoto/ProfileGalleryDisplay";
 
 import Button from "../../../button/Button";
@@ -25,6 +29,7 @@ const GalleryModal = ({
 }) => {
   const trashIcon = <TrashIcon className="icon-base" />;
   const pencilIcon = <PencilIcon className="icon-base" />;
+  const closeIcon = <XCircleIcon className="icon-base" />;
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-30" onClose={closeModal}>
@@ -55,6 +60,13 @@ const GalleryModal = ({
                 className="grid grid-cols-5 gap-4 w-3/5 transform overflow-hidden rounded-md bg-white p-4 text-left align-middle shadow-xl transition-all"
                 style={{ maxHeight: "80vh" }}
               >
+                <button
+                  className="absolute top-2 right-2 p-2 text-gray-500 hover:text-gray-700 z-20"
+                  onClick={closeModal}
+                >
+                  {closeIcon}
+                </button>
+
                 <div className="col-span-4">
                   <img
                     className="w-full h-full object-cover mx-auto"
