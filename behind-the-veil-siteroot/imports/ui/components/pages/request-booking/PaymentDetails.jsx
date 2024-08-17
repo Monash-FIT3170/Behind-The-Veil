@@ -48,7 +48,10 @@ const PaymentDetails = () => {
         const service = searchParams.get('Service');
         const serviceLocation = searchParams.get('Location');
         const date = searchParams.get('Date');
-        const totalPrice = searchParams.get('Total Price');
+        const priceString = searchParams.get('Total Price');
+
+        let priceFloat = parseFloat(priceString.replace('$', ''));
+        let totalPrice = Math.round(priceFloat);
 
         setDetails({
             brideName: brideName,
@@ -171,10 +174,10 @@ const PaymentDetails = () => {
         }
     };
 
-    const addToBooking = (startDateTime, duration, location, price, status, brideUsername, artistUsername, serviceId) => new Promise((resolve, reject) => {
+    const addToBooking = (startDateTime, endDateTime, location, price, status, brideUsername, artistUsername, serviceId) => new Promise((resolve, reject) => {
         Meteor.call("add_booking",
             startDateTime,
-            duration,
+            endDateTime,
             location,
             price,
             status,
@@ -196,9 +199,17 @@ const PaymentDetails = () => {
     });
 
     const confirmPayment = () => {
-        addToBooking(details.date, 2, details.location, details.price, BookingStatus.PENDING, userInfo.username, details.artistUsername, serviceId)
+        let datetimeParts = details.date.split(",");
+
+        let startDatetimeString = datetimeParts[0].trim();
+        let endDatetimeString = datetimeParts[1].trim();
+
+        let startDatetime = new Date(startDatetimeString);
+        let endDatetime = new Date(endDatetimeString);
+
+        addToBooking(startDatetime, endDatetime, details.location, details.price, BookingStatus.PENDING, userInfo.username, details.artistUsername, serviceId)
             .then(r => navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/booking-confirmation`))
-            .catch(reason => console.log(reason));
+            .catch(reason => alert(reason));
     }
 
     return (
