@@ -373,14 +373,17 @@ export function useGalleryTotalCollection(username) {
     return ImageCollection.find({ imageType: "post" }).fetch();
   });
 
+  //collect user post data
   const postData = useUserPosts(username);
 
+  //loop through and collect all the post ID information
   const postDataIDArray = [];
   for (let i = 0; i < postData.length; i++) {
     postDataIDArray.push(postData[i]._id);
   }
   const imageSourceArray = [];
 
+  //collect relevant post images
   for (let j = 0; j < postDataIDArray.length; j++) {
     for (let i = 0; i < imageDataArray.length; i++) {
       if (imageDataArray[i].target_id == postDataIDArray[j]) {
@@ -389,6 +392,7 @@ export function useGalleryTotalCollection(username) {
     }
   }
 
+  //return index 0 as image source and index 1 with corresponding post data.
   return [imageSourceArray, postData];
 }
 
