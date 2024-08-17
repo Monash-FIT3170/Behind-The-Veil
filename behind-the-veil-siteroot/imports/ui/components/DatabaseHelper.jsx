@@ -411,6 +411,11 @@ export function useUserPosts(username) {
   return postData;
 }
 
+/**
+ * Finds all user booking details and calculates total revenue earnt from completed bookings and pending bookings
+ * @param username {string} - the username of the artist
+ * @returns {object} - an array with index 0 containing total earnings and index 1 containing pending earnings
+ */
 export function useArtistDashboardRevenueData(username) {
   const isLoadingBookings = useSubscribe("all_user_bookings", username);
 
@@ -419,13 +424,17 @@ export function useArtistDashboardRevenueData(username) {
     return BookingCollection.find({ artistUsername: username }).fetch();
   });
 
+  //initalise variables for revenue calculation
   let bookingCompleteRevenue = 0;
   let bookingPendingRevenue = 0;
 
+  // loop through entire booking data array
   for (let i = 0; i < bookingData.length; i++) {
+    //if booking is completed, total bookings value
     if (bookingData[i].bookingStatus == "completed") {
       bookingCompleteRevenue += bookingData[i].bookingPrice;
     }
+    //if booking is pending, total bookings value
     if (bookingData[i].bookingStatus == "pending") {
       bookingPendingRevenue += bookingData[i].bookingPrice;
     }
