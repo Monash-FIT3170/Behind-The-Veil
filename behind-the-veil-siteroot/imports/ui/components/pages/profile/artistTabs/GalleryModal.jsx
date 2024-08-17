@@ -57,17 +57,10 @@ const GalleryModal = ({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel
-                className="grid grid-cols-5 gap-4 w-3/5 transform overflow-hidden rounded-md bg-white p-4 text-left align-middle shadow-xl transition-all"
+                className="grid grid-cols-6 gap-4 w-3/5 transform overflow-hidden rounded-md bg-white p-4 text-left align-middle shadow-xl transition-all"
                 style={{ maxHeight: "80vh" }}
               >
-                <button
-                  className="absolute top-2 right-2 p-2 text-gray-500 hover:text-gray-700 z-20"
-                  onClick={closeModal}
-                >
-                  {closeIcon}
-                </button>
-
-                <div className="col-span-4">
+                <div className="col-span-5">
                   <img
                     className="w-full h-full object-cover mx-auto"
                     style={{
@@ -79,13 +72,19 @@ const GalleryModal = ({
                     alt="Selected Image for Modal"
                   ></img>
                 </div>
-                <div class="relative">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-xl font-medium leading-6 text-gray-900"
-                  >
-                    {selectedPostDate}
+                <div class="relative col-span-1">
+                  <Dialog.Title as="h3" className="large-text overflow-hidden">
+                    <div className="flex-grow truncate">{selectedPostDate}</div>
                   </Dialog.Title>
+                  <div className="fixed top-2 right-2 p-2 text-gray-500 z-20">
+                    <button
+                      className="text-gray-500 hover:text-gray-700"
+                      onClick={closeModal}
+                    >
+                      {closeIcon}
+                    </button>
+                  </div>
+
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
                       {selectedPostDescription}
@@ -103,7 +102,6 @@ const GalleryModal = ({
                   ) : (
                     <span></span>
                   )}
-
                   <ProfileGalleryDisplay
                     className={""}
                     imageData={profileImgSrc}
