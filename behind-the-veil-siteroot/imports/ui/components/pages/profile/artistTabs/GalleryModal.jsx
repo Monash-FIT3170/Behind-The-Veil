@@ -1,19 +1,23 @@
+/**
+ * File Description: Artist gallery modal
+ * File version: 1.0
+ * Contributors: Phillip
+ */
+
 import React from "react";
-import { PlusIcon, TrashIcon, PencilIcon } from "@heroicons/react/24/outline";
+import { TrashIcon, PencilIcon } from "@heroicons/react/24/outline";
 import { ProfileGalleryDisplay } from "../../../profilePhoto/ProfileGalleryDisplay";
 
 import Button from "../../../button/Button";
-import { Fragment, useState } from "react";
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import { Dialog, Transition } from "@headlessui/react";
+import { Fragment } from "react";
 
-import { useGalleryTotalCollection } from "../../../DatabaseHelper";
-import { useUserInfo } from "../../../util";
+import { Dialog, Transition } from "@headlessui/react";
 
 const GalleryModal = ({
   isOpen,
   closeModal,
   selectedImage,
+  profileImgSrc,
   selectedPostDate,
   selectedPostDescription,
   userInfo,
@@ -76,7 +80,7 @@ const GalleryModal = ({
                     </p>
                   </div>
                   {external === false ? (
-                    <div className="flex flex-col items-center mt-10 mb-2 pb-10">
+                    <div className="flex flex-col items-center justify-center absolute bottom-16 w-full mt-10 mb-5 pb-8">
                       <Button className="bg-secondary-purple hover:bg-secondary-purple-hover mt-2 w-32 flex justify-center">
                         {pencilIcon} <span className="ml-2">Edit</span>
                       </Button>
@@ -89,8 +93,8 @@ const GalleryModal = ({
                   )}
 
                   <ProfileGalleryDisplay
-                    className={"mt-5"}
-                    imageData={""}
+                    className={""}
+                    imageData={profileImgSrc}
                     userAlias={userInfo.alias}
                     userUsername={userInfo.username}
                   ></ProfileGalleryDisplay>

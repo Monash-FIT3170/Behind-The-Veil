@@ -9,11 +9,13 @@ import { PlusIcon, TrashIcon, PencilIcon } from "@heroicons/react/24/outline";
 import { ProfileGalleryDisplay } from "../../../profilePhoto/ProfileGalleryDisplay";
 
 import Button from "../../../button/Button";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import { Dialog, Transition } from "@headlessui/react";
 
-import { useGalleryTotalCollection } from "../../../DatabaseHelper";
+import {
+  useGalleryTotalCollection,
+  useSpecificUser,
+} from "../../../DatabaseHelper";
 import { useUserInfo } from "../../../util";
 import GalleryModal from "./GalleryModal";
 
@@ -28,10 +30,9 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
   const [selectedPostDate, setSelectedPostDate] = useState(null);
   const [selectedPostDescription, setSelectedPostDescription] = useState(null);
   const plusIcon = <PlusIcon className="icon-base" />;
-  const trashIcon = <TrashIcon className="icon-base" />;
-  const pencilIcon = <PencilIcon className="icon-base" />;
   const galleryImgData = useGalleryTotalCollection(username)[0];
   const postData = useGalleryTotalCollection(username)[1];
+  const userProfileImageSrc = useSpecificUser(username)[2];
 
   // get current user information
   const userInfo = useUserInfo();
@@ -67,6 +68,7 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
         isOpen={isOpen}
         closeModal={closeModal}
         selectedImage={selectedImage}
+        profileImgSrc={userProfileImageSrc}
         selectedPostDate={selectedPostDate}
         selectedPostDescription={selectedPostDescription}
         userInfo={userInfo}

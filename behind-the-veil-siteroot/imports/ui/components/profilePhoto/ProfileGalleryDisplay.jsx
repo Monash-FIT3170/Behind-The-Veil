@@ -11,7 +11,7 @@ export const ProfileGalleryDisplay = ({
 }) => {
   const classes = classNames(
     className,
-    "flex grid grid-cols-3 gap-4 relative bottom-0 pb-8"
+    "flex grid grid-cols-3 gap-4 absolute bottom-0 pb-8 w-full"
     // "flex flex-col items-center justify-center"
   );
   return (
@@ -22,7 +22,7 @@ export const ProfileGalleryDisplay = ({
         className="flex container h-full w-full"
         artistPhotoData={imageData}
       />
-      <div className="col-span-2 pl-5">
+      <div className="col-span-2 flex flex-col items-center justify-center">
         <div className="text-center medium-text ">
           {userAlias ? userAlias : "User Alias"}
         </div>
