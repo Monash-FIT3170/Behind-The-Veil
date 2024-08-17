@@ -5,7 +5,7 @@ import Button from "../../../button/Button";
 
 import { CheckIcon, NoSymbolIcon } from "@heroicons/react/24/outline";
 
-const DeletePostConfirmationModal = ({ isOpen, closeModal }) => {
+const DeletePostConfirmationModal = ({ isOpen, closeModal, deleteImage }) => {
   const checkIcon = <CheckIcon className="icon-base mr-1" />;
   const noIcon = <NoSymbolIcon className="icon-base mr-1" />;
   return (
@@ -46,10 +46,16 @@ const DeletePostConfirmationModal = ({ isOpen, closeModal }) => {
                   </p>
                 </div>
                 <div className="mt-4 flex items-center justify-center w-full">
-                  <Button className="bg-secondary-purple hover:bg-secondary-purple-hover w-1/4 flex justify-center mr-4">
+                  <Button
+                    className="bg-secondary-purple hover:bg-secondary-purple-hover w-1/4 flex justify-center mr-4"
+                    onClick={deleteImage}
+                  >
                     {checkIcon} Yes
                   </Button>
-                  <Button className="w-1/4 flex justify-center ml-4">
+                  <Button
+                    className="w-1/4 flex justify-center ml-4"
+                    onClick={closeModal}
+                  >
                     {noIcon} No
                   </Button>
                 </div>

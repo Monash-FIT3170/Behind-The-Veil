@@ -31,6 +31,7 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedPostDate, setSelectedPostDate] = useState(null);
   const [selectedPostDescription, setSelectedPostDescription] = useState(null);
+  const [selectedPostId, setSelectedPostId] = useState(null);
   const plusIcon = <PlusIcon className="icon-base" />;
   const galleryImgData = useGalleryTotalCollection(username)[0];
   const postData = useGalleryTotalCollection(username)[1];
@@ -44,6 +45,7 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
   }
 
   function openGalleryModal(image, index) {
+    setSelectedPostId(postData[index]._id);
     setSelectedImage(image);
     const formattedDate = formatDate(postData[index].postDate);
     setSelectedPostDate(formattedDate);
@@ -61,12 +63,32 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
   }
 
   function openDeleteModal() {
-    setIsDeleteModalOpen(true);
     closeGalleryModal();
+    setIsDeleteModalOpen(true);
   }
 
   function closeDeleteModal() {
     setIsDeleteModalOpen(false);
+  }
+
+  function deleteImage() {
+    Meteor.call("remove_post", selectedPostId, (error) => {
+      if (error) {
+        console.error("error removing post", error);
+      } else {
+        console.log("post removed");
+      }
+    });
+
+    Meteor.call("remove_post_image", selectedPostId, (error) => {
+      if (error) {
+        console.error("error removing image", error);
+      } else {
+        console.log("image removed");
+      }
+    });
+
+    closeDeleteModal();
   }
 
   return (
@@ -85,6 +107,7 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
       <DeletePostConfirmationModal
         isOpen={isDeleteModalOpen}
         closeModal={closeDeleteModal}
+        deleteImage={deleteImage}
       ></DeletePostConfirmationModal>
 
       <div className="sticky top-20 z-20 flex justify-end">
@@ -103,7 +126,7 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
                 display: "block",
               }}
               onClick={() => openGalleryModal(image, index)}
-              alt={"Gallery Image ${i}"}
+              alt={"Gallery Image " + index}
             />
           ))}
         </Masonry>
