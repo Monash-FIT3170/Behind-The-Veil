@@ -4,7 +4,7 @@
  * Contributors: Phillip
  */
 
-import React from "react";
+import React, { useState } from "react";
 import {
   TrashIcon,
   PencilIcon,
@@ -21,6 +21,7 @@ const GalleryModal = ({
   isOpen,
   closeModal,
   selectedImage,
+  selectedIndex,
   profileImgSrc,
   selectedPostDate,
   selectedPostDescription,
@@ -42,7 +43,7 @@ const GalleryModal = ({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black/70" aria-hidden="true" />
+          <div className="fixed inset-0 bg-black/90" aria-hidden="true" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -95,7 +96,10 @@ const GalleryModal = ({
                       <Button className="bg-secondary-purple hover:bg-secondary-purple-hover mt-2 w-32 flex justify-center">
                         {pencilIcon} <span className="ml-2">Edit</span>
                       </Button>
-                      <Button className="mt-2 w-32 flex justify-center">
+                      <Button
+                        className="mt-2 w-32 flex justify-center"
+                        onClick={deleteAction}
+                      >
                         {trashIcon} <span className="ml-2">Delete</span>
                       </Button>
                     </div>

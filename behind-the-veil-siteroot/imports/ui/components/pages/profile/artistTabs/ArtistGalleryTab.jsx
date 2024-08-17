@@ -27,6 +27,7 @@ import GalleryModal from "./GalleryModal";
 export const ArtistGalleryTab = ({ username, external = false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState(null);
   const [selectedPostDate, setSelectedPostDate] = useState(null);
   const [selectedPostDescription, setSelectedPostDescription] = useState(null);
   const plusIcon = <PlusIcon className="icon-base" />;
@@ -47,6 +48,7 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
 
   function openModal(image, index) {
     setSelectedImage(image);
+    setSelectedIndex(index);
     const formattedDate = formatDate(postData[index].postDate);
     setSelectedPostDate(formattedDate);
     setSelectedPostDescription(postData[index].postDescription);
@@ -68,6 +70,7 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
         isOpen={isOpen}
         closeModal={closeModal}
         selectedImage={selectedImage}
+        selectedIndex={selectedIndex}
         profileImgSrc={userProfileImageSrc}
         selectedPostDate={selectedPostDate}
         selectedPostDescription={selectedPostDescription}
