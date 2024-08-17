@@ -22,13 +22,21 @@ import Loader from "/imports/ui/components/loader/Loader";
 import Button from "../../button/Button.jsx";
 
 import {useUserInfo} from "../../util.jsx"
+import UrlBasePath from "../../../enums/UrlBasePath";
 
 /**
  * Messages page with all users they've chatted with
  */
 export const MessagesPage = () => {
+    const navigate = useNavigate();
+
     // get current user information
     const userInfo = useUserInfo();
+
+    // given a username and chat, return the username of the other user
+    const getOtherUsername = (username, chat) => {
+        return chat.brideUsername != username ? chat.brideUsername : chat.artistUsername;
+    };
 
     // set up subscription (publication is in the "publication" folder)
     const isLoadingChats = useSubscribe('all_user_chats', userInfo.username);
@@ -52,7 +60,7 @@ export const MessagesPage = () => {
     // manual aggregation into chatsData with the other user's images
     for (let i = 0; i < chatsData.length; i++) {
         // find the other user's username
-        const otherUser = chatsData.brideUsername != userInfo.username ? chatsData.brideUsername : chatsData.artistUsername;
+        const otherUser = getOtherUsername(userInfo.username, chatsData[i]);
 
         for (let j = 0; j < usersImagesData.length; j++) {
             // find the other user's image and add their image to the chat data
@@ -63,7 +71,7 @@ export const MessagesPage = () => {
         }
     }
 
-    // TODO: this might not sort ascending (check with UI later)
+    // sort chats in descending order
     chatsData.sort(function(dateOne, dateTwo) {
         let keyOne = dateOne.chatUpdatedDate;
         let keyTwo = dateTwo.chatUpdatedDate;
@@ -73,46 +81,34 @@ export const MessagesPage = () => {
         return 0;
     });
 
-    // find the username in the url which represents the other user in the conversation
-    const [otherUsername, setOtherUsername] = useState('');
-    useEffect(() => {
-        // get the value after the # which is the username of the user we are chatting with
-        const currentUsername = window.location.hash.slice(1);
-        setOtherUsername(currentUsername);
-    }, [window.location.hash]);
 
-    // - write a for loop and check for the other user's username to see if it matches the username in the url
-    // and then set that conversation/chat as the selectedConversationIndex
-    // AND in this for loop, check that the current user's type is not the same as the other user's type. if it is, give them
+    // TODO: check that the current user's type is not the same as the other user's type. if it is, give them
     // some kind of pop up warning [REFERENCE NETH'S CODE FOR THE POP UP FOR PAYMENT] to tell them that they can't message the other
     // user and then just bring them back to general messages page (routing)
 
     // set the default conversation to the conversation that was updated most recently
     const [selectedConversationIndex, setSelectedConversationIndex] = useState(0);  // track the conversation selected, initially 0
     // if the user is already in a conversation with someone (based on the url), show the conversation with 
-    // that user if it exists. if not, create a new chat with that user.
-    
-    // if (!isLoadingChats()) {
-    //     console.log("chats have finished loading");
-    //     console.log("other username: ", otherUsername);
-    // }
+    // that user. if it doesn't exist, create a new chat with that user.
     useEffect(() => {
-        if (otherUsername !== '' && !isLoadingChats()) {
+        if (!isLoadingChats()  && chatsData.length > 0) { 
             let chatFound = false;
+            // find the username in the url which represents the other user in the conversation
+            const otherUsername = window.location.hash.slice(1)
             for (let i = 0; i < chatsData.length; i++) {
-                console.log("Other username: ", otherUsername);
-                console.log("Artist username: ", chatsData[i].artistUsername);
-                console.log("Bride username: ", chatsData[i].brideUsername);
+                // console.log("Other username: ", otherUsername);
+                // console.log("Artist username: ", chatsData[i].artistUsername);
+                // console.log("Bride username: ", chatsData[i].brideUsername);
                 if (otherUsername == chatsData[i].artistUsername || otherUsername == chatsData[i].brideUsername) {
-                    console.log("Found the chat");
+                    // console.log("Found the chat");
                     setSelectedConversationIndex(i);
                     chatFound = true;
                     break;
                 }
             }
-            // if there is no chat, create a new chat
+            // if no chat exists, create a new chat
             if (!chatFound) {
-                console.log("chat wasn't found");
+                // console.log("chat wasn't found");
                 //insert the message using the Message database method
                 try {
                     let brideUsername = "";
@@ -153,10 +149,16 @@ export const MessagesPage = () => {
                     console.log("Error adding message. Returned with error:" + error.message);
                 }
             }
-    }}, [otherUsername, chatsData]);
+    }}, [chatsData, window.location.hash.slice(1)]);
 
     const handlePreviewClick = (index) => {
         setSelectedConversationIndex(index);
+        // change the url based on the username
+        console.log("we have clicked chat with index: ", index);
+        // get the username of the user selected in the message preview click
+        const urlUsername = getOtherUsername(userInfo.username, chatsData[index]);
+        // navigate to the new page
+        navigate('/' + UrlBasePath.MESSAGES +'#' + urlUsername);
     };
     // TODO: get rid of this function
     const handleButtonClick = () => {
@@ -188,12 +190,7 @@ export const MessagesPage = () => {
     // TODO: if statement to check if chats have been loaded yet (do the below inside the if statement)
     // note: chats has a chatLastMessage attribute that can be used to display a message preview on the left side
     // TODO: double check that the chats are listed in order of the dates
-    //const newMsgPreviewsComponents = users.map((user, index) => <MessagesPreview key = {index} data = {user} onClick={() => handlePreviewClick(index)}></MessagesPreview>);
     const newMsgPreviewsComponents = chatsData.map((chat, index) => <MessagesPreview key = {index} data = {chat} onClick={() => handlePreviewClick(index)}></MessagesPreview>);
-    // for (let i = 0; i < chatsData.length; i++) {
-    //     console.log(chatsData[i].chatLastMessage);
-    //     console.log(chatsData[i].chatUpdatedDate);
-    // }
 
     // if (!isLoading) {
     // console.log("Database chats data: ", chatsData);
@@ -201,16 +198,22 @@ export const MessagesPage = () => {
 
     // TODO: place this in an if statement that checks if the page is ready or not
     return (
-        // <div>hello from the first one</div>
+        // TODO: check if chatsData length is empty, show a message that says no messages to 
+        // display
+
         // if window size is SMALLER than a medium screen (default variable for medium in tailwind sm:768px),
         // then have the contacts/list of people on separate screens than the conversation
         <WhiteBackground pageLayout={window.innerWidth <= 768 ? PageLayout.SMALL_CENTER : PageLayout.MESSAGES_PAGE}>
-            {/*you MUST keep this div and put everything on the left side inside of it*/}
+            {/* prev: no div outside al of these */}
+            {/* <div className="flex h-screen"> */}
+                 {/*you MUST keep this div and put everything on the left side inside of it*/}
+                 {/* prev: flex flex-col gap-3 */}
             <div className="flex flex-col gap-3">
                 {newMsgPreviewsComponents}
             </div>
             {/*you MUST keep this div and put everything on the right side inside of it*/}
-            <div>
+            {/* new: className="flex-1 flex flex-col" */}
+            <div >
                 {/* TODO: get rid of the button below - need to show some message that says "no 
                 messages to display here*/}
                 {chatsData.length > 0 ? (
@@ -218,6 +221,7 @@ export const MessagesPage = () => {
                     (<Button onClick={handleButtonClick}>Start a new conversation</Button>)
                     }
             </div>
+            {/* </div> */}
         </WhiteBackground>
     );
     // TODO: check why the following statement never returns true
