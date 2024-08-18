@@ -30,7 +30,5 @@ Meteor.publish('all_user_bookings', function (username) {
  * @returns {Mongo.Cursor} - A cursor representing the result the booking to be published.
  */
 Meteor.publish('specific_booking', function (bookingId) {
-    // create a mongo ID object to query for ID
-    const idObject = new Mongo.ObjectID(bookingId);
-    return BookingCollection.find({_id: idObject});
+    return BookingCollection.find({_id: bookingId});
 });
