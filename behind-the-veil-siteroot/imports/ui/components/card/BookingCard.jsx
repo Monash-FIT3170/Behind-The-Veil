@@ -22,7 +22,6 @@ import {
 import BookingStatus from "../../enums/BookingStatus";
 import BookingStatusDisplay from "../booking/BookingStatusDisplay";
 
-
 /**
  * Component that displays brief booking details
  *
@@ -108,6 +107,13 @@ export const BookingCard = ({
                             Request change
                         </Button>
                     );
+                    additionalButtons.push(
+                        <Button className={purpleButtonClass}
+                            onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
+                            <XCircleIcon className="icon-base"/>
+                            Cancel
+                        </Button>
+                    );
                 }
                 break;
             case BookingStatus.PENDING:
@@ -116,6 +122,16 @@ export const BookingCard = ({
                     <Button className={purpleButtonClass}>
                         <ArrowPathIcon className="icon-base"/>
                         Request change
+                    </Button>
+                );
+                break;
+            case BookingStatus.OVERDUE:
+                // if a booking is confirmed, add "cancel" button
+                additionalButtons.push(
+                    <Button className={purpleButtonClass}
+                        onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
+                        <XCircleIcon className="icon-base"/>
+                        Cancel
                     </Button>
                 );
                 break;

@@ -65,7 +65,6 @@ const BookingDetailsPage = () => {
                 <WhiteBackground>
                     <div className="flex flex-col gap-y-6 items-center justify-center">
                         <span className={"large-text"}>Booking is not found </span>
-
                         <Button className={"bg-secondary-purple hover:bg-secondary-purple-hover"}
                                 onClick={() => navigateTo("/" + UrlBasePath.PROFILE)}>
                             Back to my profile
