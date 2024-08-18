@@ -19,6 +19,8 @@ import {
 import { useUserInfo } from "../../../util";
 import GalleryModal from "./GalleryModal";
 import DeletePostConfirmationModal from "./DeletePostConfirmationModal";
+import { useNavigate } from "react-router-dom";
+import UrlBasePath from "../../../../enums/UrlBasePath";
 
 /**
  * Gallery tab of an artist's profile
@@ -36,6 +38,7 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
   const galleryImgData = useGalleryTotalCollection(username)[0];
   const postData = useGalleryTotalCollection(username)[1];
   const userProfileImageSrc = useSpecificUser(username)[2];
+  const navigateTo = useNavigate();
 
   // get current user information
   const userInfo = useUserInfo();
@@ -98,6 +101,13 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
     closeDeleteModal();
   }
 
+  //
+  function addPostNavigate(){
+    console.log("button pressed")
+    //{() => navigateTo(`/${UrlBasePath.PROFILE}/addService`)
+    navigateTo(`/${UrlBasePath.PROFILE}/add-edit-post`)
+  }
+
   return (
     <div className="relative">
       <GalleryModal
@@ -118,7 +128,7 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
       ></DeletePostConfirmationModal>
 
       <div className="sticky top-20 z-20 flex justify-end">
-        <Button className="absolute top-5 flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover mt-2">
+        <Button className="absolute top-5 flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover mt-2" onClick={addPostNavigate}>
           {plusIcon} Add Photo
         </Button>
       </div>

@@ -43,6 +43,8 @@ import AddEditServicePage from "./components/pages/service/AddEditServicePage.js
 import EmailVerifyPage from "./components/pages/register/EmailVerifyPage.jsx";
 import LinkSentPage from "./components/pages/forgotPassword/LinkSentPage";
 
+import AddEditPostPage from "./components/pages/artist/AddEditPostPage.jsx";
+
 export const App = () => (
     <div>
         {/*This is the navigation bar on every Page*/}
@@ -187,6 +189,7 @@ export const App = () => (
                     <Route path={`/${UrlBasePath.SERVICES}/:serviceId/booking-confirmation`} element={<BookingConfirmation />} />
                     {/* TODO: haven't implemented actual flow to get here yet */}
                     <Route path="/cancel-booking/:bookingId" element={<CancelBooking/>}/>
+                    <Route path={`/${UrlBasePath.PROFILE}/add-edit-post`}element={<AddEditPostPage/>}/>
                 </Routes>
             </main>
         </Router>
