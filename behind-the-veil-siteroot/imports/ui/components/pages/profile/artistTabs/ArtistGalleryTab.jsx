@@ -104,7 +104,6 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
   //
   function addPostNavigate(){
     console.log("button pressed")
-    //{() => navigateTo(`/${UrlBasePath.PROFILE}/addService`)
     navigateTo(`/${UrlBasePath.PROFILE}/add-edit-post`)
   }
 

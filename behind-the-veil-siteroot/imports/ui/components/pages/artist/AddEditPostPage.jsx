@@ -5,6 +5,7 @@
  */
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUserInfo } from "../../util.jsx";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
@@ -14,13 +15,18 @@ import { ArrowUpTrayIcon } from "@heroicons/react/24/outline";
 import UrlBasePath from "../../../enums/UrlBasePath";
 
 export const AddEditPostPage = () => {
-  const [inputReason, setInputReason] = useState("");
+  const [postDescription, setInputReason] = useState("");
   const [inputFile, setInputFile] = useState(null);
   const [fileError, setFileError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
+  const date = new Date();
+  const [isSuccess, setSuccess] = useState(false);
+
+
 
   const navigateTo = useNavigate();
-
+  
+  const userInfo = useUserInfo();
 
   const fileInputRef = useRef(null);   // used since the file classname is hidden to ensure that ui is in specific format
 
@@ -44,6 +50,7 @@ export const AddEditPostPage = () => {
   function handleAddPost(event) {
     event.preventDefault();
     let hasError = false;
+    let postDate = date.toLocaleDateString();
     // file errors
     if (!inputFile) {
       setFileError("Please provide a file.");
@@ -55,7 +62,7 @@ export const AddEditPostPage = () => {
       setFileError("");
     // description errors
     }
-    if (!inputReason) {
+    if (!postDescription) {
       setDescriptionError("Please provide a description.");
       hasError = true;
     } else {
@@ -64,10 +71,31 @@ export const AddEditPostPage = () => {
     if (hasError) {
       return;
     }
+    new Promise((resolve, reject) => {
+        Meteor.call("add_post",
+            postDate,
+            postDescription,
+            userInfo.username,
+            (error, result) => {
+                if (error) {
+                    console.log("Error adding post:", error);
+                    reject(`Error: ${error.message}`);
+                    //setSuccess(false)
+                } else {
+                    console.log("Post added with ID:", result);  // Logs the inserted ID
+                    resolve(result);
+                    alert("Post added successfully!");
+                    //setSuccess(true)
+                    navigateTo("/" + UrlBasePath.PROFILE);
+                }
+            });
+        }
+    ).catch(reason => alert(reason));
+
     // for time being there is only an alert
-    alert("Post has been added to the gallery");
+    //alert("Post has been added to the gallery");
     // navigates back to artist profile page
-    navigateTo(`/${UrlBasePath.PROFILE}`);
+    //navigateTo(`/${UrlBasePath.PROFILE}`);
   }
 
   function handleFileButtonClick() {
