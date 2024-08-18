@@ -4,11 +4,11 @@
  * Contributors: Vicky
  */
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {useSubscribe, useTracker} from "meteor/react-meteor-data"
 import {useNavigate, useParams} from "react-router-dom";
-import {Tracker} from "meteor/tracker";
 import {Meteor} from "meteor/meteor";
+import {Modal} from 'react-responsive-modal';
 
 import ChatCollection from "/imports/api/collections/chats";
 import ImageCollection from '../../../../api/collections/images.js';
@@ -20,6 +20,7 @@ import Conversation from '../../message/Conversation';
 import MessagesPreview from '../../message/MessagesPreview';
 import Loader from "/imports/ui/components/loader/Loader";
 import Button from "../../button/Button.jsx";
+import {CheckIcon, NoSymbolIcon} from '@heroicons/react/24/outline'
 
 import {useUserInfo} from "../../util.jsx"
 import UrlBasePath from "../../../enums/UrlBasePath";
@@ -37,6 +38,13 @@ export const MessagesPage = () => {
     const getOtherUsername = (username, chat) => {
         return chat.brideUsername != username ? chat.brideUsername : chat.artistUsername;
     };
+
+    // handler for modal displaying that user cannot message another user
+    const [open, setOpen] = useState(false);
+
+    const onOpenModal = () => setOpen(true);
+    const onCloseModal = () => setOpen(false);
+
 
     // set up subscription (publication is in the "publication" folder)
     const isLoadingChats = useSubscribe('all_user_chats', userInfo.username);
@@ -96,13 +104,6 @@ export const MessagesPage = () => {
             );
         };
 
-        // helper function to route to the default chat (most recent chat)
-        const routeToDefaultChat = () => {
-            if (chatsData.length > 0) {
-                routeToChat(0);
-            }
-        };
-
         if (isLoadingChats()) return; // return if chats are still loading
 
         // for the default message url, route to default chat
@@ -139,8 +140,8 @@ export const MessagesPage = () => {
             // user and then just bring them back to general messages page (routing)
             // maybe: make a helper function - need to do a check of this in the below code as well
             if (userInfo.type === otherUserType) {
-                // TODO: show error pop up here - refer to neth's code for payement pop up then
-                // route them to the default messages page
+                // if the user types are the same, display a modal indicating an error
+                onOpenModal();
                 return;
             }
 
@@ -171,6 +172,15 @@ export const MessagesPage = () => {
             
           });
     }
+
+    // helper function to route to the default chat (most recent chat)
+    const routeToDefaultChat = () => {
+        if (chatsData.length > 0) {
+            routeToChat(0);
+        }
+        // close the modal
+        onCloseModal();
+    };
 
     // function to route to a chat given an index
     const routeToChat = (index) => {
@@ -223,6 +233,24 @@ export const MessagesPage = () => {
                     </div>)
                     }
             </div>
+            <Modal classNames={{modal: "w-[480px] h-[300px] rounded-[45px] bg-glass-panel-background border border-main-blue"}} 
+                open={open} onClose={onCloseModal} center showCloseIcon={false}>
+                <div className="flex justify-center items-center h-full">
+                    <div className="flex flex-col">
+                        <h2 className="text-center title-text">
+                            Error
+                        </h2>
+                            <p className="text-center medium-text">This chat is invalid.</p>
+                            <p className="text-center medium-text">You will now be redirected to the messages page.</p>
+                        <div className="flex justify-center space-x-6 mt-5">
+                            <Button className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[25px] pe-[25px] flex gap-1" onClick={routeToDefaultChat} >
+                                <CheckIcon className="icon-base" /> Confirm
+                            </Button>
+                        
+                        </div>
+                    </div>
+                </div>
+            </Modal>
         </WhiteBackground>
         );
 };
