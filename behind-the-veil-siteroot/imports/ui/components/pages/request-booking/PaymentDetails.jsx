@@ -139,8 +139,21 @@ const PaymentDetails = () => {
         }
     };
 
-    const confirmPayment = () => {
-        navigateTo(`/booking-confirmation`);
+    const confirmPayment = async () => {
+        // Destructure the inputs from the state
+        const { cardNumber, expDate, cvv } = inputs;
+
+        // Make sure expDate is formatted correctly for your backend
+        const formattedExpiryDate = expDate.replace(/\D/g, ''); // Remove non-digit characters if needed
+
+        Meteor.call("processPayment", { cardNumber, cvv, expiryDate: formattedExpiryDate }, (error, result) => {
+            if (error) {
+                console.error('Error processing payment:', error);
+                alert('Payment Failed');
+            } else {
+                result.success ? navigateTo(`/booking-confirmation`) : alert('Payment Failed');
+            }
+        });
     };
 
     return (
