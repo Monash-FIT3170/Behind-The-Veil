@@ -207,7 +207,7 @@ const PaymentDetails = () => {
         let startDatetime = new Date(startDatetimeString);
         let endDatetime = new Date(endDatetimeString);
 
-        addToBooking(startDatetime, endDatetime, details.location, details.price, BookingStatus.PENDING, userInfo.username, details.artistUsername, serviceId)
+        addToBooking(startDatetime, endDatetime, details.location, details.price, BookingStatus.PENDING, details.brideName, details.artistName, serviceId)
             .then(r => navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/booking-confirmation`))
             .catch(reason => alert(reason));
     }

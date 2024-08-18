@@ -264,11 +264,10 @@ export function useSpecificService(serviceId) {
 export function useSpecificBooking(bookingId, userType) {
   // will always just get 1 specific booking by ID
   const isLoadingBooking = useSubscribe("specific_booking", bookingId);
-  const idObject = new Mongo.ObjectID(bookingId); // create a mongo ID object to query for ID
 
   let bookingData = useTracker(() => {
     return BookingCollection.find({
-      _id: idObject,
+      _id: bookingId,
     }).fetch()[0];
   });
 
@@ -288,6 +287,7 @@ export function useSpecificBooking(bookingId, userType) {
       ? bookingData.artistUsername
       : bookingData.brideUsername
     : "";
+  console.log(bookingData);
   const isLoadingUser = useSubscribe("specific_user", bookingUsername);
 
   // filter for only the other user's data (if not then you get your own data too)
