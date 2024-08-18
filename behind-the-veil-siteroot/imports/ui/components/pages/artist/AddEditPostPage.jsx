@@ -20,7 +20,6 @@ export const AddEditPostPage = () => {
   const [fileError, setFileError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
   const date = new Date();
-  const [isSuccess, setSuccess] = useState(false);
 
 
 
@@ -80,12 +79,10 @@ export const AddEditPostPage = () => {
                 if (error) {
                     console.log("Error adding post:", error);
                     reject(`Error: ${error.message}`);
-                    //setSuccess(false)
                 } else {
-                    console.log("Post added with ID:", result);  // Logs the inserted ID
+                    console.log("Post added with ID:", result);
                     resolve(result);
                     alert("Post added successfully!");
-                    //setSuccess(true)
                     navigateTo("/" + UrlBasePath.PROFILE);
                 }
             });
