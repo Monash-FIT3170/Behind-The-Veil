@@ -136,12 +136,21 @@ const BookingCalendarView = ({ bookingsData }) => {
         events={events}
         eventPropGetter={(myEventsList) => {
           let backgroundColor;
+          let className;
           if (myEventsList.bookingStatus === BookingStatus.CONFIRMED) {
-            backgroundColor = "green";
+            backgroundColor = "#27AD6D";
+          } else if (myEventsList.bookingStatus === BookingStatus.COMPLETED) {
+            backgroundColor = "#27AD6D";
           } else if (myEventsList.bookingStatus === BookingStatus.PENDING) {
-            backgroundColor = "blue";
+            backgroundColor = "#4F76D9";
+          } else if (myEventsList.bookingStatus === BookingStatus.CANCELLED) {
+            backgroundColor = "#D33B3B";
+          } else if (myEventsList.bookingStatus === BookingStatus.REJECTED) {
+            backgroundColor = "#D33B3B";
+          } else if (myEventsList.bookingStatus === BookingStatus.OVERDUE) {
+            backgroundColor = "#D33B3B";
           } else {
-            backgroundColor = "red";
+            backgroundColor = "#D33B3B";
           }
 
           return { style: { backgroundColor } };
