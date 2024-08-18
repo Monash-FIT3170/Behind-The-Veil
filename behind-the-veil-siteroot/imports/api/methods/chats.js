@@ -9,20 +9,24 @@
 import { ChatCollection } from "../collections/chats";
 
 Meteor.methods({
-    "create_chat": function (brideUsername, artistUsername, chatUpdatedDate, chatLastMessage) {
+    "create_chat": function (brideUsername, artistUsername, chatUpdatedDate, chatLastMessage, readByBride, readByArtist) {
         /**
          * Adds a new booking to the database. Keep in mind this is an async met
          * @param {string} brideUsername - The username of the bride associated with the chat.
          * @param {string} artistUsername - The username of the artist associated with the chat.
          * @param {Date} chatUpdatedDate - The date and time for when the most recent message was set.
          * @param {string} chatLastMessage - The last message sent in the chat.
+         * @param {boolean} readByBride - The bride's read status of the chat.
+         * @param {boolean} readByArtist - The artist's read status of the chat.
          * @returns {string} The unique ID of the newly created chat.
          */
         return ChatCollection.insert({
             brideUsername: brideUsername,
             artistUsername: artistUsername,
             chatUpdatedDate: chatUpdatedDate,
-            chatLastMessage: chatLastMessage
+            chatLastMessage: chatLastMessage,
+            readByBride: readByBride,
+            readByArtist: readByArtist
         });
     },
 
@@ -39,6 +43,28 @@ Meteor.methods({
                 chatUpdatedDate: chatUpdatedDate,
                 chatLastMessage: chatLastMessage,
             } },
+        );
+    },
+
+    /**
+     * Updates either the readByBride or readByArtist fields for a chat instance depending on if 
+     * the input username is the artist or bride username
+     * @param {string} chatId - The ID of the chat to update.
+     * @param {string} username - The username of the user who has read the chat
+     * @param {boolean} read - The user's read status of the chat
+     */
+    "update_chat_read": function (chatId, username, read) {
+        // find the chat
+        const chat = ChatCollection.findOne({ _id: chatId });
+        
+        // determine if the username is the artist or bride's username and select the
+        // attribute to update accordingly
+        const updateField = chat.brideUsername === username ? 'readByBride' : (chat.artistUsername === username ? 'readByArtist' : null);
+
+        // update the relevant field
+        ChatCollection.update(
+            { _id: chatId },
+            { $set: { [updateField]: read } }
         );
     },
 })

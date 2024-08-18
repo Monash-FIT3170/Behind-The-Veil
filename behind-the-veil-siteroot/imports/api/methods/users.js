@@ -65,7 +65,7 @@ Meteor.methods({
 
     /**
      * Retrieves the alias of a user based on their username.
-     * @param {string} username - The username of the user retrieve.
+     * @param {string} username - The username of the user to retrieve.
      * @returns {string|null} - The user alias if found, otherwise null.
      */
     "get_alias": function (username) {
@@ -73,6 +73,17 @@ Meteor.methods({
             { username: username },
         );
         return user ? user.profile.alias : null;
+    },
+
+    /**
+     * Retrieves the user based on their username.
+     * @param {string} username - The username of the user to retrieve.
+     * @returns {object|null} - The user if found, otherwise null.
+     */
+    "get_user": function (username) {
+        return UserCollection.findOne(
+            { username: username },
+        );
     },
 })
 

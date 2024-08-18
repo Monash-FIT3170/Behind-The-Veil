@@ -13,7 +13,7 @@ import {useUserInfo} from "../util"
 // done
 
 const MessagesPreview = (props) => {
-    const {brideUsername, artistUsername, chatUpdatedDate, chatLastMessage, otherUserImage} = props.data;
+    const {brideUsername, artistUsername, chatUpdatedDate, chatLastMessage, readByBride, readByArtist, otherUserImage} = props.data;
     
     // get current user information
     const userInfo = useUserInfo();
@@ -31,17 +31,17 @@ const MessagesPreview = (props) => {
 
     const onClick = props.onClick;
     // TODO: change this so that it reflects the chat status (chat might need new prop for read or not)
-    const read = true; // recentMessageObj.read;
+    const read = userInfo.username === brideUsername ? readByBride : readByArtist; // recentMessageObj.read;
     const recentMessage = chatLastMessage;
     return (
-        <Card className="flex flex-row justify-center items-center w-full h-full border-none lg:flex-center cursor-pointer" onClick={onClick}>
+        <Card className="flex flex-row items-start items-center w-full h-full border-none lg:flex-center cursor-pointer" onClick={onClick}>
             {/* Only show the profile photo on small screens */}
             <div className="lg:hidden">
                 <ProfilePhoto className="min-w-[10%] h-auto"></ProfilePhoto>
             </div>
             <div className="hidden lg:flex lg:gap-1 lg:items-center">
                 {/* Show profile photos and message preview on larger screens */}
-                <ProfilePhoto className="min-win-[10%] shrink-0"></ProfilePhoto>
+                <ProfilePhoto className="min-w-[10%] shrink-0"></ProfilePhoto>
                 <div className="hidden lg:flex lg:flex-col lg:gap-1 lg:w-3/4 ">
                     {read ? (
                         <div>
@@ -53,6 +53,10 @@ const MessagesPreview = (props) => {
                             <div className="message-name-unread-text">{otherUserAlias}</div>
                             <div className="message-unread-text line-clamp-2 overflow-hidden">{recentMessage}</div>
                         </div>
+                    )}
+                    {/* Red dot for unread messages */}
+                    {!read && (
+                        <div className="w-3 h-3 bg-red-600 rounded-full absolute right-4 top-1/2 transform -translate-y-1/2" />
                     )}
                     <div className="message-tag-text flex justify-end">@{otherUser}</div>
                 </div>

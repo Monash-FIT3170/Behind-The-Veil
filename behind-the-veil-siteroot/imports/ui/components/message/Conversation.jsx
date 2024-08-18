@@ -16,8 +16,9 @@ import {useUserInfo} from "../../../ui/components/util"
 import Card from '../card/Card';
 import ProfilePhoto from '../profilePhoto/ProfilePhoto';
 import Input from "../input/Input";
-import {PaperAirplaneIcon} from '@heroicons/react/24/outline';
 import Button from "../button/Button";
+import Loader from "/imports/ui/components/loader/Loader";
+import {PaperAirplaneIcon} from '@heroicons/react/24/outline';
 
 export const Conversation = ({chat}) => {
      // get current user information
@@ -37,13 +38,10 @@ export const Conversation = ({chat}) => {
         return ImageCollection.find().fetch;
     })
 
-    // console.log("messagesData", messagesData)
-
     // sort messages based on sent date (oldest to newest)
     messagesData.sort(function(chat1, chat2) {
        let keyOne = chat1.messageSentTime;
        let keyTwo = chat2.messageSentTime;
-
        // Compare the 2 dates
        if (keyOne < keyTwo) return -1;
        if (keyOne > keyTwo) return 1;
@@ -87,8 +85,10 @@ export const Conversation = ({chat}) => {
                     }
                 });
             })
+
+            // update the chat's message sent time and content
             new Promise((resolve, reject) => {
-                Meteor.call('update_chat', messageSentTime, messageContent, (error, result) => {
+                Meteor.call('update_chat', chatId, messageSentTime, messageContent, (error, result) => {
                     if (error) {
                         reject(error);
                     } else {
@@ -96,6 +96,23 @@ export const Conversation = ({chat}) => {
                     }
                 })
             })
+
+            // update the read status of the chat so that the other user's read status is false
+            try {
+                new Promise((resolve, reject) => {
+                    Meteor.call('update_chat_read', chatId, otherUser, false, (error, result) => {
+                        if (error) {
+                            reject(error); // if there's an error, go to the catch block
+                        } else {
+                            resolve(result); // if there's no error, continue with the rest of the block
+                        }
+                    })
+                }).then(() => {
+                    console.log("Chat read status successfully updated.");
+                })
+            } catch (error) {
+                console.log("Error adding message. Returned with error:" + error.message);
+            }
 
             setFormValue('');
             let heightToScroll = conversationRef?.current.scrollHeight + 50 // TODO: check, might have to adjust the value or code
@@ -108,18 +125,15 @@ export const Conversation = ({chat}) => {
         
     };
 
-    // TODO: chat last updated date and message are not being re-rendered in website
-    //console.log("chat last message: " + chat.chatLastMessage);
-
-    // TODO: use the isLoading variable to show the loader if things haven't loaded yet
     return (
         <div className="flex flex-col fixed top-0 bottom-0 left-0 right-0">
             <div
                 className='ml-4 w-11/12 message-receiver-name-text border-b-2 pt-3 pb-1 mb-8 pl-6 border-main-blue'>{otherUserAlias}
             </div>
-            <div className="flex-1 overflow-y-auto p-4" ref={conversationRef}>
+            {document.readyState === "complete" && !isLoading ? (
+                <div className="flex-1 overflow-y-auto p-4" ref={conversationRef}>
                 <div>
-                    {/* The other user's mesages */}
+                    {/* User's chat mesages */}
                     {
                         messagesData.map((message, index) => ( message.userUsername == userInfo.username ? 
                             (<div key={index} className="flex justify-end">
@@ -143,20 +157,19 @@ export const Conversation = ({chat}) => {
 
                         ))
                     }
-
-                    {/* User's OWN mesages */}
-                    {/* {
-                        messagesData.map((message, index) => (
-                            <div key={index} className="flex justify-end">
-                                <Card className={`my-2 rounded-3xl max-w-[80%] h-auto overflow-hidden ${message.userUsername === userInfo.username ? ' bg-main-blue' : 'bg-light-grey'}`}>
-                                    <div>{message.messageContent}</div>
-                                </Card>
-                            </div>
-                        ))
-                    } */}
                 </div>
             </div>
-
+            )
+        :
+            (<Loader
+                    loadingText={"Messages are loading . . ."}
+                    isLoading={isLoading}
+                    size={100}
+                    speed={1.5}
+                />)}
+            
+            {/* Input form only shown when messages have been loaded */}
+            {document.readyState === "complete" && !isLoading && (
             <form className="w-full px-8 py-6 " onSubmit={sendMessage}>
                 <div className='relative w-full flex'>
                     <Input
@@ -172,9 +185,9 @@ export const Conversation = ({chat}) => {
                         <span className='hidden sm:inline px-2'>Send</span>
                     </Button>
                 </div>
-            </form>
+            </form>)
+        }
         </div>
-    );
-}
+    );}
 
 export default Conversation;

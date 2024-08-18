@@ -30,6 +30,8 @@ if (Meteor.isClient) {
                     'artist456',
                     new Date(),
                     'last chat message',
+                    true,
+                    true,
                     // up to here it knows these are its args - it (somehow) also knows that you get back
                     // either an error or a value that is stuffed into chatId (this can be any name).
                     (error, chatId) => {
@@ -58,13 +60,34 @@ if (Meteor.isClient) {
                 brideUsername:  'bride123',
                 artistUsername: 'artist456',
                 chatUpdatedDate: new Date(),
-                chatLastMessage: 'last chat message'
+                chatLastMessage: 'last chat message',
+                readByBride: true,
+                readByArtist: true,
             });
             const newDate = new Date();
             Meteor.call('update_chat', chatId, newDate, 'new last chat message');
             const updatedChat = ChatCollection.findOne(chatId);
             assert.strictEqual(updatedChat.chatUpdatedDate.getTime(), newDate.getTime());
             assert.strictEqual(updatedChat.chatLastMessage, 'new last chat message');
+            assert.strictEqual(updatedChat.readByBride, true);
+            assert.strictEqual(updatedChat.readByArtist, true);
+        });
+        /**
+         * Test case to check if a chat's read status can be updated successfully.
+         */
+        it('can update chat read status', function () {
+            const chatId = ChatCollection.insert({
+                brideUsername:  'bride123',
+                artistUsername: 'artist456',
+                chatUpdatedDate: new Date(),
+                chatLastMessage: 'last chat message',
+                readByBride: false,
+                readByArtist: false,
+            });
+            Meteor.call('update_chat_read', chatId, 'bride123', true);
+            const updatedChat = ChatCollection.findOne(chatId);
+            assert.strictEqual(updatedChat.readByBride, true);
+            assert.strictEqual(updatedChat.readByArtist, false);
         });
     });
 }
