@@ -11,7 +11,7 @@ import { ChatCollection } from "../collections/chats";
 Meteor.methods({
     "create_chat": function (brideUsername, artistUsername, chatUpdatedDate, chatLastMessage, readByBride, readByArtist) {
         /**
-         * Adds a new booking to the database. Keep in mind this is an async met
+         * Adds a new chat to the database. Keep in mind this is an async met
          * @param {string} brideUsername - The username of the bride associated with the chat.
          * @param {string} artistUsername - The username of the artist associated with the chat.
          * @param {Date} chatUpdatedDate - The date and time for when the most recent message was set.
