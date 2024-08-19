@@ -108,14 +108,28 @@ export const BookingCard = ({
                             Request change
                         </Button>
                     );
+                    additionalButtons.push(
+                        <Button className={purpleButtonClass}
+                            onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
+                            <XCircleIcon className="icon-base"/>
+                            Cancel
+                        </Button>
+                    );
                 }
                 break;
             case BookingStatus.PENDING:
-                // if a booking is pending, add a "request change" button
+                // if a booking is pending, add a "request change" button and "cancel" button
                 additionalButtons.push(
                     <Button className={purpleButtonClass}>
                         <ArrowPathIcon className="icon-base"/>
                         Request change
+                    </Button>
+                );
+                additionalButtons.push(
+                    <Button className={purpleButtonClass}
+                        onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
+                        <XCircleIcon className="icon-base"/>
+                        Cancel
                     </Button>
                 );
                 break;
