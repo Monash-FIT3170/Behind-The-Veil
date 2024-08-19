@@ -47,6 +47,11 @@ const CalendarPopupContent = ({
     bookingLocation,
     onClose
 }) => {
+
+    const confirmBooking = () => {
+        Meteor.call('update_booking_details', bookingId, { bookingStatus: "confirmed"});
+    }
+
     const navigateTo = useNavigate();
     return (
         <>
@@ -89,7 +94,7 @@ const CalendarPopupContent = ({
                     <>
                         <Button className="flex flex-row gap-x-2 justify-center items-center
                             bg-light-gray hover:bg-secondary-purple-hover transition duration-500"
-                            onClick={() => { }}
+                            onClick={confirmBooking}
                         >
                             <CheckCircleIcon className="h-6 w-6 min-h-6 min-w-6" />
                             Confirm
