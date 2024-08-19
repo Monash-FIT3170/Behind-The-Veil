@@ -36,19 +36,38 @@ export const AddEditPostPage = () => {
     }
   }
 
+  // function to handle the upload of image, ensuring that it is in the correct format (in this case URL type of format)
   function handleFileChange(event) {
     const file = event.target.files[0];
-    setInputFile(file);
+
+    // Validate file type
+    if (file && !["image/png", "image/jpeg", "image/jpg"].includes(file.type)) {
+      setFileError("Please upload a valid image file (.png, .jpg, .jpeg).");
+      setInputFile(null); // Clear the file input
+      setImagePreviewUrl(""); // Clear the image preview
+      return;
+    }
+
     if (file) {
-      setFileError(""); // Clear the error when a file is uploaded
-      // Set preview URL
-      setImagePreviewUrl(URL.createObjectURL(file));
+      setFileError(""); // Clear the error when a valid file is uploaded
+
+      const reader = new FileReader();
+
+      // Convert the file to take URL format
+      reader.onloadend = () => {
+        const imageUrl = reader.result;
+        setInputFile(imageUrl);
+        setImagePreviewUrl(imageUrl); 
+      };
+
+      reader.readAsDataURL(file); 
     } else {
+      setInputFile(null);
       setImagePreviewUrl(""); // Clear the preview if no file
     }
   }
 
-  // main function to handle whats entered on the page when "save" is entered
+  // main function to handle whats entered on the page when "save" is pressed
   function handleAddPost(event) {
     event.preventDefault();
     let hasError = false;
@@ -57,9 +76,6 @@ export const AddEditPostPage = () => {
     // file errors
     if (!inputFile) {
       setFileError("Please provide a file.");
-      hasError = true;
-    } else if (inputFile.type !== "image/png") {
-      setFileError("Please upload a .png file.");
       hasError = true;
     } else {
       setFileError("");
@@ -104,8 +120,8 @@ export const AddEditPostPage = () => {
                   console.log("Error adding image:", error);
                   reject(`Error: ${error.message}`);
                 } else {
-                  resolve(imageId);
                   console.log("Image added with ID:", imageId);
+                  resolve(imageId);
                   alert("Post added successfully!");
                   navigateTo("/" + UrlBasePath.PROFILE);
                 }
@@ -114,11 +130,6 @@ export const AddEditPostPage = () => {
           })
       )
       .catch((reason) => alert(reason));
-
-    // for time being there is only an alert
-    //alert("Post has been added to the gallery");
-    // navigates back to artist profile page
-    //navigateTo(`/${UrlBasePath.PROFILE}`);
   }
 
   function handleFileButtonClick() {
@@ -153,11 +164,9 @@ export const AddEditPostPage = () => {
               onChange={handleFileChange}
             />
           </Button>
-          {inputFile && (
-            <div className="text-green-500">Uploaded: {inputFile.name}</div>
-          )}
+          {inputFile && <div className="text-green-500">Uploaded image: </div>}
         </div>
-        {/* Image Preview */}
+        {/* Image Preview before adding to gallery*/}
         {imagePreviewUrl && (
           <div className="mt-4">
             <img

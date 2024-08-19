@@ -24,6 +24,7 @@ Meteor.methods({
                 "imageData": imageData
             }
         )
+        return targetId;
     },
 
     "remove_post_image": function (target_Id){
