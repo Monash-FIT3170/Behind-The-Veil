@@ -19,15 +19,14 @@ export const AddEditPostPage = () => {
   const [inputFile, setInputFile] = useState(null);
   const [fileError, setFileError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
+  const [imagePreviewUrl, setImagePreviewUrl] = useState("");
   const date = new Date();
 
-
-
   const navigateTo = useNavigate();
-  
+
   const userInfo = useUserInfo();
 
-  const fileInputRef = useRef(null);   // used since the file classname is hidden to ensure that ui is in specific format
+  const fileInputRef = useRef(null); // used since the file classname is hidden to ensure that ui is in specific format
 
   function handleInputChange(event) {
     const description = event.target.value;
@@ -42,6 +41,10 @@ export const AddEditPostPage = () => {
     setInputFile(file);
     if (file) {
       setFileError(""); // Clear the error when a file is uploaded
+      // Set preview URL
+      setImagePreviewUrl(URL.createObjectURL(file));
+    } else {
+      setImagePreviewUrl(""); // Clear the preview if no file
     }
   }
 
@@ -50,6 +53,7 @@ export const AddEditPostPage = () => {
     event.preventDefault();
     let hasError = false;
     let postDate = date.toLocaleDateString();
+    let imageType = "post";
     // file errors
     if (!inputFile) {
       setFileError("Please provide a file.");
@@ -59,7 +63,7 @@ export const AddEditPostPage = () => {
       hasError = true;
     } else {
       setFileError("");
-    // description errors
+      // description errors
     }
     if (!postDescription) {
       setDescriptionError("Please provide a description.");
@@ -71,23 +75,45 @@ export const AddEditPostPage = () => {
       return;
     }
     new Promise((resolve, reject) => {
-        Meteor.call("add_post",
-            postDate,
-            postDescription,
-            userInfo.username,
-            (error, result) => {
-                if (error) {
-                    console.log("Error adding post:", error);
-                    reject(`Error: ${error.message}`);
-                } else {
-                    console.log("Post added with ID:", result);
-                    resolve(result);
-                    alert("Post added successfully!");
-                    navigateTo("/" + UrlBasePath.PROFILE);
-                }
-            });
+      Meteor.call(
+        "add_post",
+        postDate,
+        postDescription,
+        userInfo.username,
+        (error, postId) => {
+          if (error) {
+            console.log("Error adding post:", error);
+            reject(`Error: ${error.message}`);
+          } else {
+            console.log("Post added with ID:", postId);
+            resolve(postId); // Pass the postId to the next .then
+          }
         }
-    ).catch(reason => alert(reason));
+      );
+    })
+      .then(
+        (postId) =>
+          new Promise((resolve, reject) => {
+            Meteor.call(
+              "add_image",
+              imageType,
+              postId, // Use the postId passed from the previous promise
+              inputFile,
+              (error, imageId) => {
+                if (error) {
+                  console.log("Error adding image:", error);
+                  reject(`Error: ${error.message}`);
+                } else {
+                  resolve(imageId);
+                  console.log("Image added with ID:", imageId);
+                  alert("Post added successfully!");
+                  navigateTo("/" + UrlBasePath.PROFILE);
+                }
+              }
+            );
+          })
+      )
+      .catch((reason) => alert(reason));
 
     // for time being there is only an alert
     //alert("Post has been added to the gallery");
@@ -101,7 +127,10 @@ export const AddEditPostPage = () => {
 
   return (
     <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-      <BackButton to={`/${UrlBasePath.PROFILE}`} className="your-custom-classes" />
+      <BackButton
+        to={`/${UrlBasePath.PROFILE}`}
+        className="your-custom-classes"
+      />
 
       {/* Main container for content */}
       <div className="flex flex-col gap-4 xl:px-40">
@@ -128,6 +157,16 @@ export const AddEditPostPage = () => {
             <div className="text-green-500">Uploaded: {inputFile.name}</div>
           )}
         </div>
+        {/* Image Preview */}
+        {imagePreviewUrl && (
+          <div className="mt-4">
+            <img
+              src={imagePreviewUrl}
+              alt="Uploaded Preview"
+              className="max-w-full h-auto"
+            />
+          </div>
+        )}
 
         {/* no file error message */}
         {fileError && <div className="text-red-500">{fileError}</div>}
