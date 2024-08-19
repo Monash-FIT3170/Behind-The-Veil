@@ -67,6 +67,11 @@ export const BookingCard = ({
     const purpleButtonClass = classNames(buttonClass, "bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500");
     const smallPurpleButtonClass = "flex flex-row gap-x-2 justify-center items-center w-[60%] bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500"
 
+    const leaveReview = () => {
+        // TODO: add the booking id at the end of the url
+        navigateTo('/profile/review');
+    }
+
 
     if (userType === 'bride') {
         switch (bookingStatus) {
@@ -75,7 +80,8 @@ export const BookingCard = ({
                 if (bookingIsReviewed) {
                     // if not reviewed yet
                     additionalButtons.push(
-                        <Button className={purpleButtonClass}>
+                        // TODO: in the navigateTo, add '/review/' + serviceId or bookingId in it to show review of particular item
+                        <Button className={purpleButtonClass} onClick={leaveReview}>
                             <PencilSquareIcon className="icon-base"/>
                             Leave Review
                         </Button>
@@ -83,7 +89,7 @@ export const BookingCard = ({
                 } else {
                     // if already left review
                     additionalButtons.push(
-                        <Button className={purpleButtonClass}>
+                        <Button className={purpleButtonClass} onClick={leaveReview}>
                             <EyeIcon className="icon-base"/>
                             View Review
                         </Button>
