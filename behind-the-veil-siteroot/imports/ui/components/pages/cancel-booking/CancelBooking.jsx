@@ -61,8 +61,8 @@ const CancelBooking = () => {
         }
     }
 
-    //todo: Change status of the booking to CANCELLED
     const confirmCancellation = () => {
+        Meteor.call('update_booking_details', bookingId, { bookingStatus: "cancelled", cancelReason : inputReason, cancelUser: userInfo.username });
         navigateTo(`/profile`);
     }
 

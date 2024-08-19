@@ -70,6 +70,7 @@ export const BrideProfileTabs = ({userInfo}) => {
                     break;
             }
         }
+        console.log(bookings.archived)
 
         // map every booking to a JSX object
         for (let status in bookings) {
