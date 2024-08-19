@@ -71,6 +71,9 @@ export const BookingCard = ({
         // TODO: add the booking id at the end of the url
         navigateTo('/profile/review');
     }
+    const confirmBooking = () => {
+        Meteor.call('update_booking_details', bookingId, { bookingStatus: "confirmed"});
+    }
 
 
     if (userType === 'bride') {
