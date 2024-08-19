@@ -28,6 +28,7 @@ export const AddEditPostPage = () => {
 
   const fileInputRef = useRef(null); // used since the file classname is hidden to ensure that ui is in specific format
 
+  // function to handle description
   function handleInputChange(event) {
     const description = event.target.value;
     setInputReason(description);
@@ -73,13 +74,15 @@ export const AddEditPostPage = () => {
     let hasError = false;
     let postDate = date.toLocaleDateString();
     let imageType = "post";
+
     // file errors
     if (!inputFile) {
       setFileError("Please provide a file.");
       hasError = true;
     } else {
       setFileError("");
-      // description errors
+
+    // description errors
     }
     if (!postDescription) {
       setDescriptionError("Please provide a description.");
@@ -90,6 +93,7 @@ export const AddEditPostPage = () => {
     if (hasError) {
       return;
     }
+
     new Promise((resolve, reject) => {
       Meteor.call(
         "add_post",
