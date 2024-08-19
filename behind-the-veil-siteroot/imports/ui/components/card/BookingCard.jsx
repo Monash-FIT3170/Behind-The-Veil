@@ -66,6 +66,9 @@ export const BookingCard = ({
     const buttonClass = "flex flex-row gap-x-2 justify-center items-center w-4/5 min-w-40 "
     const purpleButtonClass = classNames(buttonClass, "bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500");
 
+    const confirmBooking = () => {
+        Meteor.call('update_booking_details', bookingId, { bookingStatus: "confirmed"});
+    }
 
     if (userType === 'bride') {
         switch (bookingStatus) {
@@ -126,7 +129,9 @@ export const BookingCard = ({
             case BookingStatus.PENDING:
                 // if a booking is pending, add "accept" and "reject" buttons
                 additionalButtons.push(
-                    <Button className={purpleButtonClass}>
+                    <Button className={purpleButtonClass}
+                        onClick={confirmBooking}
+                    >
                         <CheckCircleIcon className="icon-base"/>
                         Accept
                     </Button>

@@ -42,6 +42,10 @@ const BookingDetailsPage = () => {
     // grab the service ID from the URL
     const {bookingId} = useParams();
 
+    const confirmBooking = () => {
+        Meteor.call('update_booking_details', bookingId, { bookingStatus: "confirmed"});
+    }
+
     // get bookings information from database
     const {isLoading, bookingData, serviceData, userData} = useSpecificBooking(bookingId, userInfo.type);
 
@@ -217,7 +221,9 @@ const BookingDetailsPage = () => {
                     case BookingStatus.PENDING:
                         // if a booking is pending, add "accept" and "reject" buttons
                         actionButtons.push(
-                            <Button className={purpleButtonClass}>
+                            <Button className={purpleButtonClass}
+                                onClick={confirmBooking}
+                            >
                                 <CheckCircleIcon className="icon-base"/>
                                 Accept
                             </Button>
