@@ -163,7 +163,8 @@ const BookingDetailsPage = () => {
                                 </Button>
                             );
                             actionButtons.push(
-                                <Button className={buttonClass}>
+                                <Button className={buttonClass}
+                                    onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
                                     <NoSymbolIcon className="icon-base"/>
                                     Cancel
                                 </Button>
@@ -171,7 +172,7 @@ const BookingDetailsPage = () => {
                         }
                         break;
                     case BookingStatus.PENDING:
-                        // if a booking is pending, add a "request change" button
+                        // if a booking is pending, add a "request change" and "cancel" button
                         actionButtons.push(
                             <Button className={purpleButtonClass}>
                                 <ArrowPathIcon className="icon-base"/>
@@ -179,7 +180,8 @@ const BookingDetailsPage = () => {
                             </Button>
                         );
                         actionButtons.push(
-                            <Button className={buttonClass}>
+                            <Button className={buttonClass}
+                                onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
                                 <NoSymbolIcon className="icon-base"/>
                                 Cancel
                             </Button>

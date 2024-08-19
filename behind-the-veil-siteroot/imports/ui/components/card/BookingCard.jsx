@@ -117,16 +117,13 @@ export const BookingCard = ({
                 }
                 break;
             case BookingStatus.PENDING:
-                // if a booking is pending, add a "request change" button
+                // if a booking is pending, add a "request change" and "cancel" button
                 additionalButtons.push(
                     <Button className={purpleButtonClass}>
                         <ArrowPathIcon className="icon-base"/>
                         Request change
                     </Button>
                 );
-                break;
-            case BookingStatus.OVERDUE:
-                // if a booking is confirmed, add "cancel" button
                 additionalButtons.push(
                     <Button className={purpleButtonClass}
                         onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
