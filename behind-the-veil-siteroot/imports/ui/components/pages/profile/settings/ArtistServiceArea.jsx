@@ -3,7 +3,7 @@
  * File version: 1.1
  * Contributors: Hirun, Nikki
  */
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {CheckIcon} from "@heroicons/react/24/outline";
 import { mapboxKey } from "./../../../../components/map/mapUtils.js";
 import {AddressAutofill} from "@mapbox/search-js-react";
@@ -55,18 +55,29 @@ export const ArtistServiceArea = () => {
 
     };
 
+    const [fullAddress, setFullAddress] = useState('')
+
+    // to overwrite the location state with the full address when an autocomplete suggestion is selected
+    useEffect(() => {
+        setLocation(fullAddress)
+    }, [fullAddress])
+
     return (
         <form className="flex flex-col items-left justify-center gap-y-6 pl-[5%] lg:pl-[15%]" onSubmit={handleSaveChanges}>
             <div className="flex flex-col items-left justify-center md:flex-row md:items-center md:justify-start gap-6">
                 {/*Service Location input*/}
-                <AddressAutofill accessToken = {mapboxKey} >
+                <AddressAutofill accessToken = {mapboxKey} onRetrieve={(e) => {
+                    setFullAddress(e.features[0].properties.full_address)
+                }
+                }>
                     <Input
                         type="text"
                         label={<label className={"main-text"}>Service Location</label>}
                         placeholder={user.profile.artistServiceLocation}
                         className="lg:w-[40vw] sm:w-96"
                         value={location}
-                        onChange={(e) => setLocation(e.target.value)}
+                        onChange={(e) => {setLocation(e.target.value)
+                        }}
                     />
                 </AddressAutofill>
                 {/*Radius input*/}
