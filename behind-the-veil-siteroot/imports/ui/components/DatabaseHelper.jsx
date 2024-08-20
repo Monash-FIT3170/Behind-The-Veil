@@ -10,6 +10,16 @@ import ImageCollection from "../../api/collections/images";
 import UserCollection from "../../api/collections/users";
 import BookingCollection from "../../api/collections/bookings";
 import PostCollection from "../../api/collections/posts";
+import BookingStatus from "../enums/BookingStatus";
+
+
+export function updateBookingStatus(bookingId, newStatus) {
+  Meteor.call('update_booking_details', bookingId, { bookingStatus: newStatus });
+
+  // email
+  
+
+}
 
 /**
  * Used for to get a list of service data (includes their image and/or artist data automatically)

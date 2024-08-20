@@ -21,6 +21,7 @@ import {
 } from "@heroicons/react/24/outline"
 import BookingStatus from "../../enums/BookingStatus";
 import BookingStatusDisplay from "../booking/BookingStatusDisplay";
+import {updateBookingStatus} from "../DatabaseHelper";
 
 
 /**
@@ -71,11 +72,6 @@ export const BookingCard = ({
         // TODO: add the booking id at the end of the url
         navigateTo('/profile/review');
     }
-    const confirmBooking = () => {
-        Meteor.call('update_booking_details', bookingId, { bookingStatus: "confirmed"});
-    }
-
-
     if (userType === 'bride') {
         switch (bookingStatus) {
             case BookingStatus.COMPLETED:
@@ -106,7 +102,8 @@ export const BookingCard = ({
                 if (bookingDatetime >= now) { // checks that service date is after now
                     // if today or passed today
                     additionalButtons.push(
-                        <Button className={purpleButtonClass}>
+                        <Button className={purpleButtonClass}
+                                onClick={() => {updateBookingStatus(bookingId, BookingStatus.COMPLETED)}}>
                             <CurrencyDollarIcon className="icon-base"/>
                             Service Completed
                         </Button>
@@ -138,16 +135,19 @@ export const BookingCard = ({
                 // if a booking is pending, add "accept" and "reject" buttons
                 additionalButtons.push(
                     <div className={"flex flex-row items-center justify-between gap-x-1 w-4/5 min-w-40"}>
-                        <Button className={smallPurpleButtonClass}>
+                        <Button className={smallPurpleButtonClass}
+                        onClick={() => {updateBookingStatus(bookingId, BookingStatus.CONFIRMED)}}>
+                    
                             <CheckCircleIcon className="icon-base"/>
                         </Button>
-                        <Button className={smallPurpleButtonClass}>
+                        <Button className={smallPurpleButtonClass}
+                        onClick={() => {updateBookingStatus(bookingId, BookingStatus.REJECTED)}}>
                             <XCircleIcon className="icon-base"/>
                         </Button>
 
                     </div>
+                            
                 );
-                additionalButtons.push(null);
                 break;
             case BookingStatus.CONFIRMED:
             case BookingStatus.OVERDUE:

@@ -28,7 +28,7 @@ import PageLayout from "../../../enums/PageLayout";
 import Loader from "../../loader/Loader";
 import classNames from "classnames";
 import BookingStatusDisplay from "../../booking/BookingStatusDisplay";
-import {useSpecificBooking} from "../../DatabaseHelper";
+import {updateBookingStatus, useSpecificBooking} from "../../DatabaseHelper";
 import UrlBasePath from "../../../enums/UrlBasePath";
 
 /**
@@ -155,7 +155,8 @@ const BookingDetailsPage = () => {
                         if (bookingDatetime >= now) { // checks that service date is after now
                             // if booking datetime today or passed now
                             actionButtons.push(
-                                <Button className={purpleButtonClass}>
+                                <Button className={purpleButtonClass}
+                                        onClick={() => {updateBookingStatus(bookingId, BookingStatus.COMPLETED)}}>
                                     <CurrencyDollarIcon className="icon-base"/>
                                     Service Completed
                                 </Button>
@@ -232,14 +233,14 @@ const BookingDetailsPage = () => {
                         // if a booking is pending, add "accept" and "reject" buttons
                         actionButtons.push(
                             <Button className={purpleButtonClass}
-                                onClick={confirmBooking}
-                            >
+                                    onClick={() => {updateBookingStatus(bookingId, BookingStatus.CONFIRMED)}}>
                                 <CheckCircleIcon className="icon-base"/>
                                 Accept
                             </Button>
                         );
                         actionButtons.push(
-                            <Button className={buttonClass}>
+                            <Button className={buttonClass}
+                                    onClick={() => {updateBookingStatus(bookingId, BookingStatus.REJECTED)}}>
                                 <XCircleIcon className="icon-base"/>
                                 Reject
                             </Button>

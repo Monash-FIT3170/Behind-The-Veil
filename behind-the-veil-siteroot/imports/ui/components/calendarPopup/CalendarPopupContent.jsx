@@ -9,6 +9,7 @@ import BookingStatus from "../../enums/BookingStatus";
 import { XCircleIcon, ClockIcon, MapPinIcon, DocumentMagnifyingGlassIcon, CheckCircleIcon } from "@heroicons/react/24/outline"
 import Button from "../button/Button";
 import { useNavigate } from "react-router-dom";
+import {updateBookingStatus} from "../DatabaseHelper";
 
 /**
  * Button to go to specific booking detail page
@@ -31,7 +32,7 @@ const ViewDetailsButton = ({ bookingId }) => {
 
 /**
  * Component that contains the content of the calendar popup. Displays brief info + buttons.
- * 
+ *
  * @param bookingId id of booking (used for routing)
  * @param bookingStatus current booking status
  * @param brideName bride name (used for popup title)
@@ -47,10 +48,6 @@ const CalendarPopupContent = ({
     bookingLocation,
     onClose
 }) => {
-
-    const confirmBooking = () => {
-        Meteor.call('update_booking_details', bookingId, { bookingStatus: "confirmed"});
-    }
 
     const navigateTo = useNavigate();
     return (
@@ -94,15 +91,14 @@ const CalendarPopupContent = ({
                     <>
                         <Button className="flex flex-row gap-x-2 justify-center items-center
                             bg-light-gray hover:bg-secondary-purple-hover transition duration-500"
-                            onClick={confirmBooking}
-                        >
+                                onClick={() => {updateBookingStatus(bookingId, BookingStatus.CONFIRMED)}}>
                             <CheckCircleIcon className="h-6 w-6 min-h-6 min-w-6" />
                             Confirm
                         </Button>
+
                         <Button className="flex flex-row gap-x-2 justify-center items-center
                             bg-white hover:bg-light-gray-hover border-light-gray border-2 transition duration-500"
-                            onClick={() => { }}
-                        >
+                                onClick={() => {updateBookingStatus(bookingId, BookingStatus.REJECTED)}}>
                             <XCircleIcon className="h-6 w-6 min-h-6 min-w-6" />
                             Reject
                         </Button>
@@ -112,8 +108,7 @@ const CalendarPopupContent = ({
                 {bookingStatus === BookingStatus.CONFIRMED && (
                     <Button className="flex flex-row gap-x-2 justify-center items-center
                             bg-white hover:bg-secondary-purple-hover border-light-gray border-2 transition duration-500"
-                            onClick={() => navigateTo('/cancel-booking/' + bookingId)}
-                    >
+                            onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
                         <XCircleIcon className="h-6 w-6 min-h-6 min-w-6" />
                         Cancel Booking
                     </Button>
