@@ -51,24 +51,17 @@ export const BookingStatusDisplay = ({bookingStatus, className}) => {
             <span className={"main-text"}>Active statuses:</span>
             <ul className="list-disc list-inside small-text">
                 <li><span className={"text-confirmed-colour"}>Confirmed:</span> A booking scheduled to proceed</li>
-                <li><span className={"text-pending-colour"}>Awaiting confirmation:</span> Waiting on artist
-                    to confirm the booking details
-                </li>
+                <li><span className={"text-pending-colour"}>Awaiting confirmation:</span> Waiting on artist to accept the booking</li>
+                <li><span className={"text-cancelled-colour"}>Overdue:</span> Waiting for bride to confirm booking completion</li>
             </ul>
 
             <br/>
 
             <span className={"main-text"}>Closed statuses:</span>
             <ul className="list-disc list-inside small-text">
-                <li className=""><span className={"text-confirmed-colour"}>Completed:</span> A booking that was
-                    completed successfully
-                </li>
-                <li className=""><span className={"text-cancelled-colour"}>Cancelled:</span> A booking
-                    cancelled by the artist or bride
-                </li>
-                <li className=""><span className={"text-cancelled-colour"}>Rejected:</span> A booking rejected by the
-                    artist
-                </li>
+                <li className=""><span className={"text-confirmed-colour"}>Completed:</span> A booking that was completed successfully</li>
+                <li className=""><span className={"text-cancelled-colour"}>Cancelled:</span> A booking cancelled by the artist or bride</li>
+                <li className=""><span className={"text-cancelled-colour"}>Rejected:</span> A booking rejected by the artist</li>
             </ul>
         </div>
     );
@@ -95,7 +88,7 @@ export const BookingStatusDisplay = ({bookingStatus, className}) => {
         <div className={combinedClassname}>
             {statusIcon}
             {/*return the booking status text, except for "pending" which becomes awaiting confirmation*/}
-            {bookingStatus === 'pending' ? 'Awaiting Confirmation' : bookingStatus}
+            <span className={"line-clamp-1"}>{bookingStatus === 'pending' ? 'Awaiting Confirmation' : bookingStatus}</span>
             {toolTip}
         </div>
     );

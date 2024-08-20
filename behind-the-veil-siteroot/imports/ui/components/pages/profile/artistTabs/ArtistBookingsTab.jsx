@@ -49,9 +49,9 @@ export const ArtistBookingsTab = ({username}) => {
 
     const filterOptions = {
         [BookingFilter.ALL]: Object.values(BookingStatus),
-        [BookingFilter.CONFIRMED]: [BookingStatus.CONFIRMED],
+        [BookingFilter.CONFIRMED]: [BookingStatus.CONFIRMED, BookingStatus.OVERDUE],
         [BookingFilter.PENDING]: [BookingStatus.PENDING],
-        [BookingFilter.CLOSED]: [BookingStatus.COMPLETED, BookingStatus.REJECTED, BookingStatus.CANCELLED, BookingStatus.OVERDUE]
+        [BookingFilter.CLOSED]: [BookingStatus.COMPLETED, BookingStatus.REJECTED, BookingStatus.CANCELLED]
     };
 
     // rendering buttons for filters

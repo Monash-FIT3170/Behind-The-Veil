@@ -59,12 +59,13 @@ export const BookingCard = ({
     const bookingDatetime = new Date(bookingStartDateTime);
     const now = new Date();
 
-    const classes = classNames("flex flex-col overflow-hidden justify-between " +
-        "w-full min-w-60 lg:w-2/5 lg:min-w-78 min-h-[330px] pr-6 md:pr-0 lg:pr-6 xl:pr-0", className);
+    const cardClasses = classNames("flex flex-col overflow-hidden justify-between " +
+        "w-full min-w-60 lg:w-2/5 lg:min-w-78 min-h-[360px] pr-6 md:pr-0 lg:pr-6 xl:pr-0", className);
 
     let additionalButtons = [];
     const buttonClass = "flex flex-row gap-x-2 justify-center items-center w-4/5 min-w-40 "
     const purpleButtonClass = classNames(buttonClass, "bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500");
+    const smallPurpleButtonClass = "flex flex-row gap-x-2 justify-center items-center w-[60%] bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500"
 
 
     if (userType === 'bride') {
@@ -126,17 +127,17 @@ export const BookingCard = ({
             case BookingStatus.PENDING:
                 // if a booking is pending, add "accept" and "reject" buttons
                 additionalButtons.push(
-                    <Button className={purpleButtonClass}>
-                        <CheckCircleIcon className="icon-base"/>
-                        Accept
-                    </Button>
+                    <div className={"flex flex-row items-center justify-between gap-x-1 w-4/5 min-w-40"}>
+                        <Button className={smallPurpleButtonClass}>
+                            <CheckCircleIcon className="icon-base"/>
+                        </Button>
+                        <Button className={smallPurpleButtonClass}>
+                            <XCircleIcon className="icon-base"/>
+                        </Button>
+
+                    </div>
                 );
-                additionalButtons.push(
-                    <Button className={purpleButtonClass}>
-                        <XCircleIcon className="icon-base"/>
-                        Reject
-                    </Button>
-                );
+                additionalButtons.push(null);
                 break;
             case BookingStatus.CONFIRMED:
             case BookingStatus.OVERDUE:
@@ -153,36 +154,46 @@ export const BookingCard = ({
     }
 
     return (
-        <Card className={classes} {...cardProps}>
+        <Card className={cardClasses} {...cardProps}>
             <div className={"flex flex-row gap-x-4 justify-center"}>
                 <div className={"cursor-default px-4"}>
 
-                    {/* displaying booking information */}
-                    <div className="large-text text-our-black max-w-full break-all line-clamp-1 mb-3">
-                        {serviceName}</div>
-                    <BookingStatusDisplay bookingStatus={bookingStatus}/>
+                    <div className={"flex flex-col justify-between h-[300px]"}>
 
-                    <div className="flex flex-row justify-between">
-                        <div className="medium-text text-our-black max-w-full break-all line-clamp-1 mb-3">
-                            {bookingDatetime.toLocaleString()}</div>
-                        <div className="medium-text text-dark-grey max-w-full break-all line-clamp-1 mb-3 ml-auto">
-                            ${bookingPrice.toFixed(2)}</div>
-                    </div>
-                    <div className="small-text text-dark-grey max-h-[10rem] max-w-full line-clamp-4 mb-3 break-words">
-                        {serviceDesc}</div>
+                        {/* displaying booking information */}
+                        <div className="large-text text-our-black max-w-full break-all line-clamp-1 mb-3">
+                            {serviceName}</div>
+                        <BookingStatusDisplay bookingStatus={bookingStatus}/>
 
-                    {/*This is the buttons area on the bottom*/}
-                    <div className="flex flex-col gap-2 items-center mt-5">
-                        {/*additional buttons which depends on status/user type*/}
-                        {additionalButtons}
+                        <div className="flex flex-row justify-between">
+                            <div className="medium-text text-our-black max-w-full break-all line-clamp-1 mb-3">
+                                {bookingDatetime.toLocaleDateString() + " " +
+                                    bookingDatetime.toLocaleTimeString('en-US', {
+                                        hour: 'numeric',
+                                        minute: 'numeric',
+                                        hour12: true
+                                    })}
+                            </div>
+                            <div className="medium-text text-dark-grey max-w-full break-all line-clamp-1 mb-3 ml-auto">
+                                ${bookingPrice.toFixed(2)}</div>
+                        </div>
+                        <div
+                            className="small-text text-dark-grey max-h-[10rem] max-w-full line-clamp-4 break-words">
+                            {serviceDesc}
+                        </div>
 
-                        {/* button for specific booking detail page */}
-                        <Button className={classNames(buttonClass)}
-                                onClick={() => navigateTo('/booking/' + bookingId)}>
-                            <DocumentMagnifyingGlassIcon className="icon-base"/>
-                            View Details
-                        </Button>
+                        {/*This is the buttons area on the bottom*/}
+                        <div className="flex flex-col gap-2 items-center mt-5">
+                            {/*additional buttons which depends on status/user type*/}
+                            {additionalButtons}
 
+                            {/* button for specific booking detail page */}
+                            <Button className={classNames(buttonClass)}
+                                    onClick={() => navigateTo('/booking/' + bookingId)}>
+                                <DocumentMagnifyingGlassIcon className="icon-base"/>
+                                View Details
+                            </Button>
+                        </div>
                     </div>
                 </div>
 
