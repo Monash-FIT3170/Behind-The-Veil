@@ -87,4 +87,5 @@ mongoexport -h localhost:3001 --db meteor --collection images --out=output.txt
 
 ```
 
+mongoimport -h localhost:3001 --db meteor --collection bookings --file mockdata/booking_user1000.json --jsonArray
 ```

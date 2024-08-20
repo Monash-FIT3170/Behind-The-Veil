@@ -39,7 +39,6 @@ export function useServices(
   let imagesData = useTracker(() => {
     return ImageCollection.find({ imageType: "service" }).fetch();
   });
-  console.log(imagesData);
 
   // get artist data from database, if needed
   let isLoadingArtists = () => false;
@@ -339,7 +338,7 @@ export function useSpecificUser(username) {
  * @param username {string} - The username of the artist
  * @returns {Object} - Object containing the dashboard statistics like total customers, total earnings, etc.
  */
-export function useArtistDashboardData(username) {
+export function useArtistDashboardCustomerData(username) {
   // Subscribe to the necessary data
   const isLoadingBookings = useSubscribe("all_user_bookings", username);
 
@@ -362,6 +361,7 @@ export function useArtistDashboardData(username) {
     totalCustomersThisMonth,
   };
 }
+
 //  * Collects all data relevent to load gallery images
 //  *
 //  * @param {*} username - username of the user to get data
@@ -409,4 +409,36 @@ export function useUserPosts(username) {
   });
 
   return postData;
+}
+
+/**
+ * Finds all user booking details and calculates total revenue earnt from completed bookings and pending bookings
+ * @param username {string} - the username of the artist
+ * @returns {object} - an array with index 0 containing total earnings and index 1 containing pending earnings
+ */
+export function useArtistDashboardRevenueData(username) {
+  const isLoadingBookings = useSubscribe("all_user_bookings", username);
+
+  // Fetch the booking data for the artist
+  let bookingData = useTracker(() => {
+    return BookingCollection.find({ artistUsername: username }).fetch();
+  });
+
+  //initalise variables for revenue calculation
+  let bookingCompleteRevenue = 0;
+  let bookingPendingRevenue = 0;
+
+  // loop through entire booking data array
+  for (let i = 0; i < bookingData.length; i++) {
+    //if booking is completed, total bookings value
+    if (bookingData[i].bookingStatus == "completed") {
+      bookingCompleteRevenue += bookingData[i].bookingPrice;
+    }
+    //if booking is pending, total bookings value
+    if (bookingData[i].bookingStatus == "pending") {
+      bookingPendingRevenue += bookingData[i].bookingPrice;
+    }
+  }
+
+  return [bookingCompleteRevenue, bookingPendingRevenue];
 }
