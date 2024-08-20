@@ -145,6 +145,7 @@ const BookingDetailsPage = () => {
                         }
                         break;
                     case BookingStatus.CONFIRMED:
+                    case BookingStatus.OVERDUE:
                         // if booking is confirmed add a "service completed" button if over the date
                         // if a booking is confirmed, add a "request change" and "cancel" button if not yet the date
                         if (bookingDatetime >= now) { // checks that service date is after now
@@ -153,6 +154,13 @@ const BookingDetailsPage = () => {
                                 <Button className={purpleButtonClass}>
                                     <CurrencyDollarIcon className="icon-base"/>
                                     Service Completed
+                                </Button>
+                            );
+                            actionButtons.push(
+                                <Button className={buttonClass}
+                                        onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
+                                    <NoSymbolIcon className="icon-base"/>
+                                    Cancel
                                 </Button>
                             );
                         } else {
