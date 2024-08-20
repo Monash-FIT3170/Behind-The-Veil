@@ -91,6 +91,7 @@ export const BookingCard = ({
                 }
                 break;
             case BookingStatus.CONFIRMED:
+            case BookingStatus.OVERDUE:
                 // if booking is confirmed add a "service completed" button if over the date
                 // if a booking is confirmed, add a "request change" button if not yet the date
                 if (bookingDatetime >= now) { // checks that service date is after now
@@ -112,7 +113,7 @@ export const BookingCard = ({
                 }
                 break;
             case BookingStatus.PENDING:
-                // if a booking is pending, add a "request change" button
+                // if a booking is pending, add a "request change" button and "cancel" button
                 additionalButtons.push(
                     <Button className={purpleButtonClass}>
                         <ArrowPathIcon className="icon-base"/>

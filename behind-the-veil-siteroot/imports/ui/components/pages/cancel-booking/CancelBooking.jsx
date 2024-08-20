@@ -61,8 +61,8 @@ const CancelBooking = () => {
         }
     }
 
-    //todo: Change status of the booking to CANCELLED
     const confirmCancellation = () => {
+        Meteor.call('update_booking_details', bookingId, { bookingStatus: "cancelled", cancelReason : inputReason, cancelUser: userInfo.username });
         navigateTo(`/profile`);
     }
 
@@ -130,7 +130,7 @@ const CancelBooking = () => {
                     <BackButton to={"/profile"}/>
                     {/* Main container for content */}
                     <div className="flex flex-col gap-4 xl:px-40">
-                        <div className="large-text">Cancel Booking</div>
+                        <div className="large-text">Cancel Booking Form</div>
                         <ServiceDetailsHeader
                             service={serviceData.serviceName}
                             date={bookingDatetime.toLocaleString()}
@@ -157,7 +157,7 @@ const CancelBooking = () => {
                                 <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"
                                         onClick={handleCancelBooking}>
                                     <CheckIcon className="icon-base"/>
-                                    Cancel Booking
+                                    Confirm Cancellation
                                 </Button>
                             </div>
                         </div>
@@ -168,18 +168,17 @@ const CancelBooking = () => {
                         <div className="flex justify-center items-center h-full">
                             <div className="flex flex-col">
                                 <h2 className="text-center title-text">
-                                    Confirm cancellation
+                                    Cancel booking?
                                 </h2>
-                                <p className="text-center medium-text">You are about to cancel the booking</p>
-                                <p className="text-center medium-text">Are you sure?</p>
+                                <p className="text-center medium-text">Are you sure you want to cancel a booking? This action cannot be reversed. </p>
                                 <div className="flex justify-center space-x-6 mt-5">
                                     <Button className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[25px] pe-[25px] flex gap-1" onClick={confirmCancellation}>
                                         <CheckIcon className="icon-base" />
-                                        Confirm
+                                        Yes
                                     </Button>
                                     <Button className="btn-base ps-[25px] pe-[25px] flex gap-1" onClick={onCloseModal}>
                                         <NoSymbolIcon className="icon-base" />
-                                        Cancel
+                                        No
                                     </Button>
                                 </div>
                             </div>
