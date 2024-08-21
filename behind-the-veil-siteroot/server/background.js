@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { BookingStatus } from '/imports/ui/enums.BookingStatus';
+import { BookingStatus } from '/imports/ui/enums/BookingStatus';
 
 export const checkBookings = () => {
     Meteor.setInterval(() => {

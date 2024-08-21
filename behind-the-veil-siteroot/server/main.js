@@ -22,7 +22,7 @@ import "/imports/api/publications/posts";
 
 import "/imports/api/methods/payment.js";
 
-import checkBookingsEveryMidnight from "./background.js"
+import {checkBookingsEveryMidnight} from "./background.js"
 
 // file in the same folder containing creds for mail server
 // import {emailUser, emailPass, mailUrl, fromUser} from "./secrets.js"
