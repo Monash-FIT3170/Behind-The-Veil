@@ -26,7 +26,8 @@ export function useServices(
   service_publication,
   params,
   filter,
-  requireArtist = false
+  requireArtist = false,
+  oneService = true
 ) {
   // get service data from database
   const isLoadingUserServices = useSubscribe(service_publication, ...params);
@@ -58,7 +59,7 @@ export function useServices(
   // manual aggregation of each service with their image
   for (let i = 0; i < servicesData.length; i++) {
     let foundImageMatch = false;
-
+    
     // aggregate with artist first
     for (let j = 0; j < artistsData.length; j++) {
       // find matching artist and add their name
@@ -68,18 +69,31 @@ export function useServices(
       }
     }
 
-    // then aggregate with the FIRST image that belong to it
-    for (let j = 0; j < imagesData.length; j++) {
-      // find matching image for the service
-      if (
-        imagesData[j].imageType === "service" &&
-        servicesData[i]._id === imagesData[j].target_id
-      ) {
-        servicesData[i].serviceImageData = imagesData[j].imageData;
-        foundImageMatch = true;
-        break;
+    if (oneService) {
+      // then aggregate with the FIRST image that belong to it
+      for (let j = 0; j < imagesData.length; j++) {
+        // find matching image for the service
+        if (
+          imagesData[j].imageType === "service" &&
+          servicesData[i]._id === imagesData[j].target_id
+        ) {
+          servicesData[i].serviceImageData = imagesData[j].imageData;
+          foundImageMatch = true;
+          break;
+        }
+      }
+    } else {
+      let serviceImages = [];
+      for (let j = 0; j < imagesData.length; j++) {
+          // find matching images for the service
+          if (imagesData[j].imageType === "service" && servicesData[i]._id === imagesData[j].target_id) {
+              serviceImages.push(imagesData[j])
+              foundImageMatch = true;
+          }
+          servicesData[i].serviceImageData = serviceImages
       }
     }
+    
 
     // if not found any images, replace with default
     if (!foundImageMatch) {

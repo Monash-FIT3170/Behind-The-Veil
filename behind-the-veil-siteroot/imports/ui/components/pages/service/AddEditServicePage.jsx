@@ -19,6 +19,7 @@ import QuestionMarkCircleIcon from "@heroicons/react/16/solid/QuestionMarkCircle
 import UrlBasePath from "../../../enums/UrlBasePath";
 import {Modal} from "react-responsive-modal";
 import Tippy from '@tippyjs/react/headless';
+import { useServices } from "../../DatabaseHelper";
 
 export const AddEditServicePage = ({isEdit}) => {
     const navigateTo = useNavigate();
@@ -33,6 +34,9 @@ export const AddEditServicePage = ({isEdit}) => {
     const [serviceDuration, setServiceDuration] = useState(0);
     const [servicePrice, setServicePrice] = useState(0);
     const [serviceDescription, setServiceDescription] = useState("");
+    const [imagedb, setImagedb] = useState([])
+
+    const [images, setImages] = useState([]);
 
     const [errors, setErrors] = useState({
         serviceName: "",
@@ -65,7 +69,31 @@ export const AddEditServicePage = ({isEdit}) => {
 
     // get service ID from url
     const {serviceId} = useParams();
+    const { isLoading, servicesData } = useServices("specific_service", [serviceId], {}, false, false);
 
+
+    const addImage = (imageObj) => {
+        const image = (
+            <div key={imageObj.imageName} className="flex flex-row items-start justify-center gap-1">
+                <img
+                    className="max-h-[200px] max-w-[90%] object-contain"
+                    title={imageObj.imageName}
+                    src={imageObj.imageData}
+                />
+                <button
+                    type="button"
+                    className={"flex justify-center items-center w-12"}
+                    onClick={() => removeImage(imageObj)}
+                >
+                    <XMarkIcon className="size-5 hover:bg-white-hover active:bg-light-grey-hover transition duration-200 ease-in-out"></XMarkIcon>
+                </button>
+            </div>
+        );
+        setImages((prevImages) => Array.from(new Set([...prevImages, image])));
+    }
+
+
+    const [shouldAddImages, setShouldAddImages] = useState(false);
     // load in existing service information if it is editing
     useEffect(() => {
         if (isEdit) {
@@ -90,12 +118,35 @@ export const AddEditServicePage = ({isEdit}) => {
                 setServiceDuration(service.serviceDuration);
                 setServicePrice(service.servicePrice);
                 setServiceDescription(service.serviceDesc);
+                console.log(servicesData);
+                servicesData.forEach((service) => service.serviceImageData.forEach((image) => {
+                    setImagedb((prevImages) =>
+                        Array.from(
+                            new Set([
+                                ...prevImages,
+                                {
+                                    imageType: image.imageType,
+                                    imageData: image.imageData,
+                                    imageName: image.imageName,
+                                    imageSize: image.imageSize,
+                                },
+                            ])
+                        )
+                    );
+                }))
+                setShouldAddImages(true)
             });
         }
     }, []);
 
-    const [filesArray, setFilesArray] = useState([]);
-    const [images, setImages] = useState([]);
+    useEffect(() => {
+        // This effect will only run when `shouldAddImages` is true
+        if (shouldAddImages) {
+            imagedb.forEach((imageObj) => addImage(imageObj));
+            setShouldAddImages(false); // Reset the flag after adding images
+        }
+    }, [shouldAddImages, imagedb]);
+
     const allowedFileTypeExtensions = [".png", ".jpg", ".jpeg"];
     const [fileRejected, setFileRejected] = useState(false);
     const [fileRejectedMessage, setFileRejectedMessage] = useState("");
@@ -110,24 +161,14 @@ export const AddEditServicePage = ({isEdit}) => {
         reader.addEventListener(
             "load",
             () => {
-                const image = (
-                    <div key={file.name} className="flex flex-row items-start justify-center gap-1">
-                        <img
-                            className="max-h-[200px] max-w-[90%] object-contain"
-                            title={file.name}
-                            src={reader.result}
-                        />
-                        <button
-                            type="button"
-                            className={"flex justify-center items-center w-12"}
-                            onClick={() => removeFile(file)}
-                        >
-                            <XMarkIcon
-                                className="size-5 hover:bg-white-hover active:bg-light-grey-hover transition duration-200 ease-in-out"></XMarkIcon>
-                        </button>
-                    </div>
-                );
-                setImages((prevImages) => Array.from(new Set([...prevImages, image])));
+                const imageObj = {
+                    imageType: "service",
+                    imageData: reader.result,
+                    imageName: file.name,
+                    imageSize: file.size,
+                };
+                addImage(imageObj)
+                setImagedb((prevImages) => Array.from(new Set([...prevImages, imageObj])));
             },
             false
         );
@@ -135,13 +176,13 @@ export const AddEditServicePage = ({isEdit}) => {
         reader.readAsDataURL(file);
     };
 
-    const removeFile = (file) => {
-        setFilesArray((prevFiles) => prevFiles.filter((f) => f !== file));
-        setImages((prevImages) => prevImages.filter((img) => img.key !== file.name));
+    const removeImage = (imageObj) => {
+        setImagedb((prevImages) => prevImages.filter((img) => img !== imageObj));
+        setImages((prevImages) => prevImages.filter((img) => img.key !== imageObj.imageName));
     };
 
     const removeAllFiles = () => {
-        setFilesArray([]);
+        setImagedb([]);
         setImages([]);
     };
 
@@ -154,7 +195,7 @@ export const AddEditServicePage = ({isEdit}) => {
                 setFileRejected(true);
                 setFileRejectedMessage("File must be of type/s (" + allowedFileTypeExtensions.join(", ") + ")");
                 return false;
-            } else if (filesArray.some((f) => f.name === file.name && f.size === file.size)) {
+            } else if (imagedb.some((img) => img.imageName === file.name && img.imageSize === file.size)) {
                 setFileRejected(true);
                 setFileRejectedMessage("File has already been uploaded!");
                 return false;
@@ -163,8 +204,6 @@ export const AddEditServicePage = ({isEdit}) => {
         });
 
         if (validFiles) {
-
-            setFilesArray((prevFiles) => Array.from(new Set([...prevFiles, ...validFiles])));
             validFiles.forEach(readAndPreview);
         }
     };
@@ -230,6 +269,18 @@ export const AddEditServicePage = ({isEdit}) => {
                                 setSuccess(true)
                             }
                         });
+                    Meteor.call("remove_service_images", serviceId, (error, result) => {
+                        if (error) {
+                            reject(`Error: ${error.message}`);
+                            setSuccess(false);
+                        } else {
+                            resolve(result);
+                            setSuccess(true);
+                        }
+                    });
+                    imagedb.forEach( (imageObj) =>
+                        Meteor.call("add_image", "service", serviceId, imageObj.imageData, imageObj.imageName, imageObj.imageSize)
+                    );
                 } else {
 
                     Meteor.call("add_service",
@@ -245,7 +296,11 @@ export const AddEditServicePage = ({isEdit}) => {
                                 setSuccess(false)
 
                             } else {
-                                resolve(result);
+                                const newServiceId = result;
+                                resolve(imagedb.forEach( (imageObj) =>
+                                        Meteor.call("add_image", "service", newServiceId, imageObj.imageData, imageObj.imageName, imageObj.imageSize)
+                                    )
+                                );
                                 setSuccess(true)
                             }
                         });

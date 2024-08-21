@@ -18,7 +18,7 @@ Meteor.methods({
      * @param {string} artistUsername - username (id) of artist providing the service
      */
     add_service: function (type, name, desc, price, duration, artistUsername) {
-        ServiceCollection.insert({
+        const serviceId = ServiceCollection.insert({
             serviceType: type,
             serviceName: name,
             serviceDesc: desc,
@@ -27,6 +27,8 @@ Meteor.methods({
             serviceDuration: duration,
             artistUsername: artistUsername,
         });
+        
+        return serviceId
     },
 
     get_service: function (serviceId) {

@@ -16,15 +16,26 @@ Meteor.methods({
      * @param imageData - the data of the image todo: data this is currently treated as a url to the image,
      *                                                but maybe should be changed to BSON/actual data
      */
-    "add_image": function (type, targetId, imageData) {
+    "add_image": function (type, targetId, imageData, name, size) {
         ImageCollection.insert(
             {
                 "imageType": type,
                 "target_id": targetId,
-                "imageData": imageData
+                "imageData": imageData,
+                "imageName": name,
+                "imageSize": size
             }
         )
         return targetId;
+    },
+
+    "remove_service_images": function (target_Id){
+        ImageCollection.remove(
+            {
+                "imageType": "service",
+                "target_id": target_Id
+            }
+        )
     },
 
     "remove_post_image": function (target_Id){
