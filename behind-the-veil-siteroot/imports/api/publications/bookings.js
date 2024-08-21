@@ -53,3 +53,10 @@ Meteor.publish("all_user_pending_bookings", function(username){
         ]
     });
 });
+
+// TODO: create publications for just artist/bride bookings for a specific username instead of all
+Meteor.publish('artist_bookings', function (artistUsername) {
+    return BookingCollection.find({
+        artistUsername: artistUsername
+    })
+})
