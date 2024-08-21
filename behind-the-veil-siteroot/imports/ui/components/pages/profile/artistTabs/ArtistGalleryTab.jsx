@@ -60,7 +60,9 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
 
   //format date to what is expected from figma
   function formatDate(dateInput) {
+    console.log(dateInput);
     const date = new Date(dateInput);
+    console.log(date);
     return date.toLocaleDateString("en-AU", {
       year: "numeric",
       month: "long",
@@ -102,9 +104,9 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
   }
 
   //
-  function addPostNavigate(){
-    console.log("button pressed")
-    navigateTo(`/${UrlBasePath.PROFILE}/add-edit-post`)
+  function addPostNavigate() {
+    console.log("button pressed");
+    navigateTo(`/${UrlBasePath.PROFILE}/add-edit-post`);
   }
 
   return (
@@ -127,7 +129,10 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
       ></DeletePostConfirmationModal>
 
       <div className="sticky top-20 z-20 flex justify-end">
-        <Button className="absolute top-5 flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover mt-2" onClick={addPostNavigate}>
+        <Button
+          className="absolute top-5 flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover mt-2"
+          onClick={addPostNavigate}
+        >
           {plusIcon} Add Photo
         </Button>
       </div>

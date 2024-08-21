@@ -58,10 +58,10 @@ export const AddEditPostPage = () => {
       reader.onloadend = () => {
         const imageUrl = reader.result;
         setInputFile(imageUrl);
-        setImagePreviewUrl(imageUrl); 
+        setImagePreviewUrl(imageUrl);
       };
 
-      reader.readAsDataURL(file); 
+      reader.readAsDataURL(file);
     } else {
       setInputFile(null);
       setImagePreviewUrl(""); // Clear the preview if no file
@@ -72,7 +72,12 @@ export const AddEditPostPage = () => {
   function handleAddPost(event) {
     event.preventDefault();
     let hasError = false;
-    let postDate = date.toLocaleDateString();
+    let postDate = date.toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    });
+    console.log(postDate);
     let imageType = "post";
 
     // file errors
@@ -82,7 +87,7 @@ export const AddEditPostPage = () => {
     } else {
       setFileError("");
 
-    // description errors
+      // description errors
     }
     if (!postDescription) {
       setDescriptionError("Please provide a description.");
