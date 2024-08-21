@@ -1,7 +1,14 @@
+/**
+ * File Description: Background task to update bookings
+ * File version: 1.0
+ * Contributors: Laura
+ */
+
 import { Meteor } from 'meteor/meteor';
 import { BookingStatus } from '/imports/ui/enums/BookingStatus';
 import { addHours } from "date-fns";
 
+// Update all bookings
 export const checkBookings = () => {
 
     const now = new Date();
@@ -28,12 +35,9 @@ export const checkBookings = () => {
             console.error("Error fetching pending bookings:", error);
             return;
         }
-        console.log(pendingBookings)
 
         pendingBookings.forEach((booking) => {
             const eventDate = new Date(booking.bookingStartDateTime);
-
-            // Check if the event date is today
             const isPassed = (eventDate < now);
 
             if (isPassed) {
@@ -43,13 +47,14 @@ export const checkBookings = () => {
     })
 };
 
+// Run the task every mighnight
 export const checkBookingsEveryMidnight = () => {
     const now = new Date();
     const midnight = new Date(now);
-    midnight.setHours(0, 0, 0, 0); // Set to midnight
+    midnight.setHours(0, 0, 0, 0);
     const timeUntilMidnight = midnight - now;
 
-    // Run the task immediately and then at the specified time daily
+    // Run the task immediately and then at midnight
     Meteor.setTimeout(() => {
         checkBookings();
         Meteor.setInterval(checkBookings, 1000 * 60 * 60 * 24);
