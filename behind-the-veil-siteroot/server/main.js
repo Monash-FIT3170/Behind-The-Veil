@@ -22,9 +22,10 @@ import "/imports/api/publications/posts";
 
 import "/imports/api/methods/payment.js";
 
+import {checkBookingsEveryMidnight} from "./background.js"
+
 // file in the same folder containing creds for mail server
 // import {emailUser, emailPass, mailUrl, fromUser} from "./secrets.js"
-
 
 // Leave for now for any methods that need to be called on start up.
 Meteor.startup(async () => {
@@ -59,7 +60,10 @@ Meteor.startup(async () => {
 
                 return emailBody;
             }
-        };
+        }
+        
+        // update bookings every midnight
+        checkBookingsEveryMidnight()
     }
 
     // nsha0054@student.monash.edu
