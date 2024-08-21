@@ -1,6 +1,6 @@
 /**
  * File Description: Request Booking page
- * File version: 1.2
+ * File version: 1.3
  * Contributors: Josh, Nikki
  */
 
@@ -39,6 +39,8 @@ import { useSpecificService } from "../../DatabaseHelper";
 import Loader from "../../loader/Loader";
 import UrlBasePath from "../../../enums/UrlBasePath";
 import { useUserInfo } from "../../util";
+import { useSubscribe, useTracker } from "meteor/react-meteor-data";
+import BookingCollection from "../../../../api/collections/bookings.js";
 
 /**
  * Page for user to request a booking
@@ -113,14 +115,13 @@ const RequestBooking = () => {
   };
 
   // TODO: subscribe to all bookings with an artist username of the artist who is offering the service
-  const isLoadingBookings = useSubscribe("artist_bookings", "artist");
+  const isLoadingBookings = useSubscribe("artist_bookings", artistData?.username);
 
   // track these artist bookings
-  const bookingsDataFromSub = useTracker(() => {
+  const bookings = useTracker(() => {
     return BookingCollection.find().fetch();
   });
 
-  console.log(bookingsDataFromSub);
 
   // TODO: this function might not be needed once we use real bookings b/c I think start time is stored as date object
   // converting json datetimes to js datetimes
@@ -132,9 +133,6 @@ const RequestBooking = () => {
       };
     });
   };
-
-  // TODO: make actual database call to get all bookings for this artist id
-  const bookings = parseBookings(mockBookings);
 
   // TODO: get actual duration from this service
   const duration = 2;
