@@ -1,58 +1,57 @@
 import { Meteor } from 'meteor/meteor';
 import { BookingStatus } from '/imports/ui/enums/BookingStatus';
+import { addHours } from "date-fns";
 
 export const checkBookings = () => {
-    Meteor.setInterval(() => {
-        const now = new Date();
 
-        // Check all bookings with confirmed status
-        Meteor.call('get_bookings_by_status', BookingStatus.CONFIRMED, (confirmedBookings) => {
+    const now = new Date();
 
-            confirmedBookings.forEach((booking) => {
-                //const bookingStartDateTime = new Date(booking.bookingStartDateTime);
-                //const bookingEndDateTime = new Date(bookingStartDateTime.getTime() + booking.duration * 60 * 60 * 1000);
+    // Check all bookings with confirmed status
+    Meteor.call('get_bookings_by_status', BookingStatus.CONFIRMED, (error, confirmedBookings) => {
+        if (error) {
+            console.error("Error fetching confirmed bookings:", error);
+            return;
+        }
 
-                const confirmedBookingEnd = addHours(confirmedBookingStart, booking.bookingDuration)
+        confirmedBookings.forEach((booking) => {
+            const confirmedBookingEnd = addHours(booking.bookingStartDateTime, booking.bookingDuration)
 
-                if (confirmedBookingEnd < now) {  
-                    BookingCollection.update_booking_details(booking._id, {
-                        $set: { bookingStatus: BookingStatus.OVERDUE },
-                    });
-                }
-            });
+            if (confirmedBookingEnd < now) {  
+                Meteor.call('update_booking_details', booking._id, { bookingStatus: BookingStatus.OVERDUE });
+            }
         });
+    });
 
-        // Check all bookings with pending status
-        Meteor.call('get_bookings_by_status', BookingStatus.PENDING, (confirmedBookings) => {
+    // Check all bookings with pending status
+    Meteor.call('get_bookings_by_status', BookingStatus.PENDING, (error, pendingBookings) => {
+        if (error) {
+            console.error("Error fetching pending bookings:", error);
+            return;
+        }
+        console.log(pendingBookings)
 
-            confirmedBookings.forEach((booking) => {
-                const eventDate = new Date(booking.eventDate);
+        pendingBookings.forEach((booking) => {
+            const eventDate = new Date(booking.bookingStartDateTime);
 
-                // Check if the event date is today
-                const isToday = (eventDate.getFullYear() === now.getFullYear() &&
-                                eventDate.getMonth() === now.getMonth() &&
-                                eventDate.getDate() === now.getDate());
+            // Check if the event date is today
+            const isPassed = (eventDate < now);
 
-                if (isToday) {
-                    BookingCollection.update(booking._id, {
-                        $set: { bookingStatus: BookingStatus.REJECTED },
-                    });
-                }
-            });
-        });
-
-    }, 1000 * 60 * 60 * 24); // Runs every 24 hours
+            if (isPassed) {
+                Meteor.call('update_booking_details', booking._id, { bookingStatus: BookingStatus.REJECTED });
+            }
+        })
+    })
 };
 
 export const checkBookingsEveryMidnight = () => {
     const now = new Date();
     const midnight = new Date(now);
-    midnight.setHours(24, 0, 0, 0); // Set to midnight
+    midnight.setHours(0, 0, 0, 0); // Set to midnight
     const timeUntilMidnight = midnight - now;
 
     // Run the task immediately and then at the specified time daily
     Meteor.setTimeout(() => {
         checkBookings();
-        Meteor.setInterval(runDailyTask, 1000 * 60 * 60 * 24);
+        Meteor.setInterval(checkBookings, 1000 * 60 * 60 * 24);
     }, timeUntilMidnight);
 };
