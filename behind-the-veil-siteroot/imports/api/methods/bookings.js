@@ -63,5 +63,14 @@ Meteor.methods({
         const booking = BookingCollection.findOne({ serviceId: serviceId });
     
         return !!booking;
+    },
+
+    /**
+     * Retrieves all bookings with a specific status.
+     * @param {string} bookingStatus - The status of the bookings to retrieve.
+     * @returns {Array} - An array of booking objects that match the given status.
+     */
+    "get_bookings_by_status": function (bookingStatus) {
+        return BookingCollection.find({ status: bookingStatus }).fetch();
     }
 })
