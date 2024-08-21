@@ -61,6 +61,8 @@ const RequestBooking = () => {
     profileImageData,
   } = useSpecificService(serviceId);
 
+  const duration = serviceData?.serviceDuration;
+
   const navigateTo = useNavigate();
 
   /**
@@ -82,6 +84,7 @@ const RequestBooking = () => {
 
     const hours = eachHourOfInterval({
       // TODO: for now, assume that artists can work 6am to 7pm every day
+      // will add real availabilities once availability form is connected to db
       start: set(date, { hours: 6, minutes: 0, seconds: 0 }),
       end: set(date, { hours: 19 - duration, minutes: 0, seconds: 0 }),
     });
@@ -114,35 +117,21 @@ const RequestBooking = () => {
     return availableTimes;
   };
 
-  // TODO: subscribe to all bookings with an artist username of the artist who is offering the service
-  const isLoadingBookings = useSubscribe("artist_bookings", artistData?.username);
+  // subscribe to all bookings from this artist
+  const isLoadingBookingsFunc = useSubscribe("artist_bookings", artistData?.username);
+  const isLoadingBookings = isLoadingBookingsFunc()
 
   // track these artist bookings
-  const bookings = useTracker(() => {
+  const artistBookings = useTracker(() => {
     return BookingCollection.find().fetch();
   });
-
-
-  // TODO: this function might not be needed once we use real bookings b/c I think start time is stored as date object
-  // converting json datetimes to js datetimes
-  const parseBookings = (bookings) => {
-    return bookings.map((booking) => {
-      return {
-        ...booking,
-        bookingStartDateTime: new Date(booking.bookingStartDateTime),
-      };
-    });
-  };
-
-  // TODO: get actual duration from this service
-  const duration = 2;
 
   // initialise date input to the first day with availabilities
   const initDateInput = () => {
     // starting with today, iterate until we find a day with available times
     let day = startOfDay(new Date());
     while (
-      getAvailableTimes({ date: day, duration: duration, bookings: bookings })
+      getAvailableTimes({ date: day, duration: duration, bookings: artistBookings })
         .length === 0
     ) {
       day = startOfDay(addDays(day, 1));
@@ -255,16 +244,18 @@ const RequestBooking = () => {
   const availableTimes = getAvailableTimes({
     date: inputs.date,
     duration: duration,
-    bookings: bookings,
+    bookings: artistBookings,
   });
 
-  if (isLoadingServices) {
+  const isLoading = isLoadingServices || isLoadingBookings
+  
+  if (isLoading) {
     // is loader, display loader
     return (
       <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
         <Loader
           loadingText={"loading . . ."}
-          isLoading={isLoadingServices}
+          isLoading={isLoading}
           size={100}
           speed={1.5}
         />
@@ -290,7 +281,6 @@ const RequestBooking = () => {
     } else {
       return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-          {/* TODO: implement back button functionality when implementing the actual work flow to get to this page */}
           <PreviousButton />
 
           {/* Main container for content */}
@@ -386,7 +376,7 @@ const RequestBooking = () => {
                           const availableTimes = getAvailableTimes({
                             date: new Date(date),
                             duration: duration,
-                            bookings: bookings,
+                            bookings: artistBookings,
                           });
                           if (view === "month" && availableTimes.length > 0) {
                             return "available";
