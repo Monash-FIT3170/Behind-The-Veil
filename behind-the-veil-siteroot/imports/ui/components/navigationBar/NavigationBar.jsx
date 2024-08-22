@@ -154,7 +154,7 @@ export const NavigationBar = () => {
                              className={baseUrl === UrlBasePath.MESSAGES ?
                                  "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3 relative" :
                                  "main-text navbar-link-inactive p-3 relative"}>Messages {unreadMessages && (
-                                    <span className="absolute -top-0 -right-1 block h-2.5 w-2.5 rounded-full bg-red-600"></span>
+                                    <span className="absolute -top-[0.01px] -right-[0.5px] block h-2.5 w-2.5 rounded-full bg-red-600"></span>
                                   )}
                                  </NavLink>
                 </li>
