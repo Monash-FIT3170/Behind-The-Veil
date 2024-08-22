@@ -15,7 +15,6 @@ import AvailabilityCalendar, {
 } from "../../../components/availabilityCalendar/AvailabilityCalendar.jsx";
 import Input from "../../input/Input";
 import PreviousButton from "../../button/PreviousButton";
-import mockBookings from "./mockBookings.json"; // TODO: delete this, or actually import it into db
 import {
     addDays,
     addHours,
@@ -209,6 +208,7 @@ const RequestBooking = () => {
         inputs.artistName = artistData.profile.alias;
         inputs.price = serviceData.servicePrice;
         inputs.serviceName = serviceData.serviceName;
+        inputs.duration = duration
         // pass the data to the next page via the url
         const query = new URLSearchParams(inputs).toString();
 
