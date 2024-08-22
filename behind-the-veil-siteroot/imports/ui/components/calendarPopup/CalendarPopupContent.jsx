@@ -4,12 +4,12 @@
  * Contributors: Laura, Josh
  */
 
-import React from "react";
+import React, {useState} from "react";
 import BookingStatus from "../../enums/BookingStatus";
 import { XCircleIcon, ClockIcon, MapPinIcon, DocumentMagnifyingGlassIcon, CheckCircleIcon } from "@heroicons/react/24/outline"
 import Button from "../button/Button";
 import { useNavigate } from "react-router-dom";
-import {updateBookingStatus} from "../DatabaseHelper";
+import BookingStatusConfirmModal from "../booking/BookingStatusConfirmModal";
 
 /**
  * Button to go to specific booking detail page
@@ -48,6 +48,15 @@ const CalendarPopupContent = ({
     bookingLocation,
     onClose
 }) => {
+
+    // confirmation modal attributes
+    const [open, setOpen] = useState(false);
+    const [toBeStatus, setToBeStatus] = useState(null);
+    const onOpenModal = (status) => {
+        setToBeStatus(status)
+        setOpen(true)
+    };
+    const onCloseModal = () => setOpen(false);
 
     const navigateTo = useNavigate();
     return (
@@ -90,15 +99,15 @@ const CalendarPopupContent = ({
                 {bookingStatus === BookingStatus.PENDING && (
                     <>
                         <Button className="flex flex-row gap-x-2 justify-center items-center
-                            bg-light-gray hover:bg-secondary-purple-hover transition duration-500"
-                                onClick={() => {updateBookingStatus(bookingId, BookingStatus.CONFIRMED)}}>
+                            bg-light-gray hover:bg-light-grey-hover transition duration-500"
+                                onClick={() => {onOpenModal(BookingStatus.CONFIRMED)}}>
                             <CheckCircleIcon className="h-6 w-6 min-h-6 min-w-6" />
                             Confirm
                         </Button>
 
                         <Button className="flex flex-row gap-x-2 justify-center items-center
-                            bg-white hover:bg-light-gray-hover border-light-gray border-2 transition duration-500"
-                                onClick={() => {updateBookingStatus(bookingId, BookingStatus.REJECTED)}}>
+                            bg-white hover:bg-white-hover border-light-gray border-2 transition duration-500"
+                                onClick={() => {onOpenModal(BookingStatus.REJECTED)}}>
                             <XCircleIcon className="h-6 w-6 min-h-6 min-w-6" />
                             Reject
                         </Button>
@@ -107,7 +116,7 @@ const CalendarPopupContent = ({
 
                 {bookingStatus === BookingStatus.CONFIRMED && (
                     <Button className="flex flex-row gap-x-2 justify-center items-center
-                            bg-white hover:bg-secondary-purple-hover border-light-gray border-2 transition duration-500"
+                            bg-white hover:bg-white-hover border-light-gray border-2 transition duration-500"
                             onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
                         <XCircleIcon className="h-6 w-6 min-h-6 min-w-6" />
                         Cancel Booking
@@ -116,6 +125,13 @@ const CalendarPopupContent = ({
 
                 <ViewDetailsButton bookingId={bookingId} />
             </div>
+
+            <BookingStatusConfirmModal open={open}
+                                       closeHandler={onCloseModal}
+                                       bookingId={bookingId}
+                                       toBeStatus={toBeStatus}
+                                       sideEffects={[onClose]}
+            />
         </>
     )
 }

@@ -4,7 +4,7 @@
  * Contributors: Laura, Nikki
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import classNames from "classnames";
 import {useNavigate} from "react-router-dom";
 
@@ -21,7 +21,7 @@ import {
 } from "@heroicons/react/24/outline"
 import BookingStatus from "../../enums/BookingStatus";
 import BookingStatusDisplay from "../booking/BookingStatusDisplay";
-import {updateBookingStatus} from "../DatabaseHelper";
+import BookingStatusConfirmModal from "../booking/BookingStatusConfirmModal";
 
 
 /**
@@ -59,6 +59,15 @@ export const BookingCard = ({
     // date objects to compare dates
     const bookingDatetime = new Date(bookingStartDateTime);
     const now = new Date();
+
+    // confirmation modal attributes
+    const [open, setOpen] = useState(false);
+    const [toBeStatus, setToBeStatus] = useState(null);
+    const onOpenModal = (status) => {
+        setToBeStatus(status)
+        setOpen(true)
+    };
+    const onCloseModal = () => setOpen(false);
 
     const cardClasses = classNames("flex flex-col overflow-hidden justify-between " +
         "w-full min-w-60 lg:w-2/5 lg:min-w-78 min-h-[360px] pr-6 md:pr-0 lg:pr-6 xl:pr-0", className);
@@ -103,7 +112,7 @@ export const BookingCard = ({
                     // if today or passed today
                     additionalButtons.push(
                         <Button className={purpleButtonClass}
-                                onClick={() => {updateBookingStatus(bookingId, BookingStatus.COMPLETED)}}>
+                                onClick={() => {onOpenModal(BookingStatus.COMPLETED)}}>
                             <CurrencyDollarIcon className="icon-base"/>
                             Service Completed
                         </Button>
@@ -136,12 +145,12 @@ export const BookingCard = ({
                 additionalButtons.push(
                     <div className={"flex flex-row items-center justify-between gap-x-1 w-4/5 min-w-40"}>
                         <Button className={smallPurpleButtonClass}
-                        onClick={() => {updateBookingStatus(bookingId, BookingStatus.CONFIRMED)}}>
+                        onClick={() => {onOpenModal(BookingStatus.CONFIRMED)}}>
                     
                             <CheckCircleIcon className="icon-base"/>
                         </Button>
                         <Button className={smallPurpleButtonClass}
-                        onClick={() => {updateBookingStatus(bookingId, BookingStatus.REJECTED)}}>
+                        onClick={() => {onOpenModal(BookingStatus.REJECTED)}}>
                             <XCircleIcon className="icon-base"/>
                         </Button>
 
@@ -219,6 +228,12 @@ export const BookingCard = ({
                          alt={"Service's cover image"}/>
                 </div>
             </div>
+
+            <BookingStatusConfirmModal open={open}
+                                       closeHandler={onCloseModal}
+                                       bookingId={bookingId}
+                                       toBeStatus={toBeStatus}
+            />
         </Card>
     );
 };

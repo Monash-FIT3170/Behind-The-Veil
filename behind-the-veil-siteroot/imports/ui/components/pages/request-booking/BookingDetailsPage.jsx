@@ -4,7 +4,7 @@
  * Contributors: Glenn, Nikki
  */
 
-import React from "react";
+import React, {useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {
     ArrowPathIcon,
@@ -28,8 +28,9 @@ import PageLayout from "../../../enums/PageLayout";
 import Loader from "../../loader/Loader";
 import classNames from "classnames";
 import BookingStatusDisplay from "../../booking/BookingStatusDisplay";
-import {updateBookingStatus, useSpecificBooking} from "../../DatabaseHelper";
+import {useSpecificBooking} from "../../DatabaseHelper";
 import UrlBasePath from "../../../enums/UrlBasePath";
+import BookingStatusConfirmModal from "../../booking/BookingStatusConfirmModal";
 
 /**
  * Component for displaying booking summary and allowing continuation to the next step.
@@ -42,9 +43,14 @@ const BookingDetailsPage = () => {
     // grab the service ID from the URL
     const {bookingId} = useParams();
 
-    const confirmBooking = () => {
-        Meteor.call('update_booking_details', bookingId, { bookingStatus: "confirmed"});
-    }
+    // confirmation modal attributes
+    const [open, setOpen] = useState(false);
+    const [toBeStatus, setToBeStatus] = useState(null);
+    const onOpenModal = (status) => {
+        setToBeStatus(status)
+        setOpen(true)
+    };
+    const onCloseModal = () => setOpen(false);
 
     // get bookings information from database
     const {isLoading, bookingData, serviceData, userData} = useSpecificBooking(bookingId, userInfo.type);
@@ -87,7 +93,7 @@ const BookingDetailsPage = () => {
                         <FormOutput
                             textColor="text-dark-grey"
                             label="Artist"
-                            input={userData.profile.alias + " (@" + bookingData.artistUsername + ")"}
+                            input={userData ? (userData.profile.alias + " (@" + bookingData.artistUsername + ")") : "deleted user"}
                         />
 
                         <Button className="flex flex-row justify-center items-center gap-x-1.5 max-h-9
@@ -104,7 +110,7 @@ const BookingDetailsPage = () => {
                         <FormOutput
                             textColor="text-dark-grey"
                             label="Bride"
-                            input={userData.profile.alias + " (@" + bookingData.brideUsername + ")"}
+                            input={userData ? (userData.profile.alias + " (@" + bookingData.brideUsername + ")") : "deleted user"}
                         />
 
                         <Button className="flex flex-row justify-center items-center gap-x-1.5 max-h-9
@@ -119,6 +125,10 @@ const BookingDetailsPage = () => {
             // convert date string into a date
             const bookingDatetime = new Date(bookingData.bookingStartDateTime);
             const now = new Date();
+
+            // calculate number of hours for service
+            const endDate = new Date(bookingData.bookingEndDateTime)
+            const durationHours = (endDate - bookingDatetime) / (1000 * 60 * 60);
 
             // set the action buttons
             let actionButtons = [];
@@ -156,7 +166,9 @@ const BookingDetailsPage = () => {
                             // if booking datetime today or passed now
                             actionButtons.push(
                                 <Button className={purpleButtonClass}
-                                        onClick={() => {updateBookingStatus(bookingId, BookingStatus.COMPLETED)}}>
+                                        onClick={() => {
+                                            onOpenModal(BookingStatus.COMPLETED)
+                                        }}>
                                     <CurrencyDollarIcon className="icon-base"/>
                                     Service Completed
                                 </Button>
@@ -178,7 +190,7 @@ const BookingDetailsPage = () => {
                             );
                             actionButtons.push(
                                 <Button className={buttonClass}
-                                    onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
+                                        onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
                                     <NoSymbolIcon className="icon-base"/>
                                     Cancel
                                 </Button>
@@ -195,7 +207,7 @@ const BookingDetailsPage = () => {
                         );
                         actionButtons.push(
                             <Button className={buttonClass}
-                                onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
+                                    onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
                                 <NoSymbolIcon className="icon-base"/>
                                 Cancel
                             </Button>
@@ -212,7 +224,7 @@ const BookingDetailsPage = () => {
                             // if booking date has not passed yet
                             actionButtons.push(
                                 <Button className={buttonClass}
-                                    onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
+                                        onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
                                     <NoSymbolIcon className="icon-base"/>
                                     Cancel
                                 </Button>
@@ -223,7 +235,7 @@ const BookingDetailsPage = () => {
                         // if a booking is overdue, add a "cancel" button if not yet the date
                         actionButtons.push(
                             <Button className={buttonClass}
-                                onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
+                                    onClick={() => navigateTo('/cancel-booking/' + bookingId)}>
                                 <NoSymbolIcon className="icon-base"/>
                                 Cancel
                             </Button>
@@ -233,20 +245,45 @@ const BookingDetailsPage = () => {
                         // if a booking is pending, add "accept" and "reject" buttons
                         actionButtons.push(
                             <Button className={purpleButtonClass}
-                                    onClick={() => {updateBookingStatus(bookingId, BookingStatus.CONFIRMED)}}>
+                                    onClick={() => {
+                                        onOpenModal(BookingStatus.CONFIRMED)
+                                    }}>
                                 <CheckCircleIcon className="icon-base"/>
                                 Accept
                             </Button>
                         );
                         actionButtons.push(
                             <Button className={buttonClass}
-                                    onClick={() => {updateBookingStatus(bookingId, BookingStatus.REJECTED)}}>
+                                    onClick={() => {
+                                        onOpenModal(BookingStatus.REJECTED)
+                                    }}>
                                 <XCircleIcon className="icon-base"/>
                                 Reject
                             </Button>
                         );
                         break;
                 }
+            }
+
+            // set up cancelled information section IF cancelled
+            let cancelDetailsDiv = null;
+            if (bookingData.cancelReason !== '' && bookingData.cancelUser !== '') {
+                cancelDetailsDiv = (
+                    <>
+                        <FormOutput
+                            textColor="text-dark-grey"
+                            label="Cancelled User: "
+                            input={bookingData.cancelUser}
+                        />
+
+                        <FormOutput
+                            textColor="text-dark-grey"
+                            label="Cancelled Reason: "
+                            input={bookingData.cancelReason}
+                        />
+                    </>
+
+                )
             }
 
             return (
@@ -272,9 +309,8 @@ const BookingDetailsPage = () => {
                                 textColor="text-dark-grey"
                                 label="Status"
                                 input={
-                                <BookingStatusDisplay className={"mb-0"}
-                                                      bookingStatus={bookingData.bookingStatus}/>
-                            }/>
+                                    <BookingStatusDisplay className={"mb-0"} bookingStatus={bookingData.bookingStatus}/>
+                                }/>
 
                             <FormOutput
                                 textColor="text-dark-grey"
@@ -306,7 +342,7 @@ const BookingDetailsPage = () => {
                                 haveHelpText={true}
                                 tipText={"Duration does not include travel. It is the required time to performing the service for the bride."}
                                 label={"Duration"}
-                                input={bookingData.bookingDuration + " hours"}></FormOutput>
+                                input={durationHours + " hours"}></FormOutput>
 
                             <FormOutput
                                 textColor="text-dark-grey"
@@ -320,6 +356,10 @@ const BookingDetailsPage = () => {
                                 input={serviceData.serviceDesc}
                             />
 
+                            {
+                                cancelDetailsDiv
+                            }
+
                             {/*map*/}
                             <div className={"xl:hidden flex flex-col gap-6"}>
                                 <MarkerMap location={bookingData.bookingLocation}/>
@@ -332,7 +372,8 @@ const BookingDetailsPage = () => {
                         </div>
 
                         {/* div on the right only on very large (xl) screens*/}
-                        <div className="hidden xl:flex flex-col gap-y-6 h-full w-1/3 items-center justify-end mt-10 bottom-0">
+                        <div
+                            className="hidden xl:flex flex-col gap-y-6 h-full w-1/3 items-center justify-end mt-10 bottom-0">
 
                             {/*map*/}
                             <MarkerMap location={bookingData.bookingLocation}/>
@@ -343,6 +384,12 @@ const BookingDetailsPage = () => {
                             </div>
                         </div>
                     </div>
+
+                    <BookingStatusConfirmModal open={open}
+                                               closeHandler={onCloseModal}
+                                               bookingId={bookingId}
+                                               toBeStatus={toBeStatus}
+                    />
                 </WhiteBackground>
             );
         }
