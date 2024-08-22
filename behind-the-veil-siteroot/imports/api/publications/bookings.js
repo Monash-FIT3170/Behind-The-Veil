@@ -31,9 +31,6 @@ Meteor.publish('all_user_bookings', function (username) {
  */
 Meteor.publish('specific_booking', function (bookingId) {
     return BookingCollection.find({_id: bookingId});
-    // create a mongo ID object to query for ID
-    const idObject = new Mongo.ObjectID(bookingId);
-    return BookingCollection.find({_id: idObject});
 });
 
 Meteor.publish("all_user_complete_bookings", function(username){
@@ -54,9 +51,14 @@ Meteor.publish("all_user_pending_bookings", function(username){
     });
 });
 
-// TODO: create publications for just artist/bride bookings for a specific username instead of all
 Meteor.publish('artist_bookings', function (artistUsername) {
     return BookingCollection.find({
         artistUsername: artistUsername
+    })
+})
+
+Meteor.publish('bride_bookings', function (brideUsername) {
+    return BookingCollection.find({
+        brideUsername: brideUsername
     })
 })
