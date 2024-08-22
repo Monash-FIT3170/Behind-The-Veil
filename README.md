@@ -1,5 +1,4 @@
-# Behind-The-Veil
-# Project 10 - FIT3170 - 2024
+# Behind-The-Veil - Project 10 - FIT3170 - 2024
 
 ## Table of Contents
 - [Dependencies](#dependencies)
@@ -209,7 +208,7 @@ meteor npm install --save @babel/runtime react react-dom
  This file is for all the git issues and their resolution that I've come across before, more than welcome to add to it if you find a solution online to an issue you've had.
 
 ### Rebasing 
-Referenc: https://git-scm.com/book/en/v2/Git-Branching-Rebasing
+Reference: https://git-scm.com/book/en/v2/Git-Branching-Rebasing
 
 ✅ Step by Step video: https://youtu.be/RGtwxYqkkas?si=nvmMetHWNMegc0v_&t=129 (This guy does it all in his main terminal but i recommend using the IDE terminal so you can see your conflict files)
 
