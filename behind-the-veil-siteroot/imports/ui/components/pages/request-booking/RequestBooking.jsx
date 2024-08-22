@@ -73,9 +73,6 @@ const RequestBooking = () => {
 
     const navigateTo = useNavigate();
 
-    // TODO: import better bookings data into db
-    // test the availability logic, there may be an off by one error
-
     /**
      * Calculate available times that the user can select, based on date, duration, and existing bookings
      * @param {Date} date day at which we want the available time slots
