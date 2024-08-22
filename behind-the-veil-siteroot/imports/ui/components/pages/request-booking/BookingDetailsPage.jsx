@@ -162,8 +162,8 @@ const BookingDetailsPage = () => {
                     case BookingStatus.OVERDUE:
                         // if booking is confirmed add a "service completed" button if over the date
                         // if a booking is confirmed, add a "request change" and "cancel" button if not yet the date
-                        if (bookingDatetime >= now) { // checks that service date is after now
-                            // if booking datetime today or passed now
+                        if (bookingDatetime < now) { // is current time AFTER specified booking time
+                            // if booking time already passed (in the past)
                             actionButtons.push(
                                 <Button className={purpleButtonClass}
                                         onClick={() => {
@@ -181,7 +181,7 @@ const BookingDetailsPage = () => {
                                 </Button>
                             );
                         } else {
-                            // if booking datetime has not passed yet
+                            // if booking datetime has not passed yet (in the future)
                             actionButtons.push(
                                 <Button className={purpleButtonClass}>
                                     <ArrowPathIcon className="icon-base"/>

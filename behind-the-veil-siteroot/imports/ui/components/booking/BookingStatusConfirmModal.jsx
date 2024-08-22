@@ -25,7 +25,7 @@ export const BookingStatusConfirmModal = ({open, closeHandler, bookingId, toBeSt
     switch (toBeStatus) {
         case BookingStatus.COMPLETED:
             statusText = "Complete"
-            warningText = "You can no longer cancel a booking after it is confirmed to be completed."
+            warningText = "You won't be able to cancel a booking after it is completed."
             break
         case BookingStatus.CONFIRMED:
             statusText = "Accept"

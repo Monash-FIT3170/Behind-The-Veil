@@ -108,8 +108,8 @@ export const BookingCard = ({
             case BookingStatus.OVERDUE:
                 // if booking is confirmed add a "service completed" button if over the date
                 // if a booking is confirmed, add a "request change" button if not yet the date
-                if (bookingDatetime >= now) { // checks that service date is after now
-                    // if today or passed today
+                if (bookingDatetime < now) { // is current time AFTER specified booking time
+                    // if booking time already passed (in the past)
                     additionalButtons.push(
                         <Button className={purpleButtonClass}
                                 onClick={() => {onOpenModal(BookingStatus.COMPLETED)}}>
@@ -118,7 +118,7 @@ export const BookingCard = ({
                         </Button>
                     );
                 } else {
-                    // if booking date has not passed yet
+                    // if booking datetime has not passed yet (in the future)
                     additionalButtons.push(
                         <Button className={purpleButtonClass}>
                             <ArrowPathIcon className="icon-base"/>
