@@ -1,45 +1,44 @@
 /**
  * File Description: Bookings CALENDAR view for Artist's profile
- * File version: 1.1
- * Contributors: Anusha Yadav, Josh Loong
+ * File version: 1.2
+ * Contributors: Anusha Yadav, Josh Loong, Nikki
  */
 
-import React, { useState } from "react";
+import React, {useState} from "react";
 
-import { Calendar, momentLocalizer } from "react-big-calendar";
+import {Calendar, momentLocalizer} from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./Calendar.css";
-import "./CalendarToolbar.css";
-import { ChevronRightIcon } from "@heroicons/react/24/outline";
-import { ChevronLeftIcon } from "@heroicons/react/24/outline";
+import {ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/24/outline";
 import moment from "moment";
 import CalendarPopup from "../calendarPopup/CalendarPopup.jsx";
 import BookingStatus from "../../enums/BookingStatus";
-import { addHours, format } from 'date-fns'
+import {format} from 'date-fns'
+import Button from "../button/Button";
 
 const CustomToolbar = ({ label, onNavigate }) => {
   return (
-    <div className="medium-text">
-      <div className="custom-toolbar">
-        <span className="toolbar-label">{label}</span>
-        <button
-          className="toolbar-button prev bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"
+    <div>
+      <div className="flex flex-row items-center -mt-[115px] w-fit gap-x-2">
+        <span className="large-text min-w-40">{label}</span>
+        <Button
+          className="rounded-full bg-secondary-purple hover:bg-secondary-purple-hover"
           onClick={() => onNavigate("PREV")}
         >
           <ChevronLeftIcon className="icon-base" />
-        </button>
-        <button
-          className="toolbar-button next bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"
+        </Button>
+        <Button
+          className="rounded-full bg-secondary-purple hover:bg-secondary-purple-hover"
           onClick={() => onNavigate("NEXT")}
         >
           <ChevronRightIcon className="icon-base" />
-        </button>
-        <button
-          className="toolbar-button today"
+        </Button>
+        <Button
+          className="rounded-[8px]"
           onClick={() => onNavigate("TODAY")}
         >
           Today
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -91,26 +90,20 @@ const HeaderCellContent = ({ label }) => {
 const formatBookings = (bookingsData) => {
   if (!Array.isArray(bookingsData) || bookingsData.length === 0) return []
 
-  const formattedBookings = bookingsData.map((booking) => {
+  return bookingsData.map((booking) => {
 
-    // calculate booking end time
-    const bookingEndDateTime = addHours(booking.bookingStartDateTime, booking.bookingDuration)
-    
     // generate formatted booking time string
     const formattedDate = format(booking.bookingStartDateTime, "E dd/MM/yyyy")
     const formattedStartTime = format(booking.bookingStartDateTime, "h:mma")
-    const formattedEndTime = format(bookingEndDateTime, "h:mma")
+    const formattedEndTime = format(booking.bookingEndDateTime, "h:mma")
     const bookingTime = `${formattedDate} ${formattedStartTime} - ${formattedEndTime}`
 
     // add booking end time and formatted booking time string
     return {
       ...booking, // include original booking data
-      bookingEndDateTime,
       bookingTime
     }
   })
-
-  return formattedBookings
 }
 
 const BookingCalendarView = ({ bookingsData }) => {
