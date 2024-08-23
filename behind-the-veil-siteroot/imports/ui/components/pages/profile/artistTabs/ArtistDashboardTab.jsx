@@ -6,10 +6,8 @@
 
 import React from "react";
 import DashboardCard from "../../../card/DashboardCard";
-import {
-  useArtistDashboardCustomerData,
-  useArtistDashboardRevenueData,
-} from "../../../DatabaseHelper";
+import { useArtistDashboardData} from "../../../DatabaseHelper";
+import Loader from "../../../loader/Loader";
 
 /**
  * Dashboard tab of an artist's profile
@@ -23,20 +21,27 @@ export const ArtistDashboardTab = ({ username }) => {
   const currencyFormatter = new Intl.NumberFormat("en-AU", {
     style: "currency",
     currency: "AUD",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   });
-  const userRevenueData = useArtistDashboardRevenueData(username);
-
-  const completeBookingRevenue = currencyFormatter.format(userRevenueData[0]);
-  const pendingBookingRevenue = currencyFormatter.format(userRevenueData[1]);
 
   // Fetch the dashboard data
-  const { isLoading, totalCustomersLifetime, totalCustomersThisMonth } =
-    useArtistDashboardCustomerData(username);
+  const {
+      isLoading,
+      totalCustomersLifetime,
+      totalCustomersThisMonth,
+      bookingCompleteRevenue,
+      bookingPendingRevenue } = useArtistDashboardData(username);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+        <Loader
+            loadingText={"Dashboard is loading . . ."}
+            isLoading={isLoading}
+            size={100}
+            speed={1.5}
+        />
+    )
   }
 
   return (
@@ -57,13 +62,13 @@ export const ArtistDashboardTab = ({ username }) => {
         key="earnings-received"
         dashboardCardTitle="Total Earnings"
         dashboardCardDesc="Count your dollars!"
-        dashboardCardValue={completeBookingRevenue}
+        dashboardCardValue={currencyFormatter.format(bookingCompleteRevenue)}
       />
       <DashboardCard
         key="earnings-pending"
         dashboardCardTitle="Pending Earnings"
         dashboardCardDesc="Cash currently in transit!"
-        dashboardCardValue={pendingBookingRevenue}
+        dashboardCardValue={currencyFormatter.format(bookingPendingRevenue)}
       />
     </div>
   );

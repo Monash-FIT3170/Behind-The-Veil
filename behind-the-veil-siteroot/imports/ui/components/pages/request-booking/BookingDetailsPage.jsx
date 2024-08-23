@@ -60,7 +60,7 @@ const BookingDetailsPage = () => {
         return (
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
                 <Loader
-                    loadingText={"loading . . ."}
+                    loadingText={"Booking details are loading . . ."}
                     isLoading={isLoading}
                     size={100}
                     speed={1.5}

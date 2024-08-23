@@ -53,7 +53,7 @@ const SpecificServicePage = () => {
         return (
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
                 <Loader
-                    loadingText={"loading . . ."}
+                    loadingText={"Service is loading . . ."}
                     isLoading={isLoading}
                     size={100}
                     speed={1.5}
