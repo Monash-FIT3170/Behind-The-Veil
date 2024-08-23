@@ -33,7 +33,7 @@ export const BrideProfileTabs = ({userInfo}) => {
     if (isLoading) {
         return (
             <Loader
-                loadingText={"loading . . ."}
+                loadingText={"Bookings are loading . . ."}
                 isLoading={isLoading}
                 size={100}
                 speed={1.5}

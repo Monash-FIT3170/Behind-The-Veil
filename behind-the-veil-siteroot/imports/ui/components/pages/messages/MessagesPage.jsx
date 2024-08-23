@@ -133,7 +133,7 @@ export const MessagesPage = () => {
               console.error('Error fetching alias:', error);
               return;
             }
-            otherUserType = result.profile.type;
+            let otherUserType = result.profile.type;
 
             // TODO: check that the current user's type is not the same as the other user's type. if it is, give them
             // some kind of pop up warning [REFERENCE NETH'S CODE FOR THE POP UP FOR PAYMENT] to tell them that they can't message the other

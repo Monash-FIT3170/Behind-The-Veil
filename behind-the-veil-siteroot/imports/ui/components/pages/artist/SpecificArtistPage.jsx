@@ -38,7 +38,7 @@ const SpecificArtistPage = () => {
         return (
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
                 <Loader
-                    loadingText={"loading . . ."}
+                    loadingText={"Artist is loading . . ."}
                     isLoading={isLoading}
                     size={100}
                     speed={1.5}
