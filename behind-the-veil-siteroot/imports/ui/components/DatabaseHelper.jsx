@@ -58,8 +58,6 @@ export function useServices(
 
   // manual aggregation of each service with their image
   for (let i = 0; i < servicesData.length; i++) {
-    let foundImageMatch = false;
-
     // aggregate with artist first
     for (let j = 0; j < artistsData.length; j++) {
       // find matching artist and add their name
@@ -70,6 +68,7 @@ export function useServices(
     }
 
     // then aggregate with the FIRST image that belong to it
+    let foundImageMatch = false;
     for (let j = 0; j < imagesData.length; j++) {
       // find matching image for the service
       if (
@@ -135,6 +134,7 @@ export function useBookings(booking_publication, params, filter) {
       }
     }
     // then aggregate with the FIRST service image (cover)
+    let foundImageMatch = false;
     for (let j = 0; j < imagesData.length; j++) {
       // find matching image for the service
       if (
@@ -142,8 +142,14 @@ export function useBookings(booking_publication, params, filter) {
         bookingsData[i].serviceId === imagesData[j].target_id
       ) {
         bookingsData[i].serviceImageData = imagesData[j].imageData;
+        foundImageMatch = true;
         break;
       }
+    }
+
+    // if not found any images, replace with default
+    if (!foundImageMatch) {
+      bookingsData[i].serviceImageData = "/imageNotFound.png";
     }
   }
   return {
