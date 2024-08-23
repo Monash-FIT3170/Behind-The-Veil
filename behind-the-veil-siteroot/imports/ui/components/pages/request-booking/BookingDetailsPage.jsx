@@ -98,7 +98,7 @@ const BookingDetailsPage = () => {
 
                         <Button className="flex flex-row justify-center items-center gap-x-1.5 max-h-9
                         mt-2 sm:mt-0 sm:ml-10 sm:-mb-3.5 md:min-w-36 md:w-36 sm:-translate-y-1.5"
-                                onClick={() => navigateTo("/messages/" + bookingData.artistUsername)}>
+                                onClick={() => navigateTo("/messages#" + bookingData.artistUsername)}>
                             <PaperAirplaneIcon className="size-5 min-h-5 min-w-5 stroke-1.5"/>
                             <span className={"flex sm:hidden md:flex small-text"}>Message</span>
                         </Button>
@@ -115,7 +115,7 @@ const BookingDetailsPage = () => {
 
                         <Button className="flex flex-row justify-center items-center gap-x-1.5 max-h-9
                         mt-2 sm:mt-0 sm:ml-10 sm:-mb-3.5 md:min-w-36 md:w-36 sm:-translate-y-1.5"
-                                onClick={() => navigateTo("/messages/" + bookingData.brideUsername)}>
+                                onClick={() => navigateTo("/messages#" + bookingData.brideUsername)}>
                             <PaperAirplaneIcon className="size-5 min-h-5 min-w-5 stroke-1.5"/>
                             <span className={"flex sm:hidden md:flex small-text"}>Message</span>
                         </Button>
