@@ -3,13 +3,14 @@
  * File version: 1.4
  * Contributors: Nikki, Ryan, Phillip
  */
-import { useSubscribe, useTracker } from "meteor/react-meteor-data";
+import {useSubscribe, useTracker} from "meteor/react-meteor-data";
 
 import ServiceCollection from "../../api/collections/services";
 import ImageCollection from "../../api/collections/images";
 import UserCollection from "../../api/collections/users";
 import BookingCollection from "../../api/collections/bookings";
 import PostCollection from "../../api/collections/posts";
+import BookingStatus from "../enums/BookingStatus";
 
 /**
  * Used for to get a list of service data (includes their image and/or artist data automatically)
@@ -336,109 +337,92 @@ export function useSpecificUser(username) {
  * Fetches the dashboard statistics for the artist
  *
  * @param username {string} - The username of the artist
- * @returns {Object} - Object containing the dashboard statistics like total customers, total earnings, etc.
+ * @returns {Object} - Object containing if it is loading and the dashboard statistics like total customers, total earnings, etc.
  */
-export function useArtistDashboardCustomerData(username) {
+export function useArtistDashboardData(username) {
   // Subscribe to the necessary data
   const isLoadingBookings = useSubscribe("all_user_bookings", username);
 
   // Fetch the booking data for the artist
   let bookingData = useTracker(() => {
-    return BookingCollection.find({ artistUsername: username }).fetch();
+    return BookingCollection.find({artistUsername: username}).fetch();
   });
 
-  // Calculate the necessary statistics
-  const totalCustomersLifetime = bookingData.length;
-  const totalCustomersThisMonth = bookingData.filter((booking) => {
+  // Calculate the number of customers
+  const completedBookings = bookingData.filter((booking) => booking.bookingStatus === BookingStatus.COMPLETED);
+  const totalCustomersLifetime = completedBookings.length;
+  const totalCustomersThisMonth = completedBookings.filter((booking) => {
     const bookingDate = new Date(booking.bookingStartDateTime);
     const currentMonth = new Date().getMonth();
     return bookingDate.getMonth() === currentMonth;
   }).length;
 
-  return {
-    isLoading: isLoadingBookings(),
-    totalCustomersLifetime,
-    totalCustomersThisMonth,
-  };
-}
-
-//  * Collects all data relevent to load gallery images
-//  *
-//  * @param {*} username - username of the user to get data
-//  * @returns - an array with index 0 denoting image source and index 1 denoting corresponding post data (all information related to post)
-//  */
-export function useGalleryTotalCollection(username) {
-  const isLoadingImages = useSubscribe("post_images", []);
-  let imageDataArray = useTracker(() => {
-    return ImageCollection.find({ imageType: "post" }).fetch();
-  });
-
-  //collect user post data
-  const postData = useUserPosts(username);
-
-  //loop through and collect all the post ID information
-  const postDataIDArray = [];
-  for (let i = 0; i < postData.length; i++) {
-    postDataIDArray.push(postData[i]._id);
-  }
-  const imageSourceArray = [];
-
-  //collect relevant post images
-  for (let j = 0; j < postDataIDArray.length; j++) {
-    for (let i = 0; i < imageDataArray.length; i++) {
-      if (imageDataArray[i].target_id == postDataIDArray[j]) {
-        imageSourceArray.push(imageDataArray[i].imageData);
-      }
-    }
-  }
-
-  //return index 0 as image source and index 1 with corresponding post data.
-  return [imageSourceArray, postData];
-}
-
-/**
- * Collects all posts (inclusive of all relevant data) relating to the user
- *
- * @param {*} username - username of the user to get data
- * @returns - all the post data that belongs to user
- */
-export function useUserPosts(username) {
-  const isLoadingPost = useSubscribe("specific_artist_posts", username);
-  let postData = useTracker(() => {
-    return PostCollection.find({ artistUsername: username }).fetch();
-  });
-
-  return postData;
-}
-
-/**
- * Finds all user booking details and calculates total revenue earnt from completed bookings and pending bookings
- * @param username {string} - the username of the artist
- * @returns {object} - an array with index 0 containing total earnings and index 1 containing pending earnings
- */
-export function useArtistDashboardRevenueData(username) {
-  const isLoadingBookings = useSubscribe("all_user_bookings", username);
-
-  // Fetch the booking data for the artist
-  let bookingData = useTracker(() => {
-    return BookingCollection.find({ artistUsername: username }).fetch();
-  });
-
-  //initalise variables for revenue calculation
+  // initialise variables for revenue calculation
   let bookingCompleteRevenue = 0;
   let bookingPendingRevenue = 0;
 
   // loop through entire booking data array
   for (let i = 0; i < bookingData.length; i++) {
     //if booking is completed, total bookings value
-    if (bookingData[i].bookingStatus == "completed") {
+    if (bookingData[i].bookingStatus === "completed") {
       bookingCompleteRevenue += bookingData[i].bookingPrice;
     }
     //if booking is pending, total bookings value
-    if (bookingData[i].bookingStatus == "pending") {
+    if (bookingData[i].bookingStatus === "pending") {
       bookingPendingRevenue += bookingData[i].bookingPrice;
     }
   }
 
-  return [bookingCompleteRevenue, bookingPendingRevenue];
+  return {
+    isLoading: isLoadingBookings(),
+    totalCustomersLifetime,
+    totalCustomersThisMonth,
+    bookingCompleteRevenue,
+    bookingPendingRevenue
+  };
 }
+
+
+/**
+ * Collects all data relevant to load gallery images
+ *
+ * @param {string} username - username of the user to get data
+ * @returns {Object} - returns an object containing: boolean isLoading that is true when loading, false when finished loading.
+ * Also, the array of image sources and corresponding post data (all information related to post)
+ */
+export function useGalleryTotalCollection(username) {
+  // collect post image data
+  const isLoadingImages = useSubscribe("post_images", []);
+  let imageDataArray = useTracker(() => {
+    return ImageCollection.find({ imageType: "post" }).fetch();
+  });
+
+  // collect user post data
+  const isLoadingPost = useSubscribe("specific_artist_posts", username);
+  const postsData = useTracker(() => {
+    return PostCollection.find({artistUsername: username}).fetch();
+  });
+
+  // loop through and collect all the post ID information
+  const postDataIDArray = [];
+  for (let i = 0; i < postsData.length; i++) {
+    postDataIDArray.push(postsData[i]._id);
+  }
+  const imageSourceArray = [];
+
+  //collect relevant post images
+  for (let j = 0; j < postDataIDArray.length; j++) {
+    for (let i = 0; i < imageDataArray.length; i++) {
+      if (imageDataArray[i].target_id === postDataIDArray[j]) {
+        imageSourceArray.push(imageDataArray[i].imageData);
+      }
+    }
+  }
+
+  return {
+    isLoading: isLoadingImages() || isLoadingPost(),
+    imageSourceArray,
+    postsData
+  };
+}
+

@@ -5,38 +5,41 @@
  */
 
 import React from "react";
-import { PlusIcon, TrashIcon, PencilIcon } from "@heroicons/react/24/outline";
-import { ProfileGalleryDisplay } from "../../../profilePhoto/ProfileGalleryDisplay";
+import {PlusIcon, TrashIcon, PencilIcon} from "@heroicons/react/24/outline";
+import {ProfileGalleryDisplay} from "../../../profilePhoto/ProfileGalleryDisplay";
 
 import Button from "../../../button/Button";
-import { useState } from "react";
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import {useState} from "react";
+import Masonry, {ResponsiveMasonry} from "react-responsive-masonry";
 
 import {
   useGalleryTotalCollection,
   useSpecificUser,
 } from "../../../DatabaseHelper";
-import { useUserInfo } from "../../../util";
+import {useUserInfo} from "../../../util";
 import GalleryModal from "./GalleryModal";
 import DeletePostConfirmationModal from "./DeletePostConfirmationModal";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import UrlBasePath from "../../../../enums/UrlBasePath";
+import Loader from "../../../loader/Loader";
 
 /**
  * Gallery tab of an artist's profile
  *
  * @param username {string} - username of the current user's profile
+ * @param external {boolean} - true if viewing from not inside profile
  */
-export const ArtistGalleryTab = ({ username, external = false }) => {
+export const ArtistGalleryTab = ({username, external = false}) => {
   const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedPostDate, setSelectedPostDate] = useState(null);
   const [selectedPostDescription, setSelectedPostDescription] = useState(null);
   const [selectedPostId, setSelectedPostId] = useState(null);
-  const plusIcon = <PlusIcon className="icon-base" />;
-  const galleryImgData = useGalleryTotalCollection(username)[0];
-  const postData = useGalleryTotalCollection(username)[1];
+  const plusIcon = <PlusIcon className="icon-base"/>;
+
+  const {isLoading, imageSourceArray: galleryImgData, postsData} = useGalleryTotalCollection(username)
+
   const userProfileImageSrc = useSpecificUser(username)[2];
   const navigateTo = useNavigate();
 
@@ -50,11 +53,11 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
 
   //open the gallery modal and store all relevant information
   function openGalleryModal(image, index) {
-    setSelectedPostId(postData[index]._id);
+    setSelectedPostId(postsData[index]._id);
     setSelectedImage(image);
-    const formattedDate = formatDate(postData[index].postDate);
+    const formattedDate = formatDate(postsData[index].postDate);
     setSelectedPostDate(formattedDate);
-    setSelectedPostDescription(postData[index].postDescription);
+    setSelectedPostDescription(postsData[index].postDescription);
     setIsGalleryModalOpen(true);
   }
 
@@ -109,51 +112,66 @@ export const ArtistGalleryTab = ({ username, external = false }) => {
     navigateTo(`/${UrlBasePath.PROFILE}/add-edit-post`);
   }
 
-  return (
-    <div className="relative">
-      <GalleryModal
-        isOpen={isGalleryModalOpen}
-        closeModal={closeGalleryModal}
-        openDeleteModal={openDeleteModal}
-        selectedImage={selectedImage}
-        profileImgSrc={userProfileImageSrc}
-        selectedPostDate={selectedPostDate}
-        selectedPostDescription={selectedPostDescription}
-        userInfo={userInfo}
-        external={external}
+  if (isLoading) {
+    // is loading, display loader
+    return (
+      <Loader
+          loadingText={"Gallery is loading . . ."}
+          isLoading={isLoading}
+          size={100}
+          speed={1.5}
       />
-      <DeletePostConfirmationModal
-        isOpen={isDeleteModalOpen}
-        closeModal={closeDeleteModal}
-        deleteImage={deleteImage}
-      ></DeletePostConfirmationModal>
+    );
+  } else {
+    return (
+      <div className="relative">
+        <GalleryModal
+          isOpen={isGalleryModalOpen}
+          closeModal={closeGalleryModal}
+          openDeleteModal={openDeleteModal}
+          selectedImage={selectedImage}
+          profileImgSrc={userProfileImageSrc}
+          selectedPostDate={selectedPostDate}
+          selectedPostDescription={selectedPostDescription}
+          userInfo={userInfo}
+          external={external}
+        />
+        <DeletePostConfirmationModal
+          isOpen={isDeleteModalOpen}
+          closeModal={closeDeleteModal}
+          deleteImage={deleteImage}
+        ></DeletePostConfirmationModal>
 
-      <div className="sticky top-20 z-20 flex justify-end">
-        <Button
-          className="absolute top-5 flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover mt-2"
-          onClick={addPostNavigate}
-        >
-          {plusIcon} Add Photo
-        </Button>
+        {external ? null :
+          <div className="sticky top-20 z-20 flex justify-end">
+            <Button
+              className="absolute top-5 flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover mt-2"
+              onClick={addPostNavigate}
+            >
+              {plusIcon} Add Photo
+            </Button>
+          </div>
+        }
+
+        <ResponsiveMasonry>
+          <Masonry gutter="5px">
+            {galleryImgData.map((image, index) => (
+              <img
+                key={index}
+                src={image}
+                style={{
+                  width: "100%",
+                  display: "block",
+                }}
+                onClick={() => openGalleryModal(image, index)}
+                alt={"Gallery Image " + index}
+              />
+            ))}
+          </Masonry>
+        </ResponsiveMasonry>
       </div>
-      <ResponsiveMasonry>
-        <Masonry gutter="5px">
-          {galleryImgData.map((image, index) => (
-            <img
-              key={index}
-              src={image}
-              style={{
-                width: "100%",
-                display: "block",
-              }}
-              onClick={() => openGalleryModal(image, index)}
-              alt={"Gallery Image " + index}
-            />
-          ))}
-        </Masonry>
-      </ResponsiveMasonry>
-    </div>
-  );
+    );
+  }
 };
 
 export default ArtistGalleryTab;
