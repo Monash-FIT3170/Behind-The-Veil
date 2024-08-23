@@ -267,7 +267,7 @@ const BookingDetailsPage = () => {
 
             // set up cancelled information section IF cancelled
             let cancelDetailsDiv = null;
-            if (bookingData.cancelReason !== '' && bookingData.cancelUser !== '') {
+            if (bookingData.cancelReason && bookingData.cancelUser) {
                 cancelDetailsDiv = (
                     <>
                         <FormOutput
