@@ -4,15 +4,19 @@
  * Contributors: Nikki
  */
 
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {NavLink, useLocation} from "react-router-dom";
 import {Tracker} from 'meteor/tracker';
 import {Meteor} from "meteor/meteor";
+import {useSubscribe, useTracker} from "meteor/react-meteor-data"
 import {Bars3Icon, UserCircleIcon, XMarkIcon} from "@heroicons/react/24/outline"
 
 import Button from "/imports/ui/components/button/Button.jsx";
 import UrlBasePath from "/imports/ui/enums/UrlBasePath";
 import "./navigationBar.css"
+import {useUserInfo} from "../../components/util"
+
+import ChatCollection from "/imports/api/collections/chats";
 
 
 /**
@@ -57,6 +61,39 @@ export const NavigationBar = () => {
             setMenuShown(false);
         }
     };
+
+    // Determine if the user has unread messages
+    const [unreadMessages, setUnreadMessages] = useState(false);
+
+    // get current user information
+    const userInfo = useUserInfo();
+
+    // set up subscription (publication is in the "publication" folder)
+    const isLoadingChats = useSubscribe('all_user_chats', userInfo.username);
+
+    // get data from db
+    let chatsData = useTracker(() => {
+        return ChatCollection.find({
+            $or: [
+                { brideUsername: userInfo.username },
+                { artistUsername: userInfo.username }
+            ]
+        }).fetch();
+    });
+
+    useEffect(() => {
+        // update the unread messages status
+        let unread = false;
+        for (let i = 0; i < chatsData.length; i++) {
+            if (userInfo.type === "bride" && chatsData[i].readByBride === false) {
+                unread = true;
+            }
+            else if (userInfo.type === "artist" && chatsData[i].readByArtist === false) {
+                unread = true;
+            }
+        }
+        setUnreadMessages(unread);
+    }, [chatsData]);
 
     /**
      * A component for all the LINKS in the nav bar (such as link to services, artists, etc.)
@@ -115,8 +152,11 @@ export const NavigationBar = () => {
                                  autoCloseMenu();
                              }}
                              className={baseUrl === UrlBasePath.MESSAGES ?
-                                 "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3" :
-                                 "main-text navbar-link-inactive p-3"}>Messages</NavLink>
+                                 "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3 relative" :
+                                 "main-text navbar-link-inactive p-3 relative"}>Messages {unreadMessages && (
+                                    <span className="absolute -top-[0.01px] -right-[0.5px] block h-2.5 w-2.5 rounded-full bg-red-600"></span>
+                                  )}
+                                 </NavLink>
                 </li>
                 {/*Login Page*/}
                 <li className={!loggedInUserId ? "" : "hidden"}>

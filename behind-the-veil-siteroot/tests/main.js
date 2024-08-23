@@ -1,8 +1,10 @@
 import assert from "assert";
+import './chat.tests.js';
 import './booking.tests.js';
 import './post.tests.js';
 import './users.tests.js';
 import './review.tests.js'
+import './message.tests.js'
 
 
 describe("behind-the-veil-siteroot", function () {
