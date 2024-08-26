@@ -94,6 +94,21 @@ meteor test --driver-package meteortesting:mocha
 
 ## Errors
 
+> In the event your app is crashing or failing to run, scroll up on the error message and it will tell you if you are missing any dependencies.
+
+The most common missing one is Babel, so run this if you see it say missing babel package
+
+```console
+meteor npm install --save @babel/runtime react react-dom
+```
+
+> In the event that the app will not start due to "Unexpected mongo exit code 14":
+
+- Try:
+  meteor reset
+  meteor
+  credit: https://stackoverflow.com/questions/38988365/meteor-unexpected-mongo-exit-code-14-restarting-cant-start-mongo-server
+
 ## How to import the mock data into MongoDB
 
 1. Download the "MongoDB Command Line Database Tools" from: https://www.mongodb.com/try/download/database-tools
@@ -186,22 +201,6 @@ mongoexport -h localhost:3001 --db meteor --collection images --out=output.txt
 
 mongoimport -h localhost:3001 --db meteor --collection bookings --file mockdata/booking_user1000.json --jsonArray
 ```
-
-
-> In the event your app is crashing or failing to run, scroll up on the error message and it will tell you if you are missing any dependencies.
-
-The most common missing one is Babel, so run this if you see it say missing babel package
-
-```console
-meteor npm install --save @babel/runtime react react-dom
-```
-
-> In the event that the app will not start due to "Unexpected mongo exit code 14":
-
-- Try:
-  meteor reset
-  meteor
-  credit: https://stackoverflow.com/questions/38988365/meteor-unexpected-mongo-exit-code-14-restarting-cant-start-mongo-server
 
 ## Git Help
   
