@@ -6,6 +6,6 @@
 import {Mongo} from "meteor/mongo";
 
 // set up booking collection
-export const PaymentCollection = new Mongo.Collection("payments");
+export const ReceiptCollection = new Mongo.Collection("receipts");
 
-export default PaymentCollection;
+export default ReceiptCollection;
