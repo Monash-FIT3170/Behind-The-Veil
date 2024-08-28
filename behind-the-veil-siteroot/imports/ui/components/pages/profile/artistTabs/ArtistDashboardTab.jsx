@@ -6,7 +6,7 @@
 
 import React from "react";
 import DashboardCard from "../../../card/DashboardCard";
-import { useArtistDashboardData} from "../../../DatabaseHelper";
+import { useArtistDashboardData } from "../../../DatabaseHelper";
 import Loader from "../../../loader/Loader";
 
 /**
@@ -27,22 +27,28 @@ export const ArtistDashboardTab = ({ username }) => {
 
   // Fetch the dashboard data
   const {
-      isLoading,
-      totalCustomersLifetime,
-      totalCustomersThisMonth,
-      bookingCompleteRevenue,
-      bookingPendingRevenue } = useArtistDashboardData(username);
+    isLoading,
+    totalCustomersLifetime,
+    totalCustomersThisMonth,
+    bookingCompleteRevenue,
+    bookingPendingRevenue,
+  } = useArtistDashboardData(username);
 
   if (isLoading) {
     return (
-        <Loader
-            loadingText={"Dashboard is loading . . ."}
-            isLoading={isLoading}
-            size={100}
-            speed={1.5}
-        />
-    )
+      <Loader
+        loadingText={"Dashboard is loading . . ."}
+        isLoading={isLoading}
+        size={100}
+        speed={1.5}
+      />
+    );
   }
+
+  /// Dashboard Filter Strategy
+  // To get location data, search database for all locations user has a booking in.
+  // Collate all locations into an array and then when choosing a location to filter, allow search for one of these locations.
+  // Do the same for year.
 
   return (
     <div className="flex flex-col lg:flex-row gap-10 items-center justify-center flex-wrap">
