@@ -8,6 +8,7 @@ import React from "react";
 import DashboardCard from "../../../card/DashboardCard";
 import { useArtistDashboardData } from "../../../DatabaseHelper";
 import Loader from "../../../loader/Loader";
+import FilterLocationSearchBar from "../../../searchBar/filterLocationSearchBar.jsx";
 
 /**
  * Dashboard tab of an artist's profile
@@ -51,32 +52,38 @@ export const ArtistDashboardTab = ({ username }) => {
   // Do the same for year.
 
   return (
-    <div className="flex flex-col lg:flex-row gap-10 items-center justify-center flex-wrap">
-      <DashboardCard
-        key="customer-lifetime"
-        dashboardCardTitle="Total Customers - Lifetime"
-        dashboardCardDesc="Celebrate your achievement in helping brides with their special day!"
-        dashboardCardValue={totalCustomersLifetime}
-      />
-      <DashboardCard
-        key="customer-month"
-        dashboardCardTitle="Total Customers - This Month"
-        dashboardCardDesc="People you have glowed up this month!"
-        dashboardCardValue={totalCustomersThisMonth}
-      />
-      <DashboardCard
-        key="earnings-received"
-        dashboardCardTitle="Total Earnings"
-        dashboardCardDesc="Count your dollars!"
-        dashboardCardValue={currencyFormatter.format(bookingCompleteRevenue)}
-      />
-      <DashboardCard
-        key="earnings-pending"
-        dashboardCardTitle="Pending Earnings"
-        dashboardCardDesc="Cash currently in transit!"
-        dashboardCardValue={currencyFormatter.format(bookingPendingRevenue)}
-      />
-    </div>
+    <>
+      <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-3">
+        <FilterLocationSearchBar placeholder={"Enter a location..."} />
+      </div>
+
+      <div className="flex flex-col lg:flex-row gap-10 items-center justify-center flex-wrap pt-8">
+        <DashboardCard
+          key="customer-lifetime"
+          dashboardCardTitle="Total Customers - Lifetime"
+          dashboardCardDesc="Celebrate your achievement in helping brides with their special day!"
+          dashboardCardValue={totalCustomersLifetime}
+        />
+        <DashboardCard
+          key="customer-month"
+          dashboardCardTitle="Total Customers - This Month"
+          dashboardCardDesc="People you have glowed up this month!"
+          dashboardCardValue={totalCustomersThisMonth}
+        />
+        <DashboardCard
+          key="earnings-received"
+          dashboardCardTitle="Total Earnings"
+          dashboardCardDesc="Count your dollars!"
+          dashboardCardValue={currencyFormatter.format(bookingCompleteRevenue)}
+        />
+        <DashboardCard
+          key="earnings-pending"
+          dashboardCardTitle="Pending Earnings"
+          dashboardCardDesc="Cash currently in transit!"
+          dashboardCardValue={currencyFormatter.format(bookingPendingRevenue)}
+        />
+      </div>
+    </>
   );
 };
 
