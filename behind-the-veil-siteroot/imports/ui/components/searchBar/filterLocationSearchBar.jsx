@@ -1,3 +1,10 @@
+/**
+ * File Description: Dashboard Filter Search Bar React component
+ * File version: 1.0
+ * Contributors: Phillip
+ * Credit: Lucas, Nikki
+ */
+
 import React, { useState } from "react";
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
@@ -6,22 +13,14 @@ import Button from "../button/Button";
 
 const FilterLocationSearchBar = ({
   suggestionsDown = true,
-  defaultYear = "All Years",
+  defaultYear = "all_years",
   servedLocationList,
   servedYearList,
 }) => {
-  console.log(servedYearList);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchYear, setSearchYear] = useState(defaultYear);
+  const [searchTerm, setSearchTerm] = useState(null);
+  const [searchYear, setSearchYear] = useState(null);
   const [filteredLocations, setFilteredLocations] = useState([]);
 
-  // Sample location data
-  const customerLocationSuburbAll = [
-    "Sydney",
-    "Melbourne",
-    "Brisbane",
-    "Stockholm",
-  ];
   const handleSearchYearChange = (event) => {
     setSearchYear(event.target.value);
 
@@ -29,12 +28,12 @@ const FilterLocationSearchBar = ({
     setFilteredSuggestions([]);
   };
 
-  const handleSearch = (event) => {
+  const handleInputChange = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
 
     if (value) {
-      const results = customerLocationSuburbAll.filter((location) =>
+      const results = servedLocationList.filter((location) =>
         location.toLowerCase().startsWith(value.toLowerCase())
       );
       setFilteredLocations(results);
@@ -45,6 +44,24 @@ const FilterLocationSearchBar = ({
 
   const handleReset = () => {
     setSearchTerm("");
+    setFilteredLocations([]);
+  };
+
+  const onClickInput = () => {
+    if (searchTerm !== "") {
+      const results = servedLocationList.filter((location) =>
+        location.toLowerCase().startsWith(searchTerm.toLowerCase())
+      );
+      setFilteredLocations(results);
+    } else {
+      setFilteredLocations([]);
+    }
+  };
+
+  // when a suggestion is selected, use the value of the suggestion as the input, to trigger the use effect that trigger
+  // on input change above
+  const handleSuggestionSelect = (location) => {
+    setSearchTerm(location);
     setFilteredLocations([]);
   };
 
@@ -77,7 +94,9 @@ const FilterLocationSearchBar = ({
       return;
     }
     // in all other cases, empty/hide suggestions
-    setFilteredLocations([]);
+    setTimeout(() => {
+      setFilteredLocations([]);
+    }, 100);
   };
 
   const handleButtonClickOrSubmit = () => {};
@@ -85,14 +104,15 @@ const FilterLocationSearchBar = ({
   return (
     <>
       <div className="relative" onBlur={onBlurInput}>
-        <form className="flex h-12" onSubmit={(e) => e.preventDefault()}>
+        <form className="flex h-12">
           {/* The search input field */}
           <Input
             type="search"
             id={"search-input"}
             className="rounded-r-none border-r-0 w-[200px] sm:w-[35vw]"
             value={searchTerm}
-            onChange={handleSearch}
+            onChange={handleInputChange}
+            onClick={onClickInput}
           />
 
           {/* The reset button */}
@@ -112,10 +132,8 @@ const FilterLocationSearchBar = ({
               <li
                 key={index}
                 className={liClassnames}
-                onClick={() => {
-                  setSearchTerm(location);
-                  setFilteredLocations([]);
-                }}
+                name={"suggestion-list-item"}
+                onClick={() => handleSuggestionSelect(location)}
               >
                 {location}
               </li>

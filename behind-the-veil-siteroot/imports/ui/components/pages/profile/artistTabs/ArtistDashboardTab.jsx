@@ -23,6 +23,7 @@ export const ArtistDashboardTab = ({ username }) => {
   //The dashboardCardValue will have to be dynamic. Title and Desc can be static given it's the same across all accounts.
 
   const serviceYears = useArtistBookings(username).bookingYearArray;
+  const serviceLocations = useArtistBookings(username).bookingSuburbArray;
 
   const currencyFormatter = new Intl.NumberFormat("en-AU", {
     style: "currency",
@@ -63,6 +64,7 @@ export const ArtistDashboardTab = ({ username }) => {
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
         <FilterLocationSearchBar
           placeholder={"Enter a location..."}
+          servedLocationList={serviceLocations}
           servedYearList={serviceYears}
         />
       </div>
