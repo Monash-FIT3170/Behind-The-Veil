@@ -6,20 +6,23 @@
 
 import React, {useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import ServiceDetailsHeader from "../../service-details-header/ServiceDetailsHeader";
-import WhiteBackground from "../../whiteBackground/WhiteBackground";
-import PageLayout from "../../../enums/PageLayout";
-import Button from "../../button/Button";
-import {CheckIcon, NoSymbolIcon} from "@heroicons/react/24/outline"
-import BackButton from "../../button/BackButton";
 import {useSubscribe, useTracker} from "meteor/react-meteor-data";
-import Loader from "../../loader/Loader";
-import {useUserInfo} from "/imports/ui/components/util"
-import {Modal} from 'react-responsive-modal';
+import {CheckIcon, NoSymbolIcon} from "@heroicons/react/24/outline"
 
 import BookingCollection from "/imports/api/collections/bookings";
 import ServiceCollection from "../../../../api/collections/services";
 import UserCollection from "../../../../api/collections/users";
+
+import WhiteBackground from "../../whiteBackground/WhiteBackground";
+import PageLayout from "../../../enums/PageLayout";
+import ServiceDetailsHeader from "../../service-details-header/ServiceDetailsHeader";
+import Button from "../../button/Button";
+import BackButton from "../../button/BackButton";
+import BookingStatusConfirmModal from "../../booking/BookingStatusConfirmModal";
+import Loader from "../../loader/Loader";
+import {useUserInfo} from "/imports/ui/components/util"
+import BookingStatus from "../../../enums/BookingStatus";
+import PreviousButton from "../../button/PreviousButton";
 
 /**
  * Page for user to cancel a booking
@@ -32,8 +35,8 @@ const CancelBooking = () => {
     const [errors, setErrors] = useState("");
     const userInfo = useUserInfo();
 
+    // confirmation modal attributes
     const [open, setOpen] = useState(false);
-
     const onOpenModal = () => setOpen(true);
     const onCloseModal = () => setOpen(false);
 
@@ -59,11 +62,6 @@ const CancelBooking = () => {
         if (!isError) {
             onOpenModal()
         }
-    }
-
-    const confirmCancellation = () => {
-        Meteor.call('update_booking_details', bookingId, { bookingStatus: "cancelled", cancelReason : inputReason, cancelUser: userInfo.username });
-        navigateTo(`/profile`);
     }
 
     // grab the service ID from the URL
@@ -127,7 +125,7 @@ const CancelBooking = () => {
             const bookingDatetime = new Date(bookingData.bookingStartDateTime);
             return (
                 <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-                    <BackButton to={"/profile"}/>
+                    <PreviousButton />
                     {/* Main container for content */}
                     <div className="flex flex-col gap-4 xl:px-40">
                         <div className="large-text">Cancel Booking Form</div>
@@ -135,7 +133,7 @@ const CancelBooking = () => {
                             service={serviceData.serviceName}
                             date={bookingDatetime.toLocaleString()}
                             artist={userData.profile.alias + " (@" + bookingData.artistUsername + ")"}
-                            price={"$" + bookingData.bookingPrice}
+                            price={bookingData.bookingPrice}
                         />
 
                         {/* cancellation reason */}
@@ -162,28 +160,12 @@ const CancelBooking = () => {
                             </div>
                         </div>
                     </div>
-                    <Modal classNames={{
-                        modal: "w-[480px] h-[300px] rounded-[45px] bg-glass-panel-background border border-main-blue"
-                    }} open={open} onClose={onCloseModal} center showCloseIcon={false}>
-                        <div className="flex justify-center items-center h-full">
-                            <div className="flex flex-col">
-                                <h2 className="text-center title-text">
-                                    Cancel booking?
-                                </h2>
-                                <p className="text-center medium-text">Are you sure you want to cancel a booking? This action cannot be reversed. </p>
-                                <div className="flex justify-center space-x-6 mt-5">
-                                    <Button className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[25px] pe-[25px] flex gap-1" onClick={confirmCancellation}>
-                                        <CheckIcon className="icon-base" />
-                                        Yes
-                                    </Button>
-                                    <Button className="btn-base ps-[25px] pe-[25px] flex gap-1" onClick={onCloseModal}>
-                                        <NoSymbolIcon className="icon-base" />
-                                        No
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                    </Modal>
+
+                    <BookingStatusConfirmModal open={open}
+                                               closeHandler={onCloseModal}
+                                               bookingId={bookingId}
+                                               toBeStatus={BookingStatus.CANCELLED}
+                                               cancelAttributes={{cancelReason : inputReason, cancelUser: userInfo.username}}/>
                 </WhiteBackground>
             );
         }

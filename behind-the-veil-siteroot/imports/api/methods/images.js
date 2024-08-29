@@ -1,7 +1,7 @@
 /**
  * File Description: Image database entity
  * File version: 1.1
- * Contributors: Nikki, Phillip
+ * Contributors: Nikki, Phillip, Vicky
  */
 
 import {Meteor} from "meteor/meteor";
@@ -17,13 +17,14 @@ Meteor.methods({
      *                                                but maybe should be changed to BSON/actual data
      */
     "add_image": function (type, targetId, imageData) {
-        ImageCollection.insert(
+        return ImageCollection.insert(
             {
                 "imageType": type,
                 "target_id": targetId,
                 "imageData": imageData
             }
         )
+        return targetId;
     },
 
     "remove_post_image": function (target_Id){
@@ -33,7 +34,17 @@ Meteor.methods({
                 "target_id": target_Id
             }
         )
-    }
+    },
 
+    /**
+     * Retrieves a single image instance from the database based on the target ID.
+     * @param {string} targetId - The serviceId/username/postId that the image belongs to
+     * @returns {object|null} - The image object if found, otherwise null.
+     */
+    "get_image": function (targetId) {
+        return ImageCollection.findOne(
+            { "targetId": targetId },
+        )
+    },
 })
 

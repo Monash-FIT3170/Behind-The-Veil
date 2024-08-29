@@ -51,7 +51,6 @@ const PaymentDetails = () => {
         const priceString = searchParams.get('Total Price');
 
         let priceFloat = parseFloat(priceString.replace('$', ''));
-        let totalPrice = Math.round(priceFloat);
 
         setDetails({
             brideName: brideName,
@@ -59,7 +58,7 @@ const PaymentDetails = () => {
             serviceName: service,
             location: serviceLocation,
             date: date,
-            price: totalPrice,
+            price: priceFloat,
         });
     }, [location.search]);
 
@@ -329,7 +328,7 @@ const PaymentDetails = () => {
                                 <div className="flex flex-col">
                                     <h2 className="text-center title-text">Confirm Payment</h2>
                                     {/*TODO: Add price to the modal*/}
-                                    <p className="text-center medium-text">You are about make a payment of $120.00.</p>
+                                    <p className="text-center medium-text">You are about make a payment of ${details.price}.</p>
                                     <p className="text-center medium-text">Are you sure?</p>
                                     <div className="flex justify-center space-x-6 mt-5">
                                         <Button

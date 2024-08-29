@@ -16,15 +16,26 @@ import "/imports/api/collections/images.js";
 import "/imports/api/methods/images.js";
 import "/imports/api/publications/images";
 
+
 import "/imports/api/collections/posts.js";
 import "/imports/api/methods/posts.js";
 import "/imports/api/publications/posts";
 
+
 import "/imports/api/methods/payment.js";
+
+import {checkBookingsEveryMidnight} from "./background.js"
+
+import "/imports/api/collections/chats.js";
+import "/imports/api/methods/chats.js";
+import "/imports/api/publications/chats.js";
+
+import "/imports/api/collections/messages.js";
+import "/imports/api/methods/messages.js";
+import "/imports/api/publications/messages.js";
 
 // file in the same folder containing creds for mail server
 // import {emailUser, emailPass, mailUrl, fromUser} from "./secrets.js"
-
 
 // Leave for now for any methods that need to be called on start up.
 Meteor.startup(async () => {
@@ -59,7 +70,10 @@ Meteor.startup(async () => {
 
                 return emailBody;
             }
-        };
+        }
+        
+        // update bookings every midnight
+        checkBookingsEveryMidnight()
     }
 
     // nsha0054@student.monash.edu

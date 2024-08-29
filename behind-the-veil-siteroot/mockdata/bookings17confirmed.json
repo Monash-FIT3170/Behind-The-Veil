@@ -2,7 +2,7 @@
     {
         "_id": "2648fb26-bd00-45ab-b62e-f88c37c6a994",
         "bookingStartDateTime": "2025-05-27T09:00:00+10:00",
-        "bookingDuration": 2,
+        "bookingEndDateTime": "2025-05-27T11:00:00+10:00",
         "bookingLocation": "6200 Oneill Place",
         "bookingPrice": 22.48,
         "bookingStatus": "confirmed",
@@ -13,7 +13,7 @@
     {
         "_id": "512a128b-7353-4db1-9f87-b6faff90f179",
         "bookingStartDateTime": "2025-05-27T11:00:00+10:00",
-        "bookingDuration": 1,
+        "bookingEndDateTime": "2025-05-27T12:00:00+10:00",
         "bookingLocation": "6 Fuller Alley",
         "bookingPrice": 40.14,
         "bookingStatus": "confirmed",
@@ -24,7 +24,7 @@
     {
         "_id": "e0e8dbf7-edea-483d-ad6c-15203da132ba",
         "bookingStartDateTime": "2025-05-27T13:00:00+10:00",
-        "bookingDuration": 2,
+        "bookingEndDateTime": "2025-05-27T15:00:00+10:00",
         "bookingLocation": "03 Graceland Alley",
         "bookingPrice": 18.2,
         "bookingStatus": "confirmed",
@@ -35,7 +35,7 @@
     {
         "_id": "84790223-fc3f-42ef-86d7-06d5cdd2205c",
         "bookingStartDateTime": "2025-05-28T09:00:00+10:00",
-        "bookingDuration": 3,
+        "bookingEndDateTime": "2025-05-28T12:00:00+10:00",
         "bookingLocation": "3 Linden Trail",
         "bookingPrice": 82.63,
         "bookingStatus": "confirmed",
@@ -46,7 +46,7 @@
     {
         "_id": "6cfe65ee-7610-4c1f-bfeb-12680e8b6720",
         "bookingStartDateTime": "2025-05-28T16:00:00+10:00",
-        "bookingDuration": 1,
+        "bookingEndDateTime": "2025-05-28T17:00:00+10:00",
         "bookingLocation": "1 Express Parkway",
         "bookingPrice": 82.4,
         "bookingStatus": "confirmed",
@@ -57,7 +57,7 @@
     {
         "_id": "d3ebde0e-2f20-4446-b8d8-4675deca648e",
         "bookingStartDateTime": "2025-05-29T10:00:00+10:00",
-        "bookingDuration": 3,
+        "bookingEndDateTime": "2025-05-29T13:00:00+10:00",
         "bookingLocation": "8 Londonderry Place",
         "bookingPrice": 46.73,
         "bookingStatus": "confirmed",
@@ -68,7 +68,7 @@
     {
         "_id": "2212e230-d134-4fec-a4ab-5e759a344e8d",
         "bookingStartDateTime": "2025-05-29T14:00:00+10:00",
-        "bookingDuration": 1,
+        "bookingEndDateTime": "2025-05-29T15:00:00+10:00",
         "bookingLocation": "849 Novick Street",
         "bookingPrice": 50.52,
         "bookingStatus": "confirmed",
@@ -79,7 +79,7 @@
     {
         "_id": "111a67a4-12bd-47e9-9df3-63de532caed7",
         "bookingStartDateTime": "2025-05-29T16:00:00+10:00",
-        "bookingDuration": 1,
+        "bookingEndDateTime": "2025-05-29T17:00:00+10:00",
         "bookingLocation": "9375 Division Road",
         "bookingPrice": 61.97,
         "bookingStatus": "confirmed",
@@ -90,7 +90,7 @@
     {
         "_id": "ef7aab98-6124-4d91-92e8-80752f84d2ac",
         "bookingStartDateTime": "2025-05-30T09:00:00+10:00",
-        "bookingDuration": 4,
+        "bookingEndDateTime": "2025-05-30T13:00:00+10:00",
         "bookingLocation": "78194 Scofield Parkway",
         "bookingPrice": 75.01,
         "bookingStatus": "confirmed",
@@ -101,7 +101,7 @@
     {
         "_id": "0f8fdd5b-ef43-4c77-ac71-de4bb98edae5",
         "bookingStartDateTime": "2025-05-30T13:00:00+10:00",
-        "bookingDuration": 4,
+        "bookingEndDateTime": "2025-05-30T17:00:00+10:00",
         "bookingLocation": "222 Colorado Circle",
         "bookingPrice": 99.34,
         "bookingStatus": "confirmed",
@@ -112,7 +112,7 @@
     {
         "_id": "a206bfee-2f3a-4323-8b68-20159c74fa61",
         "bookingStartDateTime": "2025-05-31T06:00:00+10:00",
-        "bookingDuration": 13,
+        "bookingEndDateTime": "2025-05-31T19:00:00+10:00",
         "bookingLocation": "222 Colorado Circle",
         "bookingPrice": 99.34,
         "bookingStatus": "confirmed",
@@ -123,7 +123,7 @@
     {
         "_id": "d3672a3b-6217-47c0-8742-6e6eb738f27a",
         "bookingStartDateTime": "2025-06-01T06:00:00+10:00",
-        "bookingDuration": 13,
+        "bookingEndDateTime": "2025-06-01T19:00:00+10:00",
         "bookingLocation": "222 Colorado Circle",
         "bookingPrice": 99.34,
         "bookingStatus": "confirmed",
@@ -134,7 +134,7 @@
     {
         "_id": "8ae2f2a8-985d-4091-8358-dd82cbe49188",
         "bookingStartDateTime": "2025-06-02T06:00:00+10:00",
-        "bookingDuration": 13,
+        "bookingEndDateTime": "2025-06-02T19:00:00+10:00",
         "bookingLocation": "222 Colorado Circle",
         "bookingPrice": 99.34,
         "bookingStatus": "confirmed",
@@ -145,7 +145,7 @@
     {
         "_id": "3e46a84e-dd68-4d0d-a6f4-4afef6a35bfb",
         "bookingStartDateTime": "2025-06-03T06:00:00+10:00",
-        "bookingDuration": 13,
+        "bookingEndDateTime": "2025-06-03T19:00:00+10:00",
         "bookingLocation": "222 Colorado Circle",
         "bookingPrice": 99.34,
         "bookingStatus": "confirmed",
@@ -156,7 +156,7 @@
     {
         "_id": "aa71a00a-b5db-4e6d-86fc-d1d11ea5838e",
         "bookingStartDateTime": "2025-06-04T06:00:00+10:00",
-        "bookingDuration": 13,
+        "bookingEndDateTime": "2025-06-04T19:00:00+10:00",
         "bookingLocation": "222 Colorado Circle",
         "bookingPrice": 99.34,
         "bookingStatus": "confirmed",
@@ -167,7 +167,7 @@
     {
         "_id": "4cd97d02-880c-4992-bf08-d506691eac68",
         "bookingStartDateTime": "2025-06-05T06:00:00+10:00",
-        "bookingDuration": 13,
+        "bookingEndDateTime": "2025-06-05T19:00:00+10:00",
         "bookingLocation": "222 Colorado Circle",
         "bookingPrice": 99.34,
         "bookingStatus": "confirmed",
@@ -178,7 +178,7 @@
     {
         "_id": "c8a0546e-7dd9-4cfe-966c-f0bc6f25c92a",
         "bookingStartDateTime": "2025-06-06T06:00:00+10:00",
-        "bookingDuration": 13,
+        "bookingEndDateTime": "2025-06-06T19:00:00+10:00",
         "bookingLocation": "222 Colorado Circle",
         "bookingPrice": 99.34,
         "bookingStatus": "confirmed",

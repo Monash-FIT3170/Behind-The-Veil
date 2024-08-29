@@ -58,7 +58,7 @@ const SearchBar = ({
         () => {
             return getSearchSuggestions(searchType, usersData, servicesData)
         },
-        [searchType]
+        [searchType, isLoadingArtists, isLoadingServices]
     );
 
     /**

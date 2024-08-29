@@ -88,7 +88,7 @@ export const BookingStatusDisplay = ({bookingStatus, className}) => {
         <div className={combinedClassname}>
             {statusIcon}
             {/*return the booking status text, except for "pending" which becomes awaiting confirmation*/}
-            <span className={"line-clamp-1"}>{bookingStatus === 'pending' ? 'Awaiting Confirmation' : bookingStatus}</span>
+            <span className={"line-clamp-1"}>{bookingStatus === BookingStatus.PENDING ? 'Awaiting Confirmation' : bookingStatus}</span>
             {toolTip}
         </div>
     );

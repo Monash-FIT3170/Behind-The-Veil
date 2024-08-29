@@ -166,7 +166,7 @@ export const AccountDetails = () => {
         // wait for load data
         return (
             <Loader
-                loadingText={"Loading . . ."}
+                loadingText={"Account details are loading . . ."}
                 isLoading={isLoadingProfileImage()}
                 size={100}
                 speed={1.5}

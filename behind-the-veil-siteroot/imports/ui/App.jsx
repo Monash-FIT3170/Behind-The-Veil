@@ -34,6 +34,7 @@ import RequestBooking from "./components/pages/request-booking/RequestBooking.js
 import PaymentDetails from "./components/pages/request-booking/PaymentDetails";
 import BookingSummary from "./components/pages/request-booking/BookingSummary";
 import BookingConfirmation from "./components/pages/request-booking/BookingConfirmation";
+import Review from "./components/pages/review/Review";
 
 import AddAvailability from './components/pages/add-availability/AddAvailability.jsx';
 
@@ -42,6 +43,8 @@ import UrlBasePath from "./enums/UrlBasePath";
 import AddEditServicePage from "./components/pages/service/AddEditServicePage.jsx";
 import EmailVerifyPage from "./components/pages/register/EmailVerifyPage.jsx";
 import LinkSentPage from "./components/pages/forgotPassword/LinkSentPage";
+
+import AddEditPostPage from "./components/pages/artist/AddEditPostPage.jsx";
 
 export const App = () => (
     <div>
@@ -158,8 +161,17 @@ export const App = () => (
                             </ProtectedRoute>
                         }
                     />
-            
-
+                    <Route
+                    // TODO: Add this to the url path -> /:serviceId
+                        path={`/${UrlBasePath.PROFILE}/review`}
+                        element={
+                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}>
+                                {/* <Review /> */}
+                                <Review></Review>
+                              
+                            </ProtectedRoute>
+                        }
+                    />
                     {/*Add and Edit Service Pages for Artist*/}
                     <Route
                         path={`/${UrlBasePath.PROFILE}/addService`}
@@ -187,6 +199,7 @@ export const App = () => (
                     <Route path={`/${UrlBasePath.SERVICES}/:serviceId/booking-confirmation`} element={<BookingConfirmation />} />
                     {/* TODO: haven't implemented actual flow to get here yet */}
                     <Route path="/cancel-booking/:bookingId" element={<CancelBooking/>}/>
+                    <Route path={`/${UrlBasePath.PROFILE}/add-edit-post`}element={<AddEditPostPage/>}/>
                 </Routes>
             </main>
         </Router>
