@@ -6,7 +6,10 @@
 
 import React from "react";
 import DashboardCard from "../../../card/DashboardCard";
-import { useArtistDashboardData } from "../../../DatabaseHelper";
+import {
+  useArtistDashboardData,
+  useArtistBookings,
+} from "../../../DatabaseHelper";
 import Loader from "../../../loader/Loader";
 import FilterLocationSearchBar from "../../../searchBar/filterLocationSearchBar.jsx";
 
@@ -18,6 +21,8 @@ import FilterLocationSearchBar from "../../../searchBar/filterLocationSearchBar.
 export const ArtistDashboardTab = ({ username }) => {
   //Utilise DashboardCard component as basis for the dashboard.
   //The dashboardCardValue will have to be dynamic. Title and Desc can be static given it's the same across all accounts.
+
+  const serviceYears = useArtistBookings(username).bookingYearArray;
 
   const currencyFormatter = new Intl.NumberFormat("en-AU", {
     style: "currency",
@@ -46,6 +51,8 @@ export const ArtistDashboardTab = ({ username }) => {
     );
   }
 
+  //const artistDashboardData = useArtistBooking(username);
+
   /// Dashboard Filter Strategy
   // To get location data, search database for all locations user has a booking in.
   // Collate all locations into an array and then when choosing a location to filter, allow search for one of these locations.
@@ -53,8 +60,11 @@ export const ArtistDashboardTab = ({ username }) => {
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-3">
-        <FilterLocationSearchBar placeholder={"Enter a location..."} />
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <FilterLocationSearchBar
+          placeholder={"Enter a location..."}
+          servedYearList={serviceYears}
+        />
       </div>
 
       <div className="flex flex-col lg:flex-row gap-10 items-center justify-center flex-wrap pt-8">
