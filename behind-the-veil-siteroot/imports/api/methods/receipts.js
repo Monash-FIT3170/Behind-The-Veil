@@ -11,7 +11,7 @@ Meteor.methods({
          * Adds a new payment receipt to the database.
          * @param {Date} paymentDatetime - The date and time when the payment is made
          * @param {number} paymentAmount - Amount paid within the payment
-         * @param {string} paymentType - Deposit or full payment
+         * @param {string} paymentType - Deposit or Refund payment
          * @param {string} paymentStatus - Paid or Refunded
          * @param {string} bookingId - The booking the payment was made for.
          * @returns {number} The unique ID number of the payment
@@ -67,6 +67,7 @@ Meteor.methods({
                 {
                     $set: {
                         paymentStatus: "Refund",
+                        paymentStatus: "Refunded",
                         paymentDatetime: currentDatetime,
                     }
                 }
