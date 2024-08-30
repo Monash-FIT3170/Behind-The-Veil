@@ -199,7 +199,7 @@ const PaymentDetails = () => {
                     addToBooking(startDatetime, endDatetime, details.location, details.price, BookingStatus.PENDING, details.brideName, details.artistName, serviceId)
                         .then(bookingId => {
                             // Add the payment receipt to the database after booking is added
-                            addPaymentReceipt(new Date(), details.price, "Full", "Paid", bookingId)
+                            addPaymentReceipt(new Date(), details.price, "Deposit", "Paid", bookingId)
                                 .then(receiptId => {
                                     console.log('Receipt added with ID:', receiptId);
                                     navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/booking-confirmation`);
