@@ -4,6 +4,7 @@
  * Contributors: Nikki, Ryan, Phillip
  */
 import {useSubscribe, useTracker} from "meteor/react-meteor-data";
+import { Meteor } from 'meteor/meteor';
 
 import ServiceCollection from "../../api/collections/services";
 import ImageCollection from "../../api/collections/images";
@@ -20,7 +21,7 @@ import BookingStatus from "../enums/BookingStatus";
  * @param newStatus - new status to change to
  * @param cancelAttributes - if status is CANCELLED, this is the cancel reasons
  */
-export function updateBookingStatus(bookingId, newStatus, cancelAttributes) {
+export function updateBookingStatus(bookingId, newStatus, cancelAttributes={}) {
 
     if (newStatus === BookingStatus.CANCELLED) {
         Meteor.call('update_booking_details', bookingId, {
@@ -32,7 +33,8 @@ export function updateBookingStatus(bookingId, newStatus, cancelAttributes) {
             bookingStatus: newStatus
         });
     }
-    // email
+    // email about the update
+    Meteor.callAsync("sendStatusUpdateEmail", {bookingId: bookingId, statusAfter: newStatus})
 }
 
 /**
