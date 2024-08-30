@@ -1,12 +1,12 @@
 /**
  * File Description: User database entity
- * File version: 1.3
- * Contributors: Nikki, Ryan, Vicky
+ * File version: 1.4
+ * Contributors: Nikki, Ryan, Vicky, Josh
  */
 
-import {Meteor} from 'meteor/meteor'
-import {UserCollection} from "/imports/api/collections/users";
-import {Accounts} from "meteor/accounts-base";
+import { Meteor } from 'meteor/meteor'
+import { UserCollection } from "/imports/api/collections/users";
+import { Accounts } from "meteor/accounts-base";
 
 Meteor.methods({
     /**
@@ -32,14 +32,14 @@ Meteor.methods({
         // remove old email and add the new one in
         Accounts.removeEmail(userId, oldEmail)
         Accounts.addEmail(userId, newEmail);
-   },
+    },
     /**
      * Changes the alias associated with a user.
      * @param userId - ID of the user to be updated
      * @param newAlias - new alias/name to update to
      */
     "update_alias": function (userId, newAlias) {
-        UserCollection.update(userId, {$set: {"profile.alias": newAlias}});
+        UserCollection.update(userId, { $set: { "profile.alias": newAlias } });
     },
 
     /**
@@ -51,7 +51,7 @@ Meteor.methods({
      * @param {string} text - The new service location as a text string.
      * @param {number} radius - The new service radius in the desired unit
      */
-    'update_service_area': function (userId ,text, radius) {
+    'update_service_area': function (userId, text, radius) {
         UserCollection.update(
             { _id: userId },
             {
@@ -85,5 +85,13 @@ Meteor.methods({
             { username: username },
         );
     },
+
+    // TODO: add documentation
+    "update_availability": function (username, availability) {
+        return UserCollection.update(
+            { username: username },
+            { $set: { "availability": availability } }
+        )
+    }
 })
 

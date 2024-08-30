@@ -1,14 +1,14 @@
 /**
  * File Description: Add Availability page
- * File version: 1.0
- * Contributors: Laura
+ * File version: 1.1
+ * Contributors: Laura, Josh
  */
 
-import React, {useId, useState} from "react";
+import React, { useId, useState } from "react";
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
-import AvailabilityCalendar, {VALID_INTERVAL} from "../../../components/availabilityCalendar/AvailabilityCalendar.jsx";
+import AvailabilityCalendar, { VALID_INTERVAL } from "../../../components/availabilityCalendar/AvailabilityCalendar.jsx";
 import Input from "../../input/Input";
 import PreviousButton from "../../button/PreviousButton";
 import {
@@ -24,6 +24,7 @@ import {
 import { useParams, useNavigate } from "react-router-dom";
 import Tippy from '@tippyjs/react/headless';
 import QuestionMarkCircleIcon from "@heroicons/react/16/solid/QuestionMarkCircleIcon";
+import { useSpecificUser } from "../../DatabaseHelper.jsx";
 
 /**
  * Page for artist to add availability
@@ -31,12 +32,15 @@ import QuestionMarkCircleIcon from "@heroicons/react/16/solid/QuestionMarkCircle
 const AddAvailability = () => {
     const { artistUsername } = useParams();
 
+    const {isLoading, userData} = useSpecificUser(artistUsername)
+
+
     const MOCK_AVAILABILITY = [
         {
             "_id": "2648fb26-bd00-45ab-b62e-f88c37c6a994",
-            "availabilityTimes":{
-                "2024-08-10": [12,13,14,15,16],
-                "2024-08-11": [12,13,14,15,16]
+            "availabilityTimes": {
+                "2024-08-10": [12, 13, 14, 15, 16],
+                "2024-08-11": [12, 13, 14, 15, 16]
             },
             "artistUsername": "username"
         }
@@ -74,8 +78,8 @@ const AddAvailability = () => {
         }
 
         const hours = eachHourOfInterval({
-            start: set(date, {hours: 6, minutes: 0, seconds: 0}),
-            end: set(date, {hours: 19, minutes: 0, seconds: 0})
+            start: set(date, { hours: 6, minutes: 0, seconds: 0 }),
+            end: set(date, { hours: 19, minutes: 0, seconds: 0 })
         })
 
         return hours
@@ -98,12 +102,29 @@ const AddAvailability = () => {
         });
 
         // TODO: add/update availability in database
+        // TODO: is this needed? might be able to remove initialAvailability as well
         const existingIndex = MOCK_AVAILABILITY.findIndex(entry => entry.artistUsername === initialAvailability.artistUsername);
         if (existingIndex !== -1) {
             MOCK_AVAILABILITY[existingIndex] = initialAvailability;
         } else {
             MOCK_AVAILABILITY.push(initialAvailability);
         }
+
+        updateAvailability()
+    }
+
+    const updateAvailability = async () => {
+        Meteor.call(
+            "update_availability", 
+            artistUsername,
+            availability,
+            (error) => {
+                if (error) {
+                    console.warn('Error updating availability', error)
+                    alert('Error updating availability: ' + error)
+                }
+            }
+        )
     }
 
     const handleManualDateInput = (event) => {
@@ -118,13 +139,13 @@ const AddAvailability = () => {
                 isValid(parsedDate) &&
                 isWithinInterval(parsedDate, VALID_INTERVAL)
             ) {
-                setInputs((i) => ({...i, date: parsedDate}));
+                setInputs((i) => ({ ...i, date: parsedDate }));
                 return
             }
         }
 
         // else, just update date input with the raw value
-        setInputs((i) => ({...i, date: dateInput}));
+        setInputs((i) => ({ ...i, date: dateInput }));
         return
     }
 
@@ -141,7 +162,7 @@ const AddAvailability = () => {
     //tooltip
     const toolTipText = (
         <div className="text-center">
-            Brides can only select from available hours (green) that you set. Please note that the available hour denote 
+            Brides can only select from available hours (green) that you set. Please note that the available hour denote
             when the services start and does not account for travel time. You may need to account for extra travel time.
         </div>
     );
@@ -154,14 +175,14 @@ const AddAvailability = () => {
                     {toolTipText}
                 </div>
             )}>
-                <QuestionMarkCircleIcon className="tooltip-icon size-4 text-light-grey-hover"/>
+                <QuestionMarkCircleIcon className="tooltip-icon size-4 text-light-grey-hover" />
             </Tippy>
         </span>
     );
 
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-            <PreviousButton/>
+            <PreviousButton />
 
             {/* Main container for content */}
             <div className="flex flex-col gap-4 xl:px-40">
@@ -192,7 +213,7 @@ const AddAvailability = () => {
                                                 };
                                             });
                                         }}
-                                        tileClassName={({date, view}) => {
+                                        tileClassName={({ date, view }) => {
                                             const dateKey = format(date, 'yyyy-MM-dd');
                                             if (availability[dateKey] && availability[dateKey].length > 0) {
                                                 return 'available';

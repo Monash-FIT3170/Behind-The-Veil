@@ -71,6 +71,10 @@ const RequestBooking = () => {
             return []
         }
 
+        // TODO: take artist availability into account
+        // convert date argument into 'yyyy-MM-dd', to index into availability object
+        // console.log(format(date, 'yyyy-MM-dd'))
+
         const hours = eachHourOfInterval({
             // TODO: for now, assume that artists can work 6am to 7pm every day
             start: set(date, {hours: 6, minutes: 0, seconds: 0}),
