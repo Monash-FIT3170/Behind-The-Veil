@@ -22,11 +22,6 @@ import "/imports/api/publications/posts";
 
 import "/imports/api/methods/payment.js";
 
-import "/server/mailer.js"
-
-
-import {checkBookingsEveryMidnight} from "./background.js"
-
 import "/imports/api/collections/chats.js";
 import "/imports/api/methods/chats.js";
 import "/imports/api/publications/chats.js";
@@ -34,6 +29,9 @@ import "/imports/api/publications/chats.js";
 import "/imports/api/collections/messages.js";
 import "/imports/api/methods/messages.js";
 import "/imports/api/publications/messages.js";
+
+import "/server/mailer.js"
+import {checkBookingsEveryMidnight} from "./background.js"
 
 // file containing creds for mail server
 import {mailUrl, fromUser} from "./secrets.js"

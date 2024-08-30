@@ -1,3 +1,9 @@
+/**
+ * File Description: Email related functions
+ * File version: 1.0
+ * Contributors: Nikki
+ */
+
 import { Meteor } from "meteor/meteor";
 import { Email } from "meteor/email";
 import { check } from "meteor/check";
