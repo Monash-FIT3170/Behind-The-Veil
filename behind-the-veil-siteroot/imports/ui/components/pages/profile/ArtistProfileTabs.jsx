@@ -11,6 +11,7 @@ import ArtistDashboardTab from "./artistTabs/ArtistDashboardTab";
 import ArtistGalleryTab from "./artistTabs/ArtistGalleryTab";
 import ArtistBookingsTab from "./artistTabs/ArtistBookingsTab";
 import ArtistServicesTab from "./artistTabs/ArtistServicesTab";
+import ArtistReviewsTab from "./artistTabs/ArtistReviewsTab";
 
 /**
  * Component for artist's profile tabs
@@ -34,7 +35,7 @@ export const ArtistProfileTabs = ({ userInfo }) => {
         <ArtistBookingsTab key={"bookings"} username={userInfo.username} />,
         <ArtistServicesTab key={"my-services"} username={userInfo.username} />,
         <ArtistGalleryTab key={"gallery"} username={userInfo.username} />,
-        <span key={"reviews"}>review tab</span>,
+        <ArtistReviewsTab key={"reviews"} username={userInfo.username} />,
       ]}
       tabsClassName="lg:flex lg:justify-between"
     />
