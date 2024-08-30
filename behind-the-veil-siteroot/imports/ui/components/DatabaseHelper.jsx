@@ -34,7 +34,7 @@ export function updateBookingStatus(bookingId, newStatus, cancelAttributes={}) {
         });
     }
     // email about the update
-    Meteor.callAsync("sendStatusUpdateEmail", {bookingId: bookingId, statusAfter: newStatus})
+    Meteor.callAsync("sendStatusUpdateEmail", bookingId, newStatus)
 }
 
 /**
