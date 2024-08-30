@@ -15,6 +15,11 @@ import { ArrowUpTrayIcon } from "@heroicons/react/24/outline";
 import UrlBasePath from "../../../enums/UrlBasePath";
 
 export const AddEditPostPage = ({ isEdit }) => {
+
+  // text for title/save button
+  const title = isEdit ? "Edit Photo In Gallery" : "Add Photo To Gallery"
+  const button = isEdit ? "Save" : "Save";
+
   const [postDescription, setInputReason] = useState("");
   const [inputFile, setInputFile] = useState(null);
   const [fileError, setFileError] = useState("");
@@ -26,7 +31,12 @@ export const AddEditPostPage = ({ isEdit }) => {
 
   const userInfo = useUserInfo();
 
-  const { postId } = useParams();
+  // if user is not an artist, navigate them away
+  if (userInfo.type !== "artist") {
+    navigateTo(`/`);
+  }
+
+  const {postId} = useParams();
 
   const fileInputRef = useRef(null); // used since the file classname is hidden to ensure that ui is in specific format
 
@@ -45,42 +55,41 @@ export const AddEditPostPage = ({ isEdit }) => {
           });
         });
       };
-  
+
       // Function to retrieve image using postId (same as imageId)
-      const retrieveImage = () => {
-        return new Promise((resolve, reject) => {
-          Meteor.call("get_image", postId, (error, editImage) => { // Using postId directly
-            if (error) {
-              reject(`Error: ${error.message}`);
-            } else {
-              resolve(editImage);
-            }
-          });
-        });
-      };
-  
+      //const retrieveImage = () => {
+        // return new Promise((resolve, reject) => {
+        //   Meteor.call("get_image", postId, (error, editImage) => {
+        //     // Using postId directly
+        //     if (error) {
+        //       reject(`Error: ${error.message}`);
+        //     } else {
+        //       resolve(editImage);
+        //     }
+        //   });
+        // });
+      //};
+
       retrievePost()
         .then((post) => {
           // Validate that the post belongs to the current user
           if (post.artistUsername !== userInfo.username) {
             navigateTo("/" + UrlBasePath.PROFILE);
           }
-  
           setInputReason(post.postDescription); // Set the post description
-          return retrieveImage(); // Fetch the image next
+          //return retrieveImage(); // Fetch the image next
         })
-        .then((image) => {
+        //.then((image) => {
           // Set the image preview and input values
-          setImagePreviewUrl(image.imagePreviewUrl);
-          setInputFile(image.inputFile);
-        })
+         // setImagePreviewUrl(image.imagePreviewUrl);
+          //setInputFile(image.inputFile);
+        //})
         .catch((error) => {
           console.error("Error loading post or image:", error);
           alert(error); // Handle errors gracefully
         });
     }
   }, []);
-  
 
   // function to handle description
   function handleInputChange(event) {
@@ -122,91 +131,106 @@ export const AddEditPostPage = ({ isEdit }) => {
     }
   }
 
-// main function to handle what's entered on the page when "save" is pressed
-function handleAddPost(event) {
-  event.preventDefault();
-  let hasError = false;
-  let postDate = date.toLocaleDateString("en-US", {
-    month: "2-digit",
-    day: "2-digit",
-    year: "numeric",
-  });
-  console.log(postDate);
-  let imageType = "post";
+  // main function to handle what's entered on the page when "save" is pressed
+  function handleAddPost(event) {
+    event.preventDefault();
+    let hasError = false;
+    let postDate = date.toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    });
+    console.log(postDate);
+    let imageType = "post";
 
-  // file errors
-  if (!inputFile) {
-    setFileError("Please provide a file.");
-    hasError = true;
-  } else {
-    setFileError("");
-  }
-
-  // description errors
-  if (!postDescription) {
-    setDescriptionError("Please provide a description.");
-    hasError = true;
-  } else {
-    setDescriptionError("");
-  }
-
-  if (hasError) {
-    return;
-  }
-  
-  const post = {
-    postDate: postDate,
-    postDescription: postDescription,
-    artistUsername: userInfo.username
-  };
-
-  // edit
-  new Promise((resolve, reject) => {
-    if (isEdit) {
-      Meteor.call("update_post_details", postId, post, (error, editPostId) => {
-        if (error) {
-          reject(`Error: ${error.message}`);
-        } else {
-          resolve(editPostId); // pass the editPostId to the next .then
-        }
-      });
+    // file errors
+    if (!inputFile) {
+      setFileError("Please provide a file.");
+      hasError = true;
     } else {
-      Meteor.call("add_post", postDate, postDescription, userInfo.username, (error, addPostId) => {
-        if (error) {
-          console.log("Error adding post:", error);
-          reject(`Error: ${error.message}`);
-        } else {
-          console.log("Post added with ID:", addPostId);
-          resolve(addPostId); // Pass the addPostId to the next .then
-        }
-      });
+      setFileError("");
     }
-  })
-    .then(
-      (postId) => // takes either ID for the edit post or new post
-        new Promise((resolve, reject) => {
-          Meteor.call("add_image", imageType, postId, inputFile, (error, imageId) => {
+
+    // description errors
+    if (!postDescription) {
+      setDescriptionError("Please provide a description.");
+      hasError = true;
+    } else {
+      setDescriptionError("");
+    }
+
+    if (hasError) {
+      return;
+    }
+
+    const post = {
+      postDate: postDate,
+      postDescription: postDescription,
+      artistUsername: userInfo.username,
+    };
+
+    // edit
+    new Promise((resolve, reject) => {
+      if (isEdit) {
+        Meteor.call(
+          "update_post_details",
+          postId,
+          post,
+          (error, editPostId) => {
             if (error) {
-              console.log("Error adding image:", error);
               reject(`Error: ${error.message}`);
             } else {
-              console.log("Image added with ID:", imageId);
-              resolve(imageId);
-              if (isEdit){
-                alert("Post added successfully!");
-                navigateTo("/" + UrlBasePath.PROFILE);
-              }
-              else{
-                alert("Post edited successfully!");
-                navigateTo("/" + UrlBasePath.PROFILE);
-              }
+              resolve(editPostId); // pass the editPostId to the next .then
             }
-          });
-        })
-    )
-    .catch((reason) => alert(reason));
-}
-
+          }
+        );
+      } else {
+        Meteor.call(
+          "add_post",
+          postDate,
+          postDescription,
+          userInfo.username,
+          (error, addPostId) => {
+            if (error) {
+              console.log("Error adding post:", error);
+              reject(`Error: ${error.message}`);
+            } else {
+              console.log("Post added with ID:", addPostId);
+              resolve(addPostId); // Pass the addPostId to the next .then
+            }
+          }
+        );
+      }
+    })
+      .then(
+        (postId ) => 
+          new Promise((resolve, reject) => {
+            Meteor.call(
+              "add_image",
+              imageType,
+              postId,
+              inputFile,
+              (error, imageId) => {
+                if (error) {
+                  console.log("Error adding image:", error);
+                  reject(`Error: ${error.message}`);
+                } else {
+                  console.log("Image added with ID:", imageId);
+                  resolve(imageId);
+                  if (isEdit) {
+                    alert("Post edited successfully!");
+                    navigateTo("/" + UrlBasePath.PROFILE);
+                  } else {
+                    alert("Post added successfully!");
+                    navigateTo("/" + UrlBasePath.PROFILE);
+                  }
+                }
+              }
+            );
+          })
+      )
+      .catch((reason) => alert(reason));
+  }
 
   function handleFileButtonClick() {
     fileInputRef.current.click();
@@ -221,7 +245,7 @@ function handleAddPost(event) {
 
       {/* Main container for content */}
       <div className="flex flex-col gap-4 xl:px-40">
-        <div className="title-text">Add Photo to Gallery</div>
+        <div className="title-text">{title}</div>
 
         {/* uploading input file */}
         <div className="flex flex-row flex-wrap gap-10 items-center">
@@ -268,6 +292,7 @@ function handleAddPost(event) {
             id="description-input"
             className="input-base lg:w-[40vw] sm:w-96 h-48"
             placeholder="Enter Your Post Description"
+            value = {postDescription}
             onChange={handleInputChange}
             rows={4}
             cols={40}
@@ -287,7 +312,7 @@ function handleAddPost(event) {
               onClick={handleAddPost}
             >
               <CheckIcon className="icon-base" />
-              Save
+              {button}
             </Button>
           </div>
         </div>
