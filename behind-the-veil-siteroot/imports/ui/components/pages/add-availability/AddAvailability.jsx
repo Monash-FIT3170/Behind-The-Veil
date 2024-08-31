@@ -4,7 +4,7 @@
  * Contributors: Laura, Josh
  */
 
-import React, { useId, useState } from "react";
+import React, { useEffect, useId, useState } from "react";
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
@@ -32,25 +32,7 @@ import { useSpecificUser } from "../../DatabaseHelper.jsx";
 const AddAvailability = () => {
     const { artistUsername } = useParams();
 
-    const {isLoading, userData} = useSpecificUser(artistUsername)
-
-
-    const MOCK_AVAILABILITY = [
-        {
-            "_id": "2648fb26-bd00-45ab-b62e-f88c37c6a994",
-            "availabilityTimes": {
-                "2024-08-10": [12, 13, 14, 15, 16],
-                "2024-08-11": [12, 13, 14, 15, 16]
-            },
-            "artistUsername": "username"
-        }
-    ]
-
-    const initialAvailability = MOCK_AVAILABILITY.find(entry => entry.artistUsername === artistUsername) || {
-        _id: useId(),
-        availabilityTimes: {},
-        artistUsername: artistUsername
-    };
+    const { isLoading, userData } = useSpecificUser(artistUsername)
 
     // form input values
     const [inputs, setInputs] = useState({
@@ -58,9 +40,18 @@ const AddAvailability = () => {
         times: [],
     });
 
-    const [availability, setAvailability] = useState(
-        initialAvailability.availabilityTimes
-    );
+    const [availability, setAvailability] = useState({});
+    console.log(availability)
+
+
+    useEffect(() => {
+        if (isLoading) return
+
+        if (userData?.availability) {
+            setAvailability(userData.availability)
+        }
+    }, [isLoading])
+
 
     // id's
     const dateInputId = useId();
@@ -87,35 +78,14 @@ const AddAvailability = () => {
 
     const handleSave = (event) => {
         event.preventDefault();
-
-        const dateKey = format(inputs.date, "yyyy-MM-dd");
-
-        if (!initialAvailability.availabilityTimes[dateKey]) {
-            initialAvailability.availabilityTimes[dateKey] = [];
-        }
-
-        inputs.times.forEach((time) => {
-            const hour = time.getHours();
-            if (!initialAvailability.availabilityTimes[dateKey].includes(hour)) {
-                initialAvailability.availabilityTimes[dateKey].push(hour);
-            }
-        });
-
         // TODO: add/update availability in database
-        // TODO: is this needed? might be able to remove initialAvailability as well
-        const existingIndex = MOCK_AVAILABILITY.findIndex(entry => entry.artistUsername === initialAvailability.artistUsername);
-        if (existingIndex !== -1) {
-            MOCK_AVAILABILITY[existingIndex] = initialAvailability;
-        } else {
-            MOCK_AVAILABILITY.push(initialAvailability);
-        }
 
         updateAvailability()
     }
 
     const updateAvailability = async () => {
         Meteor.call(
-            "update_availability", 
+            "update_availability",
             artistUsername,
             availability,
             (error) => {
@@ -260,6 +230,8 @@ const AddAvailability = () => {
                                                                     times,
                                                                 };
                                                             });
+
+                                                            // this needs to be in callback
                                                             const updatedAvailability = { ...availability };
                                                             if (isActive) {
                                                                 updatedAvailability[dateKey] = updatedAvailability[dateKey].filter(hour => hour !== time.getHours());
