@@ -14,6 +14,7 @@ import PreviousButton from "../../button/PreviousButton";
 import {
     eachHourOfInterval,
     format,
+    isBefore,
     isDate,
     isValid,
     isWithinInterval,
@@ -32,26 +33,35 @@ import { useSpecificUser } from "../../DatabaseHelper.jsx";
 const AddAvailability = () => {
     const { artistUsername } = useParams();
 
-    const { isLoading, userData } = useSpecificUser(artistUsername)
-
     // form input values
     const [selectedDate, setSelectedDate] = useState(startOfDay(new Date()));
     const [availability, setAvailability] = useState({});
-    console.log(availability)
-
-    useEffect(() => {
-        if (isLoading) return
-
-        if (userData?.availability) {
-            setAvailability(userData.availability)
-        }
-    }, [isLoading])
 
     // id's
     const dateInputId = useId();
     const timeInputId = useId();
 
-    console.log(selectedDate)
+    // artist data
+    const { isLoading, userData } = useSpecificUser(artistUsername)
+
+    // init availability state once artist data loads
+    useEffect(() => {
+        if (isLoading) return
+
+        if (userData?.availability) {
+            const artistAvailability = { ...userData.availability }
+
+            // remove dates from availability object that are in the past
+            for (date of Object.keys(artistAvailability)) {
+                const today = startOfDay(new Date())
+                if (isBefore(date, today)) {
+                    delete artistAvailability[date]
+                }
+            }
+
+            setAvailability(artistAvailability)
+        }
+    }, [isLoading])
 
     /**
      * Calculate available times that the user can select, based on date
@@ -72,13 +82,7 @@ const AddAvailability = () => {
         return hours
     };
 
-    const handleSave = (event) => {
-        event.preventDefault();
-        // TODO: add/update availability in database
-
-        updateAvailability()
-    }
-
+    // write new availability object to artist document in database
     const updateAvailability = async () => {
         Meteor.call(
             "update_availability",
@@ -91,6 +95,11 @@ const AddAvailability = () => {
                 }
             }
         )
+    }
+
+    const handleSave = (event) => {
+        event.preventDefault();
+        updateAvailability()
     }
 
     const handleManualDateInput = (event) => {
@@ -185,7 +194,6 @@ const AddAvailability = () => {
                             </div>
 
                             {/* available time buttons */}
-                            {/* <div className="flex sm:flex-grow sm:justify-center"> */}
                             <div className="flex flex-col flex-grow gap-1">
                                 <div className="flex flex-row">
                                     <label
@@ -212,18 +220,22 @@ const AddAvailability = () => {
                                                         key={time}
                                                         className={className}
                                                         onClick={() => {
-                                                            // TODO: this needs to be in callback
-                                                            // also should sort the hours in ascending order
-                                                            const updatedAvailability = { ...availability };
-                                                            if (isActive) {
-                                                                updatedAvailability[dateKey] = updatedAvailability[dateKey].filter(hour => hour !== time.getHours());
-                                                            } else {
-                                                                if (!updatedAvailability[dateKey]) {
-                                                                    updatedAvailability[dateKey] = [];
+                                                            setAvailability((prevAvailability) => {
+                                                                const updatedAvailability = { ...prevAvailability };
+                                                                if (isActive) {
+                                                                    updatedAvailability[dateKey] = updatedAvailability[dateKey].filter(hour => hour !== time.getHours());
+                                                                } else {
+                                                                    if (!updatedAvailability[dateKey]) {
+                                                                        updatedAvailability[dateKey] = [];
+                                                                    }
+                                                                    updatedAvailability[dateKey].push(time.getHours());
+
+                                                                    // sort in ascending order
+                                                                    updatedAvailability[dateKey].sort((a, b) => a - b)
                                                                 }
-                                                                updatedAvailability[dateKey].push(time.getHours());
-                                                            }
-                                                            setAvailability(updatedAvailability);
+                                                                
+                                                                return updatedAvailability
+                                                            });
                                                         }}
                                                     >
                                                         {format(time, 'p')}
@@ -238,8 +250,6 @@ const AddAvailability = () => {
                                     </div>
                                 </div>
                             </div>
-                            {/* </div> */}
-
                         </div>
                     </div>
                 </form>
