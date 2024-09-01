@@ -1,7 +1,7 @@
 /**
  * File Description: Database helper functions
- * File version: 1.4
- * Contributors: Nikki, Ryan, Phillip
+ * File version: 1.5
+ * Contributors: Nikki, Ryan, Phillip, Lucas
  */
 import { useSubscribe, useTracker } from "meteor/react-meteor-data";
 
@@ -27,7 +27,7 @@ export function useServices(
   params,
   filter,
   requireArtist = false,
-  oneService = true
+  onePage = true
 ) {
   // get service data from database
   const isLoadingUserServices = useSubscribe(service_publication, ...params);
@@ -69,7 +69,8 @@ export function useServices(
       }
     }
 
-    if (oneService) {
+    // check if the frontend requires on
+    if (onePage) {
       // then aggregate with the FIRST image that belong to it
       for (let j = 0; j < imagesData.length; j++) {
         // find matching image for the service
