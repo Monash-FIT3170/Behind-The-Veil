@@ -82,41 +82,60 @@ const RequestBooking = () => {
             return []
         }
 
-        // TODO: take artist availability into account
-        // convert date argument into 'yyyy-MM-dd', to index into availability object
-        // console.log(format(date, 'yyyy-MM-dd'))
+        const dateKey = format(date, "yyyy-MM-dd");
 
-        const hours = eachHourOfInterval({
-            // TODO: for now, assume that artists can work 6am to 7pm every day
-            start: set(date, { hours: 6, minutes: 0, seconds: 0 }),
-            end: set(date, { hours: (19 - duration), minutes: 0, seconds: 0 })
+        const availabiltyOnDate = artistAvailability[dateKey]
+
+        // no availability
+        if (!Array.isArray(availabiltyOnDate) || availabiltyOnDate.length === 0) {
+            return []
+        }
+
+        // convert integer hours from database into date object hours
+        const artistWorkingHours = availabiltyOnDate.map((hour) => {
+            return set(date, { hours: hour, minutes: 0, seconds: 0 })
         })
 
         const confirmedBookings = bookings.filter((booking) => {
             return booking.bookingStatus === BookingStatus.CONFIRMED
         })
 
-        // for each hour, check if that hour is 'free'
-        // an hour is 'available' if the start of the hour + service duration doesn't overlap with any existing confirmed booking
-        const availableTimes = hours.filter((hour) => {
-            if (!isAfter(startOfHour(hour), new Date())) return false
+        // for each hour, check if that hour is 'available'
+        // an hour is 'available' if:
+        // 1. the start of the hour + service duration doesn't overlap with any existing confirmed booking and
+        // 2. the artist is available from the hour and every subsequent hour until the end of the duration
+        const availableTimes = artistWorkingHours.filter((workingHour) => {
+            if (!isAfter(startOfHour(workingHour), new Date())) return false
 
             // check every booking and see if they overlap with this hour + service duration
             // if there are no overlapping bookings, then this hour is available
-            return !confirmedBookings.some((booking) => {
+            const noClashWithExistingBookings = !confirmedBookings.some((booking) => {
                 const confirmedBookingStart = booking.bookingStartDateTime
                 const confirmedBookingEnd = booking.bookingEndDateTime
 
                 return areIntervalsOverlapping(
-                    { start: hour, end: addHours(hour, duration) }, // time slot interval
+                    { start: workingHour, end: addHours(workingHour, duration) }, // time slot interval
                     { start: confirmedBookingStart, end: confirmedBookingEnd } // confirmed booking interval
                 )
             })
+
+            // check every hour from this hour until the end of the service duration and see
+            // if the artist is working all those hours
+            const serviceHours = eachHourOfInterval({
+                start: workingHour,
+                end: addHours(workingHour, duration)
+            })
+
+            const isArtistWorking = serviceHours.every((serviceHour) => {
+                // check if artist working hours includes each hour that the booking would span
+                return Boolean(artistWorkingHours.find((hr) => isEqual(hr, serviceHour)))
+            })
+
+            return noClashWithExistingBookings && isArtistWorking
         })
 
         return availableTimes
     }, [isLoading, artistAvailability])
-
 
     // TODO: this function might not be needed once we use real bookings b/c I think start time is stored as date object
     // converting json datetimes to js datetimes
