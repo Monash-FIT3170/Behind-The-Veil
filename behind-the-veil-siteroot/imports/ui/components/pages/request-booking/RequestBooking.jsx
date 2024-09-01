@@ -90,7 +90,7 @@ const RequestBooking = () => {
             // if there are no overlapping bookings, then this hour is available
             return !confirmedBookings.some((booking) => {
                 const confirmedBookingStart = booking.bookingStartDateTime
-                const confirmedBookingEnd = addHours(confirmedBookingStart, booking.bookingDuration)
+                const confirmedBookingEnd = booking.bookingEndDateTime
 
                 return areIntervalsOverlapping(
                     {start: hour, end: addHours(hour, duration)}, // time slot interval

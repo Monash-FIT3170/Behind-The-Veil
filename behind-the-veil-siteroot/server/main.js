@@ -16,13 +16,23 @@ import "/imports/api/collections/images.js";
 import "/imports/api/methods/images.js";
 import "/imports/api/publications/images";
 
+
 import "/imports/api/collections/posts.js";
 import "/imports/api/methods/posts.js";
 import "/imports/api/publications/posts";
 
+
 import "/imports/api/methods/payment.js";
 
 import {checkBookingsEveryMidnight} from "./background.js"
+
+import "/imports/api/collections/chats.js";
+import "/imports/api/methods/chats.js";
+import "/imports/api/publications/chats.js";
+
+import "/imports/api/collections/messages.js";
+import "/imports/api/methods/messages.js";
+import "/imports/api/publications/messages.js";
 
 // file in the same folder containing creds for mail server
 // import {emailUser, emailPass, mailUrl, fromUser} from "./secrets.js"

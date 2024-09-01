@@ -4,7 +4,7 @@
  * Contributors: Laura, Nikki
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import classNames from "classnames";
 import {useNavigate} from "react-router-dom";
 
@@ -21,6 +21,7 @@ import {
 } from "@heroicons/react/24/outline"
 import BookingStatus from "../../enums/BookingStatus";
 import BookingStatusDisplay from "../booking/BookingStatusDisplay";
+import BookingStatusConfirmModal from "../booking/BookingStatusConfirmModal";
 
 
 /**
@@ -59,6 +60,15 @@ export const BookingCard = ({
     const bookingDatetime = new Date(bookingStartDateTime);
     const now = new Date();
 
+    // confirmation modal attributes
+    const [open, setOpen] = useState(false);
+    const [toBeStatus, setToBeStatus] = useState(null);
+    const onOpenModal = (status) => {
+        setToBeStatus(status)
+        setOpen(true)
+    };
+    const onCloseModal = () => setOpen(false);
+
     const cardClasses = classNames("flex flex-col overflow-hidden justify-between " +
         "w-full min-w-60 lg:w-2/5 lg:min-w-78 min-h-[360px] pr-6 md:pr-0 lg:pr-6 xl:pr-0", className);
 
@@ -67,7 +77,10 @@ export const BookingCard = ({
     const purpleButtonClass = classNames(buttonClass, "bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500");
     const smallPurpleButtonClass = "flex flex-row gap-x-2 justify-center items-center w-[60%] bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500"
 
-
+    const leaveReview = () => {
+        // TODO: add the booking id at the end of the url
+        navigateTo('/profile/review');
+    }
     if (userType === 'bride') {
         switch (bookingStatus) {
             case BookingStatus.COMPLETED:
@@ -75,7 +88,8 @@ export const BookingCard = ({
                 if (bookingIsReviewed) {
                     // if not reviewed yet
                     additionalButtons.push(
-                        <Button className={purpleButtonClass}>
+                        // TODO: in the navigateTo, add '/review/' + serviceId or bookingId in it to show review of particular item
+                        <Button className={purpleButtonClass} onClick={leaveReview}>
                             <PencilSquareIcon className="icon-base"/>
                             Leave Review
                         </Button>
@@ -83,7 +97,7 @@ export const BookingCard = ({
                 } else {
                     // if already left review
                     additionalButtons.push(
-                        <Button className={purpleButtonClass}>
+                        <Button className={purpleButtonClass} onClick={leaveReview}>
                             <EyeIcon className="icon-base"/>
                             View Review
                         </Button>
@@ -94,16 +108,17 @@ export const BookingCard = ({
             case BookingStatus.OVERDUE:
                 // if booking is confirmed add a "service completed" button if over the date
                 // if a booking is confirmed, add a "request change" button if not yet the date
-                if (bookingDatetime >= now) { // checks that service date is after now
-                    // if today or passed today
+                if (bookingDatetime < now) { // is current time AFTER specified booking time
+                    // if booking time already passed (in the past)
                     additionalButtons.push(
-                        <Button className={purpleButtonClass}>
+                        <Button className={purpleButtonClass}
+                                onClick={() => {onOpenModal(BookingStatus.COMPLETED)}}>
                             <CurrencyDollarIcon className="icon-base"/>
                             Service Completed
                         </Button>
                     );
                 } else {
-                    // if booking date has not passed yet
+                    // if booking datetime has not passed yet (in the future)
                     additionalButtons.push(
                         <Button className={purpleButtonClass}>
                             <ArrowPathIcon className="icon-base"/>
@@ -129,16 +144,19 @@ export const BookingCard = ({
                 // if a booking is pending, add "accept" and "reject" buttons
                 additionalButtons.push(
                     <div className={"flex flex-row items-center justify-between gap-x-1 w-4/5 min-w-40"}>
-                        <Button className={smallPurpleButtonClass}>
+                        <Button className={smallPurpleButtonClass}
+                        onClick={() => {onOpenModal(BookingStatus.CONFIRMED)}}>
+                    
                             <CheckCircleIcon className="icon-base"/>
                         </Button>
-                        <Button className={smallPurpleButtonClass}>
+                        <Button className={smallPurpleButtonClass}
+                        onClick={() => {onOpenModal(BookingStatus.REJECTED)}}>
                             <XCircleIcon className="icon-base"/>
                         </Button>
 
                     </div>
+                            
                 );
-                additionalButtons.push(null);
                 break;
             case BookingStatus.CONFIRMED:
             case BookingStatus.OVERDUE:
@@ -210,6 +228,12 @@ export const BookingCard = ({
                          alt={"Service's cover image"}/>
                 </div>
             </div>
+
+            <BookingStatusConfirmModal open={open}
+                                       closeHandler={onCloseModal}
+                                       bookingId={bookingId}
+                                       toBeStatus={toBeStatus}
+            />
         </Card>
     );
 };

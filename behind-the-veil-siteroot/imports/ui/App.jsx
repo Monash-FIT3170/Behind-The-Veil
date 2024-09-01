@@ -34,6 +34,7 @@ import RequestBooking from "./components/pages/request-booking/RequestBooking.js
 import PaymentDetails from "./components/pages/request-booking/PaymentDetails";
 import BookingSummary from "./components/pages/request-booking/BookingSummary";
 import BookingConfirmation from "./components/pages/request-booking/BookingConfirmation";
+import Review from "./components/pages/review/Review";
 
 import AddAvailability from './components/pages/add-availability/AddAvailability.jsx';
 
@@ -160,8 +161,17 @@ export const App = () => (
                             </ProtectedRoute>
                         }
                     />
-            
-
+                    <Route
+                    // TODO: Add this to the url path -> /:serviceId
+                        path={`/${UrlBasePath.PROFILE}/review`}
+                        element={
+                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}>
+                                {/* <Review /> */}
+                                <Review></Review>
+                              
+                            </ProtectedRoute>
+                        }
+                    />
                     {/*Add and Edit Service Pages for Artist*/}
                     <Route
                         path={`/${UrlBasePath.PROFILE}/addService`}

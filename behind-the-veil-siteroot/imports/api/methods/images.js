@@ -1,7 +1,7 @@
 /**
  * File Description: Image database entity
  * File version: 1.2
- * Contributors: Nikki, Phillip, Lucas
+ * Contributors: Nikki, Phillip, Lucas, Vicky
  */
 
 import {Meteor} from "meteor/meteor";
@@ -48,6 +48,15 @@ Meteor.methods({
             imageType: "post",
             target_id: target_Id,
         });
+    },
+    
+    /**
+     * Retrieves a single image instance from the database based on the target ID.
+     * @param {string} targetId - The serviceId/username/postId that the image belongs to
+     * @returns {object|null} - The image object if found, otherwise null.
+     */
+    get_image: function (targetId) {
+        return ImageCollection.findOne({ targetId: targetId });
     },
 });
 

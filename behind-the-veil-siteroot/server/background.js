@@ -21,7 +21,7 @@ export const checkBookings = () => {
         }
 
         confirmedBookings.forEach((booking) => {
-            const confirmedBookingEnd = addHours(booking.bookingStartDateTime, booking.bookingDuration)
+            const confirmedBookingEnd = booking.bookingEndDateTime
 
             if (confirmedBookingEnd < now) {  
                 Meteor.call('update_booking_details', booking._id, { bookingStatus: BookingStatus.OVERDUE });
@@ -47,7 +47,7 @@ export const checkBookings = () => {
     })
 };
 
-// Run the task every mighnight
+// Run the task every midnight
 export const checkBookingsEveryMidnight = () => {
     const now = new Date();
     const midnight = new Date(now);
