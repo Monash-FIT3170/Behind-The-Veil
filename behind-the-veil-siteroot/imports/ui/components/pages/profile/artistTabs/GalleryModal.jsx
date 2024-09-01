@@ -5,6 +5,7 @@
  */
 
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   TrashIcon,
   PencilIcon,
@@ -16,10 +17,12 @@ import Button from "../../../button/Button";
 import { Fragment } from "react";
 
 import { Dialog, Transition } from "@headlessui/react";
+import UrlBasePath from "../../../../enums/UrlBasePath";
 
 const GalleryModal = ({
   isOpen,
   closeModal,
+  postId,
   selectedImage,
   openDeleteModal,
   profileImgSrc,
@@ -27,10 +30,29 @@ const GalleryModal = ({
   selectedPostDescription,
   userInfo,
   external,
+  isEdit
 }) => {
   const trashIcon = <TrashIcon className="icon-base" />;
   const pencilIcon = <PencilIcon className="icon-base" />;
   const closeIcon = <XCircleIcon className="icon-base" />;
+  const navigateTo = useNavigate();
+
+
+  let editButton = "";
+  let mainButton = null;
+
+  const buttonBaseClasses = "bg-secondary-purple hover:bg-secondary-purple-hover mt-2 w-32 flex justify-center";
+  if (isEdit) {
+      editButton = "Edit";
+      mainButton = (
+        <Button className= {buttonBaseClasses}
+        onClick={() => navigateTo(`/${UrlBasePath.PROFILE}/editPost/${postId}`)}
+        >
+        {pencilIcon}
+        {editButton}
+      </Button>
+      )}; 
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-30" onClose={closeModal}>
@@ -93,9 +115,10 @@ const GalleryModal = ({
                   </div>
                   {external === false ? (
                     <div className="flex flex-col items-center justify-center absolute bottom-16 w-full mt-10 mb-5 pb-8">
-                      <Button className="bg-secondary-purple hover:bg-secondary-purple-hover mt-2 w-32 flex justify-center">
+                      {/*<Button className="bg-secondary-purple hover:bg-secondary-purple-hover mt-2 w-32 flex justify-center">
                         {pencilIcon} <span className="ml-2">Edit</span>
-                      </Button>
+                      </Button>*/}
+                      {mainButton}
                       <Button
                         className="mt-2 w-32 flex justify-center"
                         onClick={() => {

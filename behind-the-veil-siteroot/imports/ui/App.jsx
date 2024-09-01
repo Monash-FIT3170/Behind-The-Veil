@@ -199,7 +199,23 @@ export const App = () => (
                     <Route path={`/${UrlBasePath.SERVICES}/:serviceId/booking-confirmation`} element={<BookingConfirmation />} />
                     {/* TODO: haven't implemented actual flow to get here yet */}
                     <Route path="/cancel-booking/:bookingId" element={<CancelBooking/>}/>
-                    <Route path={`/${UrlBasePath.PROFILE}/add-edit-post`}element={<AddEditPostPage/>}/>
+                    {/*<Route path={`/${UrlBasePath.PROFILE}/add-edit-post`}element={<AddEditPostPage/>}/>*/}
+                    <Route
+                        path={`/${UrlBasePath.PROFILE}/addPost`}
+                        element={
+                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}>
+                                <AddEditPostPage />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path={`/${UrlBasePath.PROFILE}/editPost/:postId`}
+                        element={
+                            <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}>
+                                <AddEditPostPage isEdit />
+                            </ProtectedRoute>
+                        }
+                    />
                 </Routes>
             </main>
         </Router>
