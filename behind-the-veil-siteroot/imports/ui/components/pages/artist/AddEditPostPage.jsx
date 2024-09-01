@@ -17,7 +17,7 @@ import UrlBasePath from "../../../enums/UrlBasePath";
 export const AddEditPostPage = ({ isEdit }) => {
 
   // text for title/save button
-  const title = isEdit ? "Edit Photo In Gallery" : "Add Photo To Gallery"
+  const title = isEdit ? "Edit Photo In Gallery" : "Add Photo To Gallery";
   const button = isEdit ? "Save" : "Save";
 
   const [postDescription, setInputReason] = useState("");
@@ -36,7 +36,8 @@ export const AddEditPostPage = ({ isEdit }) => {
     navigateTo(`/`);
   }
 
-  const {postId} = useParams();
+  // gets the postId from the URL 
+  const { postId } = useParams();
 
   const fileInputRef = useRef(null); // used since the file classname is hidden to ensure that ui is in specific format
 
@@ -50,43 +51,43 @@ export const AddEditPostPage = ({ isEdit }) => {
             if (error) {
               reject(`Error: ${error.message}`);
             } else {
+              console.log(editPost);
               resolve(editPost);
             }
           });
         });
       };
 
-      // Function to retrieve image using postId (same as imageId)
-      //const retrieveImage = () => {
-        // return new Promise((resolve, reject) => {
-        //   Meteor.call("get_image", postId, (error, editImage) => {
-        //     // Using postId directly
-        //     if (error) {
-        //       reject(`Error: ${error.message}`);
-        //     } else {
-        //       resolve(editImage);
-        //     }
-        //   });
-        // });
-      //};
-
+      // Function to retrieve image using postId
+      const retrieveImage = () => {
+        return new Promise((resolve, reject) => {
+          Meteor.call("get_image", postId, (error, editImage) => {
+            if (error) {
+              reject(`Error: ${error.message}`);
+            } else {
+              console.log(editImage);
+              resolve(editImage);
+            }
+          });
+        });
+      };
+      // firsty use the retrievePost function
       retrievePost()
         .then((post) => {
-          // Validate that the post belongs to the current user
+          // Validate that the post belongs to the current user if not take them away
           if (post.artistUsername !== userInfo.username) {
             navigateTo("/" + UrlBasePath.PROFILE);
           }
           setInputReason(post.postDescription); // Set the post description
-          //return retrieveImage(); // Fetch the image next
+          return retrieveImage(); // Fetch the image next
         })
-        //.then((image) => {
-          // Set the image preview and input values
-         // setImagePreviewUrl(image.imagePreviewUrl);
-          //setInputFile(image.inputFile);
-        //})
+        .then((image) => {
+          //Set the image preview and input file
+          setInputFile(image.imageData);
+          setImagePreviewUrl(image.imageData);
+        })
         .catch((error) => {
-          console.error("Error loading post or image:", error);
-          alert(error); // Handle errors gracefully
+          alert(error);
         });
     }
   }, []);
@@ -163,10 +164,17 @@ export const AddEditPostPage = ({ isEdit }) => {
       return;
     }
 
+    // post object
     const post = {
       postDate: postDate,
       postDescription: postDescription,
       artistUsername: userInfo.username,
+    };
+    // image object
+    const image = {
+      imageType: imageType,
+      target_id: postId,
+      imageData: inputFile,
     };
 
     // edit
@@ -180,10 +188,12 @@ export const AddEditPostPage = ({ isEdit }) => {
             if (error) {
               reject(`Error: ${error.message}`);
             } else {
-              resolve(editPostId); // pass the editPostId to the next .then
+              console.log("post addded with:", editPostId);
+              resolve(editPostId); 
             }
           }
         );
+        //add
       } else {
         Meteor.call(
           "add_post",
@@ -196,39 +206,52 @@ export const AddEditPostPage = ({ isEdit }) => {
               reject(`Error: ${error.message}`);
             } else {
               console.log("Post added with ID:", addPostId);
-              resolve(addPostId); // Pass the addPostId to the next .then
+              resolve(addPostId); // Pass the addPostId to the next .then if we are adding
             }
           }
         );
       }
     })
-      .then(
-        (postId ) => 
-          new Promise((resolve, reject) => {
+      .then((newPostId) => {
+        if (isEdit) {
+          // If editing, handle the edit scenario
+          return new Promise((resolve, reject) => {
             Meteor.call(
-              "add_image",
-              imageType,
+              "update_post_image",
               postId,
-              inputFile,
+              image,
               (error, imageId) => {
                 if (error) {
-                  console.log("Error adding image:", error);
                   reject(`Error: ${error.message}`);
                 } else {
-                  console.log("Image added with ID:", imageId);
                   resolve(imageId);
-                  if (isEdit) {
-                    alert("Post edited successfully!");
-                    navigateTo("/" + UrlBasePath.PROFILE);
-                  } else {
-                    alert("Post added successfully!");
-                    navigateTo("/" + UrlBasePath.PROFILE);
-                  }
+                  alert("Post edited successfully!");
+                  navigateTo("/" + UrlBasePath.PROFILE);
                 }
               }
             );
-          })
-      )
+          });
+        } else {
+          // If adding a new post, handle the add scenario
+          return new Promise((resolve, reject) => {
+            Meteor.call(
+              "add_image",
+              imageType,
+              newPostId,
+              inputFile,
+              (error, imageId) => {
+                if (error) {
+                  reject(`Error: ${error.message}`);
+                } else {
+                  resolve(imageId);
+                  alert("Post added successfully!");
+                  navigateTo("/" + UrlBasePath.PROFILE);
+                }
+              }
+            );
+          });
+        }
+      })
       .catch((reason) => alert(reason));
   }
 
@@ -292,7 +315,7 @@ export const AddEditPostPage = ({ isEdit }) => {
             id="description-input"
             className="input-base lg:w-[40vw] sm:w-96 h-48"
             placeholder="Enter Your Post Description"
-            value = {postDescription}
+            value={postDescription}
             onChange={handleInputChange}
             rows={4}
             cols={40}
