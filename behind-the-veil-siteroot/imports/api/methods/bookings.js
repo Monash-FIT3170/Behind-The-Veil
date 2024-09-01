@@ -4,22 +4,23 @@
  * Contributors: Neth, Nikki
  */
 import { BookingCollection } from "../collections/bookings";
+import {sendNewBookingEmail} from "../../../server/mailer";
 
 Meteor.methods({
+    /**
+     * Adds a new booking to the database.
+     * @param {Date} startDateTime - The start date and time of the booking.
+     * @param {Date} bookingEndDateTime - The end date and time of the booking.
+     * @param {string} location - The location of the booking.
+     * @param {number} price - The price of the booking.
+     * @param {string} status - The status of the booking.
+     * @param {string} brideUsername - The username of the bride associated with the booking.
+     * @param {string} artistUsername - The username of the artist associated with the booking.
+     * @param {string} serviceId - The ID of the service booked.
+     * @returns {string} The unique ID of the newly created booking.
+     */
     "add_booking": function (startDateTime, bookingEndDateTime, location, price, status, brideUsername, artistUsername, serviceId) {
-        /**
-         * Adds a new booking to the database.
-         * @param {Date} startDateTime - The start date and time of the booking.
-         * @param {Date} bookingEndDateTime - The end date and time of the booking.
-         * @param {string} location - The location of the booking.
-         * @param {number} price - The price of the booking.
-         * @param {string} status - The status of the booking.
-         * @param {string} brideUsername - The username of the bride associated with the booking.
-         * @param {string} artistUsername - The username of the artist associated with the booking.
-         * @param {string} serviceId - The ID of the service booked.
-         * @returns {string} The unique ID of the newly created booking.
-         */
-        return BookingCollection.insert({
+        const newBookingId = BookingCollection.insert({
             bookingStartDateTime: startDateTime,
             bookingEndDateTime: bookingEndDateTime,
             bookingLocation: location,
@@ -30,6 +31,9 @@ Meteor.methods({
             artistUsername: artistUsername,
             serviceId: serviceId
         });
+
+        sendNewBookingEmail(newBookingId);
+        return newBookingId;
     },
 
     /**
