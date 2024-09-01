@@ -197,6 +197,10 @@ export const App = () => (
                     <Route path={`/${UrlBasePath.SERVICES}/:serviceId/booking-summary`} element={<BookingSummary />} />
                     <Route path={`/${UrlBasePath.SERVICES}/:serviceId/payment-details`} element={<PaymentDetails />} />
                     <Route path={`/${UrlBasePath.SERVICES}/:serviceId/booking-confirmation`} element={<BookingConfirmation />} />
+                    <Route 
+                      path="/request-booking-form" 
+                      element={<RequestBooking />}
+                    />
                     {/* TODO: haven't implemented actual flow to get here yet */}
                     <Route path="/cancel-booking/:bookingId" element={<CancelBooking/>}/>
                     <Route path={`/${UrlBasePath.PROFILE}/add-edit-post`}element={<AddEditPostPage/>}/>

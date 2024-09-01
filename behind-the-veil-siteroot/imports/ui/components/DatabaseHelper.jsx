@@ -13,6 +13,8 @@ import PostCollection from "../../api/collections/posts";
 import BookingStatus from "../enums/BookingStatus";
 
 
+
+
 /**
  * Function to update booking's status in any way (also linked to emailing in the future)
  *
@@ -21,7 +23,6 @@ import BookingStatus from "../enums/BookingStatus";
  * @param cancelAttributes - if status is CANCELLED, this is the cancel reasons
  */
 export function updateBookingStatus(bookingId, newStatus, cancelAttributes) {
-
     if (newStatus === BookingStatus.CANCELLED) {
         Meteor.call('update_booking_details', bookingId, {
             bookingStatus: newStatus,
@@ -34,6 +35,7 @@ export function updateBookingStatus(bookingId, newStatus, cancelAttributes) {
     }
     // email
 }
+
 
 /**
  * Used for to get a list of service data (includes their image and/or artist data automatically)

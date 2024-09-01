@@ -6,7 +6,7 @@
 import { BookingCollection } from "../collections/bookings";
 
 Meteor.methods({
-    "add_booking": function (startDateTime, bookingEndDateTime, location, price, status, brideUsername, artistUsername, serviceId) {
+    add_booking: function (startDateTime, bookingEndDateTime, location, price, status, brideUsername, artistUsername, serviceId) {
         /**
          * Adds a new booking to the database.
          * @param {Date} startDateTime - The start date and time of the booking.
@@ -28,19 +28,16 @@ Meteor.methods({
             bookingIsReviewed: false,
             brideUsername: brideUsername,
             artistUsername: artistUsername,
-            serviceId: serviceId
+            serviceId: serviceId,
         });
     },
-
     /**
      * Retrieves a single booking instance from the database based on the booking ID.
      * @param {string} bookingId - The ID of the booking to retrieve.
      * @returns {object|null} - The booking object if found, otherwise null.
      */
-    "get_booking": function (bookingId) {
-        return BookingCollection.findOne(
-            { _id: bookingId },
-        )
+    get_booking: function (bookingId) {
+        return BookingCollection.findOne({ _id: bookingId });
     },
 
     /**
@@ -48,20 +45,17 @@ Meteor.methods({
      * @param {string} bookingId - The ID of the booking to update.
      * @param {object} updateObject - Field and value object of elements that need to be upgraded
      */
-    "update_booking_details": function (bookingId, updateObject) {
-        BookingCollection.update(
-            { _id: bookingId },
-            { $set: updateObject },
-        );
+    update_booking_details: function (bookingId, updateObject) {
+        BookingCollection.update({ _id: bookingId }, { $set: updateObject });
     },
 
     /**
      * If there is a booking that exists with the service that matches the service ID, then the method will return true. If not, the method will return false.
      * @param {int} serviceId - The ID of the service.
      */
-    "has_booking_of_service": function (serviceId) {
+    has_booking_of_service: function (serviceId) {
         const booking = BookingCollection.findOne({ serviceId: serviceId });
-    
+
         return !!booking;
     },
 
@@ -70,7 +64,7 @@ Meteor.methods({
      * @param {BookingStatus} bookingStatus - The status of the bookings to retrieve.
      * @returns {Array} - An array of booking objects that match the given status.
      */
-    "get_bookings_by_status": function (bookingStatus) {
+    get_bookings_by_status: function (bookingStatus) {
         return BookingCollection.find({ bookingStatus: bookingStatus }).fetch();
-    }
-})
+    },
+});
