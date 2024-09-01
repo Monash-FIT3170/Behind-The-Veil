@@ -51,14 +51,13 @@ export function useServices(
   params,
   filter,
   requireArtist = false,
-  onePage = true
+  oneImage = true
 ) {
     // get service data from database
     const isLoadingUserServices = useSubscribe(service_publication, ...params);
     let servicesData = useTracker(() => {
         return ServiceCollection.find(filter).fetch();
     });
-  }
 
   // get service images from database
   const isLoadingServiceImages = useSubscribe("service_images", []);
@@ -94,37 +93,35 @@ export function useServices(
       }
     }
 
-    // check if the frontend requires on
-    if (onePage) {
-      // then aggregate with the FIRST image that belong to it
-      for (let j = 0; j < imagesData.length; j++) {
-        // find matching image for the service
-        if (
-          imagesData[j].imageType === "service" &&
-          servicesData[i]._id === imagesData[j].target_id
-        ) {
-          servicesData[i].serviceImageData = imagesData[j].imageData;
-          foundImageMatch = true;
-          break;
+        // check if the frontend requires on
+        if (oneImage) {
+            // then aggregate with the FIRST image that belong to it
+            for (let j = 0; j < imagesData.length; j++) {
+                // find matching image for the service
+                if (imagesData[j].imageType === "service" && servicesData[i]._id === imagesData[j].target_id) {
+                    servicesData[i].serviceImageData = imagesData[j].imageData;
+                    foundImageMatch = true;
+                    break;
+                }
+            }
+        } else {
+            let serviceImages = [];
+            for (let j = 0; j < imagesData.length; j++) {
+                // find matching images for the service
+                if (imagesData[j].imageType === "service" && servicesData[i]._id === imagesData[j].target_id) {
+                    serviceImages.push(imagesData[j]);
+                    foundImageMatch = true;
+                }
+                servicesData[i].serviceImageData = serviceImages;
+            }
+
+            // if not found any images, replace with default
+            if (!foundImageMatch) {
+                servicesData[i].serviceImageData = "/imageNotFound.png";
+            }
         }
-      }
-    } else {
-      let serviceImages = [];
-      for (let j = 0; j < imagesData.length; j++) {
-          // find matching images for the service
-          if (imagesData[j].imageType === "service" && servicesData[i]._id === imagesData[j].target_id) {
-              serviceImages.push(imagesData[j])
-              foundImageMatch = true;
-          }
-          servicesData[i].serviceImageData = serviceImages
-      }
-      
-      // if not found any images, replace with default
-      if (!foundImageMatch) {
-        servicesData[i].serviceImageData = "/imageNotFound.png";
-      }
     }
-    return {isLoading, servicesData};
+  return { isLoading, servicesData };
 }
 
 /**

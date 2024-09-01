@@ -212,7 +212,7 @@ export const AddEditServicePage = ({isEdit}) => {
                 setFileRejected(true);
                 setFileRejectedMessage("File has already been uploaded!");
                 return false;
-            } else if (file.size > 1048576) {
+            } else if (file.size > 16777216) {
                 setFileRejected(true);
                 setFileRejectedMessage("File must be less than 16MB");
                 return false;
