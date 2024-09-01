@@ -103,10 +103,7 @@ const FilterLocationSearchBar = ({
 
   return (
     <>
-      <div
-        className={"flex flex-col items-center justify-center"}
-        onBlur={onBlurInput}
-      >
+      <div className="relative" onBlur={onBlurInput}>
         <form className="flex h-12">
           {/* The search input field */}
           <Input
