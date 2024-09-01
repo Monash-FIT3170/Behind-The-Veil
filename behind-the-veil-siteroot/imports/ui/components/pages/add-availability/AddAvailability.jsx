@@ -35,14 +35,9 @@ const AddAvailability = () => {
     const { isLoading, userData } = useSpecificUser(artistUsername)
 
     // form input values
-    const [inputs, setInputs] = useState({
-        date: startOfDay(new Date()),
-        times: [],
-    });
-
+    const [selectedDate, setSelectedDate] = useState(startOfDay(new Date()));
     const [availability, setAvailability] = useState({});
     console.log(availability)
-
 
     useEffect(() => {
         if (isLoading) return
@@ -52,10 +47,11 @@ const AddAvailability = () => {
         }
     }, [isLoading])
 
-
     // id's
     const dateInputId = useId();
     const timeInputId = useId();
+
+    console.log(selectedDate)
 
     /**
      * Calculate available times that the user can select, based on date
@@ -109,13 +105,13 @@ const AddAvailability = () => {
                 isValid(parsedDate) &&
                 isWithinInterval(parsedDate, VALID_INTERVAL)
             ) {
-                setInputs((i) => ({ ...i, date: parsedDate }));
+                setSelectedDate(parsedDate);
                 return
             }
         }
 
         // else, just update date input with the raw value
-        setInputs((i) => ({ ...i, date: dateInput }));
+        setSelectedDate(dateInput);
         return
     }
 
@@ -127,7 +123,7 @@ const AddAvailability = () => {
         return dateInput
     }
 
-    const availableTimes = getAvailableTimes(inputs.date);
+    const availableTimes = getAvailableTimes(selectedDate);
 
     //tooltip
     const toolTipText = (
@@ -169,19 +165,14 @@ const AddAvailability = () => {
                                         label={<label htmlFor={dateInputId} className="large-text text-our-black">Select Date</label>}
                                         placeholder="DD-MM-YYYY"
                                         name="date"
-                                        value={formatDateInput(inputs.date) || ""}
+                                        value={formatDateInput(selectedDate) || ""}
                                         onChange={handleManualDateInput}
                                     />
                                     {/* calendar component */}
                                     <AvailabilityCalendar
-                                        value={isValid(inputs.date) && isDate(inputs.date) ? inputs.date : null}
+                                        value={isValid(selectedDate) && isDate(selectedDate) ? selectedDate : null}
                                         onChange={(date) => {
-                                            setInputs((i) => {
-                                                return {
-                                                    ...i,
-                                                    date: date,
-                                                };
-                                            });
+                                            setSelectedDate(date);
                                         }}
                                         tileClassName={({ date, view }) => {
                                             const dateKey = format(date, 'yyyy-MM-dd');
@@ -213,7 +204,7 @@ const AddAvailability = () => {
                                             availableTimes.map((time) => {
                                                 const baseStyle = "w-full";
                                                 const activeStyle = "bg-confirmed-colour text-white hover:bg-confirmed-colour";
-                                                const dateKey = format(inputs.date, "yyyy-MM-dd");
+                                                const dateKey = format(selectedDate, "yyyy-MM-dd");
                                                 const isActive = availability[dateKey] && availability[dateKey].includes(time.getHours());
                                                 const className = isActive ? `${baseStyle} ${activeStyle}` : baseStyle;
                                                 return (
@@ -221,17 +212,8 @@ const AddAvailability = () => {
                                                         key={time}
                                                         className={className}
                                                         onClick={() => {
-                                                            setInputs((i) => {
-                                                                const times = isActive
-                                                                    ? i.times.filter(t => t.getHours() !== time.getHours())
-                                                                    : [...i.times, time];
-                                                                return {
-                                                                    ...i,
-                                                                    times,
-                                                                };
-                                                            });
-
-                                                            // this needs to be in callback
+                                                            // TODO: this needs to be in callback
+                                                            // also should sort the hours in ascending order
                                                             const updatedAvailability = { ...availability };
                                                             if (isActive) {
                                                                 updatedAvailability[dateKey] = updatedAvailability[dateKey].filter(hour => hour !== time.getHours());
