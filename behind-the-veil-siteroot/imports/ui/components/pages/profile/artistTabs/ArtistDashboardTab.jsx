@@ -26,7 +26,7 @@ export const ArtistDashboardTab = ({ username }) => {
 
   const serviceYears = useArtistBookings(username).bookingYearArray;
   const serviceLocations = useArtistBookings(username).bookingSuburbArray;
-  const [filterYear, setFilterYear] = useState("All Years");
+  const [filterYear, setFilterYear] = useState(-1);
   const [filterLocation, setFilterLocation] = useState("");
   const [totalFilterEarnings, setTotalFilterEarnings] = useState(null);
   const [totalFilterPendingEarnings, setTotalFilterPendingEarnings] =
@@ -37,6 +37,7 @@ export const ArtistDashboardTab = ({ username }) => {
   const artistBookingData = useUserBookings(username).artistBookingData;
 
   function filterDataCalculator(location, year) {
+    console.log(location + year);
     let bookingInYear = [];
     if (year === -1) {
       bookingInYear = artistBookingData;
@@ -52,7 +53,7 @@ export const ArtistDashboardTab = ({ username }) => {
 
     let filterBookingData = [];
     if (location == "") {
-      filterBookingData = artistBookingData;
+      filterBookingData = bookingInYear;
     } else {
       for (let i = 0; i < bookingInYear.length; i++) {
         const split_address = bookingInYear[i].bookingLocation.split(",");
@@ -62,6 +63,8 @@ export const ArtistDashboardTab = ({ username }) => {
         }
       }
     }
+
+    console.log(filterBookingData);
 
     const completedBookings = [];
 
@@ -90,12 +93,6 @@ export const ArtistDashboardTab = ({ username }) => {
       bookingPendingRevenue,
     };
   }
-
-  // const filterData = useBookingFilterSearch(
-  //   filterLocation,
-  //   filterYear,
-  //   username
-  // );
 
   const currencyFormatter = new Intl.NumberFormat("en-AU", {
     style: "currency",
@@ -133,7 +130,7 @@ export const ArtistDashboardTab = ({ username }) => {
     }
 
     if (year == -1) {
-      setFilterYear("All Years");
+      setFilterYear(-1);
     }
 
     setFilterLocation(location);

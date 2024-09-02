@@ -490,13 +490,31 @@ export function useArtistBookings(username) {
   };
 }
 
-export function useBookingFilterSearch(location, year, username) {
-  const isLoadingUserBooking = useSubscribe("all_user_bookings", username);
-  const artistBookingData = useTracker(() => {
-    return BookingCollection.find({ artistUsername: username }).fetch();
-  });
-  console.log("ADSASANSFJASBJHCB");
-}
+// export function useBookingFilterSearch(location, year, username) {
+//   const isLoadingUserBooking = useSubscribe("all_user_bookings", username);
+//   const artistBookingData = useTracker(() => {
+//     return BookingCollection.find({ artistUsername: username }).fetch();
+//   });
+
+//   let returnData = [];
+
+//   if (location == "" && year == -1) {
+//     returnData = artistBookingData;
+//   }
+//   if (location == "") {
+//     returnData = artistBookingData.filter(
+//       (booking) => booking.bookingStartDateTime.getFullYear() === year
+//     );
+//   }
+//   if (year == -1) {
+//     returnData = artistBookingData;
+//   }
+
+// // }
+
+// const completedBookings = bookingData.filter(
+//   (booking) => booking.bookingStatus === BookingStatus.COMPLETED
+// );
 
 export function useUserBookings(username) {
   const isLoadingUserBooking = useSubscribe("all_user_bookings", username);
