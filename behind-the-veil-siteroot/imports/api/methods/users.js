@@ -86,7 +86,11 @@ Meteor.methods({
         );
     },
 
-    // TODO: add documentation
+    /**
+     * Updates the user's availability.
+     * @param {string} username - The username of the user to update.
+     * @param {object} availability - The availability object to update the user with. Keys = date (YYYY-mm-dd), Values = array of integers that correspond to hours of the day that the user is available to work
+     */
     "update_availability": function (username, availability) {
         return UserCollection.update(
             { username: username },
