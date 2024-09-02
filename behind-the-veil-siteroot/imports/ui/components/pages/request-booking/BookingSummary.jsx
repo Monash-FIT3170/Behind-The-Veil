@@ -12,7 +12,7 @@ import {ArrowRightIcon} from "@heroicons/react/24/outline";
 import FormOutput from "./FormOutput";
 import {addHours, enAU, format} from "date-fns";
 import PreviousButton from "../../button/PreviousButton";
-import {getUserInfo, useUserInfo} from "../../util";
+import {useUserInfo} from "../../util";
 import UrlBasePath from "../../../enums/UrlBasePath";
 
 /**
@@ -57,13 +57,14 @@ const BookingSummary = () => {
 
         // Extract date, and time from URL parameters
         const dateTime = urlParams.get('time');
+        const duration = urlParams.get('duration');
 
         return {
             'Bride Name': userInfo.alias,
             'Artist Name': urlParams.get('artistName'),
             'Service': urlParams.get('serviceName'),
             'Location': urlParams.get('location'),
-            'Date': getStartAndEndDate(dateTime, 2), // Hardcoded to be 2-hour duration, can be dynamic
+            'Date': getStartAndEndDate(dateTime, duration),
             'Total Price': `$${urlParams.get('price')}`,
         };
     };

@@ -1,6 +1,6 @@
 /**
  * File Description: Request Booking page
- * File version: 1.2
+ * File version: 1.3
  * Contributors: Josh, Nikki
  */
 
@@ -10,10 +10,11 @@ import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
-import AvailabilityCalendar, { VALID_INTERVAL } from "../../../components/availabilityCalendar/AvailabilityCalendar.jsx";
+import AvailabilityCalendar, {
+    VALID_INTERVAL,
+} from "../../../components/availabilityCalendar/AvailabilityCalendar.jsx";
 import Input from "../../input/Input";
 import PreviousButton from "../../button/PreviousButton";
-import mockBookings from './mockBookings.json'
 import {
     addDays,
     addHours,
@@ -28,29 +29,49 @@ import {
     parse,
     set,
     startOfDay,
-    startOfHour
+    startOfHour,
 } from "date-fns";
 import BookingStatus from "../../../enums/BookingStatus.ts";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from "react-router-dom";
 import { AddressAutofill } from "@mapbox/search-js-react";
 import { useSpecificService } from "../../DatabaseHelper";
 import Loader from "../../loader/Loader";
 import UrlBasePath from "../../../enums/UrlBasePath";
 import { useUserInfo } from "../../util";
+import { useSubscribe, useTracker } from "meteor/react-meteor-data";
+import BookingCollection from "../../../../api/collections/bookings.js";
 
 /**
  * Page for user to request a booking
  */
 
 const RequestBooking = () => {
-
     const userInfo = useUserInfo();
 
     // grab the service ID from the URL
     const { serviceId } = useParams();
 
     // get service data from database
-    const { isLoading, serviceData, artistData, serviceImagesData, profileImageData } = useSpecificService(serviceId);
+    const {
+        isLoading: isLoadingServices,
+        serviceData,
+        artistData,
+        serviceImagesData,
+        profileImageData,
+    } = useSpecificService(serviceId);
+
+    const duration = serviceData?.serviceDuration;
+
+    // subscribe to all bookings from this artist
+    const isLoadingBookingsFunc = useSubscribe("artist_bookings", artistData?.username);
+    const isLoadingBookings = isLoadingBookingsFunc()
+
+    const isLoading = isLoadingServices || isLoadingBookings
+
+    // track these artist bookings
+    const artistBookings = useTracker(() => {
+        return BookingCollection.find().fetch();
+    });
     const artistAvailability = artistData?.availability
 
     const navigateTo = useNavigate();
@@ -74,12 +95,12 @@ const RequestBooking = () => {
         }
 
         if (!(isValid(date) && isDate(date))) {
-            console.warn('invalid date')
-            return []
+            console.warn("invalid date");
+            return [];
         }
         if (!Array.isArray(bookings)) {
-            console.warn('bookings is not an array')
-            return []
+            console.warn("bookings is not an array");
+            return [];
         }
 
         const dateKey = format(date, "yyyy-MM-dd");
@@ -97,8 +118,8 @@ const RequestBooking = () => {
         })
 
         const confirmedBookings = bookings.filter((booking) => {
-            return booking.bookingStatus === BookingStatus.CONFIRMED
-        })
+            return booking.bookingStatus === BookingStatus.CONFIRMED;
+        });
 
         // for each hour, check if that hour is 'available'
         // an hour is 'available' if:
@@ -137,33 +158,19 @@ const RequestBooking = () => {
         return availableTimes
     }, [isLoading, artistAvailability])
 
-    // TODO: this function might not be needed once we use real bookings b/c I think start time is stored as date object
-    // converting json datetimes to js datetimes
-    const parseBookings = (bookings) => {
-        return bookings.map((booking) => {
-            return {
-                ...booking,
-                bookingStartDateTime: new Date(booking.bookingStartDateTime)
-            }
-        })
-    };
-
-    // TODO: make actual database call to get all bookings for this artist id
-    const bookings = parseBookings(mockBookings)
-
-    // TODO: get actual duration from this service
-    const duration = 2
-
     // initialise date input to the first day with availabilities
     const initDateInput = () => {
         // starting with today, iterate until we find a day with available times
-        let day = startOfDay(new Date())
-        while (getAvailableTimes({ date: day, duration: duration, bookings: bookings }).length === 0) {
-            day = startOfDay(addDays(day, 1))
-            if (isAfter(day, VALID_INTERVAL.end)) return '' // beyond valid interval
+        let day = startOfDay(new Date());
+        while (
+            getAvailableTimes({ date: day, duration: duration, bookings: artistBookings })
+                .length === 0
+        ) {
+            day = startOfDay(addDays(day, 1));
+            if (isAfter(day, VALID_INTERVAL.end)) return ""; // beyond valid interval
         }
 
-        return day
+        return day;
     };
 
     // form input values
@@ -220,66 +227,72 @@ const RequestBooking = () => {
 
     // Join address parts for full address
     useEffect(() => {
-        const street = address.street
-        const suburb = address.suburb
-        const state = address.state
-        const post = address.post
-        const full = street + ', ' + suburb + ' ' + post + ', ' + state;
+        const street = address.street;
+        const suburb = address.suburb;
+        const state = address.state;
+        const post = address.post;
+        const full = street + ", " + suburb + " " + post + ", " + state;
         setInputs((i) => ({ ...i, location: full }));
     }, [address]); //
-
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        if (!(isValid(inputs.time))) {
-            alert('Please select a valid time.')
-            return
+        if (!isValid(inputs.time)) {
+            alert("Please select a valid time.");
+            return;
         } else if (!inputs.location) {
-            alert('Please select a valid location.')
+            alert("Please select a valid location.");
             return;
         }
         inputs.artistUsername = serviceData.artistUsername;
         inputs.artistName = artistData.profile.alias;
         inputs.price = serviceData.servicePrice;
         inputs.serviceName = serviceData.serviceName;
+        inputs.duration = duration
         // pass the data to the next page via the url
         const query = new URLSearchParams(inputs).toString();
 
-        navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/booking-summary?${query}`);
-    }
+        navigateTo(
+            `/${UrlBasePath.SERVICES}/${serviceId}/booking-summary?${query}`
+        );
+    };
 
     const handleManualDateInput = (event) => {
         const dateInput = event.target.value;
 
         // if manual input is a valid date within the allowable interval
         // convert it to a date object and store it
-        const dateFormat = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(19|20)\d{2}$/
+        const dateFormat =
+            /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(19|20)\d{2}$/;
         if (dateFormat.test(dateInput)) {
-            const parsedDate = parse(dateInput, 'dd-MM-yyyy', new Date())
-            if (
-                isValid(parsedDate) &&
-                isWithinInterval(parsedDate, VALID_INTERVAL)
-            ) {
+            const parsedDate = parse(dateInput, "dd-MM-yyyy", new Date());
+            if (isValid(parsedDate) && isWithinInterval(parsedDate, VALID_INTERVAL)) {
                 setInputs((i) => ({ ...i, date: parsedDate }));
-                return
+                return;
             }
         }
 
         // else, just update date input with the raw value
         setInputs((i) => ({ ...i, date: dateInput }));
-        return
-    }
+        return;
+    };
 
     // for representing date object as DD-MM-YYYY in the date input
     const formatDateInput = (dateInput) => {
         // if the input is a valid date and a date object, format it
-        if (isValid(dateInput) && isDate(dateInput)) return format(dateInput, 'dd-MM-yyyy')
+        if (isValid(dateInput) && isDate(dateInput))
+            return format(dateInput, "dd-MM-yyyy");
 
-        return dateInput
-    }
+        return dateInput;
+    };
 
-    const availableTimes = getAvailableTimes({ date: inputs.date, duration: duration, bookings: bookings });
+    const availableTimes = getAvailableTimes({
+        date: inputs.date,
+        duration: duration,
+        bookings: artistBookings,
+    });
+
 
     if (isLoading) {
         // is loader, display loader
@@ -293,7 +306,6 @@ const RequestBooking = () => {
                 />
             </WhiteBackground>
         );
-
     } else {
         // service data for this service ID is not found
         if (!serviceData) {
@@ -302,17 +314,18 @@ const RequestBooking = () => {
                     <div className="flex flex-col gap-y-6 items-center justify-center">
                         <span className={"large-text"}>Service is not found </span>
 
-                        <Button className={"bg-secondary-purple hover:bg-secondary-purple-hover"}
-                            onClick={() => navigateTo("/" + UrlBasePath.SERVICES)}>
+                        <Button
+                            className={"bg-secondary-purple hover:bg-secondary-purple-hover"}
+                            onClick={() => navigateTo("/" + UrlBasePath.SERVICES)}
+                        >
                             Back to all services
                         </Button>
                     </div>
                 </WhiteBackground>
-            )
+            );
         } else {
             return (
                 <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-                    {/* TODO: implement back button functionality when implementing the actual work flow to get to this page */}
                     <PreviousButton />
 
                     {/* Main container for content */}
@@ -328,13 +341,17 @@ const RequestBooking = () => {
                         <form onSubmit={handleSubmit}>
                             <div className="flex flex-col gap-4">
                                 {/* location */}
-                                <AddressAutofill
-                                    accessToken="pk.eyJ1IjoibWFzdGVyY2hpZWYwIiwiYSI6ImNsdzdtMXAyZzBtdWgyc280Z2wycHlzZXEifQ.X3CmBWszdI4h1y0vri5KsA"
-                                >
+                                <AddressAutofill accessToken="pk.eyJ1IjoibWFzdGVyY2hpZWYwIiwiYSI6ImNsdzdtMXAyZzBtdWgyc280Z2wycHlzZXEifQ.X3CmBWszdI4h1y0vri5KsA">
                                     <Input
                                         id={locationInputId}
-                                        label={<label htmlFor={locationInputId}
-                                            className="main-text text-our-black">Location</label>}
+                                        label={
+                                            <label
+                                                htmlFor={locationInputId}
+                                                className="main-text text-our-black"
+                                            >
+                                                Location
+                                            </label>
+                                        }
                                         className="location"
                                         placeholder="Input location for service: wedding venue, address, ..."
                                         name="location"
@@ -368,14 +385,18 @@ const RequestBooking = () => {
                                 {/* date/time */}
                                 <div className="flex flex-col md:flex-row gap-4 md:gap-10">
                                     {/* date input + calendar */}
-                                    <div
-                                        className="flex flex-col flex-grow gap-1 md:max-w-[350px] lg:max-w-[420px] xl:lg:max-w-[490px]">
+                                    <div className="flex flex-col flex-grow gap-1 md:max-w-[350px] lg:max-w-[420px] xl:lg:max-w-[490px]">
                                         <div className="flex flex-col gap-4">
                                             <Input
                                                 id={dateInputId}
-                                                label={<label htmlFor={dateInputId}
-                                                    className="main-text text-our-black">Select
-                                                    Date</label>}
+                                                label={
+                                                    <label
+                                                        htmlFor={dateInputId}
+                                                        className="main-text text-our-black"
+                                                    >
+                                                        Select Date
+                                                    </label>
+                                                }
                                                 placeholder="DD-MM-YYYY"
                                                 name="date"
                                                 value={formatDateInput(inputs.date) || ""}
@@ -383,7 +404,11 @@ const RequestBooking = () => {
                                             />
                                             {/* calendar component */}
                                             <AvailabilityCalendar
-                                                value={isValid(inputs.date) && isDate(inputs.date) ? inputs.date : null}
+                                                value={
+                                                    isValid(inputs.date) && isDate(inputs.date)
+                                                        ? inputs.date
+                                                        : null
+                                                }
                                                 onChange={(date) => {
                                                     setInputs((i) => {
                                                         return {
@@ -396,13 +421,10 @@ const RequestBooking = () => {
                                                     const availableTimes = getAvailableTimes({
                                                         date: new Date(date),
                                                         duration: duration,
-                                                        bookings: bookings
-                                                    })
-                                                    if (
-                                                        view === 'month' &&
-                                                        availableTimes.length > 0
-                                                    ) {
-                                                        return 'available'
+                                                        bookings: artistBookings,
+                                                    });
+                                                    if (view === "month" && availableTimes.length > 0) {
+                                                        return "available";
                                                     }
                                                 }}
                                             />
@@ -418,18 +440,24 @@ const RequestBooking = () => {
                                             Select Start Time (Duration: {duration}hr)
                                         </label>
                                         <div id={timeInputId} className="grid grid-cols-2 gap-2">
-
                                             {/* if there are available times, render the time input buttons */}
-                                            {!Array.isArray(availableTimes) || availableTimes.length === 0 ?
+                                            {!Array.isArray(availableTimes) ||
+                                                availableTimes.length === 0 ? (
                                                 <span
-                                                    className={"main-text text-dark-grey text-center col-span-2 mt-4"}>No available times</span> :
+                                                    className={
+                                                        "main-text text-dark-grey text-center col-span-2 mt-4"
+                                                    }
+                                                >
+                                                    No available times
+                                                </span>
+                                            ) : (
                                                 availableTimes.map((time) => {
                                                     const baseStyle = "w-full";
-                                                    const activeStyle = "bg-dark-grey text-white hover:bg-dark-grey";
-                                                    const className =
-                                                        isEqual(inputs.time, time)
-                                                            ? `${baseStyle} ${activeStyle}`
-                                                            : baseStyle;
+                                                    const activeStyle =
+                                                        "bg-dark-grey text-white hover:bg-dark-grey";
+                                                    const className = isEqual(inputs.time, time)
+                                                        ? `${baseStyle} ${activeStyle}`
+                                                        : baseStyle;
 
                                                     return (
                                                         <Button
@@ -444,10 +472,11 @@ const RequestBooking = () => {
                                                                 });
                                                             }}
                                                         >
-                                                            {format(time, 'p')}
+                                                            {format(time, "p")}
                                                         </Button>
                                                     );
-                                                })}
+                                                })
+                                            )}
                                         </div>
                                     </div>
 
@@ -467,6 +496,6 @@ const RequestBooking = () => {
             );
         }
     }
-}
+};
 
 export default RequestBooking;

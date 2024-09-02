@@ -7,6 +7,7 @@
 import { Meteor } from 'meteor/meteor';
 import { BookingStatus } from '/imports/ui/enums/BookingStatus';
 import { addHours } from "date-fns";
+import {updateBookingStatus} from "../imports/ui/components/DatabaseHelper";
 
 // Update all bookings
 export const checkBookings = () => {
@@ -23,8 +24,8 @@ export const checkBookings = () => {
         confirmedBookings.forEach((booking) => {
             const confirmedBookingEnd = booking.bookingEndDateTime
 
-            if (confirmedBookingEnd < now) {  
-                Meteor.call('update_booking_details', booking._id, { bookingStatus: BookingStatus.OVERDUE });
+            if (confirmedBookingEnd < now) {
+                Meteor.call('updateBookingStatus', booking._id, BookingStatus.OVERDUE);
             }
         });
     });
@@ -41,7 +42,7 @@ export const checkBookings = () => {
             const isPassed = (eventDate < now);
 
             if (isPassed) {
-                Meteor.call('update_booking_details', booking._id, { bookingStatus: BookingStatus.REJECTED });
+                Meteor.call('updateBookingStatus', booking._id, BookingStatus.REJECTED);
             }
         })
     })

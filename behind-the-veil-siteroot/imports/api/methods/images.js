@@ -24,7 +24,7 @@ Meteor.methods({
                 "imageData": imageData
             }
         )
-        return targetId;
+        //return targetId;
     },
 
     "remove_post_image": function (target_Id){
@@ -35,6 +35,17 @@ Meteor.methods({
             }
         )
     },
+    /**
+     * Updates fields of a image instance in the database.
+     * @param {string} targetId - The ID of the post image to update.
+     * @param {object} updateObject - Field and value object of elements that need to be upgraded
+    */
+    "update_post_image": function (targetId, updateObject) {
+        ImageCollection.update(
+            { "target_id": targetId },
+            { $set: updateObject},
+        );
+    },
 
     /**
      * Retrieves a single image instance from the database based on the target ID.
@@ -43,7 +54,7 @@ Meteor.methods({
      */
     "get_image": function (targetId) {
         return ImageCollection.findOne(
-            { "targetId": targetId },
+            { "target_id": targetId },
         )
     },
 })
