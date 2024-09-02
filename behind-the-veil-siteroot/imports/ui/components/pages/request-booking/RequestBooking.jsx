@@ -144,7 +144,7 @@ const RequestBooking = () => {
             // if the artist is working all those hours
             const serviceHours = eachHourOfInterval({
                 start: workingHour,
-                end: addHours(workingHour, duration)
+                end: addHours(workingHour, duration - 1) // minus 1 b/c its assumed that the artist is available for the full hour and min service duration is 1
             })
 
             const isArtistWorking = serviceHours.every((serviceHour) => {
