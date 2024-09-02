@@ -34,11 +34,17 @@ export const ArtistDashboardTab = ({ username }) => {
   const [totalFilterCustomers, setTotalFilterCustomers] = useState(null);
   const [filterActive, setFilterActive] = useState(false);
 
+  // collect user bookings
   const artistBookingData = useUserBookings(username).artistBookingData;
 
+  // Function that filters data given location and year
   function filterDataCalculator(location, year) {
     console.log(location + year);
+
+    // initiate an array to store all bookings within the specified year
     let bookingInYear = [];
+
+    // -1 indicates "all years" are selected
     if (year === -1) {
       bookingInYear = artistBookingData;
     } else {
@@ -51,7 +57,10 @@ export const ArtistDashboardTab = ({ username }) => {
       }
     }
 
+    // initaite another array to return all bookings data given filter info
     let filterBookingData = [];
+
+    // "" indicates a location is not specified - likely just desiring data by year
     if (location == "") {
       filterBookingData = bookingInYear;
     } else {
@@ -64,8 +73,7 @@ export const ArtistDashboardTab = ({ username }) => {
       }
     }
 
-    console.log(filterBookingData);
-
+    // find completed bookings given filtered data
     const completedBookings = [];
 
     for (let i = 0; i < filterBookingData.length; i++) {
@@ -78,6 +86,7 @@ export const ArtistDashboardTab = ({ username }) => {
     let bookingCompleteRevenue = 0;
     let bookingPendingRevenue = 0;
 
+    // loop through to find revenue for completed and pending bookings
     for (let i = 0; i < filterBookingData.length; i++) {
       if (filterBookingData[i].bookingStatus === "completed") {
         bookingCompleteRevenue += filterBookingData[i].bookingPrice;
@@ -94,6 +103,7 @@ export const ArtistDashboardTab = ({ username }) => {
     };
   }
 
+  // formatter to ensure currency is displayed correctly
   const currencyFormatter = new Intl.NumberFormat("en-AU", {
     style: "currency",
     currency: "AUD",
@@ -101,7 +111,7 @@ export const ArtistDashboardTab = ({ username }) => {
     maximumFractionDigits: 2,
   });
 
-  // Fetch the dashboard data
+  // Fetch the default, non-filtered dashboard data
   const {
     isLoading,
     totalCustomersLifetime,
@@ -121,6 +131,7 @@ export const ArtistDashboardTab = ({ username }) => {
     );
   }
 
+  // function that handles the filtering when filter button is clicked
   function handleFilter(location, year) {
     if (year == -1 && location == "") {
       setFilterActive(false);
@@ -136,6 +147,8 @@ export const ArtistDashboardTab = ({ username }) => {
     setTotalFilterEarnings(filterData.bookingCompleteRevenue);
     setTotalFilterPendingEarnings(filterData.bookingPendingRevenue);
   }
+
+  // the below returns different text for the dashboard card given the scenario
 
   function getTotalCustomerCard() {
     if (filterYear == -1 && filterLocation != "") {
@@ -194,7 +207,6 @@ export const ArtistDashboardTab = ({ username }) => {
     <>
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
         <FilterLocationSearchBar
-          placeholder={"Enter a location..."}
           servedLocationList={serviceLocations}
           servedYearList={serviceYears}
           filterData={handleFilter}

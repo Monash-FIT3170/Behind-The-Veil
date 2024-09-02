@@ -475,6 +475,8 @@ export function useArtistBookings(username) {
     }
   }
 
+  bookingYearArray.sort();
+
   const bookingSuburbArray = [];
   for (let i = 0; i < artistBookingData.length; i++) {
     const split_address = artistBookingData[i].bookingLocation.split(",");
@@ -489,32 +491,6 @@ export function useArtistBookings(username) {
     bookingSuburbArray,
   };
 }
-
-// export function useBookingFilterSearch(location, year, username) {
-//   const isLoadingUserBooking = useSubscribe("all_user_bookings", username);
-//   const artistBookingData = useTracker(() => {
-//     return BookingCollection.find({ artistUsername: username }).fetch();
-//   });
-
-//   let returnData = [];
-
-//   if (location == "" && year == -1) {
-//     returnData = artistBookingData;
-//   }
-//   if (location == "") {
-//     returnData = artistBookingData.filter(
-//       (booking) => booking.bookingStartDateTime.getFullYear() === year
-//     );
-//   }
-//   if (year == -1) {
-//     returnData = artistBookingData;
-//   }
-
-// // }
-
-// const completedBookings = bookingData.filter(
-//   (booking) => booking.bookingStatus === BookingStatus.COMPLETED
-// );
 
 export function useUserBookings(username) {
   const isLoadingUserBooking = useSubscribe("all_user_bookings", username);

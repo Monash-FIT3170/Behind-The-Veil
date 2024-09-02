@@ -11,9 +11,13 @@ import classNames from "classnames";
 import Input from "../input/Input";
 import Button from "../button/Button";
 
+/**
+ * Filtering search component, inclusive of search input, year selection and filter button
+ * @param servedLocationList - list of all locations the user has served
+ * @param servedYearList - list of all years the user has a booking
+ * @param filterData - linking function that handles how the data is used to filter on the dashboard page
+ */
 const FilterLocationSearchBar = ({
-  suggestionsDown = true,
-  defaultYear = -1,
   servedLocationList,
   servedYearList,
   filterData,
@@ -29,6 +33,7 @@ const FilterLocationSearchBar = ({
     setFilteredLocations([]);
   };
 
+  // return the filtered location and year to the dashboard page
   const handleButtonClickOrSubmit = () => {
     filterData(searchLocation, searchYear);
   };
@@ -47,6 +52,7 @@ const FilterLocationSearchBar = ({
     }
   };
 
+  // handles the cross button to reset the location search input
   const handleReset = () => {
     setSearchLocation("");
     setFilteredLocations([]);
@@ -74,16 +80,8 @@ const FilterLocationSearchBar = ({
   let liClassnames =
     "bg-white w-full h-10 border-light-grey border-2 p-2 main-text text-dark-grey line-clamp-1 break-words hover:bg-white-hover transition duration-300 ease-in-out cursor-pointer";
 
-  if (suggestionsDown) {
-    ulClassnames = classNames(ulClassnames, "top-12 flex-col");
-    liClassnames = classNames(liClassnames, "border-t-0");
-  } else {
-    ulClassnames = classNames(
-      ulClassnames,
-      "bottom-[calc(100%+12px)] flex-col-reverse"
-    );
-    liClassnames = classNames(liClassnames, "border-b-0");
-  }
+  ulClassnames = classNames(ulClassnames, "top-12 flex-col");
+  liClassnames = classNames(liClassnames, "border-t-0");
 
   // handler for when user clicks OFF the search bar input (hide the suggestions)
   const onBlurInput = (event) => {
@@ -112,6 +110,7 @@ const FilterLocationSearchBar = ({
           <Input
             type="search"
             id={"search-input"}
+            placeholder={"Enter a suburb..."}
             className="rounded-r-none border-r-0 w-[200px] sm:w-[35vw]"
             value={searchLocation}
             onChange={handleInputChange}
@@ -148,7 +147,7 @@ const FilterLocationSearchBar = ({
       {/* search button + search type */}
       <div className="flex flex-row items-center justify-center gap-3">
         <select
-          defaultValue={defaultYear}
+          defaultValue={-1}
           onChange={handleSearchYearChange}
           className="input-base w-28"
         >
