@@ -128,26 +128,67 @@ export const ArtistDashboardTab = ({ username }) => {
     } else {
       setFilterActive(true);
     }
-
-    if (year == -1) {
-      setFilterYear(-1);
-    }
-
+    setFilterYear(year);
     setFilterLocation(location);
 
     const filterData = filterDataCalculator(location, year);
     setTotalFilterCustomers(filterData.totalCompletedCustomersInYear);
     setTotalFilterEarnings(filterData.bookingCompleteRevenue);
     setTotalFilterPendingEarnings(filterData.bookingPendingRevenue);
-    //setFilterData();
   }
 
-  //const artistDashboardData = useArtistBooking(username);
+  function getTotalCustomerCard() {
+    if (filterYear == -1 && filterLocation != "") {
+      return [
+        "Total Customers - " + filterLocation + ", " + "All Years",
+        "People you have glowed up in " +
+          filterLocation +
+          ", " +
+          "All Years" +
+          "!",
+      ];
+    }
 
-  /// Dashboard Filter Strategy
-  // To get location data, search database for all locations user has a booking in.
-  // Collate all locations into an array and then when choosing a location to filter, allow search for one of these locations.
-  // Do the same for year.
+    if (filterYear != -1 && filterLocation == "") {
+      return [
+        "Total Customers - " + filterYear,
+        "People you have glowed up in " + filterYear + "!",
+      ];
+    }
+
+    return [
+      "Total Customers - " + filterLocation + ", " + filterYear,
+      "People you have glowed up in " +
+        filterLocation +
+        ", " +
+        filterYear +
+        "!",
+    ];
+  }
+
+  function getTotalEarningsCard() {
+    if (filterYear == -1 && filterLocation != "") {
+      return "Total Earnings - " + filterLocation + ", " + "All Years";
+    }
+
+    if (filterYear != -1 && filterLocation == "") {
+      return "Total Earnings - " + filterYear;
+    }
+
+    return "Total Earnings - " + filterLocation + ", " + filterYear;
+  }
+
+  function getPendingEarningsCard() {
+    if (filterYear == -1 && filterLocation != "") {
+      return "Pending Earnings - " + filterLocation + ", " + "All Years";
+    }
+
+    if (filterYear != -1 && filterLocation == "") {
+      return "Pending Earnings - " + filterYear;
+    }
+
+    return "Pending Earnings - " + filterLocation + ", " + filterYear;
+  }
 
   return (
     <>
@@ -170,16 +211,24 @@ export const ArtistDashboardTab = ({ username }) => {
         <DashboardCard
           key="customer-month"
           dashboardCardTitle={
-            filterActive ? `Total Customers` : "Total Customers - This Month"
+            filterActive
+              ? getTotalCustomerCard()[0]
+              : "Total Customers - This Month"
           }
-          dashboardCardDesc="People you have glowed up this month!"
+          dashboardCardDesc={
+            filterActive
+              ? getTotalCustomerCard()[1]
+              : "People you have glowed up this month!"
+          }
           dashboardCardValue={
             filterActive ? totalFilterCustomers : totalCustomersThisMonth
           }
         />
         <DashboardCard
           key="earnings-received"
-          dashboardCardTitle="Total Earnings"
+          dashboardCardTitle={
+            filterActive ? getTotalEarningsCard() : "Total Earnings"
+          }
           dashboardCardDesc="Count your dollars!"
           dashboardCardValue={
             filterActive
@@ -189,7 +238,9 @@ export const ArtistDashboardTab = ({ username }) => {
         />
         <DashboardCard
           key="earnings-pending"
-          dashboardCardTitle="Pending Earnings"
+          dashboardCardTitle={
+            filterActive ? getPendingEarningsCard() : "Pending Earnings"
+          }
           dashboardCardDesc="Cash currently in transit!"
           dashboardCardValue={
             filterActive
