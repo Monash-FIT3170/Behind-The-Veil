@@ -2,7 +2,7 @@
  * File Description: Dashboard Filter Search Bar React component
  * File version: 1.0
  * Contributors: Phillip
- * Credit: Lucas, Nikki
+ * Source: Lucas, Nikki
  */
 
 import React, { useState } from "react";
