@@ -6,31 +6,36 @@
  */
 
 import React, { useState } from "react";
-import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import Input from "../input/Input";
 import Button from "../button/Button";
 
 const FilterLocationSearchBar = ({
   suggestionsDown = true,
-  defaultYear = "all_years",
+  defaultYear = -1,
   servedLocationList,
   servedYearList,
+  filterData,
 }) => {
-  const [searchTerm, setSearchTerm] = useState(null);
-  const [searchYear, setSearchYear] = useState(null);
+  const [searchLocation, setSearchLocation] = useState("");
+  const [searchYear, setSearchYear] = useState(-1);
   const [filteredLocations, setFilteredLocations] = useState([]);
 
   const handleSearchYearChange = (event) => {
     setSearchYear(event.target.value);
 
     // on change search type, also clear current suggestions
-    setFilteredSuggestions([]);
+    setFilteredLocations([]);
+  };
+
+  const handleButtonClickOrSubmit = () => {
+    filterData(searchLocation, searchYear);
   };
 
   const handleInputChange = (event) => {
     const value = event.target.value;
-    setSearchTerm(value);
+    setSearchLocation(value);
 
     if (value) {
       const results = servedLocationList.filter((location) =>
@@ -43,14 +48,14 @@ const FilterLocationSearchBar = ({
   };
 
   const handleReset = () => {
-    setSearchTerm("");
+    setSearchLocation("");
     setFilteredLocations([]);
   };
 
   const onClickInput = () => {
-    if (searchTerm !== "") {
+    if (searchLocation !== "") {
       const results = servedLocationList.filter((location) =>
-        location.toLowerCase().startsWith(searchTerm.toLowerCase())
+        location.toLowerCase().startsWith(searchLocation.toLowerCase())
       );
       setFilteredLocations(results);
     } else {
@@ -61,7 +66,7 @@ const FilterLocationSearchBar = ({
   // when a suggestion is selected, use the value of the suggestion as the input, to trigger the use effect that trigger
   // on input change above
   const handleSuggestionSelect = (location) => {
-    setSearchTerm(location);
+    setSearchLocation(location);
     setFilteredLocations([]);
   };
 
@@ -99,8 +104,6 @@ const FilterLocationSearchBar = ({
     }, 100);
   };
 
-  const handleButtonClickOrSubmit = () => {};
-
   return (
     <>
       <div className="relative" onBlur={onBlurInput}>
@@ -110,7 +113,7 @@ const FilterLocationSearchBar = ({
             type="search"
             id={"search-input"}
             className="rounded-r-none border-r-0 w-[200px] sm:w-[35vw]"
-            value={searchTerm}
+            value={searchLocation}
             onChange={handleInputChange}
             onClick={onClickInput}
           />
@@ -149,19 +152,19 @@ const FilterLocationSearchBar = ({
           onChange={handleSearchYearChange}
           className="input-base w-28"
         >
+          <option value={-1}>All Years</option>
           {servedYearList.map((year, index) => (
             <option key={index} value={year}>
               {year}
             </option>
           ))}
-          <option value="all_years">All Years</option>
         </select>
         <Button
-          className="flex justify-center items-center rounded-full h-12 w-12 p-2
+          className="flex justify-center items-center rounded-full h-12 w-32 p-2
                             bg-secondary-purple hover:bg-secondary-purple-hover"
           onClick={handleButtonClickOrSubmit}
         >
-          <MagnifyingGlassIcon className="icon-base" />
+          Filter
         </Button>
       </div>
     </>

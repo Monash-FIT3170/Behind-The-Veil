@@ -483,10 +483,25 @@ export function useArtistBookings(username) {
       bookingSuburbArray.push(suburb);
     }
   }
-  console.log(bookingSuburbArray);
   return {
     isLoadingUserBooking,
     bookingYearArray,
     bookingSuburbArray,
   };
+}
+
+export function useBookingFilterSearch(location, year, username) {
+  const isLoadingUserBooking = useSubscribe("all_user_bookings", username);
+  const artistBookingData = useTracker(() => {
+    return BookingCollection.find({ artistUsername: username }).fetch();
+  });
+  console.log("ADSASANSFJASBJHCB");
+}
+
+export function useUserBookings(username) {
+  const isLoadingUserBooking = useSubscribe("all_user_bookings", username);
+  const artistBookingData = useTracker(() => {
+    return BookingCollection.find({ artistUsername: username }).fetch();
+  });
+  return { isLoadingUserBooking, artistBookingData };
 }
