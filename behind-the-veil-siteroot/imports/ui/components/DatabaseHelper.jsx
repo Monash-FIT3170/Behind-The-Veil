@@ -11,6 +11,7 @@ import ImageCollection from "../../api/collections/images";
 import UserCollection from "../../api/collections/users";
 import BookingCollection from "../../api/collections/bookings";
 import PostCollection from "../../api/collections/posts";
+import ReviewCollection from "../../api/collections/reviews";
 import BookingStatus from "../enums/BookingStatus";
 
 /**
