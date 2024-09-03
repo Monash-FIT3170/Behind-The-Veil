@@ -39,8 +39,6 @@ export const ArtistDashboardTab = ({ username }) => {
 
   // Function that filters data given location and year
   function filterDataCalculator(location, year) {
-    console.log(location + year);
-
     // initiate an array to store all bookings within the specified year
     let bookingInYear = [];
 
@@ -56,6 +54,8 @@ export const ArtistDashboardTab = ({ username }) => {
         }
       }
     }
+
+    console.log(bookingInYear);
 
     // initaite another array to return all bookings data given filter info
     let filterBookingData = [];
@@ -133,6 +133,9 @@ export const ArtistDashboardTab = ({ username }) => {
 
   // function that handles the filtering when filter button is clicked
   function handleFilter(location, year) {
+    if (typeof year === "string") {
+      year = Number(year);
+    }
     if (year == -1 && location == "") {
       setFilterActive(false);
       return;
