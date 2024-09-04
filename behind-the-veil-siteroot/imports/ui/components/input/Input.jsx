@@ -14,28 +14,27 @@ import classNames from "classnames";
  * @param {JSX.Element} label - an optional html label element
  * @param inputProps encompasses all other props supplied to the input, such as type, placeholder, etc
  */
-const Input = ({children, className, label, ...inputProps}) => {
-    const inputClasses = classNames("input-base", className);
+const Input = ({ children, className, label, ...inputProps }) => {
+  const inputClasses = classNames("input-base", className);
 
-    if (label) {
-        // label given
-        return (
-            <div className="flex flex-col gap-1">
-                {label}
-                <input className={inputClasses} {...inputProps}>
-                    {children}
-                </input>
-            </div>
-        );
-
-    } else {
-        // no label given
-        return (
-            <input className={inputClasses} {...inputProps}>
-                {children}
-            </input>
-        );
-    }
+  if (label) {
+    // label given
+    return (
+      <div className="flex flex-col gap-1">
+        {label}
+        <input className={inputClasses} {...inputProps}>
+          {children}
+        </input>
+      </div>
+    );
+  } else {
+    // no label given
+    return (
+      <input className={inputClasses} {...inputProps}>
+        {children}
+      </input>
+    );
+  }
 };
 
 export default Input;

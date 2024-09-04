@@ -109,7 +109,7 @@ export const ArtistGalleryTab = ({username, external = false}) => {
   //
   function addPostNavigate() {
     console.log("button pressed");
-    navigateTo(`/${UrlBasePath.PROFILE}/add-edit-post`);
+    navigateTo(`/${UrlBasePath.PROFILE}/addPost`);
   }
 
   if (isLoading) {
@@ -126,6 +126,10 @@ export const ArtistGalleryTab = ({username, external = false}) => {
     return (
       <div className="relative">
         <GalleryModal
+          key={selectedPostId}
+          postId={selectedPostId}
+          artistUsername={userInfo.username}
+          artistAlias={userInfo.alias}
           isOpen={isGalleryModalOpen}
           closeModal={closeGalleryModal}
           openDeleteModal={openDeleteModal}
@@ -135,6 +139,7 @@ export const ArtistGalleryTab = ({username, external = false}) => {
           selectedPostDescription={selectedPostDescription}
           userInfo={userInfo}
           external={external}
+          isEdit= {!external}
         />
         <DeletePostConfirmationModal
           isOpen={isDeleteModalOpen}

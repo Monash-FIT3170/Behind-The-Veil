@@ -15,7 +15,6 @@ import 'react-responsive-modal/styles.css';
 import {Modal} from 'react-responsive-modal';
 import {useNavigate, useParams} from "react-router-dom";
 import PreviousButton from "../../button/PreviousButton";
-import {useUserInfo} from "../../util";
 import BookingStatus from "../../../enums/BookingStatus";
 import UrlBasePath from "../../../enums/UrlBasePath";
 
@@ -31,8 +30,6 @@ import UrlBasePath from "../../../enums/UrlBasePath";
 const PaymentDetails = () => {
     const navigateTo = useNavigate();
 
-    const userInfo = useUserInfo();
-
     // grab the service ID from the URL
     const {serviceId} = useParams();
 
@@ -43,26 +40,24 @@ const PaymentDetails = () => {
         const searchParams = new URLSearchParams(location.search);
 
         // Extracting the parameters
-        const brideName = searchParams.get('Bride Name');
-        const artistName = searchParams.get('Artist Name');
-        const service = searchParams.get('Service');
-        const serviceLocation = searchParams.get('Location');
-        const date = searchParams.get('Date');
-        const priceString = searchParams.get('Total Price');
-
+        const artistusername = searchParams.get('artistUsername');
+        const brideUsername = searchParams.get('brideUsername');
+        const service = searchParams.get('service');
+        const serviceLocation = searchParams.get('location');
+        const date = searchParams.get('date');
+        const priceString = searchParams.get('totalPrice');
         let priceFloat = parseFloat(priceString.replace('$', ''));
 
         setDetails({
-            brideName: brideName,
-            artistName: artistName,
+            artistUsername: artistusername,
+            brideUsername: brideUsername,
             serviceName: service,
             location: serviceLocation,
             date: date,
             price: priceFloat,
         });
-    }, [location.search]);
 
-    const errorMsg = ["card number", "card holder name", "expiry date", "CVV"]
+    }, [location.search]);
 
     const cardNumberId = useId();
     const cardNameId = useId();
@@ -194,6 +189,12 @@ const PaymentDetails = () => {
                 console.error('Error processing payment:', error);
                 alert('Payment Failed');
             } else {
+                console.log(details);
+                console.log(details.aristUsername);
+                result.success ? addToBooking(startDatetime, endDatetime, details.location, details.price, BookingStatus.PENDING, details.brideUsername, details.artistUsername, serviceId)
+                    .then(r => navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/booking-confirmation?${r}`))
+                    .catch(reason => alert(reason)) : alert('Payment Failed');
+              
                 if (result.success) {
                     // Add the booking to the database
                     addToBooking(startDatetime, endDatetime, details.location, details.price, BookingStatus.PENDING, details.brideName, details.artistName, serviceId)
@@ -207,9 +208,7 @@ const PaymentDetails = () => {
                                 .catch(reason => alert(`Failed to add receipt: ${reason}`));
                         })
                         .catch(reason => alert(`Failed to add booking: ${reason}`));
-                } else {
-                    alert('Payment Failed');
-                }
+                } 
             }
         });
     };

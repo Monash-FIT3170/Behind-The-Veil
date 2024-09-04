@@ -3,8 +3,8 @@
  * File version: 1.1
  * Contributors: Hirun
  */
-import React, { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useUserInfo } from "../../util.jsx";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
@@ -14,7 +14,12 @@ import { CheckIcon } from "@heroicons/react/24/outline";
 import { ArrowUpTrayIcon } from "@heroicons/react/24/outline";
 import UrlBasePath from "../../../enums/UrlBasePath";
 
-export const AddEditPostPage = () => {
+export const AddEditPostPage = ({ isEdit }) => {
+
+  // text for title/save button
+  const title = isEdit ? "Edit Photo In Gallery" : "Add Photo To Gallery";
+  const button = isEdit ? "Save" : "Save";
+
   const [postDescription, setInputReason] = useState("");
   const [inputFile, setInputFile] = useState(null);
   const [fileError, setFileError] = useState("");
@@ -26,7 +31,66 @@ export const AddEditPostPage = () => {
 
   const userInfo = useUserInfo();
 
+  // if user is not an artist, navigate them away
+  if (userInfo.type !== "artist") {
+    navigateTo(`/`);
+  }
+
+  // gets the postId from the URL 
+  const { postId } = useParams();
+
   const fileInputRef = useRef(null); // used since the file classname is hidden to ensure that ui is in specific format
+
+  // Load in existing post information if it is editing
+  useEffect(() => {
+    if (isEdit) {
+      // Function to retrieve post details
+      const retrievePost = () => {
+        return new Promise((resolve, reject) => {
+          Meteor.call("get_post", postId, (error, editPost) => {
+            if (error) {
+              reject(`Error: ${error.message}`);
+            } else {
+              console.log(editPost);
+              resolve(editPost);
+            }
+          });
+        });
+      };
+
+      // Function to retrieve image using postId
+      const retrieveImage = () => {
+        return new Promise((resolve, reject) => {
+          Meteor.call("get_image", postId, (error, editImage) => {
+            if (error) {
+              reject(`Error: ${error.message}`);
+            } else {
+              console.log(editImage);
+              resolve(editImage);
+            }
+          });
+        });
+      };
+      // firsty use the retrievePost function
+      retrievePost()
+        .then((post) => {
+          // Validate that the post belongs to the current user if not take them away
+          if (post.artistUsername !== userInfo.username) {
+            navigateTo("/" + UrlBasePath.PROFILE);
+          }
+          setInputReason(post.postDescription); // Set the post description
+          return retrieveImage(); // Fetch the image next
+        })
+        .then((image) => {
+          //Set the image preview and input file
+          setInputFile(image.imageData);
+          setImagePreviewUrl(image.imageData);
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    }
+  }, []);
 
   // function to handle description
   function handleInputChange(event) {
@@ -68,7 +132,7 @@ export const AddEditPostPage = () => {
     }
   }
 
-  // main function to handle whats entered on the page when "save" is pressed
+  // main function to handle what's entered on the page when "save" is pressed
   function handleAddPost(event) {
     event.preventDefault();
     let hasError = false;
@@ -86,58 +150,108 @@ export const AddEditPostPage = () => {
       hasError = true;
     } else {
       setFileError("");
-
-      // description errors
     }
+
+    // description errors
     if (!postDescription) {
       setDescriptionError("Please provide a description.");
       hasError = true;
     } else {
       setDescriptionError("");
     }
+
     if (hasError) {
       return;
     }
 
+    // post object
+    const post = {
+      postDate: postDate,
+      postDescription: postDescription,
+      artistUsername: userInfo.username,
+    };
+    // image object
+    const image = {
+      imageType: imageType,
+      target_id: postId,
+      imageData: inputFile,
+    };
+
+    // edit
     new Promise((resolve, reject) => {
-      Meteor.call(
-        "add_post",
-        postDate,
-        postDescription,
-        userInfo.username,
-        (error, postId) => {
-          if (error) {
-            console.log("Error adding post:", error);
-            reject(`Error: ${error.message}`);
-          } else {
-            console.log("Post added with ID:", postId);
-            resolve(postId); // Pass the postId to the next .then
+      if (isEdit) {
+        Meteor.call(
+          "update_post_details",
+          postId,
+          post,
+          (error, editPostId) => {
+            if (error) {
+              reject(`Error: ${error.message}`);
+            } else {
+              console.log("post addded with:", editPostId);
+              resolve(editPostId); 
+            }
           }
-        }
-      );
+        );
+        //add
+      } else {
+        Meteor.call(
+          "add_post",
+          postDate,
+          postDescription,
+          userInfo.username,
+          (error, addPostId) => {
+            if (error) {
+              console.log("Error adding post:", error);
+              reject(`Error: ${error.message}`);
+            } else {
+              console.log("Post added with ID:", addPostId);
+              resolve(addPostId); // Pass the addPostId to the next .then if we are adding
+            }
+          }
+        );
+      }
     })
-      .then(
-        (postId) =>
-          new Promise((resolve, reject) => {
+      .then((newPostId) => {
+        if (isEdit) {
+          // If editing, handle the edit scenario
+          return new Promise((resolve, reject) => {
+            Meteor.call(
+              "update_post_image",
+              postId,
+              image,
+              (error, imageId) => {
+                if (error) {
+                  reject(`Error: ${error.message}`);
+                } else {
+                  resolve(imageId);
+                  alert("Post edited successfully!");
+                  navigateTo("/" + UrlBasePath.PROFILE);
+                }
+              }
+            );
+          });
+        } else {
+          // If adding a new post, handle the add scenario
+          return new Promise((resolve, reject) => {
             Meteor.call(
               "add_image",
               imageType,
-              postId, // Use the postId passed from the previous promise
+              newPostId,
               inputFile,
               (error, imageId) => {
                 if (error) {
-                  console.log("Error adding image:", error);
                   reject(`Error: ${error.message}`);
                 } else {
-                  console.log("Image added with ID:", imageId);
                   resolve(imageId);
                   alert("Post added successfully!");
                   navigateTo("/" + UrlBasePath.PROFILE);
                 }
               }
             );
-          })
-      )
+          });
+        }
+      })
       .catch((reason) => alert(reason));
   }
 
@@ -154,7 +268,7 @@ export const AddEditPostPage = () => {
 
       {/* Main container for content */}
       <div className="flex flex-col gap-4 xl:px-40">
-        <div className="title-text">Add Photo to Gallery</div>
+        <div className="title-text">{title}</div>
 
         {/* uploading input file */}
         <div className="flex flex-row flex-wrap gap-10 items-center">
@@ -201,6 +315,7 @@ export const AddEditPostPage = () => {
             id="description-input"
             className="input-base lg:w-[40vw] sm:w-96 h-48"
             placeholder="Enter Your Post Description"
+            value={postDescription}
             onChange={handleInputChange}
             rows={4}
             cols={40}
@@ -220,7 +335,7 @@ export const AddEditPostPage = () => {
               onClick={handleAddPost}
             >
               <CheckIcon className="icon-base" />
-              Save
+              {button}
             </Button>
           </div>
         </div>
