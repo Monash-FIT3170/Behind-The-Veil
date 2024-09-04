@@ -15,8 +15,14 @@ import bookings from "../../../api/collections/bookings";
 
 /**
  * Confirmation dialog that comes up when you accept/reject/complete/cancel a booking
+ * @param open - if model is opened
+ * @param closeHandler - function for closing model
+ * @param bookingId - ID of booking to confirm status change
+ * @param toBeStatus - status to change to
+ * @param cancelAttributes - if changing to cancel, need extra attributes for canceled user data and reason
+ * @param sideEffects - list of functions to call afterward, if any
  */
-export const BookingStatusConfirmModal = ({open, closeHandler, bookingId, toBeStatus, cancelAttributes, sideEffects}) => {
+export const BookingStatusConfirmModal = ({open, closeHandler, bookingId, toBeStatus, cancelAttributes, sideEffects=[]}) => {
     const navigate = useNavigate();
 
     let statusText = ""

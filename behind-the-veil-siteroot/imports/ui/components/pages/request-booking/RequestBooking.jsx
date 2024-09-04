@@ -1,6 +1,6 @@
 /**
  * File Description: Request Booking page
- * File version: 1.2
+ * File version: 1.3
  * Contributors: Josh, Nikki
  */
 
@@ -49,12 +49,32 @@ const RequestBooking = () => {
     const userInfo = useUserInfo();
     const location = useLocation();
     const navigate = useNavigate();
-    const { serviceId } = useParams();
     const bookingData = location.state?.bookingData;
     const isChangeRequest = !!bookingData;
     const [serviceDetails, setServiceDetails] = useState(null);
+    // grab the service ID from the URL
+    const { serviceId } = useParams();
+
     // get service data from database
-    const { isLoading, serviceData, artistData } = useSpecificService(serviceId);
+    const {
+        isLoading: isLoadingServices,
+        serviceData,
+        artistData,
+        serviceImagesData,
+        profileImageData,
+    } = useSpecificService(serviceId);
+
+    // const duration = serviceData?.serviceDuration;
+
+    // subscribe to all bookings from this artist
+    const isLoadingBookingsFunc = useSubscribe("artist_bookings", artistData?.username);
+    const isLoadingBookings = isLoadingBookingsFunc()
+
+    // track these artist bookings
+    const artistBookings = useTracker(() => {
+        return BookingCollection.find().fetch();
+    });
+
     const navigateTo = useNavigate();
 
     useEffect(() => {
@@ -97,6 +117,7 @@ const RequestBooking = () => {
 
         const hours = eachHourOfInterval({
             // TODO: for now, assume that artists can work 6am to 7pm every day
+            // will add real availabilities once availability form is connected to db
             start: set(date, { hours: 6, minutes: 0, seconds: 0 }),
             end: set(date, { hours: 19 - duration, minutes: 0, seconds: 0 }),
         });
@@ -288,7 +309,13 @@ const RequestBooking = () => {
         return dateInput;
     };
 
-    const availableTimes = getAvailableTimes({ date: inputs.date, duration: duration, bookings: bookings });
+    const availableTimes = getAvailableTimes({
+        date: inputs.date,
+        duration: duration,
+        bookings: artistBookings,
+    });
+
+    const isLoading = isLoadingServices || isLoadingBookings
 
     if (isLoading) {
         // is loader, display loader
@@ -339,7 +366,10 @@ const RequestBooking = () => {
                                     <Input
                                         id={locationInputId}
                                         label={
-                                            <label htmlFor={locationInputId} className="main-text text-our-black">
+                                            <label
+                                                htmlFor={locationInputId}
+                                                className="main-text text-our-black"
+                                            >
                                                 Location
                                             </label>
                                         }
@@ -384,7 +414,10 @@ const RequestBooking = () => {
                                             <Input
                                                 id={dateInputId}
                                                 label={
-                                                    <label htmlFor={dateInputId} className="main-text text-our-black">
+                                                    <label
+                                                        htmlFor={dateInputId}
+                                                        className="main-text text-our-black"
+                                                    >
                                                         Select Date
                                                     </label>
                                                 }
@@ -395,7 +428,11 @@ const RequestBooking = () => {
                                             />
                                             {/* calendar component */}
                                             <AvailabilityCalendar
-                                                value={isValid(inputs.date) && isDate(inputs.date) ? inputs.date : null}
+                                                value={
+                                                    isValid(inputs.date) && isDate(inputs.date)
+                                                        ? inputs.date
+                                                        : null
+                                                }
                                                 onChange={(date) => {
                                                     setInputs((i) => {
                                                         return {
@@ -408,7 +445,7 @@ const RequestBooking = () => {
                                                     const availableTimes = getAvailableTimes({
                                                         date: new Date(date),
                                                         duration: duration,
-                                                        bookings: bookings,
+                                                        bookings: artistBookings,
                                                     });
                                                     if (view === "month" && availableTimes.length > 0) {
                                                         return "available";
@@ -426,13 +463,23 @@ const RequestBooking = () => {
                                         </label>
                                         <div id={timeInputId} className="grid grid-cols-2 gap-2">
                                             {/* if there are available times, render the time input buttons */}
-                                            {!Array.isArray(availableTimes) || availableTimes.length === 0 ? (
-                                                <span className={"main-text text-dark-grey text-center col-span-2 mt-4"}>No available times</span>
+                                            {!Array.isArray(availableTimes) ||
+                                                availableTimes.length === 0 ? (
+                                                <span
+                                                    className={
+                                                        "main-text text-dark-grey text-center col-span-2 mt-4"
+                                                    }
+                                                >
+                                                    No available times
+                                                </span>
                                             ) : (
                                                 availableTimes.map((time) => {
                                                     const baseStyle = "w-full";
-                                                    const activeStyle = "bg-dark-grey text-white hover:bg-dark-grey";
-                                                    const className = isEqual(inputs.time, time) ? `${baseStyle} ${activeStyle}` : baseStyle;
+                                                    const activeStyle =
+                                                        "bg-dark-grey text-white hover:bg-dark-grey";
+                                                    const className = isEqual(inputs.time, time)
+                                                        ? `${baseStyle} ${activeStyle}`
+                                                        : baseStyle;
 
                                                     return (
                                                         <Button
