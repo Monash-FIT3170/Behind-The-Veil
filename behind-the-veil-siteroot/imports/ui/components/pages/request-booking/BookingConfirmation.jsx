@@ -23,6 +23,8 @@ import UrlBasePath from "../../../enums/UrlBasePath";
 const BookingConfirmation = () => {
     const navigateTo = useNavigate();
 
+    const bookingId = new URLSearchParams(location.search).toString();
+
     /**
      * Function to navigate the user back to their account page.
      */
@@ -41,7 +43,7 @@ const BookingConfirmation = () => {
                 </div>
                 <div className="flex flex-row gap-4 mt-6">
                     <span className="main-text text-dark-grey">Receipt Number:</span>
-                    <span className="flex main-text items-center justify-center">X219061084912321</span>
+                    <span className="flex main-text items-center justify-center">${bookingId}</span>
                 </div>
                 <Button className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[25px] pe-[25px] flex gap-1 mt-10" onClick={returnToAccount}>
                     <CheckIcon className="icon-base" />
