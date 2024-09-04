@@ -10,9 +10,7 @@ import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
-import AvailabilityCalendar, {
-    VALID_INTERVAL,
-} from "../../../components/availabilityCalendar/AvailabilityCalendar.jsx";
+import AvailabilityCalendar, { VALID_INTERVAL } from "../../../components/availabilityCalendar/AvailabilityCalendar.jsx";
 import Input from "../../input/Input";
 import PreviousButton from "../../button/PreviousButton";
 import {
@@ -41,6 +39,8 @@ import { useUserInfo } from "../../util";
 import { Modal } from "react-responsive-modal";
 import { updateBookingStatus } from "../../DatabaseHelper";
 import "react-responsive-modal/styles.css";
+import { useSubscribe, useTracker } from "meteor/react-meteor-data";
+import BookingCollection from "../../../../api/collections/bookings.js";
 
 /**
  * Page for user to request a booking
@@ -57,26 +57,20 @@ const RequestBooking = () => {
     const { serviceId } = useParams();
 
     // get service data from database
-    const {
-        isLoading: isLoadingServices,
-        serviceData,
-        artistData,
-        serviceImagesData,
-        profileImageData,
-    } = useSpecificService(serviceId);
+    const { isLoading: isLoading, serviceData, artistData, serviceImagesData, profileImageData } = useSpecificService(serviceId);
 
     // subscribe to all bookings from this artist
     const isLoadingBookingsFunc = useSubscribe("artist_bookings", artistData?.username);
-    const isLoadingBookings = isLoadingBookingsFunc()
+    const isLoadingBookings = isLoadingBookingsFunc();
 
     // track these artist bookings
     const artistBookings = useTracker(() => {
         return BookingCollection.find().fetch();
     });
 
-    const artistAvailability = artistData?.availability
+    const artistAvailability = artistData?.availability;
     const navigateTo = useNavigate();
-
+    const duration = serviceData?.serviceDuration;
     useEffect(() => {
         if (isChangeRequest) {
             // Use booking data for change requests
@@ -97,7 +91,8 @@ const RequestBooking = () => {
                 });
             }
         }
-    }, [isChangeRequest, bookingData, isLoading, serviceData, artistData]);
+    }, [isChangeRequest, isLoading, bookingData, serviceData, artistData]);
+
     /**
      * Calculate available times that the user can select, based on date, duration, and existing bookings
      * @param {Date} date day at which we want the available time slots
@@ -106,91 +101,89 @@ const RequestBooking = () => {
      * @returns array of date objects that correspond to available times, on the hour
      */
 
-    const getAvailableTimes = useCallback(({ date, duration, bookings }) => {
-        if (isLoading) {
-            console.warn('loading')
-            return []
-        }
+    const getAvailableTimes = useCallback(
+        ({ date, duration, bookings }) => {
+            if (isLoading) {
+                console.warn("loading");
+                return [];
+            }
 
-        if (!artistAvailability) {
-            console.warn('artist availability not found')
-            return []
-        }
+            if (!artistAvailability) {
+                console.warn("artist availability not found");
+                return [];
+            }
 
-        if (!(isValid(date) && isDate(date))) {
-            console.warn("invalid date");
-            return [];
-        }
-        if (!Array.isArray(bookings)) {
-            console.warn("bookings is not an array");
-            return [];
-        }
+            if (!(isValid(date) && isDate(date))) {
+                console.warn("invalid date");
+                return [];
+            }
+            if (!Array.isArray(bookings)) {
+                console.warn("bookings is not an array");
+                return [];
+            }
 
-        const dateKey = format(date, "yyyy-MM-dd");
+            const dateKey = format(date, "yyyy-MM-dd");
 
-        const availabiltyOnDate = artistAvailability[dateKey]
+            const availabiltyOnDate = artistAvailability[dateKey];
 
-        // no availability
-        if (!Array.isArray(availabiltyOnDate) || availabiltyOnDate.length === 0) {
-            return []
-        }
+            // no availability
+            if (!Array.isArray(availabiltyOnDate) || availabiltyOnDate.length === 0) {
+                return [];
+            }
 
-        // convert integer hours from database into date object hours
-        const artistWorkingHours = availabiltyOnDate.map((hour) => {
-            return set(date, { hours: hour, minutes: 0, seconds: 0 })
-        })
+            // convert integer hours from database into date object hours
+            const artistWorkingHours = availabiltyOnDate.map((hour) => {
+                return set(date, { hours: hour, minutes: 0, seconds: 0 });
+            });
 
+            const confirmedBookings = bookings.filter((booking) => {
+                return booking.bookingStatus === BookingStatus.CONFIRMED;
+            });
 
-        const confirmedBookings = bookings.filter((booking) => {
-            return booking.bookingStatus === BookingStatus.CONFIRMED;
-        });
+            // for each hour, check if that hour is 'available'
+            // an hour is 'available' if:
+            // 1. the start of the hour + service duration doesn't overlap with any existing confirmed booking and
+            // 2. the artist is available from the hour and every subsequent hour until the end of the duration
+            const availableTimes = artistWorkingHours.filter((workingHour) => {
+                if (!isAfter(startOfHour(workingHour), new Date())) return false;
 
-        // for each hour, check if that hour is 'available'
-        // an hour is 'available' if:
-        // 1. the start of the hour + service duration doesn't overlap with any existing confirmed booking and
-        // 2. the artist is available from the hour and every subsequent hour until the end of the duration
-        const availableTimes = artistWorkingHours.filter((workingHour) => {
-            if (!isAfter(startOfHour(workingHour), new Date())) return false
+                // check every booking and see if they overlap with this hour + service duration
+                // if there are no overlapping bookings, then this hour is available
+                const noClashWithExistingBookings = !confirmedBookings.some((booking) => {
+                    const confirmedBookingStart = booking.bookingStartDateTime;
+                    const confirmedBookingEnd = booking.bookingEndDateTime;
 
-            // check every booking and see if they overlap with this hour + service duration
-            // if there are no overlapping bookings, then this hour is available
-            const noClashWithExistingBookings = !confirmedBookings.some((booking) => {
-                const confirmedBookingStart = booking.bookingStartDateTime
-                const confirmedBookingEnd = booking.bookingEndDateTime
+                    return areIntervalsOverlapping(
+                        { start: workingHour, end: addHours(workingHour, duration) }, // time slot interval
+                        { start: confirmedBookingStart, end: confirmedBookingEnd } // confirmed booking interval
+                    );
+                });
 
-                return areIntervalsOverlapping(
-                    { start: workingHour, end: addHours(workingHour, duration) }, // time slot interval
-                    { start: confirmedBookingStart, end: confirmedBookingEnd } // confirmed booking interval
-                )
-            })
+                // check every hour from this hour until the end of the service duration and see
+                // if the artist is working all those hours
+                const serviceHours = eachHourOfInterval({
+                    start: workingHour,
+                    end: addHours(workingHour, duration - 1), // minus 1 b/c its assumed that the artist is available for the full hour and min service duration is 1
+                });
 
-            // check every hour from this hour until the end of the service duration and see
-            // if the artist is working all those hours
-            const serviceHours = eachHourOfInterval({
-                start: workingHour,
-                end: addHours(workingHour, duration - 1) // minus 1 b/c its assumed that the artist is available for the full hour and min service duration is 1
-            })
+                const isArtistWorking = serviceHours.every((serviceHour) => {
+                    // check if artist working hours includes each hour that the booking would span
+                    return Boolean(artistWorkingHours.find((hr) => isEqual(hr, serviceHour)));
+                });
 
-            const isArtistWorking = serviceHours.every((serviceHour) => {
-                // check if artist working hours includes each hour that the booking would span
-                return Boolean(artistWorkingHours.find((hr) => isEqual(hr, serviceHour)))
-            })
+                return noClashWithExistingBookings && isArtistWorking;
+            });
 
-            return noClashWithExistingBookings && isArtistWorking
-        })
-
-        return availableTimes
-    }, [isLoading, artistAvailability])
-
+            return availableTimes;
+        },
+        [isLoading, artistAvailability]
+    );
 
     // initialise date input to the first day with availabilities
     const initDateInput = () => {
         // starting with today, iterate until we find a day with available times
         let day = startOfDay(new Date());
-        while (
-            getAvailableTimes({ date: day, duration: duration, bookings: artistBookings })
-                .length === 0
-        ) {
+        while (getAvailableTimes({ date: day, duration: duration, bookings: artistBookings }).length === 0) {
             day = startOfDay(addDays(day, 1));
             if (isAfter(day, VALID_INTERVAL.end)) return ""; // beyond valid interval
         }
@@ -213,10 +206,10 @@ const RequestBooking = () => {
                 return {
                     ...i,
                     date: initDateInput(),
-                }
-            })
+                };
+            });
         }
-    }, [isLoading])
+    }, [isLoading]);
 
     // id's
     const locationInputId = useId();
@@ -291,9 +284,9 @@ const RequestBooking = () => {
             inputs.artistName = artistData.profile.alias;
             inputs.price = serviceData.servicePrice;
             inputs.serviceName = serviceData.serviceName;
-            inputs.duration = duration
+            inputs.duration = duration;
             // For new bookings, navigate to the next step (booking summary)
-            const query = new URLSearchParams({inputs}).toString();
+            const query = new URLSearchParams({ inputs }).toString();
             navigate(`/${UrlBasePath.SERVICES}/${serviceId}/booking-summary?${query}`);
         }
     };
@@ -304,8 +297,7 @@ const RequestBooking = () => {
         // if manual input is a valid date within the allowable interval
         // convert it to a date object and store it
 
-        const dateFormat =
-            /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(19|20)\d{2}$/;
+        const dateFormat = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(19|20)\d{2}$/;
 
         if (dateFormat.test(dateInput)) {
             const parsedDate = parse(dateInput, "dd-MM-yyyy", new Date());
@@ -339,13 +331,11 @@ const RequestBooking = () => {
         setShowConfirmModal(false);
     };
 
-
     // for representing date object as DD-MM-YYYY in the date input
     const formatDateInput = (dateInput) => {
         // if the input is a valid date and a date object, format it
 
-        if (isValid(dateInput) && isDate(dateInput))
-            return format(dateInput, "dd-MM-yyyy");
+        if (isValid(dateInput) && isDate(dateInput)) return format(dateInput, "dd-MM-yyyy");
 
         return dateInput;
     };
@@ -355,8 +345,6 @@ const RequestBooking = () => {
         duration: duration,
         bookings: artistBookings,
     });
-
-
 
     if (isLoading) {
         // is loader, display loader
@@ -405,10 +393,7 @@ const RequestBooking = () => {
                                     <Input
                                         id={locationInputId}
                                         label={
-                                            <label
-                                                htmlFor={locationInputId}
-                                                className="main-text text-our-black"
-                                            >
+                                            <label htmlFor={locationInputId} className="main-text text-our-black">
                                                 Location
                                             </label>
                                         }
@@ -453,10 +438,7 @@ const RequestBooking = () => {
                                             <Input
                                                 id={dateInputId}
                                                 label={
-                                                    <label
-                                                        htmlFor={dateInputId}
-                                                        className="main-text text-our-black"
-                                                    >
+                                                    <label htmlFor={dateInputId} className="main-text text-our-black">
                                                         Select Date
                                                     </label>
                                                 }
@@ -467,11 +449,7 @@ const RequestBooking = () => {
                                             />
                                             {/* calendar component */}
                                             <AvailabilityCalendar
-                                                value={
-                                                    isValid(inputs.date) && isDate(inputs.date)
-                                                        ? inputs.date
-                                                        : null
-                                                }
+                                                value={isValid(inputs.date) && isDate(inputs.date) ? inputs.date : null}
                                                 onChange={(date) => {
                                                     setInputs((i) => {
                                                         return {
@@ -501,23 +479,13 @@ const RequestBooking = () => {
                                         </label>
                                         <div id={timeInputId} className="grid grid-cols-2 gap-2">
                                             {/* if there are available times, render the time input buttons */}
-                                            {!Array.isArray(availableTimes) ||
-                                                availableTimes.length === 0 ? (
-                                                <span
-                                                    className={
-                                                        "main-text text-dark-grey text-center col-span-2 mt-4"
-                                                    }
-                                                >
-                                                    No available times
-                                                </span>
+                                            {!Array.isArray(availableTimes) || availableTimes.length === 0 ? (
+                                                <span className={"main-text text-dark-grey text-center col-span-2 mt-4"}>No available times</span>
                                             ) : (
                                                 availableTimes.map((time) => {
                                                     const baseStyle = "w-full";
-                                                    const activeStyle =
-                                                        "bg-dark-grey text-white hover:bg-dark-grey";
-                                                    const className = isEqual(inputs.time, time)
-                                                        ? `${baseStyle} ${activeStyle}`
-                                                        : baseStyle;
+                                                    const activeStyle = "bg-dark-grey text-white hover:bg-dark-grey";
+                                                    const className = isEqual(inputs.time, time) ? `${baseStyle} ${activeStyle}` : baseStyle;
 
                                                     return (
                                                         <Button
@@ -550,7 +518,6 @@ const RequestBooking = () => {
                                             <ArrowRightIcon className="icon-base" />
                                         </>
                                     )}
-
                                 </Button>
                             </div>
                         </form>
