@@ -47,7 +47,7 @@ export const ArtistDashboardTab = ({ username }) => {
       bookingInYear = artistBookingData;
     } else {
       for (let i = 0; i < artistBookingData.length; i++) {
-        const dateObject = artistBookingData[i].bookingStartDateTime;
+        const dateObject = new Date(artistBookingData[i].bookingStartDateTime);
         const bookingYear = dateObject.getFullYear();
         if (bookingYear == year) {
           bookingInYear.push(artistBookingData[i]);
@@ -66,7 +66,7 @@ export const ArtistDashboardTab = ({ username }) => {
     } else {
       for (let i = 0; i < bookingInYear.length; i++) {
         const split_address = bookingInYear[i].bookingLocation.split(",");
-        const suburb = split_address[1].trim();
+        const suburb = split_address[1] ? split_address[1].trim() : "";
         if (suburb == location) {
           filterBookingData.push(bookingInYear[i]);
         }

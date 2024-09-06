@@ -468,7 +468,7 @@ export function useArtistBookings(username) {
 
   const bookingYearArray = [];
   for (let i = 0; i < artistBookingData.length; i++) {
-    const dateObject = artistBookingData[i].bookingStartDateTime;
+    const dateObject = new Date(artistBookingData[i].bookingStartDateTime);
     const year = dateObject.getFullYear();
     if (!bookingYearArray.includes(year)) {
       bookingYearArray.push(year);
@@ -480,7 +480,7 @@ export function useArtistBookings(username) {
   const bookingSuburbArray = [];
   for (let i = 0; i < artistBookingData.length; i++) {
     const split_address = artistBookingData[i].bookingLocation.split(",");
-    const suburb = split_address[1].trim();
+    const suburb = split_address[1] ? split_address[1].trim() : "";
     if (!bookingSuburbArray.includes(suburb)) {
       bookingSuburbArray.push(suburb);
     }
