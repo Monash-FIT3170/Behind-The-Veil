@@ -461,6 +461,7 @@ export function useGalleryTotalCollection(username) {
   };
 }
 
+
 export function useArtistBookings(username) {
   const isLoadingUserBooking = useSubscribe("all_user_bookings", username);
   const artistBookingData = useTracker(() => {
@@ -499,4 +500,34 @@ export function useUserBookings(username) {
     return BookingCollection.find({ artistUsername: username }).fetch();
   });
   return { isLoadingUserBooking, artistBookingData };
+}
+
+
+export function reviewCollection(username) {
+    // collect bookings data
+    const isLoadingBookings = useSubscribe("all_user_bookings", username);
+    const bookingsData = useTracker(() => {      
+        return BookingCollection.find({}).fetch();
+    });
+
+    // collect reviews data
+    const isLoadingReviews = useSubscribe("all_reviews",[]);
+    const reviewData = useTracker(() => {
+        return ReviewCollection.find({}).fetch();
+    })
+
+    // get the reviews relative to a specific artist
+    const reviewSourceArray = []
+    for (let i=0; i < reviewData.length; i++) {
+        for (let j = 0; j < bookingsData.length; j++) {
+            if (bookingsData[j]._id === reviewData[i].bookingId) {
+                reviewSourceArray.push(reviewData[i]);
+            }
+        }
+    }
+    return {
+        isLoading: isLoadingBookings() || isLoadingReviews, 
+        bookingsData, 
+        reviewSourceArray
+    }
 }

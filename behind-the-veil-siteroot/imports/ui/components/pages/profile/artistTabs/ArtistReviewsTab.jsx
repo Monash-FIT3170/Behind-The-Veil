@@ -1,31 +1,12 @@
 import React from 'react';
-import { useTracker } from 'meteor/react-meteor-data';
-import BookingCollection from '/imports/api/collections/bookings';
-import ReviewCollection from '/imports/api/collections/reviews';
 import Loader from '../../../loader/Loader';
-import { useState } from 'react';
-import "/imports/api/methods/reviews";
+import { useUserInfo } from '../../../util';
+import { StarIcon } from '@heroicons/react/24/solid'
 
-import {returnReviews} from "../../../DatabaseHelper";
+import { reviewCollection } from "../../../DatabaseHelper";
 
 export const ArtistReviewsTab = ({ username }) => {
-    const { bookings, reviews, isLoading } = useTracker(() => {
-        const bookingHandle = Meteor.subscribe('all_user_bookings', username);
-        const reviewHandle = Meteor.subscribe('all_reviews');
-
-        console.log(bookingHandle, reviewHandle)
-
-        if (!bookingHandle.ready()) {
-            return { bookings: [], reviews:[] , isLoading: true };
-        }
-        
-
-        const bookings = BookingCollection.find({ artistUsername: username }).fetch();
-        console.log('bookings inside useTracker: ', bookings)
-        const reviews = ReviewCollection.find({}).fetch();
-        console.log( 'reviews inside userTracker', reviews)
-        return { bookings, reviews, isLoading: false };
-    }, [username]);
+    const { isLoading, bookingsData, reviewSourceArray } = reviewCollection(username)
 
     if (isLoading) {
         <Loader
@@ -36,62 +17,68 @@ export const ArtistReviewsTab = ({ username }) => {
         />
     }
 
-    const bookingIds = bookings.map(booking => booking._id);
-    console.log("bookingIds", bookingIds)
+    // Calculate the average rating from the reviewSourceArray
+    const totalReviews = reviewSourceArray.length;
+    const ratingSum = reviewSourceArray.reduce((sum, review) => sum + review.reviewRating, 0);
+    const ratingAverage = Math.round((ratingSum / totalReviews).toFixed(1) * 2) / 2;
 
-    const {
-        isLoading_from_dbhelper,
-        reviews_from_dbhelper } = returnReviews(username);
+    // Create rating distribution (counts of each rating from 1 to 5)
+    const ratingDistribution = reviewSourceArray.reduce((distribution, review) => {
+        distribution[review.reviewRating] = (distribution[review.reviewRating] || 0) + 1;
+        return distribution;
+    }, {});
 
-    console.log("reviews from dbhelper", reviews_from_dbhelper)
-    // const matchingReviews = reviews.filter(review => bookingIds.includes(review.bookingId));
+    // Find the maximum number of reviews for any rating
+    const maxReviewsCount = Math.max(...Object.values(ratingDistribution));
 
-    // const totalRating = matchingReviews.reduce((sum, review) => sum + review.reviewRating, 0);
-    // const averageRating = totalRating / matchingReviews.length;
+    // Convert the rating distribution counts into percentages, relative to the max count
+    const ratingDistributionPercent = {};
+    Object.keys(ratingDistribution).forEach(star => {
+        ratingDistributionPercent[star] = (ratingDistribution[star] / maxReviewsCount) * 100;
+    });
 
-    const [reviewId, setReviewId] = useState('');
-    const [review, setReview] = useState(null);
-
-    const handleGetReview = () => {
-        Meteor.call('get_review', "66bb050ffc13ae0ea1e2604f", (error, reviewData) => {
-            if (error) {
-                console.error('Error retrieving review:', error);
-            } else {
-                setReview(reviewData);
-                console.log('Retrieved review:', reviewData);
-            }
-        });
-    }
     return (
         <div>
-            {/* testing fetching */}
-            <h2>Artist Reviews</h2>
-            <ul>
-                {bookingIds.map(id => (
-                    <li key={id}>{id}</li>
-                ))}
-            </ul>
-            {/* <ul>
-                {matchingReviews.map(review => (
-                    <li key={review._id}>{review.reviewText}</li>
-                ))}
-            </ul>
-            <p>{averageRating}</p> */}
-            <div>
-            <button className=" underline text-red-600" onClick={handleGetReview}>Get Review</button>
-            {review && (
-                <div>
-                    <h3>Review Details:</h3>
-                    <p>Rating: {review.reviewRating}</p>
-                    <p>Comment: {review.reviewComment}</p>
-                    <p>Booking ID: {review.bookingId}</p>
+
+            {/* Ratings Section */}
+            <div className='lg:grid lg:grid-cols-2 gap-8'>
+                {/* Average Ratings Section */}
+                <div className=' lg:pl-20 lg:py-6'>
+                    <div className="text-xl font-semibold mb-2">Overall Rating:</div>
+                    <div className="flex items-center">
+                        <span className="text-2xl lg:text-5xl">{ratingAverage}</span>
+                        <div className="ml-2 flex items-center px-2">
+                            {[...Array(5)].map((_, i) => {
+                                const currentStar = i + 1;
+                                if (currentStar <= Math.floor(ratingAverage)) {
+                                    return <StarIcon key={i} className="lg:size-8 ml-2 size-4 text-secondary-purple-hover" />; // Full Star
+                                } else if (currentStar === Math.ceil(ratingAverage) && ratingAverage % 1 !== 0) {
+                                    return <StarIcon key={i} className="lg:size-8 ml-2 size-4 text-main-blue" />; // Half 0.5 rating star
+                                } else {
+                                    return <StarIcon key={i} className="lg:size-8 ml-2 size-4 text-gray-400" />; // Empty star
+                                }
+                            })}
+                        </div>
+                    </div>
                 </div>
-            )}
-            </div>
 
-            {/* Overall Ratings Section */}
-            <div>
-
+                {/* Rating Distribution Bars */}
+                <div className='py-4'>
+                    {Object.keys(ratingDistributionPercent)
+                        .sort((a, b) => b - a) // Sort in descending order to show 5 stars at the top
+                        .map((star) => (
+                            <div key={star} className="flex items-center mb-2">
+                                <StarIcon className="lg:size-5 mr-2 size-4 text-gray-500 " />
+                                <span className=' font-semibold lg:text-xl'>{star}</span>
+                                <div className=" w-2/3 rounded-full h-2 lg:h-3 ml-4">
+                                    <div
+                                        className={`bg-secondary-purple h-full rounded-full`}
+                                        style={{ width: `${ratingDistributionPercent[star]}%` }}
+                                    ></div>
+                                </div>
+                            </div>
+                        ))}
+                </div>
             </div>
 
             {/* Client Reviews Section */}
