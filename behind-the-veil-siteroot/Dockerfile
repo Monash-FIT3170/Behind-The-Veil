@@ -1,22 +1,23 @@
-# specify node version 14
-FROM node:14
+FROM --platform=linux/amd64 node:14
 
-# set main app directory
-WORKDIR /usr/src/app 
+WORKDIR /usr/src/app
 
-# copy all files to container
 COPY . .
 
-# install meteor (v2.15)
-# had to include double backslashes
-RUN curl https://install.meteor.com/\\?release\\=2.15 | sh
+# Set environment variable to allow Meteor to run as root
+ENV METEOR_ALLOW_SUPERUSER=true
 
-# install dependencies
-RUN npm install
+# Install Meteor globally with
+RUN npm install -g meteor@2.15 --unsafe-perm
 
-# expose the port that meteor will run on
+# Add Meteor's installation directory to PATH
+ENV PATH="/root/.meteor:$PATH"
+
+# Install app dependencies
+RUN meteor npm install
+
+# Expose the port that Meteor will run on
 EXPOSE 3000
 
-# set the start command
+# Set the start command
 CMD ["meteor", "run", "--port", "3000"]
-# todo: something wrong with meteor
