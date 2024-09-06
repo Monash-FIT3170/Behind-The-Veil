@@ -20,6 +20,7 @@ import ArtistServicesTab from "../profile/artistTabs/ArtistServicesTab";
 import UrlBasePath from "../../../enums/UrlBasePath";
 import {useSpecificUser} from "../../DatabaseHelper";
 import ArtistGalleryTab from "../profile/artistTabs/ArtistGalleryTab";
+import ArtistReviewsTab from '../profile/artistTabs/ArtistReviewsTab';
 
 /**
  * Displays a page for a specific artist (similar to profile but external view)
@@ -95,7 +96,7 @@ const SpecificArtistPage = () => {
                                             serviceLocation={userData.profile.artistServiceLocation}
                                             serviceRadius={userData.profile.artistServiceRadius} />,
                             <ArtistGalleryTab key={"gallery"} username={artistUsername} external={true} />,
-                            <span key={4}>Reviews</span>,
+                            <ArtistReviewsTab key={4} username={artistUsername}>Reviews</ArtistReviewsTab>,
                         ]}
                         tabsClassName="lg:flex lg:justify-between lg:px-[15%] xl:px-[20%] 2xl:px-[25%]"
                     />

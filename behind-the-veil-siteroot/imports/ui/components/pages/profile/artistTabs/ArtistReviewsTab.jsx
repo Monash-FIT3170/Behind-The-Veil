@@ -6,7 +6,7 @@ import { StarIcon } from '@heroicons/react/24/solid'
 import { reviewCollection } from "../../../DatabaseHelper";
 
 export const ArtistReviewsTab = ({ username }) => {
-    const { isLoading, bookingsData, reviewSourceArray } = reviewCollection(username)
+    const { isLoading, bookingsData, reviewSourceArray } = reviewCollection(username);
 
     if (isLoading) {
         <Loader
@@ -38,54 +38,57 @@ export const ArtistReviewsTab = ({ username }) => {
     });
 
     return (
-        <div>
-
-            {/* Ratings Section */}
-            <div className='lg:grid lg:grid-cols-2 gap-8'>
-                {/* Average Ratings Section */}
-                <div className=' lg:pl-20 lg:py-6'>
-                    <div className="text-xl font-semibold mb-2">Overall Rating:</div>
-                    <div className="flex items-center">
-                        <span className="text-2xl lg:text-5xl">{ratingAverage}</span>
-                        <div className="ml-2 flex items-center px-2">
-                            {[...Array(5)].map((_, i) => {
-                                const currentStar = i + 1;
-                                if (currentStar <= Math.floor(ratingAverage)) {
-                                    return <StarIcon key={i} className="lg:size-8 ml-2 size-4 text-secondary-purple-hover" />; // Full Star
-                                } else if (currentStar === Math.ceil(ratingAverage) && ratingAverage % 1 !== 0) {
-                                    return <StarIcon key={i} className="lg:size-8 ml-2 size-4 text-main-blue" />; // Half 0.5 rating star
-                                } else {
-                                    return <StarIcon key={i} className="lg:size-8 ml-2 size-4 text-gray-400" />; // Empty star
-                                }
-                            })}
+        totalReviews !== 0 ? (
+            <div>
+                {/* Ratings Section */}
+                <div className='lg:grid lg:grid-cols-2 gap-8'>
+                    {/* Average Ratings Section */}
+                    <div className='lg:pl-20 lg:py-6'>
+                        <div className="text-xl font-semibold mb-2">Overall Rating:</div>
+                        <div className="flex items-center">
+                            <span className="text-2xl lg:text-5xl">{ratingAverage}</span>
+                            <div className="ml-2 flex items-center px-2">
+                                {[...Array(5)].map((_, i) => {
+                                    const currentStar = i + 1;
+                                    if (currentStar <= Math.floor(ratingAverage)) {
+                                        return <StarIcon key={i} className="lg:size-8 ml-2 size-4 text-secondary-purple-hover" />; // Full Star
+                                    } else if (currentStar === Math.ceil(ratingAverage) && ratingAverage % 1 !== 0) {
+                                        return <StarIcon key={i} className="lg:size-8 ml-2 size-4 text-main-blue" />; // Half 0.5 rating star
+                                    } else {
+                                        return <StarIcon key={i} className="lg:size-8 ml-2 size-4 text-gray-400" />; // Empty star
+                                    }
+                                })}
+                            </div>
                         </div>
+                    </div>
+
+                    {/* Rating Distribution Bars */}
+                    <div className='py-4'>
+                        {Object.keys(ratingDistributionPercent)
+                            .sort((a, b) => b - a) // Sort in descending order to show 5 stars at the top
+                            .map((star) => (
+                                <div key={star} className="flex items-center mb-2">
+                                    <StarIcon className="lg:size-5 mr-2 size-4 text-gray-500 " />
+                                    <span className=' font-semibold lg:text-xl'>{star}</span>
+                                    <div className=" w-2/3 rounded-full h-2 lg:h-3 ml-4">
+                                        <div
+                                            className={`bg-secondary-purple h-full rounded-full`}
+                                            style={{ width: `${ratingDistributionPercent[star]}%` }}
+                                        ></div>
+                                    </div>
+                                </div>
+                            ))}
                     </div>
                 </div>
 
-                {/* Rating Distribution Bars */}
-                <div className='py-4'>
-                    {Object.keys(ratingDistributionPercent)
-                        .sort((a, b) => b - a) // Sort in descending order to show 5 stars at the top
-                        .map((star) => (
-                            <div key={star} className="flex items-center mb-2">
-                                <StarIcon className="lg:size-5 mr-2 size-4 text-gray-500 " />
-                                <span className=' font-semibold lg:text-xl'>{star}</span>
-                                <div className=" w-2/3 rounded-full h-2 lg:h-3 ml-4">
-                                    <div
-                                        className={`bg-secondary-purple h-full rounded-full`}
-                                        style={{ width: `${ratingDistributionPercent[star]}%` }}
-                                    ></div>
-                                </div>
-                            </div>
-                        ))}
+                {/* Client Reviews Section */}
+                <div>
+                    
                 </div>
             </div>
-
-            {/* Client Reviews Section */}
-            <div>
-
-            </div>
-        </div>
+        ) : (
+            <span className="text-xl font-semibold mb-2 lg:pl-20 lg:py-6">No reviews yet</span>
+        )
     );
 };
 
