@@ -96,7 +96,7 @@ const SpecificArtistPage = () => {
                                             serviceLocation={userData.profile.artistServiceLocation}
                                             serviceRadius={userData.profile.artistServiceRadius} />,
                             <ArtistGalleryTab key={"gallery"} username={artistUsername} external={true} />,
-                            <ArtistReviewsTab key={4} username={artistUsername}>Reviews</ArtistReviewsTab>,
+                            <ArtistReviewsTab key={"reviews"} username={artistUsername}>Reviews</ArtistReviewsTab>,
                         ]}
                         tabsClassName="lg:flex lg:justify-between lg:px-[15%] xl:px-[20%] 2xl:px-[25%]"
                     />

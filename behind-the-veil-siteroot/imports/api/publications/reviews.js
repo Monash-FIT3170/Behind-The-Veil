@@ -18,13 +18,16 @@ Meteor.publish('specific_review', function(bookingId) {
 });
 
 /**
- * Publishes all reviews to the client.
- * This method does not apply any filtering and will publish all documents
- * in the ReviewCollection. Use this method cautiously, especially if the
- * collection is large, as it may impact performance.
+ * Publishes reviews for a specific artist to the client.
+ * This method filters the reviews by the provided artistUsername.
+ * Use this method to retrieve only the reviews associated with a particular artist.
+ * Be mindful of performance when querying large collections, as the results
+ * are filtered by artistUsername but still might be numerous depending on the artist's reviews.
  *
- * @returns {Mongo.Cursor} - A cursor representing the result set of all reviews to be published.
+ * @param {String} username - The username of the artist to filter reviews by.
+ * @returns {Mongo.Cursor} - A cursor representing the result set of reviews for the specified artist.
  */
-Meteor.publish('all_reviews', function() {
-    return ReviewCollection.find({});
+
+Meteor.publish('artist_reviews', function(username) {
+    return ReviewCollection.find({artistUsername: username});
 })
