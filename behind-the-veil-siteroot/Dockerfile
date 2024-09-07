@@ -1,11 +1,25 @@
-FROM geoffreybooth/meteor-base:2.15
+# FROM --platform=linux/amd64 node:14
+FROM ubuntu:22.04
 
-# Set environment variable to allow Meteor to run as root
-ENV METEOR_ALLOW_SUPERUSER=true
+# install nvm and use node 14
+RUN apt-get update && \
+    apt-get -y install curl && \
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash && \
+    export NVM_DIR="$HOME/.nvm" && \ 
+    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" && \
+    nvm install 14 && \
+    nvm use 14 && \
+    npm install -g meteor@2.15 --unsafe-perm
 
 WORKDIR /usr/src/app
 
 COPY . .
+
+# Set environment variable to allow Meteor to run as root
+ENV METEOR_ALLOW_SUPERUSER=true
+
+# Add Meteor's installation directory to PATH
+ENV PATH="/root/.meteor:$PATH"
 
 # Install app dependencies
 RUN meteor npm install
