@@ -177,11 +177,13 @@ export const MessagesPage = () => {
 
     // helper function to route to the default chat (most recent chat)
     const routeToDefaultChat = () => {
+        const otherUsername = window.location.hash.slice(1);
         if (chatsData.length > 0) {
             routeToChat(0);
         }
-        // close the modal
-        //onCloseModal();
+        else if (otherUsername != "") {
+            navigate('/' + UrlBasePath.MESSAGES)
+        }
     };
 
     // function to route to a chat given an index
