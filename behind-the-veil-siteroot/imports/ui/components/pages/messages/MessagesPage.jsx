@@ -43,7 +43,10 @@ export const MessagesPage = () => {
     const [open, setOpen] = useState(false);
 
     const onOpenModal = () => setOpen(true);
-    const onCloseModal = () => setOpen(false);
+    const onCloseModal = () => {
+        setOpen(false);
+        routeToDefaultChat();
+    }
 
 
     // set up subscription (publication is in the "publication" folder)
@@ -133,12 +136,11 @@ export const MessagesPage = () => {
               console.error('Error fetching alias:', error);
               return;
             }
+
             let otherUserType = result.profile.type;
 
-            // TODO: check that the current user's type is not the same as the other user's type. if it is, give them
-            // some kind of pop up warning [REFERENCE NETH'S CODE FOR THE POP UP FOR PAYMENT] to tell them that they can't message the other
-            // user and then just bring them back to general messages page (routing)
-            // maybe: make a helper function - need to do a check of this in the below code as well
+            // check that the current user's type is not the same as the other user's type. if it is, give them
+            // a pop up warning and bring them back to general messages page (routing)
             if (userInfo.type === otherUserType) {
                 // if the user types are the same, display a modal indicating an error
                 onOpenModal();
@@ -175,11 +177,13 @@ export const MessagesPage = () => {
 
     // helper function to route to the default chat (most recent chat)
     const routeToDefaultChat = () => {
+        const otherUsername = window.location.hash.slice(1);
         if (chatsData.length > 0) {
             routeToChat(0);
         }
-        // close the modal
-        onCloseModal();
+        else if (otherUsername != "") {
+            navigate('/' + UrlBasePath.MESSAGES)
+        }
     };
 
     // function to route to a chat given an index
@@ -216,8 +220,9 @@ export const MessagesPage = () => {
     const newMsgPreviewsComponents = chatsData.map((chat, index) => <MessagesPreview key = {index} data = {chat} onClick={() => routeToChat(index)}></MessagesPreview>);
 
     return (
-        // if window size is SMALLER than a medium screen (default variable for medium in tailwind sm:768px),
-        // then have the contacts/list of people on separate screens than the conversation
+        <div>
+            {/* if window size is SMALLER than a medium screen (default variable for medium in tailwind sm:768px),
+        then have the contacts/list of people on separate screens than the conversation */}
         <WhiteBackground pageLayout={window.innerWidth <= 768 ? PageLayout.SMALL_CENTER : PageLayout.MESSAGES_PAGE}>
             {/*you MUST keep this div and put everything on the left side inside of it*/}
             <div className="flex flex-col gap-3">
@@ -233,7 +238,9 @@ export const MessagesPage = () => {
                     </div>)
                     }
             </div>
-            <Modal classNames={{modal: "w-[480px] h-[300px] rounded-[45px] bg-glass-panel-background border border-main-blue"}} 
+           
+        </WhiteBackground>
+        <Modal classNames={{modal: "w-[480px] h-[300px] rounded-[45px] bg-glass-panel-background border border-main-blue"}} 
                 open={open} onClose={onCloseModal} center showCloseIcon={false}>
                 <div className="flex justify-center items-center h-full">
                     <div className="flex flex-col">
@@ -243,7 +250,7 @@ export const MessagesPage = () => {
                             <p className="text-center medium-text">This chat is invalid.</p>
                             <p className="text-center medium-text">You will now be redirected to the messages page.</p>
                         <div className="flex justify-center space-x-6 mt-5">
-                            <Button className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[25px] pe-[25px] flex gap-1" onClick={routeToDefaultChat} >
+                            <Button className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[25px] pe-[25px] flex gap-1" onClick={onCloseModal} >
                                 <CheckIcon className="icon-base" /> Confirm
                             </Button>
                         
@@ -251,7 +258,8 @@ export const MessagesPage = () => {
                     </div>
                 </div>
             </Modal>
-        </WhiteBackground>
+        </div>
+       
         );
 };
 
