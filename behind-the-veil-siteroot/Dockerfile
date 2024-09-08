@@ -1,4 +1,3 @@
-# FROM --platform=linux/amd64 node:14
 FROM ubuntu:22.04
 
 # install nvm and use node 14
@@ -24,8 +23,8 @@ ENV PATH="/root/.meteor:$PATH"
 # Install app dependencies
 RUN meteor npm install
 
-# Expose the port that Meteor will run on
-EXPOSE 3000
+# Expose the port that Meteor will run on. 8080 for Google Cloud Run
+EXPOSE 8080
 
 # Set the start command
-CMD ["meteor", "run", "--port", "3000", "--settings", "settings.json"]
+CMD ["meteor", "run", "--port", "8080"]
