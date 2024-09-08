@@ -1,7 +1,7 @@
 /**
  * File Description: Background task to update bookings
- * File version: 1.0
- * Contributors: Laura
+ * File version: 1.1
+ * Contributors: Laura, Nikki
  */
 
 import { Meteor } from 'meteor/meteor';
@@ -25,7 +25,7 @@ export const checkBookings = () => {
             const confirmedBookingEnd = booking.bookingEndDateTime
 
             if (confirmedBookingEnd < now) {
-                Meteor.call('updateBookingStatus', booking._id, BookingStatus.OVERDUE);
+                updateBookingStatus(booking._id, BookingStatus.OVERDUE)
             }
         });
     });
@@ -42,7 +42,7 @@ export const checkBookings = () => {
             const isPassed = (eventDate < now);
 
             if (isPassed) {
-                Meteor.call('updateBookingStatus', booking._id, BookingStatus.REJECTED);
+                updateBookingStatus(booking._id, BookingStatus.REJECTED)
             }
         })
     })
