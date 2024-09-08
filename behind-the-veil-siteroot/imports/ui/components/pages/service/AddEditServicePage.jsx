@@ -122,8 +122,11 @@ export const AddEditServicePage = ({isEdit}) => {
                 setServicePrice(service.servicePrice);
                 setServiceDescription(service.serviceDesc);
                 console.log(servicesData);
-                servicesData.forEach((service) =>
-                    service.serviceImageData.forEach((image) => {
+                console.log(service);
+                if (servicesData[0].serviceImageData === "/imageNotFound.png") {
+                    setImagedb([{imageData: "/imageNotFound.png"}]);
+                } else {
+                    servicesData[0].serviceImageData.forEach((image) => {
                         setImagedb((prevImages) =>
                             Array.from(
                                 new Set([
@@ -137,9 +140,10 @@ export const AddEditServicePage = ({isEdit}) => {
                                 ])
                             )
                         );
-                    })
-                );
-                setShouldAddImages(true);
+                    });
+                    setShouldAddImages(true);
+                }
+                
             });
         }
     }, []);
