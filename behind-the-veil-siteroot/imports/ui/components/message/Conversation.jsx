@@ -130,8 +130,8 @@ export const Conversation = ({chat, isLeftHandler}) => {
             <div className={'w-11/12 border-b-2 mb-8 ml-4 pt-3 pb-1 pl-2 pr-6 lg:px-6 border-main-blue line-clamp-1 ' +
                 'break-all flex flex-row gap-x-2 items-center'}>
                 <ChevronLeftIcon onClick={() => isLeftHandler(true)}
-                                 className={"size-8 min-w-8 min-h-8 stroke-2 cursor-pointer text-dark-grey rounded-full px-1 " +
-                                     "hover:bg-white-hover hover:text-our-black transition duration-500 lg:hidden"}/>
+                                 className={"size-8 min-w-8 min-h-8 stroke-2 cursor-pointer text-dark-grey rounded-full px-1 mr-2 " +
+                                     "bg-white-hover hover:bg-light-grey hover:text-our-black transition duration-500 lg:hidden"}/>
                 <span className={"message-receiver-name-text break-all line-clamp-1"}>{otherUserAlias}</span>
                 <span className={"text-dark-grey large-text break-all mt-1 line-clamp-1"}>(@{otherUser})</span>
             </div>
@@ -183,7 +183,7 @@ export const Conversation = ({chat, isLeftHandler}) => {
                         value={formValue}
                         onChange={(event) => setFormValue(event.target.value)}
                         placeholder="Type a message..."
-                        className="w-full rounded-3xl pl-8 pr-40"
+                        className="w-full rounded-3xl pl-8 pr-36"
                     />
                     <Button type="submit" disabled={!formValue}
                             className="bg-secondary-purple hover:bg-secondary-purple-hover focus:outline-none cursor-pointer
