@@ -20,7 +20,7 @@ export const ProfileGalleryDisplay = ({
       <ProfilePhoto
         galleryImage={true}
         className="flex container h-full w-full"
-        artistPhotoData={imageData}
+        userPhotoData={imageData}
       />
       <div className="col-span-2 flex flex-col items-center justify-center">
         <div className="text-center medium-text ">
