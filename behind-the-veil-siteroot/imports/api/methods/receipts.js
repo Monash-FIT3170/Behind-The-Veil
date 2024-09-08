@@ -67,7 +67,6 @@ Meteor.methods({
                 {
                     $set: {
                         paymentStatus: "Refund",
-                        paymentStatus: "Refunded",
                         paymentDatetime: currentDatetime,
                     }
                 }
