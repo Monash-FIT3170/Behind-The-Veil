@@ -3,9 +3,9 @@ import Loader from '../../../loader/Loader';
 import { StarIcon } from '@heroicons/react/24/solid'
 
 import { useArtistReviews } from "../../../DatabaseHelper";
-
+import ReviewCard from '../../../card/ReviewCard';
 export const ArtistReviewsTab = ({ username }) => {
-    const { isLoading, artistReviewData } = useArtistReviews(username);
+    const { isLoading, reviewArray, artistReviewData } = useArtistReviews(username);
 
     if (isLoading) {
         return (
@@ -18,6 +18,7 @@ export const ArtistReviewsTab = ({ username }) => {
         )
     }
 
+    console.log(reviewArray);
     const calculateReviewStats = (reviewSourceArray) => {
         const totalReviews = reviewSourceArray.length;
 
@@ -99,8 +100,17 @@ export const ArtistReviewsTab = ({ username }) => {
                 </div>
 
                 {/* Client Reviews Section */}
-                <div>
-
+                <div className="flex flex-col gap-6 mt-2">
+                {reviewArray.map((review) => (
+                        <ReviewCard
+                            key={review._id}
+                            reviewTitle={review.reviewTitle}
+                            reviewComment={review.reviewComment}
+                            date={review.booking.bookingStartDateTime} // Use booking start date from booking data
+                            //service={review.service.serviceName} // Use service name from booking data
+                            price={review.booking.bookingPrice} // Use booking price from booking data
+                        />
+                    ))}
                 </div>
             </div>
         ) : (
