@@ -521,6 +521,8 @@ export function useArtistReviews(username) {
   // loads services data
   const isLoadingServices = useSubscribe("all_user_services", username);
 
+  const isLoading = isLoadingReviews() || isLoadingBookings() || isLoadingServices();
+
   // Extract relevant booking IDs from the reviews
   const reviewBookingId = artistReviewData.map(review => review.bookingId);
 
@@ -536,23 +538,21 @@ export function useArtistReviews(username) {
     return ServiceCollection.find({ _id: { $in: bookingServiceId } }).fetch();
   })
 
-  // Map service IDs to service objects for quick lookup
-  const serviceMap = Object.fromEntries(serviceArray.map((service) => [service._id, service]));
-
-  // Map booking IDs to booking objects for quick lookup
-  const bookingMap = Object.fromEntries(relevantBookings.map((booking) => [booking._id, booking]));
-  // create the review array with associated bookings and services
+  // Create review array with associated bookings and services
   const reviewArray = artistReviewData.map((review) => {
-    const booking = bookingMap[review.bookingId]; // Find booking using relevant ID from review obeject
-    const service = serviceMap[booking.serviceId]; // Find service using the service ID from the booking
-  
+    // Find the booking associated with the review
+    const booking = relevantBookings.find(booking => booking._id === review.bookingId);
+
+    // Find the service associated with the booking
+    const service = serviceArray.find(service => service._id === booking.serviceId);
+
     return {
       ...review,
       booking,
       service,
     };
   });
-  const isLoading = isLoadingReviews() || isLoadingBookings() || isLoadingServices();
+
 console.log(reviewArray);
   return {
     isLoading,

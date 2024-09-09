@@ -41,7 +41,6 @@ export const ArtistReviewsTab = ({ username }) => {
 
     const reviewStats = calculateReviewStats(artistReviewData);
 
-    console.log(reviewStats);
     if (isLoading) {
         return (
             <Loader
@@ -51,7 +50,8 @@ export const ArtistReviewsTab = ({ username }) => {
                 speed={1.5}
             />
         )
-    } else {
+    } else {    console.log(reviewStats);
+
 
         return (
             reviewStats.totalReviews !== 0 ? (
