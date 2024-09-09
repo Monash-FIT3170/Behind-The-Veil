@@ -502,41 +502,60 @@ export function useUserBookings(username) {
   return { isLoadingUserBooking, artistBookingData };
 }
 
+/**
+ * Collects all data relevant to artist reviews
+ *
+ * @param {string} username - username of the user to get data
+ * @returns {Object} - returns an object containing: boolean isLoading that is true when loading, false when finished loading.
+ * Also, the array of review data
+ */
 export function useArtistReviews(username) {
   const isLoadingReviews = useSubscribe("artist_reviews", username);
   const artistReviewData = useTracker(() => {
     return ReviewCollection.find({artistUsername: username}).fetch();
   })
   
-  // collect bookings data
+  // loads bookings data
   const isLoadingBookings = useSubscribe("all_user_bookings", username);
-  const bookingsData = useTracker(() => {      
-      return BookingCollection.find({}).fetch();
-  });
+
+  // loads services data
+  const isLoadingServices = useSubscribe("all_user_services", username);
 
   // Extract relevant booking IDs from the reviews
   const reviewBookingId = artistReviewData.map(review => review.bookingId);
 
-  // Retrieve full objects based on the extracted IDs
+  // Retrieve booking objects based on the extracted IDs
   const relevantBookings = useTracker(() => {
     return BookingCollection.find({ _id: { $in: reviewBookingId } }).fetch();
   });
 
   const bookingServiceId = relevantBookings.map(booking => booking.serviceId);
+
+  // retrieve servcie objects based on the extracted ID's
   const serviceArray = useTracker(() => {
     return ServiceCollection.find({ _id: { $in: bookingServiceId } }).fetch();
   })
-  console.log(serviceArray);
-  // get the reviews relative to a specific artist
-  const reviewArray = []
-  for (let i=0; i < artistReviewData.length; i++) {
-    //if (artistReviewData[i]._id === relevantBookings[i]._id){
-      reviewArray.push({...artistReviewData[i], booking: relevantBookings[i], service: serviceArray[i]});
-    //}
-  }
 
+  // Map service IDs to service objects for quick lookup
+  const serviceMap = Object.fromEntries(serviceArray.map((service) => [service._id, service]));
+
+  // Map booking IDs to booking objects for quick lookup
+  const bookingMap = Object.fromEntries(relevantBookings.map((booking) => [booking._id, booking]));
+  // create the review array with associated bookings and services
+  const reviewArray = artistReviewData.map((review) => {
+    const booking = bookingMap[review.bookingId]; // Find booking using relevant ID from review obeject
+    const service = serviceMap[booking.serviceId]; // Find service using the service ID from the booking
+  
+    return {
+      ...review,
+      booking,
+      service,
+    };
+  });
+  const isLoading = isLoadingReviews() || isLoadingBookings() || isLoadingServices();
+console.log(reviewArray);
   return {
-    isLoadingReviews,
+    isLoading,
     reviewArray,
     artistReviewData
   }
