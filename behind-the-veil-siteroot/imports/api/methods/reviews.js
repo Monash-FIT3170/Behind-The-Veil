@@ -17,13 +17,14 @@ Meteor.methods({
      * @param {string} bookingId - the ID of the booking this review belongs to 
      * @returns {string} The unique ID of the newly created review (reviewId).
      */
-    "add_review": function (reviewRating, reviewComment, bookingId) {
+    "add_review": function (reviewTitle, reviewRating, reviewComment, bookingId) {
+        check(reviewTitle, String)
         check(reviewRating, Number)
         check(reviewComment, String)
         check(bookingId, String)
-
         return ReviewCollection.insert(
             {
+                "reviewTitle": reviewTitle,
                 "reviewRating": reviewRating,
                 "reviewComment": reviewComment,
                 "bookingId": bookingId,
@@ -32,14 +33,13 @@ Meteor.methods({
     },
     /**
      * Retrieves a single review instance from the database based on the review ID.
-     * @param {string} reviewId - The ID of the review to retrieve.
+     * @param {string} bookingId - The booking ID of the review to retrieve.
      * @returns {object|null} - The review object if found, otherwise null.
      */
-    "get_review": function (reviewId) {
-        check(reviewId, String)
-
-        return ReviewCollection.findOne(
-            { _id: reviewId },
+    "get_review": function (bookingId) {
+    check(bookingId, String)    
+    return ReviewCollection.findOne(
+            { bookingId: bookingId },
         )
     },
 })

@@ -78,8 +78,8 @@ export const BookingCard = ({
     const smallPurpleButtonClass = "flex flex-row gap-x-2 justify-center items-center w-[60%] bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500"
 
     const leaveReview = () => {
-        // TODO: add the booking id at the end of the url
-        navigateTo('/profile/review');
+        // add the booking id at the end of the url
+        navigateTo(`/profile/review/${bookingId._str}`);
     }
     if (userType === 'bride') {
         switch (bookingStatus) {
