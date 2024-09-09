@@ -86,8 +86,11 @@ const CancelBooking = () => {
     });
 
     // data trackers
-    let userData = useTracker(() => {
-        return UserCollection.find().fetch()[0];
+    let artistData = useTracker(() => {
+        if (bookingData && bookingData.artistUsername) {
+            return UserCollection.find({ username: bookingData.artistUsername }).fetch()[0];
+        }
+        return null;
     });
 
     const isLoading = isLoadingBooking() || isLoadingService() || isLoadingUser();
@@ -132,7 +135,7 @@ const CancelBooking = () => {
                         <ServiceDetailsHeader
                             service={serviceData.serviceName}
                             date={bookingDatetime.toLocaleString()}
-                            artist={userData.profile.alias + " (@" + bookingData.artistUsername + ")"}
+                            artist={artistData.profile.alias + " (@" + bookingData.artistUsername + ")"}
                             price={bookingData.bookingPrice}
                         />
 
