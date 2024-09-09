@@ -30,7 +30,7 @@ const ReviewCard = ({ className,reviewTitle, reviewComment, date, service, price
       <div>
         <div className="main-text text-dark-grey">Service: {service}</div>
         <div className="main-text text-dark-grey">Price: ${price}</div>
-        <div className="main-text text-dark-grey">Date: {date ? date : type ? type : ""}</div>
+        <div className="main-text text-dark-grey">  Date: {date ? date.split('T')[0] : type ? type : ""}</div>
       </div>
 
     </Card>
