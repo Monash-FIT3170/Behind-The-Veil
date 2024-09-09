@@ -150,11 +150,11 @@ const AddAvailability = () => {
                     {toolTipText}
                 </div>
             )}>
-                <QuestionMarkCircleIcon className="tooltip-icon size-4 text-light-grey-hover" />
+                <QuestionMarkCircleIcon className="tooltip-icon size-4 text-secondary-purple-hover" />
             </Tippy>
         </span>
     );
-
+    
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
             <PreviousButton />
