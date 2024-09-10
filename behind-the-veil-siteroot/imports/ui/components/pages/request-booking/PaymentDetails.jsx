@@ -189,15 +189,13 @@ const PaymentDetails = () => {
                 console.error('Error processing payment:', error);
                 alert('Payment Failed');
             } else {
-                console.log(details);
-                console.log(details.aristUsername);
                 result.success ? addToBooking(startDatetime, endDatetime, details.location, details.price, BookingStatus.PENDING, details.brideUsername, details.artistUsername, serviceId)
                     .then(r => navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/booking-confirmation?${r}`))
                     .catch(reason => alert(reason)) : alert('Payment Failed');
               
                 if (result.success) {
                     // Add the booking to the database
-                    addToBooking(startDatetime, endDatetime, details.location, details.price, BookingStatus.PENDING, details.brideName, details.artistName, serviceId)
+                    addToBooking(startDatetime, endDatetime, details.location, details.price, BookingStatus.PENDING, details.brideUsername, details.artistUsername, serviceId)
                         .then(bookingId => {
                             // Add the payment receipt to the database after booking is added
                             addPaymentReceipt(new Date(), details.price, "Deposit", "Paid", bookingId)
