@@ -40,6 +40,9 @@ import "/imports/api/collections/reviews.js";
 import "/imports/api/methods/reviews.js";
 import "/imports/api/publications/reviews.js";
 
+import "/imports/api/collections/receipts.js";
+import "/imports/api/methods/receipts.js";
+
 // Leave for now for any methods that need to be called on start up.
 Meteor.startup(async () => {
 
