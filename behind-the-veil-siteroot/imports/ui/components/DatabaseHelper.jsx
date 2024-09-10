@@ -515,12 +515,9 @@ export function useArtistReviews(username) {
     return ReviewCollection.find({artistUsername: username}).fetch();
   })
   
-  // loads bookings data
+  // loading data
   const isLoadingBookings = useSubscribe("all_user_bookings", username);
-
-  // loads services data
   const isLoadingServices = useSubscribe("all_user_services", username);
-
   const isLoading = isLoadingReviews() || isLoadingBookings() || isLoadingServices();
 
   // Extract relevant booking IDs from the reviews
@@ -531,14 +528,15 @@ export function useArtistReviews(username) {
     return BookingCollection.find({ _id: { $in: reviewBookingId } }).fetch();
   });
 
+  // extract relevant service ID's from the bookings
   const bookingServiceId = relevantBookings.map(booking => booking.serviceId);
 
-  // retrieve servcie objects based on the extracted ID's
+  // retrieve service objects based on the extracted ID's
   const serviceArray = useTracker(() => {
     return ServiceCollection.find({ _id: { $in: bookingServiceId } }).fetch();
   })
 
-  // Create review array with associated bookings and services
+  // Create review array with relevant bookings and services
   const reviewArray = artistReviewData.map((review) => {
     // Find the booking associated with the review
     const booking = relevantBookings.find(booking => booking._id === review.bookingId);
