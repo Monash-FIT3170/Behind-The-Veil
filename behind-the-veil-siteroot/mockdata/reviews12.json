@@ -2,44 +2,44 @@
     {
         "_id": "66bb050ffc13ae0ea1e2604d",
         "reviewRating": 3,
-        "reviewComment": "natoque penatibus et magnis dis parturient montes nascetur ridiculus mus vivamus vestibulum sagittis sapien cum   ",
+        "reviewComment": "natoque penatibus et magnis dis parturient montes nascetur ridiculus mus vivamus vestibulum sagittis sapien cum",
         "bookingId": "1",
-        "artistUsername": "newnew"
+        "artistUsername": "artist"
     },
     {
         "_id": "66bb050ffc13ae0ea1e2604e",
         "reviewRating": 4,
         "reviewComment": "erat vestibulum sed magna at nunc commodo",
         "bookingId": "2",
-        "artistUsername": "newnew"
+        "artistUsername": "artist"
     },
     {
         "_id": "66bb050ffc13ae0ea1e2604f",
         "reviewRating": 4,
         "reviewComment": "lacus purus aliquet at feugiat non pretium quis lectus",
         "bookingId": "3",
-        "artistUsername": "newnew"
+        "artistUsername": "artist"
     },
     {
         "_id": "66bb050ffc13ae0ea1e26050",
         "reviewRating": 2,
         "reviewComment": "morbi quis tortor id nulla ultrices aliquet maecenas leo odio condimentum id luctus nec",
         "bookingId": "4",
-        "artistUsername": "newnew"
+        "artistUsername": "artist"
     },
     {
         "_id": "66bb050ffc13ae0ea1e26051",
         "reviewRating": 3,
         "reviewComment": "dui luctus rutrum nulla tellus",
         "bookingId": "5",
-        "artistUsername": "newnew"
+        "artistUsername": "artist"
     },
     {
         "_id": "66bb050ffc13ae0ea1e26052",
         "reviewRating": 5,
         "reviewComment": "aliquam non mauris morbi non lectus aliquam sit amet diam in magna bibendum imperdiet nullam orci pede venenatis non",
         "bookingId": "6",
-        "artistUsername": "newnew"
+        "artistUsername": "artist"
     },
     {
         "_id": "66bb050ffc13ae0ea1e26053",

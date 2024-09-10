@@ -12,6 +12,7 @@ import UserCollection from "../../api/collections/users";
 import BookingCollection from "../../api/collections/bookings";
 import PostCollection from "../../api/collections/posts";
 import ReviewCollection from "../../api/collections/reviews";
+import ReviewCollection from "../../api/collections/reviews";
 import BookingStatus from "../enums/BookingStatus";
 
 /**
@@ -38,6 +39,15 @@ export function updateBookingStatus(
   }
   // email about the update
   Meteor.callAsync("sendStatusUpdateEmail", bookingId, newStatus);
+  
+  if (newStatus === BookingStatus.CANCELLED || newStatus === BookingStatus.REJECTED) {
+      Meteor.call('get_receipt_from_booking', bookingId, (error, receipt) => {
+          if (receipt && receipt.paymentStatus === "Deposit") {
+              // Update the receipt to change its status from Deposit to Refunded
+              Meteor.call('deposit_to_refund', receipt._id);
+          }
+      });    
+  }
 }
 
 /**
@@ -460,6 +470,7 @@ export function useGalleryTotalCollection(username) {
     postsData,
   };
 }
+
 
 
 export function useArtistBookings(username) {
