@@ -1,11 +1,13 @@
 /**
  * File Description: Review database entity
  * File version: 1.0
- * Contributors: Vicky
+ * Contributors: Vicky, Katie
  */
 
 import {Meteor} from "meteor/meteor";
 import {ReviewCollection} from "/imports/api/collections/reviews";
+import { check } from 'meteor/check';
+
 
 Meteor.methods({
     /**
@@ -16,6 +18,10 @@ Meteor.methods({
      * @returns {string} The unique ID of the newly created review (reviewId).
      */
     "add_review": function (reviewRating, reviewComment, bookingId) {
+        check(reviewRating, Number)
+        check(reviewComment, String)
+        check(bookingId, String)
+
         return ReviewCollection.insert(
             {
                 "reviewRating": reviewRating,
@@ -30,6 +36,8 @@ Meteor.methods({
      * @returns {object|null} - The review object if found, otherwise null.
      */
     "get_review": function (reviewId) {
+        check(reviewId, String)
+
         return ReviewCollection.findOne(
             { _id: reviewId },
         )
