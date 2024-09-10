@@ -3,6 +3,7 @@ mongoimport -h localhost:3001 --db meteor --collection bookings --file mockdata/
 
 mongoimport -h localhost:3001 --db meteor --collection users --file mockdata/presentation/artists50.json --jsonArray
 mongoimport -h localhost:3001 --db meteor --collection images --file mockdata/presentation/artist_images50.json --jsonArray
+mongoimport -h localhost:3001 --db meteor --collection images --file mockdata/presentation/user_images2.json --jsonArray
 
 mongoimport -h localhost:3001 --db meteor --collection posts --file mockdata/presentation/posts15.json --jsonArray
 mongoimport -h localhost:3001 --db meteor --collection images --file mockdata/presentation/gallery_images15.json --jsonArray

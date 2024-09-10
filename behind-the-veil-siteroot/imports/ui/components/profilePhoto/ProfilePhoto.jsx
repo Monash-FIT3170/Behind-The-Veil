@@ -1,6 +1,6 @@
 /**
  * File Description: A round profile photo component
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Nikki
  */
 
@@ -15,12 +15,12 @@ import {UserCircleIcon} from "@heroicons/react/20/solid"
  * @param artistPhotoData artist profile photo's data from database
  * @param hoverEffect {boolean} false to disable hover effects, defaults to true
  */
-export const ProfilePhoto = ({className, artistPhotoData, hoverEffect=true}) => {
-    // todo change depending on actual photo data format from database
+export const ProfilePhoto = ({className, userPhotoData, hoverEffect=true}) => {
+
     const classes = classNames(className, "relative h-[10vh] w-[10vh]");
 
     // if the profile image data is available
-    if (artistPhotoData) {
+    if (userPhotoData) {
 
         // check if there is hover effect
         const baseImageClass = "w-full h-full object-cover absolute rounded-full border-2 border-light-grey";
@@ -29,7 +29,7 @@ export const ProfilePhoto = ({className, artistPhotoData, hoverEffect=true}) => 
         return (
             <div className={classes}>
                 <img className={classNames(baseImageClass, hoverEffect ? imageHoverClass : "")}
-                     src={artistPhotoData}
+                     src={userPhotoData}
                      alt={"Artist profile photo"}
                      onError={({currentTarget }) => {
                          currentTarget.onError=null; // prevent infinite loop

@@ -1,6 +1,6 @@
 /**
  * File Description: White background for almost all pages
- * File version: 2.0
+ * File version: 2.1
  * Contributors: Nikki
  */
 
@@ -60,7 +60,7 @@ export const WhiteBackground = ({children, className, pageLayout, ...divProps}) 
         pageMainDivClasses = classNames("message-right", pageMainDivClasses);
 
         // has a left dark grey div for the list of contacts
-        pageSubDivClasses = "grey-glass-base standard-shadow inner-shadow message-left";
+        pageSubDivClasses = classNames("grey-glass-base standard-shadow inner-shadow message-left", className);
 
     } else {
         // all other cases if it is not covered, default to large center
