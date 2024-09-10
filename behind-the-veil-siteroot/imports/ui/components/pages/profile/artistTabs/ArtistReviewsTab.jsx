@@ -51,9 +51,6 @@ export const ArtistReviewsTab = ({ username }) => {
 
     const reviewStats = calculateReviewStats(artistReviewData);
 
-    console.log(reviewStats);
-
-
     return (
         reviewStats.totalReviews !== 0 ? (
             <div>
