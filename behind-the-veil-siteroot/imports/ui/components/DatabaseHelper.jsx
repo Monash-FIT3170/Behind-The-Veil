@@ -11,6 +11,7 @@ import ImageCollection from "../../api/collections/images";
 import UserCollection from "../../api/collections/users";
 import BookingCollection from "../../api/collections/bookings";
 import PostCollection from "../../api/collections/posts";
+import ReviewCollection from "../../api/collections/reviews";
 import BookingStatus from "../enums/BookingStatus";
 
 /**
@@ -469,6 +470,7 @@ export function useGalleryTotalCollection(username) {
   };
 }
 
+
 export function useArtistBookings(username) {
   const isLoadingUserBooking = useSubscribe("all_user_bookings", username);
   const artistBookingData = useTracker(() => {
@@ -507,4 +509,15 @@ export function useUserBookings(username) {
     return BookingCollection.find({ artistUsername: username }).fetch();
   });
   return { isLoadingUserBooking, artistBookingData };
+}
+
+export function useArtistReviews(username) {
+  const isLoadingReviews = useSubscribe("artist_reviews", username);
+  const artistReviewData = useTracker(() => {
+    return ReviewCollection.find({artistUsername: username}).fetch();
+  })
+  return {
+    isLoadingReviews,
+    artistReviewData
+  }
 }
