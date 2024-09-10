@@ -105,3 +105,11 @@ export function getSearchSuggestions(type, usersData, servicesData) {
     }
     return allKeyWords
 }
+
+export const imageObj = (imageData, name, size) => {
+    return {
+        imageData: imageData,
+        imageName: name,
+        imageSize: size
+    }
+}
