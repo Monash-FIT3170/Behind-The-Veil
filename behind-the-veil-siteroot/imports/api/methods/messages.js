@@ -31,7 +31,6 @@ Meteor.methods({
             messageSentTime: messageSentTime,
             messageContent: messageContent,
             messageRead: messageRead,
-            photoId: photoId,
             userUsername: userUsername,
             chatId: chatId,
         });

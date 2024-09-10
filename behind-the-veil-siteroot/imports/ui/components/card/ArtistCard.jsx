@@ -31,7 +31,7 @@ export const ArtistCard = ({className, artistUsername, artistAlias, artistProfil
     return (
         <Card className={"cursor-default flex flex-col justify-center items-center w-64 min-h-56 gap-y-2"} {...cardProps}>
 
-            <ProfilePhoto artistPhotoData={artistProfileImageData} hoverEffect={false}/>
+            <ProfilePhoto userPhotoData={artistProfileImageData} hoverEffect={false}/>
 
             <div className={"my-2"}>
                 <div className="large-text text-our-black max-w-full break-all line-clamp-1 text-center">
