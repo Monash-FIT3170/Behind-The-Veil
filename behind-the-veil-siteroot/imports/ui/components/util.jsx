@@ -65,7 +65,6 @@ export function useUserInfo() {
         }
     })
 
-    //console.log("Current logged in user:" + JSON.stringify(userInfo))
     return userInfo;
 }
 

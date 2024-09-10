@@ -51,7 +51,6 @@ export const AddEditPostPage = ({ isEdit }) => {
             if (error) {
               reject(`Error: ${error.message}`);
             } else {
-              console.log(editPost);
               resolve(editPost);
             }
           });
@@ -65,7 +64,6 @@ export const AddEditPostPage = ({ isEdit }) => {
             if (error) {
               reject(`Error: ${error.message}`);
             } else {
-              console.log(editImage);
               resolve(editImage);
             }
           });
@@ -141,7 +139,7 @@ export const AddEditPostPage = ({ isEdit }) => {
       day: "2-digit",
       year: "numeric",
     });
-    console.log(postDate);
+
     let imageType = "post";
 
     // file errors
@@ -188,7 +186,6 @@ export const AddEditPostPage = ({ isEdit }) => {
             if (error) {
               reject(`Error: ${error.message}`);
             } else {
-              console.log("post addded with:", editPostId);
               resolve(editPostId); 
             }
           }
@@ -202,10 +199,8 @@ export const AddEditPostPage = ({ isEdit }) => {
           userInfo.username,
           (error, addPostId) => {
             if (error) {
-              console.log("Error adding post:", error);
               reject(`Error: ${error.message}`);
             } else {
-              console.log("Post added with ID:", addPostId);
               resolve(addPostId); // Pass the addPostId to the next .then if we are adding
             }
           }

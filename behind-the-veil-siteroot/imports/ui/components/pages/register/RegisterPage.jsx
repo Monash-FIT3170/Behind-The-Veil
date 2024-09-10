@@ -24,7 +24,6 @@ export const RegisterPage = () => {
      * @param {string} accountType - artist or bride account to create
      */
     const handleAccountTypeSelection = (accountType) => {
-        console.log("Selected Type:", accountType);
         navigate(`/${UrlBasePath.REGISTER}/createAccount?type=${accountType}`);
     };
 
@@ -52,7 +51,6 @@ export const RegisterPage = () => {
                     type="button"
                     className="bg-secondary-purple hover:bg-secondary-purple-hover size-24 sm:size-32 mb-2.5"
                     onClick={() => {
-                        console.log("Selected Type:", accountType);
                         navigate("/register/createAccount?type=" + accountType);
                     }}>
                     {label}
