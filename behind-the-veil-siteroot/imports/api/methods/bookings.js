@@ -29,7 +29,8 @@ Meteor.methods({
             bookingIsReviewed: false,
             brideUsername: brideUsername,
             artistUsername: artistUsername,
-            serviceId: serviceId
+            serviceId: serviceId,
+            bookingCreatedDate: new Date()
         });
 
         Meteor.callAsync("sendNewBookingEmail", newBookingId);
