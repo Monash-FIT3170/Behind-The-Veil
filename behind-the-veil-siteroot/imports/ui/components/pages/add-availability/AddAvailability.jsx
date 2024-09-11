@@ -1,19 +1,20 @@
 /**
  * File Description: Add Availability page
- * File version: 1.0
- * Contributors: Laura
+ * File version: 1.1
+ * Contributors: Laura, Josh
  */
 
-import React, {useId, useState} from "react";
+import React, { useEffect, useId, useState } from "react";
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
-import AvailabilityCalendar, {VALID_INTERVAL} from "../../../components/availabilityCalendar/AvailabilityCalendar.jsx";
+import AvailabilityCalendar, { VALID_INTERVAL } from "../../../components/availabilityCalendar/AvailabilityCalendar.jsx";
 import Input from "../../input/Input";
 import PreviousButton from "../../button/PreviousButton";
 import {
     eachHourOfInterval,
     format,
+    isBefore,
     isDate,
     isValid,
     isWithinInterval,
@@ -24,6 +25,7 @@ import {
 import { useParams, useNavigate } from "react-router-dom";
 import Tippy from '@tippyjs/react/headless';
 import QuestionMarkCircleIcon from "@heroicons/react/16/solid/QuestionMarkCircleIcon";
+import { useSpecificUser } from "../../DatabaseHelper.jsx";
 
 /**
  * Page for artist to add availability
@@ -31,36 +33,35 @@ import QuestionMarkCircleIcon from "@heroicons/react/16/solid/QuestionMarkCircle
 const AddAvailability = () => {
     const { artistUsername } = useParams();
 
-    const MOCK_AVAILABILITY = [
-        {
-            "_id": "2648fb26-bd00-45ab-b62e-f88c37c6a994",
-            "availabilityTimes":{
-                "2024-08-10": [12,13,14,15,16],
-                "2024-08-11": [12,13,14,15,16]
-            },
-            "artistUsername": "username"
-        }
-    ]
-
-    const initialAvailability = MOCK_AVAILABILITY.find(entry => entry.artistUsername === artistUsername) || {
-        _id: useId(),
-        availabilityTimes: {},
-        artistUsername: artistUsername
-    };
-
     // form input values
-    const [inputs, setInputs] = useState({
-        date: startOfDay(new Date()),
-        times: [],
-    });
-
-    const [availability, setAvailability] = useState(
-        initialAvailability.availabilityTimes
-    );
+    const [selectedDate, setSelectedDate] = useState(startOfDay(new Date()));
+    const [availability, setAvailability] = useState({});
 
     // id's
     const dateInputId = useId();
     const timeInputId = useId();
+
+    // artist data
+    const { isLoading, userData } = useSpecificUser(artistUsername)
+
+    // init availability state once artist data loads
+    useEffect(() => {
+        if (isLoading) return
+
+        if (userData?.availability) {
+            const artistAvailability = { ...userData.availability }
+
+            // remove dates from availability object that are in the past
+            for (date of Object.keys(artistAvailability)) {
+                const today = startOfDay(new Date())
+                if (isBefore(date, today)) {
+                    delete artistAvailability[date]
+                }
+            }
+
+            setAvailability(artistAvailability)
+        }
+    }, [isLoading])
 
     /**
      * Calculate available times that the user can select, based on date
@@ -74,36 +75,31 @@ const AddAvailability = () => {
         }
 
         const hours = eachHourOfInterval({
-            start: set(date, {hours: 6, minutes: 0, seconds: 0}),
-            end: set(date, {hours: 19, minutes: 0, seconds: 0})
+            start: set(date, { hours: 6, minutes: 0, seconds: 0 }),
+            end: set(date, { hours: 19, minutes: 0, seconds: 0 })
         })
 
         return hours
     };
 
+    // write new availability object to artist document in database
+    const updateAvailability = async () => {
+        Meteor.call(
+            "update_availability",
+            artistUsername,
+            availability,
+            (error) => {
+                if (error) {
+                    console.warn('Error updating availability', error)
+                    alert('Error updating availability: ' + error)
+                }
+            }
+        )
+    }
+
     const handleSave = (event) => {
         event.preventDefault();
-
-        const dateKey = format(inputs.date, "yyyy-MM-dd");
-
-        if (!initialAvailability.availabilityTimes[dateKey]) {
-            initialAvailability.availabilityTimes[dateKey] = [];
-        }
-
-        inputs.times.forEach((time) => {
-            const hour = time.getHours();
-            if (!initialAvailability.availabilityTimes[dateKey].includes(hour)) {
-                initialAvailability.availabilityTimes[dateKey].push(hour);
-            }
-        });
-
-        // TODO: add/update availability in database
-        const existingIndex = MOCK_AVAILABILITY.findIndex(entry => entry.artistUsername === initialAvailability.artistUsername);
-        if (existingIndex !== -1) {
-            MOCK_AVAILABILITY[existingIndex] = initialAvailability;
-        } else {
-            MOCK_AVAILABILITY.push(initialAvailability);
-        }
+        updateAvailability()
     }
 
     const handleManualDateInput = (event) => {
@@ -118,13 +114,13 @@ const AddAvailability = () => {
                 isValid(parsedDate) &&
                 isWithinInterval(parsedDate, VALID_INTERVAL)
             ) {
-                setInputs((i) => ({...i, date: parsedDate}));
+                setSelectedDate(parsedDate);
                 return
             }
         }
 
         // else, just update date input with the raw value
-        setInputs((i) => ({...i, date: dateInput}));
+        setSelectedDate(dateInput);
         return
     }
 
@@ -136,12 +132,12 @@ const AddAvailability = () => {
         return dateInput
     }
 
-    const availableTimes = getAvailableTimes(inputs.date);
+    const availableTimes = getAvailableTimes(selectedDate);
 
     //tooltip
     const toolTipText = (
         <div className="text-center">
-            Brides can only select from available hours (green) that you set. Please note that the available hour denote 
+            Brides can only select from available hours (green) that you set. Please note that the available hour denote
             when the services start and does not account for travel time. You may need to account for extra travel time.
         </div>
     );
@@ -154,14 +150,14 @@ const AddAvailability = () => {
                     {toolTipText}
                 </div>
             )}>
-                <QuestionMarkCircleIcon className="tooltip-icon size-4 text-light-grey-hover"/>
+                <QuestionMarkCircleIcon className="tooltip-icon size-4 text-secondary-purple-hover" />
             </Tippy>
         </span>
     );
-
+    
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-            <PreviousButton/>
+            <PreviousButton />
 
             {/* Main container for content */}
             <div className="flex flex-col gap-4 xl:px-40">
@@ -178,21 +174,16 @@ const AddAvailability = () => {
                                         label={<label htmlFor={dateInputId} className="large-text text-our-black">Select Date</label>}
                                         placeholder="DD-MM-YYYY"
                                         name="date"
-                                        value={formatDateInput(inputs.date) || ""}
+                                        value={formatDateInput(selectedDate) || ""}
                                         onChange={handleManualDateInput}
                                     />
                                     {/* calendar component */}
                                     <AvailabilityCalendar
-                                        value={isValid(inputs.date) && isDate(inputs.date) ? inputs.date : null}
+                                        value={isValid(selectedDate) && isDate(selectedDate) ? selectedDate : null}
                                         onChange={(date) => {
-                                            setInputs((i) => {
-                                                return {
-                                                    ...i,
-                                                    date: date,
-                                                };
-                                            });
+                                            setSelectedDate(date);
                                         }}
-                                        tileClassName={({date, view}) => {
+                                        tileClassName={({ date, view }) => {
                                             const dateKey = format(date, 'yyyy-MM-dd');
                                             if (availability[dateKey] && availability[dateKey].length > 0) {
                                                 return 'available';
@@ -203,7 +194,6 @@ const AddAvailability = () => {
                             </div>
 
                             {/* available time buttons */}
-                            {/* <div className="flex sm:flex-grow sm:justify-center"> */}
                             <div className="flex flex-col flex-grow gap-1">
                                 <div className="flex flex-row">
                                     <label
@@ -222,7 +212,7 @@ const AddAvailability = () => {
                                             availableTimes.map((time) => {
                                                 const baseStyle = "w-full";
                                                 const activeStyle = "bg-confirmed-colour text-white hover:bg-confirmed-colour";
-                                                const dateKey = format(inputs.date, "yyyy-MM-dd");
+                                                const dateKey = format(selectedDate, "yyyy-MM-dd");
                                                 const isActive = availability[dateKey] && availability[dateKey].includes(time.getHours());
                                                 const className = isActive ? `${baseStyle} ${activeStyle}` : baseStyle;
                                                 return (
@@ -230,25 +220,22 @@ const AddAvailability = () => {
                                                         key={time}
                                                         className={className}
                                                         onClick={() => {
-                                                            setInputs((i) => {
-                                                                const times = isActive
-                                                                    ? i.times.filter(t => t.getHours() !== time.getHours())
-                                                                    : [...i.times, time];
-                                                                return {
-                                                                    ...i,
-                                                                    times,
-                                                                };
-                                                            });
-                                                            const updatedAvailability = { ...availability };
-                                                            if (isActive) {
-                                                                updatedAvailability[dateKey] = updatedAvailability[dateKey].filter(hour => hour !== time.getHours());
-                                                            } else {
-                                                                if (!updatedAvailability[dateKey]) {
-                                                                    updatedAvailability[dateKey] = [];
+                                                            setAvailability((prevAvailability) => {
+                                                                const updatedAvailability = { ...prevAvailability };
+                                                                if (isActive) {
+                                                                    updatedAvailability[dateKey] = updatedAvailability[dateKey].filter(hour => hour !== time.getHours());
+                                                                } else {
+                                                                    if (!updatedAvailability[dateKey]) {
+                                                                        updatedAvailability[dateKey] = [];
+                                                                    }
+                                                                    updatedAvailability[dateKey].push(time.getHours());
+
+                                                                    // sort in ascending order
+                                                                    updatedAvailability[dateKey].sort((a, b) => a - b)
                                                                 }
-                                                                updatedAvailability[dateKey].push(time.getHours());
-                                                            }
-                                                            setAvailability(updatedAvailability);
+                                                                
+                                                                return updatedAvailability
+                                                            });
                                                         }}
                                                     >
                                                         {format(time, 'p')}
@@ -263,8 +250,6 @@ const AddAvailability = () => {
                                     </div>
                                 </div>
                             </div>
-                            {/* </div> */}
-
                         </div>
                     </div>
                 </form>

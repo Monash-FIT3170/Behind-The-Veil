@@ -28,7 +28,7 @@ const BookingSummary = () => {
     const tipText = "Full deposit for a service is required. If the booking is cancelled or rejected, the full fee will be refunded.";
     /**
      * Function to calculate start and end dates based on input dateTime and service duration.
-     * @param {Date} startDateTime - Date object of the starting time of the booking
+     * @param {string} startDateTime - Date object of the starting time of the booking
      * @param {number} serviceDuration - Duration of service in hours.
      * @returns {Array<Date>} - Array containing start date, end date, and formatted date range string.
      */
@@ -47,24 +47,23 @@ const BookingSummary = () => {
         return [startDateTime, endDateTime, formattedString];
     };
 
+    const urlParams = new URLSearchParams(window.location.search);
+
     /**
      * Function to retrieve query data from URL parameters.
      * @returns {Object} - Object containing booking details.
      */
     const queryData = () => {
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-
         // Extract date, and time from URL parameters
         const dateTime = urlParams.get('time');
         const duration = urlParams.get('duration');
 
         return {
-            'Bride Name': userInfo.alias,
+            'brideName': userInfo.alias,
             'Artist Name': urlParams.get('artistName'),
             'Service': urlParams.get('serviceName'),
             'Location': urlParams.get('location'),
-            'Date': getStartAndEndDate(dateTime, duration),
+            'Date': getStartAndEndDate(dateTime, Number(duration)),
             'Total Price': `$${urlParams.get('price')}`,
         };
     };
@@ -75,7 +74,16 @@ const BookingSummary = () => {
      */
     const handleSubmit = () => {
         // pass the data to the next page via the url
-        const query = new URLSearchParams(queryData()).toString();
+        const oldQuery = queryData();
+        const newQuery = {
+            artistUsername: urlParams.get('artistUsername'),
+            brideUsername: userInfo.username,
+            service: oldQuery['Service'],
+            location: oldQuery['Location'],
+            date: oldQuery['Date'],
+            totalPrice: oldQuery['Total Price'],
+        }
+        const query = new URLSearchParams(newQuery).toString();
         navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/payment-details?${query}`);
     }
 

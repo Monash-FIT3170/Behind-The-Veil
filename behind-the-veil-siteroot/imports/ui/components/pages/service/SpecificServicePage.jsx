@@ -17,6 +17,7 @@ import FormOutput from "../request-booking/FormOutput";
 import PreviousButton from "../../button/PreviousButton";
 import UrlBasePath from "../../../enums/UrlBasePath";
 import {useSpecificService} from "../../DatabaseHelper";
+import {useUserInfo} from "../../util";
 
 /**
  * Displays a page for a specific service
@@ -24,6 +25,8 @@ import {useSpecificService} from "../../DatabaseHelper";
 const SpecificServicePage = () => {
 
     const navigateTo = useNavigate();
+
+    const userInfo = useUserInfo();
 
     // image carousel handler
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -188,15 +191,14 @@ const SpecificServicePage = () => {
                                             input={serviceData.serviceDuration + " hours"}></FormOutput>
                                 <FormOutput textColor="text-dark-grey" haveHelpText={false} label={"Description:"}
                                             input={serviceData.serviceDesc}></FormOutput>
-
                             </div>
-
-                            <Button className="flex flex-row gap-x-2 justify-center items-center w-4/5 sm:w-1/3 min-w-60
-                            bg-secondary-purple hover:bg-secondary-purple-hover"
-                                    onClick={() => navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/request-booking`)}>
-                                <CalendarDaysIcon className="icon-base"/>
-                                Request Booking
-                            </Button>
+                            {userInfo.type === 'bride' && (
+                                <Button className="flex flex-row gap-x-2 justify-center items-center w-4/5 sm:w-1/3 min-w-60 bg-secondary-purple hover:bg-secondary-purple-hover"
+                                        onClick={() => navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/request-booking`)}>
+                                    <CalendarDaysIcon className="icon-base"/>
+                                    Request Booking
+                                </Button>
+                            )}
                         </div>
                     </div>
                 </WhiteBackground>

@@ -15,7 +15,6 @@ import 'react-responsive-modal/styles.css';
 import {Modal} from 'react-responsive-modal';
 import {useNavigate, useParams} from "react-router-dom";
 import PreviousButton from "../../button/PreviousButton";
-import {useUserInfo} from "../../util";
 import BookingStatus from "../../../enums/BookingStatus";
 import UrlBasePath from "../../../enums/UrlBasePath";
 
@@ -31,8 +30,6 @@ import UrlBasePath from "../../../enums/UrlBasePath";
 const PaymentDetails = () => {
     const navigateTo = useNavigate();
 
-    const userInfo = useUserInfo();
-
     // grab the service ID from the URL
     const {serviceId} = useParams();
 
@@ -43,26 +40,24 @@ const PaymentDetails = () => {
         const searchParams = new URLSearchParams(location.search);
 
         // Extracting the parameters
-        const brideName = searchParams.get('Bride Name');
-        const artistName = searchParams.get('Artist Name');
-        const service = searchParams.get('Service');
-        const serviceLocation = searchParams.get('Location');
-        const date = searchParams.get('Date');
-        const priceString = searchParams.get('Total Price');
-
+        const artistusername = searchParams.get('artistUsername');
+        const brideUsername = searchParams.get('brideUsername');
+        const service = searchParams.get('service');
+        const serviceLocation = searchParams.get('location');
+        const date = searchParams.get('date');
+        const priceString = searchParams.get('totalPrice');
         let priceFloat = parseFloat(priceString.replace('$', ''));
 
         setDetails({
-            brideName: brideName,
-            artistName: artistName,
+            artistUsername: artistusername,
+            brideUsername: brideUsername,
             serviceName: service,
             location: serviceLocation,
             date: date,
             price: priceFloat,
         });
-    }, [location.search]);
 
-    const errorMsg = ["card number", "card holder name", "expiry date", "CVV"]
+    }, [location.search]);
 
     const cardNumberId = useId();
     const cardNameId = useId();
@@ -174,32 +169,68 @@ const PaymentDetails = () => {
     };
 
     const confirmPayment = async () => {
-
         let datetimeParts = details.date.split(",");
-
+    
         let startDatetimeString = datetimeParts[0].trim();
         let endDatetimeString = datetimeParts[1].trim();
-
+    
         let startDatetime = new Date(startDatetimeString);
         let endDatetime = new Date(endDatetimeString);
-
+    
         // Destructure the inputs from the state
         const { cardNumber, expDate, cvv } = inputs;
-
+    
         // Make sure expDate is formatted correctly for your backend
         const formattedExpiryDate = expDate.replace(/\D/g, ''); // Remove non-digit characters if needed
-
+    
+        // Call the payment processing method
         Meteor.call("processPayment", { cardNumber, cvv, expiryDate: formattedExpiryDate }, (error, result) => {
             if (error) {
                 console.error('Error processing payment:', error);
                 alert('Payment Failed');
             } else {
-                result.success ? addToBooking(startDatetime, endDatetime, details.location, details.price, BookingStatus.PENDING, details.brideName, details.artistName, serviceId)
-                    .then(r => navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/booking-confirmation`))
+                console.log(details);
+                console.log(details.aristUsername);
+                result.success ? addToBooking(startDatetime, endDatetime, details.location, details.price, BookingStatus.PENDING, details.brideUsername, details.artistUsername, serviceId)
+                    .then(r => navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/booking-confirmation?${r}`))
                     .catch(reason => alert(reason)) : alert('Payment Failed');
+                    
+                result.success ? 
+                    addToBooking(startDatetime, endDatetime, details.location, details.price, BookingStatus.PENDING, details.brideUsername, details.artistUsername, serviceId)
+                        .then(bookingId => {
+                            // After successfully adding the booking, add the payment receipt
+                            addPaymentReceipt(new Date(), details.price, "Deposit", "Paid", bookingId)
+                                .then(receiptId => {
+                                    console.log('Receipt added with ID:', receiptId);
+                                    // Navigate to the booking confirmation page
+                                    navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/booking-confirmation?${bookingId}`);
+                                })
+                                .catch(reason => {
+                                    alert(`Failed to add receipt: ${reason}`);
+                                });
+                        })
+                        .catch(reason => alert(`Failed to add booking: ${reason}`))
+                : alert('Payment Failed');
+                    }
+                })
+            }
+
+    const addPaymentReceipt = (paymentDatetime, paymentAmount, paymentType, paymentStatus, bookingId) => new Promise((resolve, reject) => {
+        Meteor.call("add_receipt", 
+            paymentDatetime, 
+            paymentAmount, 
+            paymentType, 
+            paymentStatus, 
+            bookingId, 
+            (error, receiptId) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(receiptId);
             }
         });
-    };
+    });
+    
 
     const addToBooking = (startDateTime, endDateTime, location, price, status, brideUsername, artistUsername, serviceId) => new Promise((resolve, reject) => {
         Meteor.call("add_booking",

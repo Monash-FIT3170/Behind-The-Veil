@@ -1,6 +1,6 @@
 /**
  * File Description: A profile display with profile image, name and username
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Katie, Nikki
  */
 
@@ -22,7 +22,7 @@ export const ProfileDisplay = ({className, imageData, userAlias, userUsername}) 
     return (
         // make up how it would be coded with the data
         <div className={classes}>
-            <ProfilePhoto className="flex container mx-auto" artistPhotoData={imageData}/>
+            <ProfilePhoto className="flex container mx-auto" userPhotoData={imageData}/>
             <div className="text-center large-text">{userAlias ? userAlias : "User Alias"}</div>
             <div className="text-center medium-text text-dark-grey">{userUsername ? "@" + userUsername : "@username"}</div>
         </div>
