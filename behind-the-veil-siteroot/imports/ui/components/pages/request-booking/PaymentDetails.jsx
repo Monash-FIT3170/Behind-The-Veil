@@ -192,25 +192,26 @@ const PaymentDetails = () => {
                 result.success ? addToBooking(startDatetime, endDatetime, details.location, details.price, BookingStatus.PENDING, details.brideUsername, details.artistUsername, serviceId)
                     .then(r => navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/booking-confirmation?${r}`))
                     .catch(reason => alert(reason)) : alert('Payment Failed');
-              
-                if (result.success) {
-                    // Add the booking to the database
+                    
+                result.success ? 
                     addToBooking(startDatetime, endDatetime, details.location, details.price, BookingStatus.PENDING, details.brideUsername, details.artistUsername, serviceId)
                         .then(bookingId => {
-                            // Add the payment receipt to the database after booking is added
+                            // After successfully adding the booking, add the payment receipt
                             addPaymentReceipt(new Date(), details.price, "Deposit", "Paid", bookingId)
                                 .then(receiptId => {
                                     console.log('Receipt added with ID:', receiptId);
-                                    navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/booking-confirmation`);
+                                    // Navigate to the booking confirmation page
+                                    navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/booking-confirmation?${bookingId}`);
                                 })
-                                .catch(reason => alert(`Failed to add receipt: ${reason}`));
+                                .catch(reason => {
+                                    alert(`Failed to add receipt: ${reason}`);
+                                });
                         })
-                        .catch(reason => alert(`Failed to add booking: ${reason}`));
-                } 
+                        .catch(reason => alert(`Failed to add booking: ${reason}`))
+                : alert('Payment Failed');
+                    }
+                })
             }
-        });
-    };
-    
 
     const addPaymentReceipt = (paymentDatetime, paymentAmount, paymentType, paymentStatus, bookingId) => new Promise((resolve, reject) => {
         Meteor.call("add_receipt", 
