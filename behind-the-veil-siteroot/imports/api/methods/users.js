@@ -65,7 +65,7 @@ Meteor.methods({
     'update_service_area': function (userId, text, radius) {
         check(userId, String)
         check(text, String)
-        check(radius, Number)
+        check(radius, String)
 
         UserCollection.update(
             { _id: userId },

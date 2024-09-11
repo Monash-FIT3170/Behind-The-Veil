@@ -23,8 +23,8 @@ Meteor.methods({
         check(type, String)
         check(name, String)
         check(desc, String)
-        check(price, Number)
-        check(duration, Number)
+        check(price, String)
+        check(duration, String)
         check(artistUsername, String)
 
         ServiceCollection.insert({
