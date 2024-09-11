@@ -60,12 +60,6 @@ export function useServices(
         return ServiceCollection.find(filter).fetch();
     });
 
-    // get service images from database
-    const isLoadingServiceImages = useSubscribe("service_images", []);
-    let imagesData = useTracker(() => {
-        return ImageCollection.find({imageType: "service"}).fetch();
-    });
-
     // get artist data from database, if needed
     let isLoadingArtists = () => false;
     let artistsData = [];
@@ -79,7 +73,7 @@ export function useServices(
 
     // variable for loading
     const isLoading =
-        isLoadingUserServices() || isLoadingArtists() || isLoadingServiceImages();
+        isLoadingUserServices() || isLoadingArtists();
 
     // manual aggregation of each service with their image
     for (let i = 0; i < servicesData.length; i++) {
@@ -92,23 +86,10 @@ export function useServices(
             }
         }
 
-        // then aggregate with the FIRST image that belong to it
-        let foundImageMatch = false;
-        for (let j = 0; j < imagesData.length; j++) {
-            // find matching image for the service
-            if (
-                imagesData[j].imageType === "service" &&
-                servicesData[i]._id === imagesData[j].target_id
-            ) {
-                servicesData[i].serviceImageData = imagesData[j].imageData;
-                foundImageMatch = true;
-                break;
-            }
-        }
-
-        // if not found any images, replace with default
-        if (!foundImageMatch) {
+        if (!servicesData[i].serviceImages) {
             servicesData[i].serviceImageData = "/imageNotFound.png";
+        } else {
+            servicesData[i].serviceImageData = servicesData[i].serviceImages[0].imageData
         }
     }
     return {isLoading, servicesData};
