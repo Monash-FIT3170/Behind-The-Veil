@@ -1,7 +1,15 @@
+/**
+ * File Description: Users method testing
+ * File version: 1.0
+ * Contributors: Katie
+ */
+
 const assert = require('assert');
 import {resetDatabase} from 'meteor/xolvio:cleaner';
 import "../imports/api/methods/users";
 import {UserCollection} from "../imports/api/collections/users";
+import {Accounts} from 'meteor/accounts-base';
+
 
 /**
  * Test suite for client-side user methods.
@@ -14,7 +22,82 @@ if (Meteor.isClient) {
         beforeEach(function () {
             resetDatabase(); // Clear the collection before each test
         });
+        /**
+         * Test case to check if all users can be removed.
+         */
+        it('can remove all users', function () {
+            const userId = UserCollection.insert({
+                username: 'testuser',
+                email: 'testuser@example.com',
+                password: 'password',
+                profile: {
+                    alias: 'test',
+                    type: 'artist',
+                    artistServiceLocation: '',
+                    artistserviceRadius: 0,
+                },
+            });
+            Meteor.call('remove_all_users');
+            assert.strictEqual(UserCollection.find().count(), 0, 'Expected no users to be present after removal');
 
+        });
+        /**
+         * Test case to check if verification email can send.
+         */
+        it('can send verification email', function () {
+            Accounts.createUser({
+                username: 'testuser',
+                email: 'testuser@example.com',
+                password: 'password',
+                profile: {
+                    alias: 'test',
+                    type: 'artist',
+                },
+            });
+            Meteor.call("verify_email", Meteor.userId());
+
+        });
+        /**
+         * Test case to check if email can be updated.
+         */
+        it('can update email', function () {
+            const userId = UserCollection.insert({
+                username: 'testuser',
+                email: 'testuser@example.com',
+                password: 'password',
+                profile: {
+                    alias: 'test',
+                    type: 'artist',
+                    artistServiceLocation: '',
+                    artistserviceRadius: 0,
+                },
+            });
+            Meteor.call("update_email", userId, 'testuser@example.com', 'updateuser@example.com');
+            const updatedUser = UserCollection.findOne(userId);
+            assert.strictEqual(updatedUser.email, 'updateuser@example.com');
+            // throwing an error because it is not updating 
+            // maybe because the Accounts is used in "update_email"
+
+        });
+        /**
+         * Test case to check if the alias can be updated.
+         */
+        it('can update alias', function () {
+            const userId = UserCollection.insert({
+                username: 'testuser',
+                email: 'testuser@example.com',
+                password: 'password',
+                profile: {
+                    alias: 'test',
+                    type: 'artist',
+                    artistServiceLocation: '',
+                    artistserviceRadius: 0,
+                },
+            });
+            Meteor.call('update_alias', userId, 'newalias');
+            const updatedUser = UserCollection.findOne(userId);
+            assert.strictEqual(updatedUser.profile.alias, 'newalias');
+        });
         /**
          * Test case to check if service area can be updated successfully.
          */
@@ -100,5 +183,24 @@ if (Meteor.isClient) {
                 assert.strictEqual(user.profile.artistServiceRadius, retrievedUser.profile.artistServiceRadius);
             });
         });
+        /**
+         * Test case to check if availability can be updated.
+         */
+        it('can update availability', function () {
+            const userId = UserCollection.insert({
+                username: 'testuser',
+                email: 'testuser@example.com',
+                password: 'password',
+                profile: {
+                    alias: 'test',
+                    type: 'artist',
+                    artistServiceLocation: '',
+                    artistserviceRadius: 0,
+                },
+            });
+            Meteor.call('update_availability', 'testuser', 'clayton',  );
+            const updatedUser = UserCollection.findOne(userId);
+        });
+        
     });
 }
