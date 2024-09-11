@@ -101,9 +101,10 @@ export const ArtistReviewsTab = ({ username }) => {
                                 key={review._id}
                                 reviewTitle={review.reviewTitle}
                                 reviewComment={review.reviewComment}
-                                date={review.booking.bookingStartDateTime} // Use booking start date from booking data
-                                service={review.service.serviceName} // Use service name from booking data
-                                price={review.booking.bookingPrice} // Use booking price from booking data
+                                date={review.booking.bookingStartDateTime} 
+                                service={review.service.serviceName} 
+                                price={review.booking.bookingPrice}
+                                reviewRating = {review.reviewRating} 
                             />
                         ))}
                     </div>

@@ -157,7 +157,7 @@ on a case by case basis within individual JSX components.
     }
     
     .review-details {
-        @apply grid grid-cols-2 grid-rows-2 gap-x-10 gap-y-4 w-full min-w-[300px] lg:w-4/5 mx-auto;
+        @apply grid grid-cols-2 divide-blue-100 divide-x-[3px] w-full min-w-[300px] lg:w-4/5 mx-auto;
     }
 
 }
