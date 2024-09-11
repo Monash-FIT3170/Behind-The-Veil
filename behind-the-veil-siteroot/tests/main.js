@@ -5,6 +5,10 @@ import './post.tests.js';
 import './users.tests.js';
 import './review.tests.js'
 import './message.tests.js'
+import './images.tests.js'
+import './payment.tests.js'
+import './receipts.tests.js'
+import './services.tests.js'
 
 
 describe("behind-the-veil-siteroot", function () {
