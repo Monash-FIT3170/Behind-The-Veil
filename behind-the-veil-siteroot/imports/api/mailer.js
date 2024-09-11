@@ -7,13 +7,10 @@
 import { Meteor } from "meteor/meteor";
 import { Email } from "meteor/email";
 import { check } from "meteor/check";
-import BookingStatus from "../imports/ui/enums/BookingStatus";
-import BookingCollection from "../imports/api/collections/bookings";
-import ServiceCollection from "../imports/api/collections/services";
-import UserCollection from "../imports/api/collections/users";
-
-// file containing info for mail server
-import {fromUser} from "./secrets.js"
+import BookingStatus from "../ui/enums/BookingStatus";
+import BookingCollection from "./collections/bookings";
+import ServiceCollection from "./collections/services";
+import UserCollection from "./collections/users";
 
 Meteor.methods({
     /**
@@ -21,7 +18,7 @@ Meteor.methods({
      * @param bookingId - id of booking to send about
      * @param statusAfter - the status that it was changed to
      */
-    sendStatusUpdateEmail(bookingId, statusAfter) {
+    "sendStatusUpdateEmail": function (bookingId, statusAfter) {
         check([bookingId, statusAfter], [String]);
 
         // retrieve data (server side, so no need for meteor.call)
@@ -33,7 +30,7 @@ Meteor.methods({
 
         // if data is all there
         if (bookingData && serviceData && usersData) {
-            const from = fromUser;
+            const from = "Behind the Veil <behindtheveil010@gmail.com>";
             const subject = "[Behind the Veil] Booking status change alert";
             let text = `Booking Details: \n`;
             text += `Service Name: ${serviceData.serviceName} \n`;
@@ -52,34 +49,35 @@ Meteor.methods({
             Email.send({ to: userEmails, from, subject, text });
         }
     },
+
+    /**
+     * Sends email for a new booking
+     * @param bookingId - ID of new booking
+     */
+    "sendNewBookingEmail": function (bookingId) {
+        check([bookingId], [String]);
+
+        // retrieve data (server side, so no need for meteor.call)
+        const bookingData = BookingCollection.find({_id: bookingId}).fetch()[0];
+        const serviceData = ServiceCollection.find({_id: bookingData.serviceId}).fetch()[0];
+        const usersData = UserCollection.find({
+            username: { $in : [bookingData.brideUsername, bookingData.artistUsername] }
+        }).fetch();
+
+        // if data is all there
+        if (bookingData && serviceData && usersData) {
+            const from = "Behind the Veil <behindtheveil010@gmail.com>";
+            const subject = "[Behind the Veil] New Booking";
+            let text = `You have a new booking: \n\n`;
+            text += `Booking Details: \n`;
+            text += `Service Name: ${serviceData.serviceName} \n`;
+            text += `Service Description: ${serviceData.serviceDesc} \n`;
+            text += `Date: ${new Date(bookingData.bookingStartDateTime).toLocaleString()} \n`;
+            text += `Price: $${bookingData.bookingPrice} \n\n`;
+
+            const userEmails = usersData.map((user) => user.emails[0].address)
+            Email.send({ to: userEmails, from, subject, text });
+        }
+    }
 });
 
-/**
- * This is not a meteor.method because it is only ever called on the server side
- * @param bookingId - ID of new booking
- */
-export function sendNewBookingEmail(bookingId) {
-    check([bookingId], [String]);
-
-    // retrieve data (server side, so no need for meteor.call)
-    const bookingData = BookingCollection.find({_id: bookingId}).fetch()[0];
-    const serviceData = ServiceCollection.find({_id: bookingData.serviceId}).fetch()[0];
-    const usersData = UserCollection.find({
-        username: { $in : [bookingData.brideUsername, bookingData.artistUsername] }
-    }).fetch();
-
-    // if data is all there
-    if (bookingData && serviceData && usersData) {
-        const from = fromUser;
-        const subject = "[Behind the Veil] New Booking";
-        let text = `You have a new booking: \n\n`;
-        text += `Booking Details: \n`;
-        text += `Service Name: ${serviceData.serviceName} \n`;
-        text += `Service Description: ${serviceData.serviceDesc} \n`;
-        text += `Date: ${new Date(bookingData.bookingStartDateTime).toLocaleString()} \n`;
-        text += `Price: $${bookingData.bookingPrice} \n\n`;
-
-        const userEmails = usersData.map((user) => user.emails[0].address)
-        Email.send({ to: userEmails, from, subject, text });
-    }
-}

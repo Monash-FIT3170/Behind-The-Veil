@@ -291,9 +291,9 @@ export const MessagesPage = () => {
                     <div className="flex justify-center items-center h-full">
                         <div className="flex flex-col">
                             <h2 className="text-center title-text">
-                                Error
+                                Cannot message
                             </h2>
-                            <p className="text-center medium-text">This chat is invalid.</p>
+                            <p className="text-center medium-text">You cannot message users of the same type (bride/artist).</p>
                             <p className="text-center medium-text">You will now be redirected to the messages page.</p>
                             <div className="flex justify-center space-x-6 mt-5">
                                 <Button
