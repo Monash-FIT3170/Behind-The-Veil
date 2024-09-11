@@ -470,8 +470,6 @@ export function useGalleryTotalCollection(username) {
   };
 }
 
-
-
 export function useArtistBookings(username) {
   const isLoadingUserBooking = useSubscribe("all_user_bookings", username);
   const artistBookingData = useTracker(() => {
@@ -561,7 +559,6 @@ export function useArtistReviews(username) {
     };
   });
 
-console.log(reviewArray);
   return {
     isLoading,
     reviewArray,

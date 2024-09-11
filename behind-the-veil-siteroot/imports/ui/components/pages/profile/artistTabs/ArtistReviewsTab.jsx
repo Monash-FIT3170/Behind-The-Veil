@@ -7,7 +7,6 @@ import ReviewCard from '../../../card/ReviewCard';
 export const ArtistReviewsTab = ({ username }) => {
     const { isLoading, reviewArray, artistReviewData } = useArtistReviews(username);
 
-    console.log(reviewArray);
     const calculateReviewStats = (reviewSourceArray) => {
         const totalReviews = reviewSourceArray.length;
 
@@ -50,9 +49,7 @@ export const ArtistReviewsTab = ({ username }) => {
                 speed={1.5}
             />
         )
-    } else {    console.log(reviewStats);
-
-
+    } else {
         return (
             reviewStats.totalReviews !== 0 ? (
                 <div>
