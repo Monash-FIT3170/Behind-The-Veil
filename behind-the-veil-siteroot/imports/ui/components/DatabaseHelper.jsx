@@ -421,11 +421,13 @@ export function useArtistDashboardData(username) {
   // loop through entire booking data array
   for (let i = 0; i < bookingData.length; i++) {
     //if booking is completed, total bookings value
-    if (bookingData[i].bookingStatus === "completed") {
+    if (bookingData[i].bookingStatus === BookingStatus.COMPLETED) {
       bookingCompleteRevenue += bookingData[i].bookingPrice;
     }
-    //if booking is pending, total bookings value
-    if (bookingData[i].bookingStatus === "pending") {
+    //if booking is pending/confirmed, total bookings value
+    if (bookingData[i].bookingStatus === BookingStatus.PENDING ||
+        bookingData[i].bookingStatus === BookingStatus.CONFIRMED ||
+        bookingData[i].bookingStatus === BookingStatus.OVERDUE) {
       bookingPendingRevenue += bookingData[i].bookingPrice;
     }
   }
