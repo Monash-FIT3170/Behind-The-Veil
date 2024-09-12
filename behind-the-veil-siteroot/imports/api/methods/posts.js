@@ -15,12 +15,13 @@ Meteor.methods({
      * @param {string} artistUsername - the username of the artist this post belongs to 
      * @returns {string} The unique ID of the newly created post (postId).
      */
-    "add_post": function (postDate, postDescription, artistUsername) {
+    "add_post": function (postDate, postDescription, artistUsername, postImage) {
         return PostCollection.insert(
             {
                 "postDate": postDate,
                 "postDescription": postDescription,
                 "artistUsername": artistUsername,
+                "postImage": postImage
             }
         );
     },

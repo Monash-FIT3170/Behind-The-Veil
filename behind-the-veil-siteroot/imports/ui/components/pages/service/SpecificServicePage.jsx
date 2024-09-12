@@ -43,11 +43,11 @@ const SpecificServicePage = () => {
     const {serviceId} = useParams();
 
     // get service data from database
-    const {isLoading, serviceData, artistData, serviceImagesData, profileImageData} = useSpecificService(serviceId);
+    const {isLoading, serviceData, artistData, profileImageData} = useSpecificService(serviceId);
 
-    const imageUrls = serviceImagesData.map((image) => (
-        image.imageData
-    ))
+    const imageUrls = serviceData.serviceImages
+        ? serviceData.serviceImages.map((image) => image.imageData)
+        : ["/imageNotFound.png"];
 
     const durationTip = "Duration does not include travel. It is the required time to performing the service for the bride.";
 

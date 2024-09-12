@@ -63,6 +63,13 @@ Meteor.methods({
         );
     },
 
+    'update_profile_image': function (userId, image) {
+        UserCollection.UserCollection.update(
+            {_id: userId},
+            {$set: {'profile.profileImage': image}}
+        )
+    },
+
     /**
      * Retrieves the alias of a user based on their username.
      * @param {string} username - The username of the user to retrieve.

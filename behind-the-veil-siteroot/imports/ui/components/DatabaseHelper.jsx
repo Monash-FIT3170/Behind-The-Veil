@@ -124,7 +124,6 @@ export function useBookings(booking_publication, params, filter) {
   let bookingsData = useTracker(() => {
     return BookingCollection.find(filter).fetch();
   });
-  console.log(bookingsData);
 
   // get services from database
   const isLoadingService = useSubscribe("all_services");
@@ -132,15 +131,9 @@ export function useBookings(booking_publication, params, filter) {
     return ServiceCollection.find().fetch();
   });
 
-  // get service images from database
-  const isLoadingServiceImage = useSubscribe("service_images");
-  let imagesData = useTracker(() => {
-    return ImageCollection.find({ imageType: "service" }).fetch();
-  });
-
   // variable for loading
   const isLoading =
-    isLoadingBooking() || isLoadingService() || isLoadingServiceImage();
+    isLoadingBooking() || isLoadingService();
 
   // manual aggregation into bookingsData with its services and images
   for (let i = 0; i < bookingsData.length; i++) {
@@ -150,26 +143,13 @@ export function useBookings(booking_publication, params, filter) {
       if (bookingsData[i].serviceId === servicesData[j]._id) {
         bookingsData[i].serviceName = servicesData[j].serviceName;
         bookingsData[i].serviceDesc = servicesData[j].serviceDesc;
+        if (!servicesData[j].serviceImages) {
+            bookingsData[i].serviceImageData = "/imageNotFound.png";
+        } else {
+            bookingsData[i].serviceImageData = servicesData[j].serviceImages[0].imageData;
+        }
         break;
       }
-    }
-    // then aggregate with the FIRST service image (cover)
-    let foundImageMatch = false;
-    for (let j = 0; j < imagesData.length; j++) {
-      // find matching image for the service
-      if (
-        imagesData[j].imageType === "service" &&
-        bookingsData[i].serviceId === imagesData[j].target_id
-      ) {
-        bookingsData[i].serviceImageData = imagesData[j].imageData;
-        foundImageMatch = true;
-        break;
-      }
-    }
-
-    // if not found any images, replace with default
-    if (!foundImageMatch) {
-      bookingsData[i].serviceImageData = "/imageNotFound.png";
     }
   }
   return {
@@ -235,17 +215,6 @@ export function useSpecificService(serviceId) {
     }).fetch()[0];
   });
 
-  // get service images from database
-  const isLoadingServiceImages = useSubscribe(
-    "specific_service_images",
-    serviceId
-  );
-  let serviceImagesData = useTracker(() => {
-    return ImageCollection.find({
-      $and: [{ imageType: "service" }, { target_id: serviceId }],
-    }).fetch();
-  });
-
   // get artist data + profile image from database
   const serviceArtistUsername = serviceData ? serviceData.artistUsername : "";
   const isLoadingArtist = useSubscribe("specific_user", serviceArtistUsername);
@@ -268,14 +237,12 @@ export function useSpecificService(serviceId) {
   const isLoading =
     isLoadingService() ||
     isLoadingArtist() ||
-    isLoadingServiceImages() ||
     isLoadingArtistProfile();
   return {
     isLoading,
     serviceData,
     artistData,
-    serviceImagesData,
-    profileImageData,
+    profileImageData
   };
 }
 

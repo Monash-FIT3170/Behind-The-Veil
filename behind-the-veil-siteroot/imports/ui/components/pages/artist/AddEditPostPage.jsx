@@ -58,19 +58,6 @@ export const AddEditPostPage = ({ isEdit }) => {
         });
       };
 
-      // Function to retrieve image using postId
-      const retrieveImage = () => {
-        return new Promise((resolve, reject) => {
-          Meteor.call("get_image", postId, (error, editImage) => {
-            if (error) {
-              reject(`Error: ${error.message}`);
-            } else {
-              console.log(editImage);
-              resolve(editImage);
-            }
-          });
-        });
-      };
       // firsty use the retrievePost function
       retrievePost()
         .then((post) => {
@@ -79,12 +66,8 @@ export const AddEditPostPage = ({ isEdit }) => {
             navigateTo("/" + UrlBasePath.PROFILE);
           }
           setInputReason(post.postDescription); // Set the post description
-          return retrieveImage(); // Fetch the image next
-        })
-        .then((image) => {
-          //Set the image preview and input file
-          setInputFile(image.imageData);
-          setImagePreviewUrl(image.imageData);
+          setInputFile(post.postImage.imageData);
+          setImagePreviewUrl(post.postImage.imageData);
         })
         .catch((error) => {
           alert(error);
@@ -169,12 +152,7 @@ export const AddEditPostPage = ({ isEdit }) => {
       postDate: postDate,
       postDescription: postDescription,
       artistUsername: userInfo.username,
-    };
-    // image object
-    const image = {
-      imageType: imageType,
-      target_id: postId,
-      imageData: inputFile,
+      postImage: {imageDate: inputFile}
     };
 
     // edit
@@ -188,7 +166,7 @@ export const AddEditPostPage = ({ isEdit }) => {
             if (error) {
               reject(`Error: ${error.message}`);
             } else {
-              console.log("post addded with:", editPostId);
+              console.log("post added with:", editPostId);
               resolve(editPostId); 
             }
           }
@@ -200,6 +178,7 @@ export const AddEditPostPage = ({ isEdit }) => {
           postDate,
           postDescription,
           userInfo.username,
+          {imageData: inputFile},
           (error, addPostId) => {
             if (error) {
               console.log("Error adding post:", error);
@@ -212,46 +191,6 @@ export const AddEditPostPage = ({ isEdit }) => {
         );
       }
     })
-      .then((newPostId) => {
-        if (isEdit) {
-          // If editing, handle the edit scenario
-          return new Promise((resolve, reject) => {
-            Meteor.call(
-              "update_post_image",
-              postId,
-              image,
-              (error, imageId) => {
-                if (error) {
-                  reject(`Error: ${error.message}`);
-                } else {
-                  resolve(imageId);
-                  alert("Post edited successfully!");
-                  navigateTo("/" + UrlBasePath.PROFILE);
-                }
-              }
-            );
-          });
-        } else {
-          // If adding a new post, handle the add scenario
-          return new Promise((resolve, reject) => {
-            Meteor.call(
-              "add_image",
-              imageType,
-              newPostId,
-              inputFile,
-              (error, imageId) => {
-                if (error) {
-                  reject(`Error: ${error.message}`);
-                } else {
-                  resolve(imageId);
-                  alert("Post added successfully!");
-                  navigateTo("/" + UrlBasePath.PROFILE);
-                }
-              }
-            );
-          });
-        }
-      })
       .catch((reason) => alert(reason));
   }
 
