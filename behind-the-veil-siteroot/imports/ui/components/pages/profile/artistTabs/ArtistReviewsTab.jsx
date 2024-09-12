@@ -104,6 +104,7 @@ export const ArtistReviewsTab = ({ username }) => {
                                 date={review.booking.bookingStartDateTime} 
                                 service={review.service.serviceName} 
                                 price={review.booking.bookingPrice}
+                                bride = {review.bride.profile.alias}
                                 reviewRating = {review.reviewRating} 
                             />
                         ))}

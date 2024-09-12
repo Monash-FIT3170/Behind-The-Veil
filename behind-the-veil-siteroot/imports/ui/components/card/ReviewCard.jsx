@@ -19,7 +19,7 @@ import { StarIcon } from '@heroicons/react/24/solid'
  * @param {string} price - Price of service
  * // TODO: may need to refactor props once the database schema is set up
  */
-const ReviewCard = ({ className,reviewTitle, reviewComment, date, service, price, reviewRating }) => {
+const ReviewCard = ({ className,reviewTitle, reviewComment, date, service, price, reviewRating, bride }) => {
   const classes = classNames("review-details", className)
   return (
     <Card className={classes}>
@@ -28,9 +28,10 @@ const ReviewCard = ({ className,reviewTitle, reviewComment, date, service, price
         <div className="medium-text text-our-black max-w-xl break-words">{reviewComment}</div>
       </div>
       <div className="flex flex-col p-4">
-        <div className="main-text text-dark-grey font-semibold gap-x-10"> Service: {service}</div>
+        <div className="main-text text-dark-grey font-semibold"> Service: {service}</div>
         <div className="main-text text-dark-grey font-semibold"> Price: ${price}</div>
         <div className="main-text text-dark-grey font-semibold"> Date: {date ? date.split('T')[0] : type ? type : ""}</div>
+        <div className="main-text text-dark-grey font-semibold"> Bride Name: {bride}</div>
         <div className="flex items-center mt-2">
           {[...Array(5)].map((_, i) => {
             const currentStar = i + 1;

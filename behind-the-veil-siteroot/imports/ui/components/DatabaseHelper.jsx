@@ -13,6 +13,7 @@ import BookingCollection from "../../api/collections/bookings";
 import PostCollection from "../../api/collections/posts";
 import ReviewCollection from "../../api/collections/reviews";
 import BookingStatus from "../enums/BookingStatus";
+import { relativeTimeRounding } from "moment";
 
 /**
  * Function to update booking's status in any way (also linked to emailing in the future)
@@ -526,7 +527,8 @@ export function useArtistReviews(username) {
   // loading data
   const isLoadingBookings = useSubscribe("all_user_bookings", username);
   const isLoadingServices = useSubscribe("all_user_services", username);
-  const isLoading = isLoadingReviews() || isLoadingBookings() || isLoadingServices();
+  const isLoadingBrides = useSubscribe("all_brides");
+  const isLoading = isLoadingReviews() || isLoadingBookings() || isLoadingServices() || isLoadingBrides();
 
   // Extract relevant booking IDs from the reviews
   const reviewBookingId = artistReviewData.map(review => review.bookingId);
@@ -539,6 +541,12 @@ export function useArtistReviews(username) {
   // extract relevant service ID's from the bookings
   const bookingServiceId = relevantBookings.map(booking => booking.serviceId);
 
+  // extract bride information
+  const brideUsername = relevantBookings.map(booking => booking.brideUsername);
+
+  const brideArray = useTracker(() => {
+    return UserCollection.find({ username: { $in: brideUsername } }).fetch();
+  })  
   // retrieve service objects based on the extracted ID's
   const serviceArray = useTracker(() => {
     return ServiceCollection.find({ _id: { $in: bookingServiceId } }).fetch();
@@ -548,13 +556,16 @@ export function useArtistReviews(username) {
   const reviewArray = artistReviewData.map((review) => {
     // Find the booking associated with the review
     const booking = relevantBookings.find(booking => booking._id === review.bookingId);
-
+    // find the bride with associated username from booking
+    const bride = brideArray.find(bride => bride.username === booking.brideUsername);
     // Find the service associated with the booking
     const service = serviceArray.find(service => service._id === booking.serviceId);
+
 
     return {
       ...review,
       booking,
+      bride,
       service,
     };
   });
