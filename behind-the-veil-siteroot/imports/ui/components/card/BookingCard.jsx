@@ -79,7 +79,7 @@ export const BookingCard = ({
 
     const leaveReview = () => {
         // add the booking id at the end of the url
-        navigateTo(`/profile/review/${bookingId._str}`);
+        navigateTo(`/profile/review/${bookingId}`);
     }
     if (userType === 'bride') {
         switch (bookingStatus) {
