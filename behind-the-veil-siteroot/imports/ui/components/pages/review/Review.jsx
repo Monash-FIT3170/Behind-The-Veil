@@ -22,7 +22,7 @@ import { StarIcon } from '@heroicons/react/24/solid'
 import ReviewCollection from '../../../../api/collections/reviews.js';
 import BookingCollection from '../../../../api/collections/bookings.js';
 import "../../../../api/methods/reviews.js";
-//import "../../../../api/methods/bookings.js";
+import "../../../../api/methods/bookings.js";
 
 import { useSpecificService } from '../../DatabaseHelper';
 import { useUserInfo } from '../../util.jsx';
@@ -71,11 +71,26 @@ export const Review = () => {
         return BookingCollection.find({_id: bookingId}).fetch();
     })
 
+    // set the review attributes when reviewData has loaded
+    useEffect(() => {
+        if (reviewData.length > 0) {
+            const review = reviewData[0]
+            setReviewTitle(review.reviewTitle)
+            setReviewRating(review.reviewRating)
+            setReviewComment(review.reviewComment)
+        }
+        console.log("review data: ", reviewData)
+    }, [reviewData]);
+
     // set the serviceId when bookingData has loaded
     useEffect(() => {
         if (bookingData.length > 0) {
-            const serviceIdFromBooking = bookingData[0].serviceId;
+            const booking = bookingData[0]
+            const serviceIdFromBooking = booking.serviceId;
             setServiceId(serviceIdFromBooking); 
+            if (booking.bookingIsReviewed) {
+                setLeaveReview(false);
+            }
         }
     }, [bookingData]);
 
@@ -89,14 +104,6 @@ export const Review = () => {
     } = useSpecificService(serviceId ?? null); // pass serviceId if available, else pass null
 
     const isLoading = isLoadingReviews() || isLoadingBookings() || isLoadingService;
-
-    if (!isLoading) {
-        // if there is an existing review, then set the leave review status to false
-        if (bookingData[0].bookingIsReviewed) {
-            setLeaveReview(false);
-        }
-
-    }
 
     // when the user clicks submit review, conduct error checks to make sure that input fields are 
     // not empty
@@ -153,27 +160,27 @@ export const Review = () => {
             console.log("Error adding review. Returned with error:" + error.message);
         }
 
-        // // set the bookingIsReviewed attribute of the booking to 'true'
-        // bookingReviewedObj = {
-        //     bookingIsReviewed: true
-        // }
-        // try {
-        //     // wrap meteor.call in a promise
-        //     new Promise((resolve, reject) => {
-        //         // asynchronous operation
-        //         Meteor.call('update_booking_details', bookingId, bookingReviewedObj, (error, result) => {
-        //             if (error) {
-        //                 reject(error); // if there's an error, go to the catch block
-        //             } else {
-        //                 resolve(result); // if there's no error, continue with the rest of the block
-        //             }
-        //         });
-        //     }).then(() => {
-        //         console.log("Booking successfully updated");
-        //     });
-        // } catch (error) {
-        //     console.log("Error adding review. Returned with error:" + error.message);
-        // }
+        // set the bookingIsReviewed attribute of the booking to 'true'
+        bookingReviewedObj = {
+            bookingIsReviewed: true
+        }
+        try {
+            // wrap meteor.call in a promise
+            new Promise((resolve, reject) => {
+                // asynchronous operation
+                Meteor.call('update_booking_details', bookingId, bookingReviewedObj, (error, result) => {
+                    if (error) {
+                        reject(error); // if there's an error, go to the catch block
+                    } else {
+                        resolve(result); // if there's no error, continue with the rest of the block
+                    }
+                });
+            }).then(() => {
+                console.log("Booking successfully updated");
+            });
+        } catch (error) {
+            console.log("Error adding review. Returned with error:" + error.message);
+        }
     }
 
 
@@ -304,10 +311,12 @@ export const Review = () => {
                         ) : (
                             <div className="flex flex-col gap-6">
                                 <div className="flex flex-col md:flex-row gap-4 md:gap-10">
-                                    <div className="main-text">Review Title</div>
-                                    {/* TODO: make the below text grey */}
-                                    <div className="main-text">{reviewData[0].reviewTitle}</div>
-                                    <div>
+                                    <div className="flex flex-col">
+                                        <div className="main-text">Review Title</div>
+                                        {/* TODO: make the below text grey */}
+                                        <div className="main-text text-dark-grey">{reviewTitle}</div>
+                                    </div>
+                                    <div className="flex flex-col w-1/2">
                                             <div className="main-text">Rating</div>
                                             <div className="flex items-center">
                                                 {[...Array(5)].map((_, i) => {
@@ -334,11 +343,9 @@ export const Review = () => {
                                             })}
                                             </div>
                                     </div>
-                                    {/* TODO: Add star rating object here */}
                                 </div>
                                 <div className="main-text">Your Review</div>
-                                    {/* TODO: make the below text grey */}
-                                    <div className="main-text">reviewData[0].reviewComment</div>
+                                    <div className="main-text text-dark-grey">{reviewComment}</div>
                                 </div>  
                         )}
                     </div>

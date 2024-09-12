@@ -90,16 +90,16 @@ export const BookingCard = ({
                     additionalButtons.push(
                         // TODO: in the navigateTo, add '/review/' + serviceId or bookingId in it to show review of particular item
                         <Button className={purpleButtonClass} onClick={leaveReview}>
-                            <PencilSquareIcon className="icon-base"/>
-                            Leave Review
+                            <EyeIcon className="icon-base"/>
+                            View Review
                         </Button>
                     );
                 } else {
                     // if already left review
                     additionalButtons.push(
                         <Button className={purpleButtonClass} onClick={leaveReview}>
-                            <EyeIcon className="icon-base"/>
-                            View Review
+                            <PencilSquareIcon className="icon-base"/>
+                            Leave Review
                         </Button>
                     );
                 }
