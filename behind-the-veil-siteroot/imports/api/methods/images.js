@@ -1,7 +1,7 @@
 /**
  * File Description: Image database entity
- * File version: 1.1
- * Contributors: Nikki, Phillip, Vicky
+ * File version: 1.2
+ * Contributors: Nikki, Phillip, Lucas, Vicky
  */
 
 import {Meteor} from "meteor/meteor";
@@ -13,27 +13,30 @@ Meteor.methods({
      * @param {string} type - type of image, such as "service" image for a service, "post" image for artist gallery
      *                        posts, or "profile" images for user profiles.
      * @param {string} targetId - the target id (the serviceId/username/postId that this image belongs to)
-     * @param imageData - the data of the image todo: data this is currently treated as a url to the image,
-     *                                                but maybe should be changed to BSON/actual data
+     * @param imageData - the data of the image
+     * @param {string} name - The name of the image being uploaded
+     * @param size - The size of the image being uploaded
      */
-    "add_image": function (type, targetId, imageData) {
-        return ImageCollection.insert(
-            {
-                "imageType": type,
-                "target_id": targetId,
-                "imageData": imageData
-            }
-        )
-        //return targetId;
+    add_image: function (type, targetId, imageData, name, size) {
+        ImageCollection.insert({
+            imageType: type,
+            target_id: targetId,
+            imageData: imageData,
+            imageName: name,
+            imageSize: size,
+        });
+        return targetId;
     },
 
-    "remove_post_image": function (target_Id){
-        ImageCollection.remove(
-            {
-                "imageType":"post",
-                "target_id": target_Id
-            }
-        )
+    /**
+     * removes all images from a target service
+     * @param target_Id
+     */
+    remove_service_images: function (target_Id) {
+        ImageCollection.remove({
+            imageType: "service",
+            target_id: target_Id,
+        });
     },
     /**
      * Updates fields of a image instance in the database.
@@ -48,6 +51,17 @@ Meteor.methods({
     },
 
     /**
+     * removes the image from a target service
+     * @param target_Id
+     */
+    remove_post_image: function (target_Id) {
+        ImageCollection.remove({
+            imageType: "post",
+            target_id: target_Id,
+        });
+    },
+    
+    /**
      * Retrieves a single image instance from the database based on the target ID.
      * @param {string} targetId - The serviceId/username/postId that the image belongs to
      * @returns {object|null} - The image object if found, otherwise null.
@@ -57,5 +71,5 @@ Meteor.methods({
             { "target_id": targetId },
         )
     },
-})
+});
 
