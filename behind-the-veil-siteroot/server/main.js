@@ -45,7 +45,9 @@ Meteor.startup(async () => {
 
     if (Meteor.isServer) {
         // process.env.MAIL_URL = mailUrl;
-        Accounts.emailTemplates.from = fromUser;
+        // Accounts.emailTemplates.from = fromUser;
+
+        Accounts.emailTemplates.from = process.env.FROM_USER;
 
         // change email template for verifying password
         Accounts.emailTemplates.verifyEmail = {
