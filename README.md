@@ -193,6 +193,7 @@ mongoimport -h localhost:3001 --db meteor --collection images --file mockdata/us
 mongoimport -h localhost:3001 --db meteor --collection images --file mockdata/service_images100.json --jsonArray
 mongoimport -h localhost:3001 --db meteor --collection images --file mockdata/galleryImages50_abc.json --jsonArray
 mongoimport -h localhost:3001 --db meteor --collection posts --file mockdata/post50_abc.json --jsonArray
+mongoimport -h localhost:3001 --db meteor --collection reviews --file mockdata/reviews12.json --jsonArray
 ```
 
 mongoexport -h localhost:3001 --db meteor --collection images --out=output.txt

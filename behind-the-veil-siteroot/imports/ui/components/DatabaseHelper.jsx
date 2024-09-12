@@ -11,6 +11,7 @@ import ImageCollection from "../../api/collections/images";
 import UserCollection from "../../api/collections/users";
 import BookingCollection from "../../api/collections/bookings";
 import PostCollection from "../../api/collections/posts";
+import ReviewCollection from "../../api/collections/reviews";
 import BookingStatus from "../enums/BookingStatus";
 
 
@@ -38,6 +39,15 @@ export function updateBookingStatus(
   }
   // email about the update
   Meteor.callAsync("sendStatusUpdateEmail", bookingId, newStatus);
+  
+  if (newStatus === BookingStatus.CANCELLED || newStatus === BookingStatus.REJECTED) {
+      Meteor.call('get_receipt_from_booking', bookingId, (error, receipt) => {
+          if (receipt && receipt.paymentStatus === "Deposit") {
+              // Update the receipt to change its status from Deposit to Refunded
+              Meteor.call('deposit_to_refund', receipt._id);
+          }
+      });    
+  }
 }
 
 
@@ -462,6 +472,7 @@ export function useGalleryTotalCollection(username) {
   };
 }
 
+
 export function useArtistBookings(username) {
   const isLoadingUserBooking = useSubscribe("all_user_bookings", username);
   const artistBookingData = useTracker(() => {
@@ -470,7 +481,7 @@ export function useArtistBookings(username) {
 
   const bookingYearArray = [];
   for (let i = 0; i < artistBookingData.length; i++) {
-    const dateObject = artistBookingData[i].bookingStartDateTime;
+    const dateObject = new Date(artistBookingData[i].bookingStartDateTime);
     const year = dateObject.getFullYear();
     if (!bookingYearArray.includes(year)) {
       bookingYearArray.push(year);
@@ -482,7 +493,7 @@ export function useArtistBookings(username) {
   const bookingSuburbArray = [];
   for (let i = 0; i < artistBookingData.length; i++) {
     const split_address = artistBookingData[i].bookingLocation.split(",");
-    const suburb = split_address[1].trim();
+    const suburb = split_address[1] ? split_address[1].trim() : "";
     if (!bookingSuburbArray.includes(suburb)) {
       bookingSuburbArray.push(suburb);
     }
@@ -500,4 +511,15 @@ export function useUserBookings(username) {
     return BookingCollection.find({ artistUsername: username }).fetch();
   });
   return { isLoadingUserBooking, artistBookingData };
+}
+
+export function useArtistReviews(username) {
+  const isLoadingReviews = useSubscribe("artist_reviews", username);
+  const artistReviewData = useTracker(() => {
+    return ReviewCollection.find({artistUsername: username}).fetch();
+  })
+  return {
+    isLoadingReviews,
+    artistReviewData
+  }
 }
