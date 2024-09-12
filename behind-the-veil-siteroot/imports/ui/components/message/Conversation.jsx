@@ -1,7 +1,7 @@
 /**
  * File Description: Direct Message Conversation Component of Messages Page
- * File version: 1.2
- * Contributors: Nishan, Vicky
+ * File version: 1.3
+ * Contributors: Nishan, Vicky, Nikki
  */
 
 import React, {useRef, useState} from 'react';
@@ -11,16 +11,17 @@ import {useSubscribe, useTracker } from 'meteor/react-meteor-data';
 import MessageCollection from "/imports/api/collections/messages";
 import ImageCollection from "/imports/api/collections/images";
 import "/imports/api/methods/messages";
-import {useUserInfo} from "../../../ui/components/util"
+import {useUserInfo} from "../util"
 
 import Card from '../card/Card';
 import ProfilePhoto from '../profilePhoto/ProfilePhoto';
 import Input from "../input/Input";
 import Button from "../button/Button";
 import Loader from "/imports/ui/components/loader/Loader";
-import {PaperAirplaneIcon} from '@heroicons/react/24/outline';
+import {ChevronLeftIcon, PaperAirplaneIcon} from '@heroicons/react/24/outline';
+import BackButton from "../button/BackButton";
 
-export const Conversation = ({chat}) => {
+export const Conversation = ({chat, isLeftHandler}) => {
      // get current user information
      const userInfo = useUserInfo();
 
@@ -71,13 +72,12 @@ export const Conversation = ({chat}) => {
             const messageSentTime = new Date();
             const messageContent = formValue;
             const messageRead = false; // TODO: figure out how to set message to read when the other user is on the app at the same time
-            const photoId = userInfo.username; // TODO: check if its the user's username for the image or if its the actual id in the db
             const chatId = chat._id;
 
             // wrap meteor.call in a promise
             new Promise((resolve, reject) => {
                 // asynchronous operation
-                Meteor.call('add_message', messageSentTime, messageContent, messageRead, photoId, userInfo.username, chatId, (error, result) => {
+                Meteor.call('add_message', messageSentTime, messageContent, messageRead, userInfo.username, chatId, (error, result) => {
                     if (error) {
                         reject(error); // if there's an error, go to the catch block
                     } else {
@@ -115,7 +115,7 @@ export const Conversation = ({chat}) => {
             }
 
             setFormValue('');
-            let heightToScroll = conversationRef?.current.scrollHeight + 50 // TODO: check, might have to adjust the value or code
+            let heightToScroll = conversationRef?.current.scrollHeight + 50; // TODO: check, might have to adjust the value or code
             setTimeout(() => {
                 conversationRef?.current.scrollTo({left: 0, top: heightToScroll, behaviour: "smooth"})
             }, 5)
@@ -127,29 +127,36 @@ export const Conversation = ({chat}) => {
 
     return (
         <div className="flex flex-col fixed top-0 bottom-0 left-0 right-0">
-            <div
-                className='ml-4 w-11/12 message-receiver-name-text border-b-2 pt-3 pb-1 mb-8 pl-6 border-main-blue'>{otherUserAlias}
+            <div className={'w-11/12 border-b-2 mb-8 ml-4 pt-3 pb-1 pl-2 pr-6 lg:px-6 border-main-blue line-clamp-1 ' +
+                'break-all flex flex-row gap-x-2 items-center'}>
+                <ChevronLeftIcon onClick={() => isLeftHandler(true)}
+                                 className={"size-8 min-w-8 min-h-8 stroke-2 cursor-pointer text-dark-grey rounded-full px-1 mr-2 " +
+                                     "bg-white-hover hover:bg-light-grey hover:text-our-black transition duration-500 lg:hidden"}/>
+                <span className={"message-receiver-name-text break-all line-clamp-1"}>{otherUserAlias}</span>
+                <span className={"text-dark-grey large-text break-all mt-1 line-clamp-1"}>(@{otherUser})</span>
             </div>
             {document.readyState === "complete" && !isLoading ? (
                 <div className="flex-1 overflow-y-auto p-4" ref={conversationRef}>
                 <div>
-                    {/* User's chat mesages */}
+                    {/* User's chat messages */}
                     {
-                        messagesData.map((message, index) => ( message.userUsername == userInfo.username ? 
+                        messagesData.map((message, index) => ( message.userUsername === userInfo.username ?
                             (<div key={index} className="flex justify-end">
-                            <Card className={`my-2 rounded-3xl max-w-[80%] h-auto overflow-hidden ${message.userUsername === userInfo.username ? ' bg-main-blue' : 'bg-light-grey'}`}>
+                            <Card className={`my-2 rounded-3xl p-3 max-w-[80%] h-auto overflow-hidden ${message.userUsername === userInfo.username ? ' bg-main-blue' : 'bg-light-grey'}`}>
                                 <div>{message.messageContent}</div>
                             </Card>
                             </div>)
                         :
                             (<div key={index}>
-                                <div className={`${message.userUsername === userInfo.username ? 'flex  justify-end' : 'flex'}`}>
+                                <div className={`flex flex-row gap-x-2 items-center ${message.userUsername === userInfo.username ? 'justify-end' : ''}`}>
                                     {message.userUsername !== userInfo.username  && (
                                         <ProfilePhoto
-                                            className={`${message.userUsername === userInfo.username ? 'order-last flex' : ''} min-win-[10%] shrink-0`}></ProfilePhoto>
+                                            hoverEffect={false}
+                                            userPhotoData={chat.otherUserImage}
+                                            className={`${message.userUsername === userInfo.username ? 'order-last flex' : ''} min-win-[10%] shrink-0  h-[5vh] w-[5vh]`} />
                                     )}
                                     <Card
-                                        className={`my-2 rounded-3xl max-w-[80%] border-transparent ${message.userUsername === userInfo.username ? ' bg-main-blue' : 'bg-light-grey'} `}>
+                                        className={`my-2 rounded-3xl p-3 max-w-[80%] border-transparent ${message.userUsername === userInfo.username ? ' bg-main-blue' : 'bg-light-grey'} `}>
                                         {message.messageContent}
                                     </Card>
                                 </div>
@@ -162,7 +169,7 @@ export const Conversation = ({chat}) => {
             )
         :
             (<Loader
-                    loadingText={"Messages are loading . . ."}
+                    loadingText={"loading . . ."}
                     isLoading={isLoading}
                     size={100}
                     speed={1.5}
@@ -176,7 +183,7 @@ export const Conversation = ({chat}) => {
                         value={formValue}
                         onChange={(event) => setFormValue(event.target.value)}
                         placeholder="Type a message..."
-                        className="w-full rounded-3xl pr-40"
+                        className="w-full rounded-3xl pl-8 pr-36"
                     />
                     <Button type="submit" disabled={!formValue}
                             className="bg-secondary-purple hover:bg-secondary-purple-hover focus:outline-none cursor-pointer

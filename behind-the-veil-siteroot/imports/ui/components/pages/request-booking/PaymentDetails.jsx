@@ -169,21 +169,21 @@ const PaymentDetails = () => {
     };
 
     const confirmPayment = async () => {
-
         let datetimeParts = details.date.split(",");
-
+    
         let startDatetimeString = datetimeParts[0].trim();
         let endDatetimeString = datetimeParts[1].trim();
-
+    
         let startDatetime = new Date(startDatetimeString);
         let endDatetime = new Date(endDatetimeString);
-
+    
         // Destructure the inputs from the state
         const { cardNumber, expDate, cvv } = inputs;
-
+    
         // Make sure expDate is formatted correctly for your backend
         const formattedExpiryDate = expDate.replace(/\D/g, ''); // Remove non-digit characters if needed
-
+    
+        // Call the payment processing method
         Meteor.call("processPayment", { cardNumber, cvv, expiryDate: formattedExpiryDate }, (error, result) => {
             if (error) {
                 console.error('Error processing payment:', error);
@@ -194,9 +194,43 @@ const PaymentDetails = () => {
                 result.success ? addToBooking(startDatetime, endDatetime, details.location, details.price, BookingStatus.PENDING, details.brideUsername, details.artistUsername, serviceId)
                     .then(r => navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/booking-confirmation?${r}`))
                     .catch(reason => alert(reason)) : alert('Payment Failed');
+                    
+                result.success ? 
+                    addToBooking(startDatetime, endDatetime, details.location, details.price, BookingStatus.PENDING, details.brideUsername, details.artistUsername, serviceId)
+                        .then(bookingId => {
+                            // After successfully adding the booking, add the payment receipt
+                            addPaymentReceipt(new Date(), details.price, "Deposit", "Paid", bookingId)
+                                .then(receiptId => {
+                                    console.log('Receipt added with ID:', receiptId);
+                                    // Navigate to the booking confirmation page
+                                    navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/booking-confirmation?${bookingId}`);
+                                })
+                                .catch(reason => {
+                                    alert(`Failed to add receipt: ${reason}`);
+                                });
+                        })
+                        .catch(reason => alert(`Failed to add booking: ${reason}`))
+                : alert('Payment Failed');
+                    }
+                })
+            }
+
+    const addPaymentReceipt = (paymentDatetime, paymentAmount, paymentType, paymentStatus, bookingId) => new Promise((resolve, reject) => {
+        Meteor.call("add_receipt", 
+            paymentDatetime, 
+            paymentAmount, 
+            paymentType, 
+            paymentStatus, 
+            bookingId, 
+            (error, receiptId) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(receiptId);
             }
         });
-    };
+    });
+    
 
     const addToBooking = (startDateTime, endDateTime, location, price, status, brideUsername, artistUsername, serviceId) => new Promise((resolve, reject) => {
         Meteor.call("add_booking",

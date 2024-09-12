@@ -1,6 +1,6 @@
 /**
  * File Description: Account Details within the Settings page
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Kyle, Nikki
  */
 import React, {useEffect, useState} from "react";
@@ -212,7 +212,7 @@ export const AccountDetails = () => {
                     <div className="main-text">Profile Image</div>
 
                     <div className="flex flex-col md:flex-row items-center gap-4">
-                        <ProfilePhoto artistPhotoData={uploadedFile ? previewImageUrl : profileImageData}/>
+                        <ProfilePhoto userPhotoData={uploadedFile ? previewImageUrl : profileImageData}/>
 
                         <div className={"flex flex-col gap-1"}>
                             <Input

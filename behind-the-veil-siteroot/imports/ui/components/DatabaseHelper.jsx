@@ -1,7 +1,7 @@
 /**
  * File Description: Database helper functions
- * File version: 1.4
- * Contributors: Nikki, Ryan, Phillip
+ * File version: 1.5
+ * Contributors: Nikki, Ryan, Phillip, Lucas
  */
 import { useSubscribe, useTracker } from "meteor/react-meteor-data";
 import { Meteor } from "meteor/meteor";
@@ -11,6 +11,7 @@ import ImageCollection from "../../api/collections/images";
 import UserCollection from "../../api/collections/users";
 import BookingCollection from "../../api/collections/bookings";
 import PostCollection from "../../api/collections/posts";
+import ReviewCollection from "../../api/collections/reviews";
 import BookingStatus from "../enums/BookingStatus";
 
 /**
@@ -37,6 +38,15 @@ export function updateBookingStatus(
   }
   // email about the update
   Meteor.callAsync("sendStatusUpdateEmail", bookingId, newStatus);
+  
+  if (newStatus === BookingStatus.CANCELLED || newStatus === BookingStatus.REJECTED) {
+      Meteor.call('get_receipt_from_booking', bookingId, (error, receipt) => {
+          if (receipt && receipt.paymentStatus === "Deposit") {
+              // Update the receipt to change its status from Deposit to Refunded
+              Meteor.call('deposit_to_refund', receipt._id);
+          }
+      });    
+  }
 }
 
 /**
@@ -54,18 +64,19 @@ export function useServices(
   service_publication,
   params,
   filter,
-  requireArtist = false
+  requireArtist = false,
+  oneImage = true
 ) {
-  // get service data from database
-  const isLoadingUserServices = useSubscribe(service_publication, ...params);
-  let servicesData = useTracker(() => {
-    return ServiceCollection.find(filter).fetch();
-  });
+    // get service data from database
+    const isLoadingUserServices = useSubscribe(service_publication, ...params);
+    let servicesData = useTracker(() => {
+        return ServiceCollection.find(filter).fetch();
+    });
 
   // get service images from database
   const isLoadingServiceImages = useSubscribe("service_images", []);
   let imagesData = useTracker(() => {
-    return ImageCollection.find({ imageType: "service" }).fetch();
+      return ImageCollection.find({imageType: "service"}).fetch();
   });
 
   // get artist data from database, if needed
@@ -85,6 +96,8 @@ export function useServices(
 
   // manual aggregation of each service with their image
   for (let i = 0; i < servicesData.length; i++) {
+    let foundImageMatch = false;
+    
     // aggregate with artist first
     for (let j = 0; j < artistsData.length; j++) {
       // find matching artist and add their name
@@ -94,25 +107,34 @@ export function useServices(
       }
     }
 
-    // then aggregate with the FIRST image that belong to it
-    let foundImageMatch = false;
-    for (let j = 0; j < imagesData.length; j++) {
-      // find matching image for the service
-      if (
-        imagesData[j].imageType === "service" &&
-        servicesData[i]._id === imagesData[j].target_id
-      ) {
-        servicesData[i].serviceImageData = imagesData[j].imageData;
-        foundImageMatch = true;
-        break;
-      }
-    }
+        // check if the frontend requires on
+        if (oneImage) {
+            // then aggregate with the FIRST image that belong to it
+            for (let j = 0; j < imagesData.length; j++) {
+                // find matching image for the service
+                if (imagesData[j].imageType === "service" && servicesData[i]._id === imagesData[j].target_id) {
+                    servicesData[i].serviceImageData = imagesData[j].imageData;
+                    foundImageMatch = true;
+                    break;
+                }
+            }
+        } else {
+            let serviceImages = [];
+            for (let j = 0; j < imagesData.length; j++) {
+                // find matching images for the service
+                if (imagesData[j].imageType === "service" && servicesData[i]._id === imagesData[j].target_id) {
+                    serviceImages.push(imagesData[j]);
+                    foundImageMatch = true;
+                }
+                servicesData[i].serviceImageData = serviceImages;
+            }
 
-    // if not found any images, replace with default
-    if (!foundImageMatch) {
-      servicesData[i].serviceImageData = "/imageNotFound.png";
+            // if not found any images, replace with default
+            if (!foundImageMatch) {
+                servicesData[i].serviceImageData = "/imageNotFound.png";
+            }
+        }
     }
-  }
   return { isLoading, servicesData };
 }
 
@@ -460,6 +482,7 @@ export function useGalleryTotalCollection(username) {
   };
 }
 
+
 export function useArtistBookings(username) {
   const isLoadingUserBooking = useSubscribe("all_user_bookings", username);
   const artistBookingData = useTracker(() => {
@@ -468,7 +491,7 @@ export function useArtistBookings(username) {
 
   const bookingYearArray = [];
   for (let i = 0; i < artistBookingData.length; i++) {
-    const dateObject = artistBookingData[i].bookingStartDateTime;
+    const dateObject = new Date(artistBookingData[i].bookingStartDateTime);
     const year = dateObject.getFullYear();
     if (!bookingYearArray.includes(year)) {
       bookingYearArray.push(year);
@@ -480,7 +503,7 @@ export function useArtistBookings(username) {
   const bookingSuburbArray = [];
   for (let i = 0; i < artistBookingData.length; i++) {
     const split_address = artistBookingData[i].bookingLocation.split(",");
-    const suburb = split_address[1].trim();
+    const suburb = split_address[1] ? split_address[1].trim() : "";
     if (!bookingSuburbArray.includes(suburb)) {
       bookingSuburbArray.push(suburb);
     }
@@ -498,4 +521,15 @@ export function useUserBookings(username) {
     return BookingCollection.find({ artistUsername: username }).fetch();
   });
   return { isLoadingUserBooking, artistBookingData };
+}
+
+export function useArtistReviews(username) {
+  const isLoadingReviews = useSubscribe("artist_reviews", username);
+  const artistReviewData = useTracker(() => {
+    return ReviewCollection.find({artistUsername: username}).fetch();
+  })
+  return {
+    isLoadingReviews,
+    artistReviewData
+  }
 }
