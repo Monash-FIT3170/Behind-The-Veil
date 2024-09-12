@@ -34,6 +34,9 @@ import "/imports/api/collections/reviews.js";
 import "/imports/api/methods/reviews.js";
 import "/imports/api/publications/reviews.js";
 
+import "/imports/api/collections/receipts.js";
+import "/imports/api/methods/receipts.js";
+
 import "/imports/api/mailer.js"
 import {checkBookingsEveryMidnight} from "./background.js"
 

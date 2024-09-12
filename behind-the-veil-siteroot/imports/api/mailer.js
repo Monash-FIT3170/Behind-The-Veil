@@ -1,6 +1,6 @@
 /**
  * File Description: Email related functions
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Nikki
  */
 
@@ -46,7 +46,12 @@ Meteor.methods({
             }
 
             const userEmails = usersData.map((user) => user.emails[0].address)
-            Email.send({ to: userEmails, from, subject, text });
+
+            // send each separately to not reveal the email address of each user to each other
+            for (let i=0; i < userEmails.length; i++) {
+                Email.send({ to: userEmails, from, subject, text });
+            }
+
         }
     },
 
@@ -76,7 +81,11 @@ Meteor.methods({
             text += `Price: $${bookingData.bookingPrice} \n\n`;
 
             const userEmails = usersData.map((user) => user.emails[0].address)
-            Email.send({ to: userEmails, from, subject, text });
+
+            // send each separately to not reveal the email address of each user to each other
+            for (let i=0; i < userEmails.length; i++) {
+                Email.send({ to: userEmails[i], from, subject, text });
+            }
         }
     }
 });
