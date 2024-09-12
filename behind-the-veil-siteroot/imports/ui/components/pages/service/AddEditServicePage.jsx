@@ -101,18 +101,10 @@ export const AddEditServicePage = ({isEdit}) => {
     useEffect(() => {
         if (isEdit) {
             const retrieveService = () => {
-                return new Promise((resolve, reject) => {
-                    Meteor.call("get_service", serviceId, (error, result) => {
-                        if (error) {
-                            reject(`Error: ${error.message}`);
-                        } else {
-                            resolve(result);
-                        }
-                    });
-                });
+                return servicesData.filter((service) => service._id === serviceId)
             };
 
-            retrieveService().then((service) => {
+            const service = retrieveService()[0]
                 if (service.artistUsername !== userInfo.username) {
                     navigateTo("/" + UrlBasePath.PROFILE);
                 }
@@ -123,10 +115,10 @@ export const AddEditServicePage = ({isEdit}) => {
                 setServiceDescription(service.serviceDesc);
                 console.log(servicesData);
                 console.log(service);
-                if (servicesData[0].serviceImageData === "/imageNotFound.png") {
+                if (service.serviceImageData === "/imageNotFound.png") {
                     setImagedb([{imageData: "/imageNotFound.png"}]);
                 } else {
-                    servicesData[0].serviceImageData.forEach((image) => {
+                    service.serviceImageData.forEach((image) => {
                         setImagedb((prevImages) =>
                             Array.from(
                                 new Set([
@@ -143,8 +135,6 @@ export const AddEditServicePage = ({isEdit}) => {
                     });
                     setShouldAddImages(true);
                 }
-                
-            });
         }
     }, []);
 
