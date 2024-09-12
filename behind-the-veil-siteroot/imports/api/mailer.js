@@ -101,7 +101,7 @@ export function sendUnrespondedBookingEmail(bookingId) {
     const artistData = UserCollection.findOne({ username: bookingData.artistUsername });
 
     if (bookingData && serviceData && artistData) {
-        const from = fromUser;
+        const from = "Behind the Veil <behindtheveil010@gmail.com>";
         const subject = "[Behind the Veil] Unresponded Booking";
         let text = `You have an unresponded booking: \n\n`;
         text += `Booking Details: \n`;
