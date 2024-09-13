@@ -4,7 +4,7 @@
  * Contributors: Neth, Nikki
  */
 import { BookingCollection } from "../collections/bookings";
-import {sendNewBookingEmail} from "../../../server/mailer";
+import {Meteor} from "meteor/meteor";
 
 Meteor.methods({
     /**
@@ -32,7 +32,8 @@ Meteor.methods({
             serviceId: serviceId
         });
 
-        sendNewBookingEmail(newBookingId);
+        Meteor.callAsync("sendNewBookingEmail", newBookingId);
+
         return newBookingId;
     },
 

@@ -535,7 +535,7 @@ export const AddEditServicePage = ({isEdit}) => {
             >
                 <div className="flex flex-col justify-center items-center h-full gap-y-10">
                     <h2 className="text-center title-text px-4">
-                        {(isEdit ? "Modification" : "Creation") + (isSuccess ? " was Successful" : " Failed")}
+                        {(isEdit ? "Modification" : "Creation") + (isSuccess ? " was successful" : " failed")}
                     </h2>
                     <Button
                         className={
