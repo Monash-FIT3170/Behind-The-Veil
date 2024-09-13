@@ -240,8 +240,8 @@ export const AddEditServicePage = ({isEdit}) => {
             newErrors.servicePrice = "Please input a valid service price";
             isError = true;
         }
-        if (serviceDuration <= 0 || serviceDuration > 24) {
-            newErrors.serviceDuration = "Please input a valid service duration between (0.5 - 24 hours)";
+        if (serviceDuration <= 0 || serviceDuration > 24 || !Number.isInteger(serviceDuration)) {
+            newErrors.serviceDuration = "Please input a valid full hour service duration between (1 - 24 hours)";
             isError = true;
         }
         if (!serviceDescription) {
@@ -436,8 +436,9 @@ export const AddEditServicePage = ({isEdit}) => {
                         <Input
                             className="md:w-1/2 md:max-w-72"
                             type="number"
-                            min="0"
-                            step="0.5"
+                            min="1"
+                            max="24"
+                            step="1"
                             label={<label className="main-text">Duration (Hours)</label>}
                             value={serviceDuration}
                             onChange={(e) => setServiceDuration(e.target.value)}
