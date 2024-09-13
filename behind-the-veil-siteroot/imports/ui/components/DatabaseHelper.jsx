@@ -13,6 +13,7 @@ import BookingCollection from "../../api/collections/bookings";
 import PostCollection from "../../api/collections/posts";
 import ReviewCollection from "../../api/collections/reviews";
 import BookingStatus from "../enums/BookingStatus";
+import { relativeTimeRounding } from "moment";
 
 /**
  * Function to update booking's status in any way (also linked to emailing in the future)
@@ -484,7 +485,6 @@ export function useGalleryTotalCollection(username) {
   };
 }
 
-
 export function useArtistBookings(username) {
   const isLoadingUserBooking = useSubscribe("all_user_bookings", username);
   const artistBookingData = useTracker(() => {
@@ -525,13 +525,68 @@ export function useUserBookings(username) {
   return { isLoadingUserBooking, artistBookingData };
 }
 
+/**
+ * Collects all data relevant to artist reviews
+ *
+ * @param {string} username - username of the user to get data
+ * @returns {Object} - returns an object containing: boolean isLoading that is true when loading, false when finished loading.
+ * Also, the array of review data
+ */
 export function useArtistReviews(username) {
   const isLoadingReviews = useSubscribe("artist_reviews", username);
   const artistReviewData = useTracker(() => {
     return ReviewCollection.find({artistUsername: username}).fetch();
   })
+  
+  // loading data
+  const isLoadingBookings = useSubscribe("all_user_bookings", username);
+  const isLoadingServices = useSubscribe("all_user_services", username);
+  const isLoadingBrides = useSubscribe("all_brides");
+  const isLoading = isLoadingReviews() || isLoadingBookings() || isLoadingServices() || isLoadingBrides();
+
+  // Extract relevant booking IDs from the reviews
+  const reviewBookingId = artistReviewData.map(review => review.bookingId);
+
+  // Retrieve booking objects based on the extracted IDs
+  const relevantBookings = useTracker(() => {
+    return BookingCollection.find({ _id: { $in: reviewBookingId } }).fetch();
+  });
+
+  // extract relevant service ID's from the bookings
+  const bookingServiceId = relevantBookings.map(booking => booking.serviceId);
+
+  // extract bride information
+  const brideUsername = relevantBookings.map(booking => booking.brideUsername);
+
+  const brideArray = useTracker(() => {
+    return UserCollection.find({ username: { $in: brideUsername } }).fetch();
+  })  
+  // retrieve service objects based on the extracted ID's
+  const serviceArray = useTracker(() => {
+    return ServiceCollection.find({ _id: { $in: bookingServiceId } }).fetch();
+  })
+
+  // Create review array with relevant bookings and services
+  const reviewArray = artistReviewData.map((review) => {
+    // Find the booking associated with the review
+    const booking = relevantBookings.find(booking => booking._id === review.bookingId);
+    // find the bride with associated username from booking
+    const bride = brideArray.find(bride => bride.username === booking.brideUsername);
+    // Find the service associated with the booking
+    const service = serviceArray.find(service => service._id === booking.serviceId);
+
+
+    return {
+      ...review,
+      booking,
+      bride,
+      service,
+    };
+  });
+
   return {
-    isLoadingReviews,
+    isLoading,
+    reviewArray,
     artistReviewData
   }
 }
