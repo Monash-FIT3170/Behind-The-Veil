@@ -9,6 +9,8 @@ import {resetDatabase} from 'meteor/xolvio:cleaner';
 import "../imports/api/methods/users";
 import {UserCollection} from "../imports/api/collections/users";
 import {Accounts} from 'meteor/accounts-base';
+import { useSpecificUser } from "../../DatabaseHelper.jsx";
+
 
 
 /**
@@ -198,8 +200,35 @@ if (Meteor.isClient) {
                     artistserviceRadius: 0,
                 },
             });
-            Meteor.call('update_availability', 'testuser', 'clayton',  );
+            initialAvailability = {
+                "2024-09-15": [
+                  6,
+                  7,
+                  8,
+                ],
+                "2024-09-22": [
+                  16
+                ],
+                "2024-09-21": [
+                  16
+                ],
+                "2024-09-14": [
+                  10,
+                  12,
+                  14
+                ]
+            }
+            result = Meteor.call('update_availability', 'testuser', initialAvailability  );
+
+            const { isLoading, userData } = useSpecificUser(artistUsername)
             const updatedUser = UserCollection.findOne(userId);
+            if (userData?.availability) {
+                const artistAvailability = { ...userData.availability }
+            }
+            // not sure how to best replicate a test for the availability objects
+
+
+
         });
         
     });
