@@ -189,8 +189,6 @@ const PaymentDetails = () => {
                 console.error('Error processing payment:', error);
                 alert('Payment Failed');
             } else {
-                console.log(details);
-                console.log(details.aristUsername);
                 result.success ? addToBooking(startDatetime, endDatetime, details.location, details.price, BookingStatus.PENDING, details.brideUsername, details.artistUsername, serviceId)
                     .then(r => navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/booking-confirmation?${r}`))
                     .catch(reason => alert(reason)) : alert('Payment Failed');
