@@ -30,12 +30,6 @@ import "/imports/api/collections/messages.js";
 import "/imports/api/methods/messages.js";
 import "/imports/api/publications/messages.js";
 
-
-import "/server/mailer.js"
-import {checkBookingsEveryMidnight} from "./background.js"
-
-// file containing creds for mail server
-import {mailUrl, fromUser} from "./secrets.js"
 import "/imports/api/collections/reviews.js";
 import "/imports/api/methods/reviews.js";
 import "/imports/api/publications/reviews.js";
@@ -43,12 +37,14 @@ import "/imports/api/publications/reviews.js";
 import "/imports/api/collections/receipts.js";
 import "/imports/api/methods/receipts.js";
 
+import "/imports/api/mailer.js"
+import {checkBookingsEveryMidnight} from "./background.js"
+
 // Leave for now for any methods that need to be called on start up.
 Meteor.startup(async () => {
 
     if (Meteor.isServer) {
-        // process.env.MAIL_URL = mailUrl;
-        Accounts.emailTemplates.from = fromUser;
+        Accounts.emailTemplates.from = process.env.FROM_USER;
 
         // change email template for verifying password
         Accounts.emailTemplates.verifyEmail = {

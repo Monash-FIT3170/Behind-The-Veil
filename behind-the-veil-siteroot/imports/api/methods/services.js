@@ -27,7 +27,7 @@ Meteor.methods({
         check(duration, String)
         check(artistUsername, String)
 
-        ServiceCollection.insert({
+        const serviceId = ServiceCollection.insert({
             serviceType: type,
             serviceName: name,
             serviceDesc: desc,
@@ -36,6 +36,8 @@ Meteor.methods({
             serviceDuration: duration,
             artistUsername: artistUsername,
         });
+        
+        return serviceId
     },
 
     get_service: function (serviceId) {
