@@ -90,7 +90,7 @@ export const BookingCard = ({
                     additionalButtons.push(
                         // TODO: in the navigateTo, add '/review/' + serviceId or bookingId in it to show review of particular item
                         <Button className={purpleButtonClass} onClick={leaveReview}>
-                            <EyeIcon className="icon-base"/>
+                            <DocumentMagnifyingGlassIcon className="icon-base"/>
                             View Review
                         </Button>
                     );

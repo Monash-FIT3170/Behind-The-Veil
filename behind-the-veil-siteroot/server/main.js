@@ -26,16 +26,9 @@ import "/imports/api/collections/messages.js";
 import "/imports/api/methods/messages.js";
 import "/imports/api/publications/messages.js";
 
-
 import "/imports/api/collections/reviews.js";
 import "/imports/api/methods/reviews.js";
 import "/imports/api/publications/reviews.js";
-
-import "/server/mailer.js"
-import {checkBookingsEveryMidnight} from "./background.js"
-
-// file containing creds for mail server
-import {mailUrl, fromUser} from "./secrets.js"
 
 import "/imports/api/collections/receipts.js";
 import "/imports/api/methods/receipts.js";
