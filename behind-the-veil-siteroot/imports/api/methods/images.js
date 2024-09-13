@@ -21,7 +21,6 @@ Meteor.methods({
     "add_image": function (type, targetId, imageData) {
         check(type, String)
         check(targetId, String)
-        // check(chatId, String)
 
         return ImageCollection.insert(
             {
