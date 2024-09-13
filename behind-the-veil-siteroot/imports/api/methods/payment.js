@@ -14,7 +14,6 @@ Meteor.methods({
      * @param {object} paymentData - The data for the payment.
      */
     "processPayment": function (paymentData) {
-        console.log(paymentData.expiryDate)
 
         // Check is needed to validate the right payment data and santise the inputs
         check(paymentData, {
@@ -22,12 +21,7 @@ Meteor.methods({
             cvv: String,
             expiryDate: String
         });
-        console.log(paymentData.expiryDate)
 
-        
-
-        
-        
         // Remove all non-digit characters
         const digitsOnly = paymentData.cardNumber.replace(/\D/g, "");
         if (digitsOnly.length !== 16) {
@@ -51,7 +45,6 @@ Meteor.methods({
                 throw new Meteor.Error('invalid-card-number', 'Card number needs to be from a valid card.');
             }
         }
-        console.log(paymentData.expiryDate)
 
         if (!/^(0[1-9]|1[0-2])\d{2}$/.test(paymentData.expiryDate)) {
             throw new Meteor.Error('invalid-date', 'Date needs to be in mmyy format.');
