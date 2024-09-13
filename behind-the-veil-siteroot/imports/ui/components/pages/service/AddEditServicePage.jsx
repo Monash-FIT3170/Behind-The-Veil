@@ -240,7 +240,7 @@ export const AddEditServicePage = ({isEdit}) => {
             newErrors.servicePrice = "Please input a valid service price";
             isError = true;
         }
-        if (serviceDuration <= 0 || serviceDuration > 24 || !Number.isInteger(serviceDuration)) {
+        if (serviceDuration <= 0 || serviceDuration > 24 || !Number.isInteger(Number(serviceDuration))) {
             newErrors.serviceDuration = "Please input a valid full hour service duration between (1 - 24 hours)";
             isError = true;
         }
