@@ -20,7 +20,7 @@ import "/imports/api/collections/posts.js";
 import "/imports/api/methods/posts.js";
 import "/imports/api/publications/posts";
 
-import "/imports/api/methods/payment.js";
+import "/imports/api/methods/payments.js";
 
 import "/imports/api/collections/chats.js";
 import "/imports/api/methods/chats.js";
