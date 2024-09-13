@@ -44,8 +44,7 @@ import {checkBookingsEveryMidnight} from "./background.js"
 Meteor.startup(async () => {
 
     if (Meteor.isServer) {
-
-        Accounts.emailTemplates.from = "Behind the Veil <behindtheveil010@gmail.com>";
+        Accounts.emailTemplates.from = process.env.FROM_USER;
 
         // change email template for verifying password
         Accounts.emailTemplates.verifyEmail = {
