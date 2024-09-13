@@ -1,11 +1,13 @@
 /**
  * File Description: Image database entity
  * File version: 1.2
- * Contributors: Nikki, Phillip, Lucas, Vicky
+ * Contributors: Nikki, Phillip, Lucas, Vicky, Katie
  */
 
 import {Meteor} from "meteor/meteor";
 import { ImageCollection } from "../collections/images";
+import { check } from 'meteor/check';
+
 
 Meteor.methods({
     /**
@@ -18,6 +20,9 @@ Meteor.methods({
      * @param size - The size of the image being uploaded
      */
     add_image: function (type, targetId, imageData, name, size) {
+        check(type, String)
+        check(targetId, String)
+
         ImageCollection.insert({
             imageType: type,
             target_id: targetId,
@@ -33,6 +38,8 @@ Meteor.methods({
      * @param target_Id
      */
     remove_service_images: function (target_Id) {
+        check(target_Id, String)
+
         ImageCollection.remove({
             imageType: "service",
             target_id: target_Id,
@@ -44,6 +51,9 @@ Meteor.methods({
      * @param {object} updateObject - Field and value object of elements that need to be upgraded
     */
     "update_post_image": function (targetId, updateObject) {
+        check(targetId, String)
+        check(updateObject, Object)
+
         ImageCollection.update(
             { "target_id": targetId },
             { $set: updateObject},
@@ -67,6 +77,8 @@ Meteor.methods({
      * @returns {object|null} - The image object if found, otherwise null.
      */
     "get_image": function (targetId) {
+        check(targetId, String)
+
         return ImageCollection.findOne(
             { "target_id": targetId },
         )

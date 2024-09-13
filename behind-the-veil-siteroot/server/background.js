@@ -5,9 +5,9 @@
  */
 
 import { Meteor } from 'meteor/meteor';
-import { BookingStatus } from '/imports/ui/enums/BookingStatus';
-import { addHours } from "date-fns";
+import { BookingStatus } from '../imports/ui/enums/BookingStatus';
 import {updateBookingStatus} from "../imports/ui/components/DatabaseHelper";
+import {sendUnrespondedBookingEmail} from "../imports/api/mailer";
 
 // Update all bookings
 export const checkBookings = () => {
@@ -43,6 +43,20 @@ export const checkBookings = () => {
 
             if (isPassed) {
                 updateBookingStatus(booking._id, BookingStatus.REJECTED)
+            } else {
+                // Check if the event date is 2 weeks away
+                const timeDifference = eventDate - now;
+                const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+                // Check if the booking was created 3 days ago
+                const bookingCreatedDate = new Date(booking.bookingCreatedDate);
+                const createdTimeDifference = now - bookingCreatedDate;
+                const createdDaysDifference = Math.floor(createdTimeDifference / (1000 * 60 * 60 * 24));
+
+                // Remind the artist every 3 days of the unresponded booking or 2 weeks before the event
+                if (createdDaysDifference % 3 === 0 || daysDifference <= 14) {
+                    sendUnrespondedBookingEmail(booking._id);
+                }
             }
         })
     })
