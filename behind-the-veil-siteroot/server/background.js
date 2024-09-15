@@ -37,6 +37,7 @@ export const checkBookings = () => {
             return;
         }
 
+        let checkedArtists = []
         pendingBookings.forEach((booking) => {
             const eventDate = new Date(booking.bookingStartDateTime);
             const isPassed = (eventDate < now);
@@ -54,8 +55,9 @@ export const checkBookings = () => {
                 const createdDaysDifference = Math.floor(createdTimeDifference / (1000 * 60 * 60 * 24));
 
                 // Remind the artist every 3 days of the unresponded booking or 2 weeks before the event
-                if (createdDaysDifference % 3 === 0 || daysDifference <= 14) {
-                    sendUnrespondedBookingEmail(booking._id);
+                if (!checkedArtists.includes(booking.artistUsername) && (createdDaysDifference % 3 === 0 || daysDifference <= 14)) {
+                    checkedArtists.push(booking.artistUsername);
+                    sendUnrespondedBookingEmail(booking.artistUsername);
                 }
             }
         })
