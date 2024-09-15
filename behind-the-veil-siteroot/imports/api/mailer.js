@@ -90,26 +90,16 @@ Meteor.methods({
     }
 });
 
-export function sendUnrespondedBookingEmail(bookingId) {
-    check([bookingId], [String]);
+export function sendUnrespondedBookingEmail(artistUsername) {
+    check(artistUsername, String);
 
-    // Retrieve data (server side, so no need for meteor.call)
-    const bookingData = BookingCollection.findOne({ _id: bookingId });
+    const artistData = UserCollection.findOne({ username: artistUsername});
 
-    const serviceData = ServiceCollection.findOne({ _id: bookingData.serviceId });
-
-    const artistData = UserCollection.findOne({ username: bookingData.artistUsername });
-
-    if (bookingData && serviceData && artistData) {
+    if (artistData) {
         const from = "Behind the Veil <behindtheveil010@gmail.com>";
-        const subject = "[Behind the Veil] Unresponded Booking";
-        let text = `You have an unresponded booking: \n\n`;
-        text += `Booking Details: \n`;
-        text += `Service Name: ${serviceData.serviceName} \n`;
-        text += `Service Description: ${serviceData.serviceDesc} \n`;
-        text += `Date: ${new Date(bookingData.bookingStartDateTime).toLocaleString()} \n`;
-        text += `Price: $${bookingData.bookingPrice} \n\n`;
-        text += `Please respond to this booking before the event is passed!`;
+        const subject = "[Behind the Veil] Unresponded Booking/s";
+        let text = `You have one or more unresponded bookings \n\n`;
+        text += `Please respond to the bride before the event is passed!`;
 
         const artistEmail = artistData.emails[0].address;
         Email.send({to: artistEmail, from, subject, text});
