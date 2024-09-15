@@ -38,8 +38,8 @@ const CardExamples = () => {
                     servicePrice={112333294}
                     serviceImageData={"/images/unsplash-valerie-elash-bI8Yv7AH6b0.jpg"}
                     artistUsername={"alice_smith"}
-                    artistName={"Alice Smith"}
-                ></ServiceCard>
+                    artistAlias={"Alice Smith"}
+                />
                 <ServiceCard
                     className=""
                     serviceId={2}
@@ -48,8 +48,8 @@ const CardExamples = () => {
                     servicePrice={123}
                     serviceImageData={"/images/unsplash-amir-seilsepour.png"}
                     artistUsername={"Bobbyyy1"}
-                    artistName={"Bob"}
-                ></ServiceCard>
+                    artistAlias={"Bob"}
+                />
                 <ServiceCard
                     className=""
                     serviceId={3}
@@ -58,8 +58,8 @@ const CardExamples = () => {
                     servicePrice={123}
                     serviceImageData={"/images/pexels-kristina-polianskaia-2617447-4241704.jpg"}
                     artistUsername={"ihavealonglonglongnameJones"}
-                    artistName={"LonglonglongnamedJones LongnamedDavis"}
-                ></ServiceCard>
+                    artistAlias={"LonglonglongnamedJones LongnamedDavis"}
+                />
                 <ServiceCard
                     className=""
                     serviceId={4}
@@ -68,9 +68,9 @@ const CardExamples = () => {
                     servicePrice={123}
                     serviceImageData={"/images/pexels-christian-diokno-1666462-3260852.jpg"}
                     artistUsername={"ihavealonglonglongnameJones"}
-                    artistName={"LonglonglongnamedJones LongnamedDavis"}
+                    artistAlias={"LonglonglongnamedJones LongnamedDavis"}
                     isEdit={true}
-                ></ServiceCard>
+                />
             </div>
 
 

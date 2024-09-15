@@ -1,6 +1,6 @@
 /**
  * File Description: Forget password: Reset complete page
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Nikki
  */
 
@@ -11,6 +11,7 @@ import {CheckCircleIcon} from "@heroicons/react/24/outline";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
+import UrlBasePath from "../../../enums/UrlBasePath";
 
 /**
  * Page that confirms user their password has been changed
@@ -31,7 +32,7 @@ export const ResetCompletePage = () => {
             </span>
                 <Button className={"bg-secondary-purple hover:bg-secondary-purple-hover w-1/3 min-w-40 mt-5"}
                         onClick={() => {
-                            navigate('/login')
+                            navigate('/' + UrlBasePath.LOGIN)
                         }
                         }>Return to Login</Button>
             </div>

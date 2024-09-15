@@ -25,7 +25,7 @@ const BackButton = ({className, to}) => {
     const classes = classNames(buttonClasses, className);
 
     return (
-        <Link className={classes} to={to ? to : ".."}>
+        <Link className={classes} to={to ? to : ".."} relative="path">
             <ChevronLeftIcon className={"size-7 stroke-2 cursor-pointer"}/> Back
         </Link>
     );

@@ -1,18 +1,22 @@
 /**
  * File Description: Navigation Bar React component
- * File version: 2.0
+ * File version: 2.1
  * Contributors: Nikki
  */
 
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {NavLink, useLocation} from "react-router-dom";
 import {Tracker} from 'meteor/tracker';
 import {Meteor} from "meteor/meteor";
+import {useSubscribe, useTracker} from "meteor/react-meteor-data"
 import {Bars3Icon, UserCircleIcon, XMarkIcon} from "@heroicons/react/24/outline"
 
 import Button from "/imports/ui/components/button/Button.jsx";
 import UrlBasePath from "/imports/ui/enums/UrlBasePath";
 import "./navigationBar.css"
+import {useUserInfo} from "../../components/util"
+
+import ChatCollection from "/imports/api/collections/chats";
 
 
 /**
@@ -26,9 +30,6 @@ export const NavigationBar = () => {
 
     // variables for logged in user (if any)
     const [loggedInUserId, setLoggedInUserId] = useState(Meteor.userId());
-    const [userInfo, setUserInfo] = useState({"type": null, "username": null});
-
-    console.log("Current logged in user:" + JSON.stringify(userInfo))
 
     // When login status changes, this is automatically ran
     Tracker.autorun(() => {
@@ -36,33 +37,6 @@ export const NavigationBar = () => {
 
         if (userId !== loggedInUserId) {
             setLoggedInUserId(Meteor.userId());
-        }
-    })
-
-    // tracker for the required user data
-    Tracker.autorun(() => {
-        const user = Meteor.user();
-
-        if (user) {
-            // user is logged in
-            const userType = user.profile.type;
-            const username = user.username;
-
-            // check if an update to the current user info is required or not (this is needed to prevent inf loop)
-            if (userInfo.type !== userType || userInfo.username !== username) {
-                setUserInfo(
-                    {"type": user.profile.type, "username": user.username}
-                )
-            }
-
-        } else {
-            // user is not logged in
-            // check if an update to the current user info is required or not (this is needed to prevent inf loop)
-            if (userInfo.type !== null || userInfo.username !== null) {
-                setUserInfo(
-                    {"type": null, "username": null}
-                )
-            }
         }
     })
 
@@ -88,6 +62,39 @@ export const NavigationBar = () => {
         }
     };
 
+    // Determine if the user has unread messages
+    const [unreadMessages, setUnreadMessages] = useState(false);
+
+    // get current user information
+    const userInfo = useUserInfo();
+
+    // set up subscription (publication is in the "publication" folder)
+    const isLoadingChats = useSubscribe('all_user_chats', userInfo.username);
+
+    // get data from db
+    let chatsData = useTracker(() => {
+        return ChatCollection.find({
+            $or: [
+                { brideUsername: userInfo.username },
+                { artistUsername: userInfo.username }
+            ]
+        }).fetch();
+    });
+
+    useEffect(() => {
+        // update the unread messages status
+        let unread = false;
+        for (let i = 0; i < chatsData.length; i++) {
+            if (userInfo.type === "bride" && chatsData[i].readByBride === false) {
+                unread = true;
+            }
+            else if (userInfo.type === "artist" && chatsData[i].readByArtist === false) {
+                unread = true;
+            }
+        }
+        setUnreadMessages(unread);
+    }, [chatsData]);
+
     /**
      * A component for all the LINKS in the nav bar (such as link to services, artists, etc.)
      * Reused twice in Navigation bar component once for vertical mobile menu, once for normal top menu
@@ -110,7 +117,7 @@ export const NavigationBar = () => {
                 {/*</li>*/}
                 {/*Home Page*/}
                 <li>
-                    <NavLink to="/"
+                    <NavLink to={"/" + UrlBasePath.HOME}
                              onClick={() => {
                                  autoCloseMenu();
                              }}
@@ -120,7 +127,7 @@ export const NavigationBar = () => {
                 </li>
                 {/*Services Page*/}
                 <li>
-                    <NavLink to="/services"
+                    <NavLink to={"/" + UrlBasePath.SERVICES}
                              onClick={() => {
                                  autoCloseMenu();
                              }}
@@ -130,7 +137,7 @@ export const NavigationBar = () => {
                 </li>
                 {/*Artists Page*/}
                 <li>
-                    <NavLink to="/artists"
+                    <NavLink to={"/" + UrlBasePath.ARTISTS}
                              onClick={() => {
                                  autoCloseMenu();
                              }}
@@ -140,17 +147,20 @@ export const NavigationBar = () => {
                 </li>
                 {/*Messages Page*/}
                 <li className={loggedInUserId ? "" : "hidden"}>
-                    <NavLink to="/messages"
+                    <NavLink to={"/" + UrlBasePath.MESSAGES}
                              onClick={() => {
                                  autoCloseMenu();
                              }}
                              className={baseUrl === UrlBasePath.MESSAGES ?
-                                 "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3" :
-                                 "main-text navbar-link-inactive p-3"}>Messages</NavLink>
+                                 "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3 relative" :
+                                 "main-text navbar-link-inactive p-3 relative"}>Messages {unreadMessages && (
+                                    <span className="absolute -top-[0.01px] -right-[0.5px] block h-2.5 w-2.5 rounded-full bg-red-600"></span>
+                                  )}
+                                 </NavLink>
                 </li>
                 {/*Login Page*/}
                 <li className={!loggedInUserId ? "" : "hidden"}>
-                    <NavLink to="/login"
+                    <NavLink to={"/" + UrlBasePath.LOGIN}
                              onClick={() => {
                                  autoCloseMenu();
                              }}>
@@ -164,7 +174,7 @@ export const NavigationBar = () => {
                 </li>
                 {/*Register Page*/}
                 <li className={!loggedInUserId ? "" : "hidden"}>
-                    <NavLink to="/register"
+                    <NavLink to={"/" + UrlBasePath.REGISTER}
                              onClick={() => {
                                  autoCloseMenu();
                              }}>
@@ -179,22 +189,15 @@ export const NavigationBar = () => {
 
                 {/*Profile Page*/}
                 <li className={loggedInUserId ? "" : "hidden"}>
-                    {/*todo: unsure how profiles will work yet (if bride and artist separate or not todo later*/}
 
-
-                    <NavLink to={
-                        userInfo.type === 'artist' ?
-                            `/${UrlBasePath.ARTIST_PROFILE}/${userInfo.username}` :
-                            `/${UrlBasePath.BRIDE_PROFILE}/${userInfo.username}`
-                    }
+                    <NavLink to={"/" + UrlBasePath.PROFILE}
                              onClick={() => {
                                  autoCloseMenu();
                              }}
-                             
-                             className={baseUrl === UrlBasePath.ARTIST_PROFILE || baseUrl === UrlBasePath.BRIDE_PROFILE ?
+
+                             className={baseUrl === UrlBasePath.PROFILE ?
                                  "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3 lg:p-0" :
                                  "main-text navbar-link-inactive p-3 lg:p-0"}>
-                                    
 
                         {/*profile icon appears for horizontal menu, the word "Account" appears for vertical menu*/}
                         <span className="lg:hidden">Account</span>
@@ -227,7 +230,7 @@ export const NavigationBar = () => {
                 <div className="flex items-center justify-between relative h-16 m-4">
 
                     {/* LOGO */}
-                    <NavLink to="/"
+                    <NavLink to={"/" + UrlBasePath.HOME}
                              onClick={() => {
                                  autoCloseMenu();
                              }}

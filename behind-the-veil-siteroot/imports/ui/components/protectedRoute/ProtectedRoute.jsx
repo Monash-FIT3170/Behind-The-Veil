@@ -1,6 +1,6 @@
 /**
  * File Description: Protected route component that only checks user against access requirements
- * File version: 2.0
+ * File version: 2.1
  * Contributors: Nikki
  */
 
@@ -13,6 +13,7 @@ import Loader from "/imports/ui/components/loader/Loader";
 import WhiteBackground from "/imports/ui/components/whiteBackground/WhiteBackground";
 import PageLayout from "/imports/ui/enums/PageLayout";
 import RoutingAccess from "/imports/ui/enums/RoutingAccess";
+import UrlBasePath from "../../enums/UrlBasePath";
 
 /**
  * Protects a route that can ONLY be accessed either logged-in or NOT logged-in users.
@@ -79,7 +80,7 @@ export const ProtectedRoute = ({children, accessReq}) => {
             case RoutingAccess.SIGNED_IN_ONLY:
                 if (loggedInUser === null) {
                     // user is NOT authenticated, cannot access page, redirect to login page
-                    return <Navigate to="/login"/>;
+                    return <Navigate to={"/" + UrlBasePath.LOGIN}/>;
                 }
                 return children;
         }

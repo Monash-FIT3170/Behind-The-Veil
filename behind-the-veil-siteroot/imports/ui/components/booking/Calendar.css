@@ -1,0 +1,93 @@
+.rbc-off-range {
+   color: white;
+ }
+
+
+
+
+.rbc-month-view {
+ border-bottom-right-radius: 10px;
+ border-bottom-left-radius: 10px;
+ border-top-left-radius: 10px;
+ border-top-right-radius: 10px;
+ border: none !important; /*to get rid of grey outline */
+ text-align: left;
+ border-right: none;
+ padding: 10px;
+ margin-top: -50px;
+}
+
+
+.rbc-month-row {
+ border: 4px solid rgb(181,199,235) !important;
+ border-top: none !important;
+ border-right: none !important;
+ border-bottom: none !important;
+ border-top: 2px solid rgb(181,199,235) !important;
+}
+
+
+.rbc-month-row:nth-child(2) {
+ border-top: 4px solid rgb(181,199,235) !important;
+ border-top-color: rgb(181,199,235) !important;
+ border-top-right-radius: 10px !important;
+ border-top-left-radius: 10px !important;
+}
+
+
+.rbc-month-row:last-child {
+ border-bottom: 4px solid rgb(181,199,235) !important;
+ border-top-right-radius: 0px !important;
+ border-top-left-radius: 0px !important;
+ border-bottom-color: rgb(181,199,235) !important;
+ border-bottom-right-radius: 10px !important;
+ border-bottom-left-radius: 10px !important;
+}
+
+
+/* All cells have white colour background*/
+.rbc-day-bg {
+ background-color: white !important;
+ border-top: 0% !important;
+ color: grey !important;
+ border-right: 4px solid rgb(181,199,235);
+}
+
+
+.rbc-month-row .rbc-day-bg:nth-child(-n+6){
+ background-color: white;
+ border-top: 0! important;
+ border-right: 2px solid rgb(181,199,235) !important;
+
+
+}
+
+
+/* Align the date number to the left */
+.rbc-date-cell > a {
+ float: left !important;
+ padding-left: 9px;
+ color: grey !important;
+}
+
+
+/* Apply background color to all date cells */
+.rbc-date-cell {
+ text-align: left !important; /* Align text to the left */
+ padding-left: 15px; /* Add some padding to the left if needed */
+ border-right: 10px !important;
+}
+
+
+
+
+/* Set the background color for the days of the week header */
+.rbc-header {
+ font-size: 18px;
+ background-color: transparent;
+ border: none !important;
+}
+
+.rbc-row-content {
+  z-index: auto;
+}

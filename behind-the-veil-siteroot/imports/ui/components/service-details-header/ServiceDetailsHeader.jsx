@@ -37,7 +37,7 @@ const ServiceDetailsHeader = ({ className, service, date, type, artist, price })
       </div>
       <div>
         <div className="main-text text-dark-grey">Price</div>
-        <div className="main-text text-our-black">{price}</div>
+        <div className="main-text text-our-black">${price}</div>
       </div>
     </Card>
   );

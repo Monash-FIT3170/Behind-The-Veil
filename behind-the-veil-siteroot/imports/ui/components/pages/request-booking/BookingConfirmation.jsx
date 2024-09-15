@@ -1,6 +1,6 @@
 /**
  * File Description: Booking confirmation page
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Neth
  */
 
@@ -8,7 +8,9 @@ import React from "react";
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import Button from "../../button/Button";
 import {CheckCircleIcon, CheckIcon} from "@heroicons/react/24/outline";
-import { useNavigate } from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
+import UrlBasePath from "../../../enums/UrlBasePath";
+import URLSearchParams from "@ungap/url-search-params";
 
 /**
  * * Component for displaying a booking confirmation message.
@@ -22,11 +24,13 @@ import { useNavigate } from "react-router-dom";
 const BookingConfirmation = () => {
     const navigateTo = useNavigate();
 
+    const bookingId = new URLSearchParams(useLocation().search).get("receipt");
+
     /**
      * Function to navigate the user back to their account page.
      */
     const returnToAccount = () => {
-        navigateTo(`/bride-profile/:username`);
+        navigateTo("/" + UrlBasePath.PROFILE);
     }
 
     return (
@@ -40,7 +44,7 @@ const BookingConfirmation = () => {
                 </div>
                 <div className="flex flex-row gap-4 mt-6">
                     <span className="main-text text-dark-grey">Receipt Number:</span>
-                    <span className="flex main-text items-center justify-center">X219061084912321</span>
+                    <span className="flex main-text items-center justify-center">{bookingId}</span>
                 </div>
                 <Button className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[25px] pe-[25px] flex gap-1 mt-10" onClick={returnToAccount}>
                     <CheckIcon className="icon-base" />

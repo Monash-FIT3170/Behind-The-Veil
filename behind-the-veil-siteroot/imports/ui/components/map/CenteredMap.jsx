@@ -4,12 +4,12 @@
  * Contributors: Laura
  */
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css'
 
 import classNames from "classnames";
-import { mapboxKey, getCoordinates } from './mapUtils';
+import {getCoordinates, mapboxKey} from './mapUtils';
 
 export const CenteredMap = ({ className, location }) => {
 
