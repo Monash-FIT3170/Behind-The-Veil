@@ -30,8 +30,6 @@ RUN \
 # Expose the port that Meteor will run on. 8080 for Google Cloud Run
 EXPOSE 8080
 
-ENV ROOT_URL=http://localhost:8080
-
 # Go to where the main.js file is
 WORKDIR /usr/src/build/bundle
 
