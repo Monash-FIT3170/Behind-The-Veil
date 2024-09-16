@@ -83,8 +83,6 @@ const ChangePasswordTab = () => {
                 newErrors.currentPassword = 'Input does not match current password.'
                 setErrors(newErrors);
             } else {
-                console.log('Password change request:', { currentPassword, newPassword });
-                console.log('Password changed successfully!');
                 setErrors({ currentPassword: "", newPassword: "", retypeNewPassword: "" });
                 setSuccessMessage('Password changed successfully!');
             }

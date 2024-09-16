@@ -51,7 +51,6 @@ export const AddEditPostPage = ({ isEdit }) => {
             if (error) {
               reject(`Error: ${error.message}`);
             } else {
-              console.log(editPost);
               resolve(editPost);
             }
           });
@@ -65,7 +64,6 @@ export const AddEditPostPage = ({ isEdit }) => {
             if (error) {
               reject(`Error: ${error.message}`);
             } else {
-              console.log(editImage);
               resolve(editImage);
             }
           });
@@ -141,7 +139,6 @@ export const AddEditPostPage = ({ isEdit }) => {
       day: "2-digit",
       year: "numeric",
     });
-    console.log(postDate);
     let imageType = "post";
 
     // file errors

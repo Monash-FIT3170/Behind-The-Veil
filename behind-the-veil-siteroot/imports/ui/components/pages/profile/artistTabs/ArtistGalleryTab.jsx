@@ -6,12 +6,9 @@
 
 import React from "react";
 import {PlusIcon, TrashIcon, PencilIcon} from "@heroicons/react/24/outline";
-import {ProfileGalleryDisplay} from "../../../profilePhoto/ProfileGalleryDisplay";
-
 import Button from "../../../button/Button";
 import {useState} from "react";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry";
-
 import {
   useGalleryTotalCollection,
   useSpecificUser,
@@ -63,9 +60,7 @@ export const ArtistGalleryTab = ({username, external = false}) => {
 
   //format date to what is expected from figma
   function formatDate(dateInput) {
-    console.log(dateInput);
     const date = new Date(dateInput);
-    console.log(date);
     return date.toLocaleDateString("en-AU", {
       year: "numeric",
       month: "long",
@@ -108,7 +103,6 @@ export const ArtistGalleryTab = ({username, external = false}) => {
 
   //
   function addPostNavigate() {
-    console.log("button pressed");
     navigateTo(`/${UrlBasePath.PROFILE}/addPost`);
   }
 

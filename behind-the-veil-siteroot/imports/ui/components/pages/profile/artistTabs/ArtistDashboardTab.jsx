@@ -55,8 +55,6 @@ export const ArtistDashboardTab = ({ username }) => {
       }
     }
 
-    console.log(bookingInYear);
-
     // initaite another array to return all bookings data given filter info
     let filterBookingData = [];
 

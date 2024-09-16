@@ -50,7 +50,6 @@ export const BrideProfileTabs = ({ userInfo }) => {
 
         // put each booking into the array according to its status
         for (let booking of bookingsData) {
-            // console.log(`The booking id : ${booking._id} and booking status: ${booking.bookingStatus}`);
             switch (booking.bookingStatus) {
                 case BookingStatus.CONFIRMED:
                 case BookingStatus.OVERDUE:

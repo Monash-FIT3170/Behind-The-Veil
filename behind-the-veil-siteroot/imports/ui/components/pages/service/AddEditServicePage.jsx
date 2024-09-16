@@ -113,8 +113,7 @@ export const AddEditServicePage = ({isEdit}) => {
                 setServiceDuration(service.serviceDuration);
                 setServicePrice(service.servicePrice);
                 setServiceDescription(service.serviceDesc);
-                console.log(servicesData);
-                console.log(service);
+
                 if (service.serviceImageData === "/imageNotFound.png") {
                     setImagedb([{imageData: "/imageNotFound.png"}]);
                 } else {
