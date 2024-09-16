@@ -1,7 +1,7 @@
 /**
  * File Description: Database helper functions
- * File version: 1.4
- * Contributors: Nikki, Ryan, Phillip
+ * File version: 1.5
+ * Contributors: Nikki, Ryan, Phillip, Lucas
  */
 import { useSubscribe, useTracker } from "meteor/react-meteor-data";
 import { Meteor } from "meteor/meteor";
@@ -13,6 +13,7 @@ import BookingCollection from "../../api/collections/bookings";
 import PostCollection from "../../api/collections/posts";
 import ReviewCollection from "../../api/collections/reviews";
 import BookingStatus from "../enums/BookingStatus";
+import { relativeTimeRounding } from "moment";
 
 
 /**
@@ -66,18 +67,19 @@ export function useServices(
   service_publication,
   params,
   filter,
-  requireArtist = false
+  requireArtist = false,
+  oneImage = true
 ) {
-  // get service data from database
-  const isLoadingUserServices = useSubscribe(service_publication, ...params);
-  let servicesData = useTracker(() => {
-    return ServiceCollection.find(filter).fetch();
-  });
+    // get service data from database
+    const isLoadingUserServices = useSubscribe(service_publication, ...params);
+    let servicesData = useTracker(() => {
+        return ServiceCollection.find(filter).fetch();
+    });
 
   // get service images from database
   const isLoadingServiceImages = useSubscribe("service_images", []);
   let imagesData = useTracker(() => {
-    return ImageCollection.find({ imageType: "service" }).fetch();
+      return ImageCollection.find({imageType: "service"}).fetch();
   });
 
   // get artist data from database, if needed
@@ -97,6 +99,8 @@ export function useServices(
 
   // manual aggregation of each service with their image
   for (let i = 0; i < servicesData.length; i++) {
+    let foundImageMatch = false;
+    
     // aggregate with artist first
     for (let j = 0; j < artistsData.length; j++) {
       // find matching artist and add their name
@@ -106,25 +110,34 @@ export function useServices(
       }
     }
 
-    // then aggregate with the FIRST image that belong to it
-    let foundImageMatch = false;
-    for (let j = 0; j < imagesData.length; j++) {
-      // find matching image for the service
-      if (
-        imagesData[j].imageType === "service" &&
-        servicesData[i]._id === imagesData[j].target_id
-      ) {
-        servicesData[i].serviceImageData = imagesData[j].imageData;
-        foundImageMatch = true;
-        break;
-      }
-    }
+        // check if the frontend requires on
+        if (oneImage) {
+            // then aggregate with the FIRST image that belong to it
+            for (let j = 0; j < imagesData.length; j++) {
+                // find matching image for the service
+                if (imagesData[j].imageType === "service" && servicesData[i]._id === imagesData[j].target_id) {
+                    servicesData[i].serviceImageData = imagesData[j].imageData;
+                    foundImageMatch = true;
+                    break;
+                }
+            }
+        } else {
+            let serviceImages = [];
+            for (let j = 0; j < imagesData.length; j++) {
+                // find matching images for the service
+                if (imagesData[j].imageType === "service" && servicesData[i]._id === imagesData[j].target_id) {
+                    serviceImages.push(imagesData[j]);
+                    foundImageMatch = true;
+                }
+                servicesData[i].serviceImageData = serviceImages;
+            }
 
-    // if not found any images, replace with default
-    if (!foundImageMatch) {
-      servicesData[i].serviceImageData = "/imageNotFound.png";
+            // if not found any images, replace with default
+            if (!foundImageMatch) {
+                servicesData[i].serviceImageData = "/imageNotFound.png";
+            }
+        }
     }
-  }
   return { isLoading, servicesData };
 }
 
@@ -411,11 +424,13 @@ export function useArtistDashboardData(username) {
   // loop through entire booking data array
   for (let i = 0; i < bookingData.length; i++) {
     //if booking is completed, total bookings value
-    if (bookingData[i].bookingStatus === "completed") {
+    if (bookingData[i].bookingStatus === BookingStatus.COMPLETED) {
       bookingCompleteRevenue += bookingData[i].bookingPrice;
     }
-    //if booking is pending, total bookings value
-    if (bookingData[i].bookingStatus === "pending") {
+    //if booking is pending/confirmed, total bookings value
+    if (bookingData[i].bookingStatus === BookingStatus.PENDING ||
+        bookingData[i].bookingStatus === BookingStatus.CONFIRMED ||
+        bookingData[i].bookingStatus === BookingStatus.OVERDUE) {
       bookingPendingRevenue += bookingData[i].bookingPrice;
     }
   }
@@ -472,7 +487,6 @@ export function useGalleryTotalCollection(username) {
   };
 }
 
-
 export function useArtistBookings(username) {
   const isLoadingUserBooking = useSubscribe("all_user_bookings", username);
   const artistBookingData = useTracker(() => {
@@ -513,13 +527,68 @@ export function useUserBookings(username) {
   return { isLoadingUserBooking, artistBookingData };
 }
 
+/**
+ * Collects all data relevant to artist reviews
+ *
+ * @param {string} username - username of the user to get data
+ * @returns {Object} - returns an object containing: boolean isLoading that is true when loading, false when finished loading.
+ * Also, the array of review data
+ */
 export function useArtistReviews(username) {
   const isLoadingReviews = useSubscribe("artist_reviews", username);
   const artistReviewData = useTracker(() => {
     return ReviewCollection.find({artistUsername: username}).fetch();
   })
+  
+  // loading data
+  const isLoadingBookings = useSubscribe("all_user_bookings", username);
+  const isLoadingServices = useSubscribe("all_user_services", username);
+  const isLoadingBrides = useSubscribe("all_brides");
+  const isLoading = isLoadingReviews() || isLoadingBookings() || isLoadingServices() || isLoadingBrides();
+
+  // Extract relevant booking IDs from the reviews
+  const reviewBookingId = artistReviewData.map(review => review.bookingId);
+
+  // Retrieve booking objects based on the extracted IDs
+  const relevantBookings = useTracker(() => {
+    return BookingCollection.find({ _id: { $in: reviewBookingId } }).fetch();
+  });
+
+  // extract relevant service ID's from the bookings
+  const bookingServiceId = relevantBookings.map(booking => booking.serviceId);
+
+  // extract bride information
+  const brideUsername = relevantBookings.map(booking => booking.brideUsername);
+
+  const brideArray = useTracker(() => {
+    return UserCollection.find({ username: { $in: brideUsername } }).fetch();
+  })  
+  // retrieve service objects based on the extracted ID's
+  const serviceArray = useTracker(() => {
+    return ServiceCollection.find({ _id: { $in: bookingServiceId } }).fetch();
+  })
+
+  // Create review array with relevant bookings and services
+  const reviewArray = artistReviewData.map((review) => {
+    // Find the booking associated with the review
+    const booking = relevantBookings.find(booking => booking._id === review.bookingId);
+    // find the bride with associated username from booking
+    const bride = brideArray.find(bride => bride.username === booking.brideUsername);
+    // Find the service associated with the booking
+    const service = serviceArray.find(service => service._id === booking.serviceId);
+
+
+    return {
+      ...review,
+      booking,
+      bride,
+      service,
+    };
+  });
+
   return {
-    isLoadingReviews,
+    isLoading,
+    reviewArray,
     artistReviewData
   }
 }
