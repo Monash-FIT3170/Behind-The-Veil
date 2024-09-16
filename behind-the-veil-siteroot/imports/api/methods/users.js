@@ -1,12 +1,14 @@
 /**
  * File Description: User database entity
  * File version: 1.4
- * Contributors: Nikki, Ryan, Vicky, Josh
+ * Contributors: Nikki, Ryan, Vicky, Josh, Katie
  */
 
 import { Meteor } from 'meteor/meteor'
 import { UserCollection } from "/imports/api/collections/users";
 import { Accounts } from "meteor/accounts-base";
+import { check } from 'meteor/check';
+
 
 Meteor.methods({
     /**
@@ -20,6 +22,8 @@ Meteor.methods({
      * @param {string} id - id of the user (mongo DB attribute)
      */
     "verify_email": function (id) {
+        check(id, String)
+
         Accounts.sendVerificationEmail(id);
     },
     /**
@@ -29,6 +33,10 @@ Meteor.methods({
      * @param newEmail - new email to be added
      */
     "update_email": function (userId, oldEmail, newEmail) {
+        check(userId, String)
+        check(oldEmail, String)
+        check(newEmail, String)
+
         // remove old email and add the new one in
         Accounts.removeEmail(userId, oldEmail)
         Accounts.addEmail(userId, newEmail);
@@ -39,6 +47,9 @@ Meteor.methods({
      * @param newAlias - new alias/name to update to
      */
     "update_alias": function (userId, newAlias) {
+        check(userId, String)
+        check(newAlias, String)
+
         UserCollection.update(userId, { $set: { "profile.alias": newAlias } });
     },
 
@@ -52,6 +63,10 @@ Meteor.methods({
      * @param {number} radius - The new service radius in the desired unit
      */
     'update_service_area': function (userId, text, radius) {
+        check(userId, String)
+        check(text, String)
+        check(radius, String)
+
         UserCollection.update(
             { _id: userId },
             {
@@ -69,6 +84,8 @@ Meteor.methods({
      * @returns {string|null} - The user alias if found, otherwise null.
      */
     "get_alias": function (username) {
+        check(username, String)
+
         const user = UserCollection.findOne(
             { username: username },
         );
@@ -81,6 +98,8 @@ Meteor.methods({
      * @returns {object|null} - The user if found, otherwise null.
      */
     "get_user": function (username) {
+        check(username, String)
+
         return UserCollection.findOne(
             { username: username },
         );
@@ -92,6 +111,9 @@ Meteor.methods({
      * @param {object} availability - The availability object to update the user with. Keys = date (YYYY-mm-dd), Values = array of integers that correspond to hours of the day that the user is available to work
      */
     "update_availability": function (username, availability) {
+        check(username, String)
+        check(availability, Object)
+
         return UserCollection.update(
             { username: username },
             { $set: { "availability": availability } }

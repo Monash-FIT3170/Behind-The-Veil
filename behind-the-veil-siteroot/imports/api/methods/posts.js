@@ -1,11 +1,13 @@
 /**
  * File Description: Post database entity
  * File version: 1.0
- * Contributors: Vicky
+ * Contributors: Vicky, Katie
  */
 
 import {Meteor} from "meteor/meteor";
 import {PostCollection} from "/imports/api/collections/posts";
+import { check } from 'meteor/check';
+
 
 Meteor.methods({
     /**
@@ -16,6 +18,10 @@ Meteor.methods({
      * @returns {string} The unique ID of the newly created post (postId).
      */
     "add_post": function (postDate, postDescription, artistUsername) {
+        check(postDate, String)  // should be type Date?
+        check(postDescription, String)
+        check(artistUsername, String)
+
         return PostCollection.insert(
             {
                 "postDate": postDate,
@@ -30,6 +36,8 @@ Meteor.methods({
      * @returns {object|null} - The post object if found, otherwise null.
      */
     "get_post": function (postId) {
+        check(postId, String)
+
         return PostCollection.findOne(
             { _id: postId },
         )
@@ -40,6 +48,9 @@ Meteor.methods({
      * @param {object} updateObject - Field and value object of elements that need to be upgraded
      */
      "update_post_details": function (postId, updateObject) {
+        check(postId, String)
+        check(updateObject, Object)
+
         PostCollection.update(
             { _id: postId },
             { $set: updateObject},
@@ -49,6 +60,8 @@ Meteor.methods({
      * Removes a particular post based on the post ID.
      */
     "remove_post": function (postId) {
+        check(postId, String)
+
         PostCollection.remove(
             { _id: postId },
         );

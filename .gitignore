@@ -3,3 +3,4 @@
 node_modules/
 behind-the-veil-siteroot/package-lock.json
 settings.json
+build/

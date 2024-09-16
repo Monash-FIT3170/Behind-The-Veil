@@ -22,6 +22,13 @@ Meteor.publish('all_artists', function() {
 });
 
 /**
+ * Publishes brides.
+ */
+Meteor.publish('all_brides', function() {
+    return UserCollection.find({"profile.type":"bride"});
+});
+
+/**
  * Publishes all bookings associated with a specific user to the client.
  *
  * @param {string} username - The username of the user to be published.

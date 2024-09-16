@@ -189,30 +189,19 @@ const PaymentDetails = () => {
                 console.error('Error processing payment:', error);
                 alert('Payment Failed');
             } else {
-                console.log(details);
-                console.log(details.aristUsername);
-                result.success ? addToBooking(startDatetime, endDatetime, details.location, details.price, BookingStatus.PENDING, details.brideUsername, details.artistUsername, serviceId)
-                    .then(r => navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/booking-confirmation?${r}`))
-                    .catch(reason => alert(reason)) : alert('Payment Failed');
-              
-                if (result.success) {
-                    // Add the booking to the database
-                    addToBooking(startDatetime, endDatetime, details.location, details.price, BookingStatus.PENDING, details.brideName, details.artistName, serviceId)
-                        .then(bookingId => {
-                            // Add the payment receipt to the database after booking is added
-                            addPaymentReceipt(new Date(), details.price, "Deposit", "Paid", bookingId)
-                                .then(receiptId => {
-                                    console.log('Receipt added with ID:', receiptId);
-                                    navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/booking-confirmation`);
-                                })
-                                .catch(reason => alert(`Failed to add receipt: ${reason}`));
-                        })
-                        .catch(reason => alert(`Failed to add booking: ${reason}`));
-                } 
+                addToBooking(startDatetime, endDatetime, details.location, details.price, BookingStatus.PENDING, details.brideUsername, details.artistUsername, serviceId)
+                    .then(bookingId => {
+                        return addPaymentReceipt(new Date(), details.price, "Deposit", "Paid", bookingId);
+                    })
+                    .then(r => {
+                        navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/booking-confirmation?receipt=${r}`);
+                    })
+                    .catch(reason => {
+                        alert(reason);
+                    });
             }
-        });
-    };
-    
+        })
+    }
 
     const addPaymentReceipt = (paymentDatetime, paymentAmount, paymentType, paymentStatus, bookingId) => new Promise((resolve, reject) => {
         Meteor.call("add_receipt", 

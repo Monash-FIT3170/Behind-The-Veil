@@ -158,7 +158,7 @@ const ChangePasswordTab = () => {
                 </ul>
             </div>
 
-            {successMessage && <div className="text-green-500 -mt-2">{successMessage}</div>}
+            {successMessage && <div className="text-confirmed-colour -mt-2">{successMessage}</div>}
 
             <Button type="submit"
                     className="bg-secondary-purple hover:bg-secondary-purple-hover w-1/3 min-w-40">

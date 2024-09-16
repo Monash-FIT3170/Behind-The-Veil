@@ -1,6 +1,6 @@
 /**
  * File Description: Account Details within the Settings page
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Kyle, Nikki
  */
 import React, {useEffect, useState} from "react";
@@ -15,6 +15,7 @@ import Button from "../../../button/Button.jsx";
 import ProfilePhoto from "../../../profilePhoto/ProfilePhoto.jsx"
 import {useUserInfo} from "../../../util";
 import Loader from "../../../loader/Loader";
+import UserCollection from "../../../../../api/collections/users";
 
 /**
  * This page allows both artists and brides to change their name/alias, email address and profile image
@@ -25,6 +26,21 @@ export const AccountDetails = () => {
 
     // get user information and their profile photo
     const userInfo = useUserInfo();
+
+    // get all user data to check for all existing emails
+    const isLoadingUsers = useSubscribe('all_users');
+
+    // get user data from meteor
+    let usersEmailData = useTracker(() => {
+        // an array of email arrays (one for each user even though each user only has 1 email)
+        const emailArrays = UserCollection.find({}, {}).fetch();
+
+        // get the emails ONLY if user data has loaded
+        return emailArrays ? emailArrays.map((emailArray) => (
+            emailArray.emails[0] ? emailArray.emails[0].address.toLowerCase() : null
+        )) : []
+    });
+
 
     // get current profile image
     const isLoadingProfileImage = useSubscribe('specific_profile_image', userInfo);
@@ -119,6 +135,9 @@ export const AccountDetails = () => {
         if (email && !emailRegex.test(email)) {
             newErrors.email = 'Please enter a valid email address.';
             isError = true;
+        } else if (usersEmailData.includes(email.toLowerCase())) {
+            newErrors.email = 'Email address has already been used.';
+            isError = true;
         }
 
         // check alias is valid
@@ -162,7 +181,7 @@ export const AccountDetails = () => {
         }
     };
 
-    if (isLoadingProfileImage()) {
+    if (isLoadingProfileImage() || isLoadingUsers()) {
         // wait for load data
         return (
             <Loader

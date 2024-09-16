@@ -159,10 +159,8 @@ const FilterLocationSearchBar = ({
           ))}
         </select>
         <Button
-          className="flex justify-center items-center rounded-full h-12 w-32 p-2
-                            bg-secondary-purple hover:bg-secondary-purple-hover"
-          onClick={handleButtonClickOrSubmit}
-        >
+          className="w-32 p-2 bg-secondary-purple hover:bg-secondary-purple-hover"
+          onClick={handleButtonClickOrSubmit}>
           Filter
         </Button>
       </div>

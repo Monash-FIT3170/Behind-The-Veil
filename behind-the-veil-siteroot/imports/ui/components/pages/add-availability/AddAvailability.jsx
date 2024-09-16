@@ -1,6 +1,6 @@
 /**
  * File Description: Add Availability page
- * File version: 1.1
+ * File version: 1.2
  * Contributors: Laura, Josh
  */
 
@@ -32,6 +32,9 @@ import { useSpecificUser } from "../../DatabaseHelper.jsx";
  */
 const AddAvailability = () => {
     const { artistUsername } = useParams();
+
+    // message on save
+    const [successMessage, setSuccessMessage] = useState("");
 
     // form input values
     const [selectedDate, setSelectedDate] = useState(startOfDay(new Date()));
@@ -92,6 +95,8 @@ const AddAvailability = () => {
                 if (error) {
                     console.warn('Error updating availability', error)
                     alert('Error updating availability: ' + error)
+                } else {
+                    setSuccessMessage("You have updated your availabilities")
                 }
             }
         )
@@ -220,6 +225,7 @@ const AddAvailability = () => {
                                                         key={time}
                                                         className={className}
                                                         onClick={() => {
+                                                            setSuccessMessage("")
                                                             setAvailability((prevAvailability) => {
                                                                 const updatedAvailability = { ...prevAvailability };
                                                                 if (isActive) {
@@ -243,10 +249,13 @@ const AddAvailability = () => {
                                                 );
                                             })}
                                     </div>
-                                    <div className="flex justify-center items-center">
+                                    <div className="flex flex-col items-center justify-center gap-y-6">
                                         <Button
-                                            className="bg-secondary-purple hover:bg-secondary-purple-hover flex items-center justify-center gap-2 w-1/5 mt-4"
-                                            type="submit">Save</Button>
+                                            className="bg-secondary-purple hover:bg-secondary-purple-hover flex items-center justify-center gap-2 w-1/5 min-w-28 mt-4"
+                                            type="submit">Save
+                                        </Button>
+                                        {successMessage && <div className="text-confirmed-colour mt-2">{successMessage}</div>}
+
                                     </div>
                                 </div>
                             </div>

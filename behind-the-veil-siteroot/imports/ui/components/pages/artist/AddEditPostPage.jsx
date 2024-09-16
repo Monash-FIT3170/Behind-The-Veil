@@ -287,7 +287,7 @@ export const AddEditPostPage = ({ isEdit }) => {
               onChange={handleFileChange}
             />
           </Button>
-          {inputFile && <div className="text-green-500">Uploaded image: </div>}
+          {inputFile && <div className="text-confirmed-colour">Uploaded image: </div>}
         </div>
         {/* Image Preview before adding to gallery*/}
         {imagePreviewUrl && (
