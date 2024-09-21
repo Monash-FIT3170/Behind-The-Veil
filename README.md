@@ -1,5 +1,7 @@
 # Behind-The-Veil - Project 10 - FIT3170 - 2024
 
+Behind the Veil is currently hosted at: https://behind-the-veil-1077153890194.australia-southeast2.run.app/
+
 ## Table of Contents
 - [Dependencies](#dependencies)
 - [Running the app](#running-the-app)
