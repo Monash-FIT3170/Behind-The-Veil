@@ -4,18 +4,26 @@
  * Contributors: Cameron
  */
 import { ReceiptCollection } from "../collections/receipts";
+import { check } from 'meteor/check';
+
 
 Meteor.methods({
+    /**
+     * Adds a new payment receipt to the database.
+     * @param {Date} paymentDatetime - The date and time when the payment is made
+     * @param {number} paymentAmount - Amount paid within the payment
+     * @param {string} paymentType - Deposit or Refund payment
+     * @param {string} paymentStatus - Paid or Refunded
+     * @param {string} bookingId - The booking the payment was made for.
+     * @returns {number} The unique ID number of the payment
+     */
     "add_receipt": function (paymentDatetime, paymentAmount, paymentType, paymentStatus, bookingId) {
-        /**
-         * Adds a new payment receipt to the database.
-         * @param {Date} paymentDatetime - The date and time when the payment is made
-         * @param {number} paymentAmount - Amount paid within the payment
-         * @param {string} paymentType - Deposit or Refund payment
-         * @param {string} paymentStatus - Paid or Refunded
-         * @param {string} bookingId - The booking the payment was made for.
-         * @returns {number} The unique ID number of the payment
-         */
+        check(paymentDatetime, Date)
+        check(paymentAmount, Number)
+        check(paymentType, String)
+        check(paymentStatus, String)
+        check(bookingId, String)
+
         return ReceiptCollection.insert({
             paymentDatetime: paymentDatetime,
             paymentAmount: paymentAmount,
@@ -32,6 +40,8 @@ Meteor.methods({
      * @returns {object|null} - The payment receipt object if found, otherwise null.
      */
     "get_receipt": function (paymentId) {
+        check(reviewComment, String)
+
         return ReceiptCollection.findOne(
             { _id: paymentId },
         )
@@ -43,17 +53,19 @@ Meteor.methods({
      * @returns {object|null} - The payment receipt object if found, otherwise null.
      */
     "get_receipt_from_booking": function (bookingId) {
+        check(reviewComment, String)
+
         return ReceiptCollection.findOne({ bookingId: bookingId });
     },
 
-
+    /**
+     * Updates a receipt's payment status from "Deposit" to "Refund" and updates the paymentDatetime to the current date and time.
+     * @param {string} receiptId - The ID of the receipt to update.
+     * @returns {number} The number of documents updated.
+     */
     "deposit_to_refund": function (receiptId) {
-        /**
-         * Updates a receipt's payment status from "Deposit" to "Refund" and updates the paymentDatetime to the current date and time.
-         * @param {string} receiptId - The ID of the receipt to update.
-         * @returns {number} The number of documents updated.
-         */
-        
+        check(reviewComment, String)
+
         // Get the current date and time
         const currentDatetime = new Date();
 

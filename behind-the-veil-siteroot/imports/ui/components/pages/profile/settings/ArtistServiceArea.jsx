@@ -94,7 +94,7 @@ export const ArtistServiceArea = () => {
             </div>
             {/* show error and successMessage */}
             {errorMessage && <span className="text-cancelled-colour -mt-2">{errorMessage}</span>}
-            {successMessage && <div className="text-green-500 -mt-2">{successMessage}</div>}
+            {successMessage && <div className="text-confirmed-colour -mt-2">{successMessage}</div>}
             {/* Save changes button*/}
             <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2" type="submit">
                 <CheckIcon className="icon-base" />

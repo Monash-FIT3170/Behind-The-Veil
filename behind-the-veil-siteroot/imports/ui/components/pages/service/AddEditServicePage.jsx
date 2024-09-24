@@ -19,6 +19,7 @@ import QuestionMarkCircleIcon from "@heroicons/react/16/solid/QuestionMarkCircle
 import UrlBasePath from "../../../enums/UrlBasePath";
 import {Modal} from "react-responsive-modal";
 import Tippy from '@tippyjs/react/headless';
+import { useServices } from "../../DatabaseHelper";
 
 export const AddEditServicePage = ({isEdit}) => {
     const navigateTo = useNavigate();
@@ -27,7 +28,7 @@ export const AddEditServicePage = ({isEdit}) => {
     const title = isEdit ? "Edit Service" : "Add New Service";
     const button = isEdit ? "Edit Service" : "Add Service";
 
-    // input and error variables
+    // input variables
     const [serviceName, setServiceName] = useState("");
     const [serviceType, setServiceType] = useState("None");
     const [serviceDuration, setServiceDuration] = useState(0);
@@ -197,6 +198,7 @@ export const AddEditServicePage = ({isEdit}) => {
         }
     };
 
+    // Handles when the service is submitted
     const handleSubmit = (event) => {
         event.preventDefault();
 
@@ -384,8 +386,9 @@ export const AddEditServicePage = ({isEdit}) => {
                         <Input
                             className="md:w-1/2 md:max-w-72"
                             type="number"
-                            min="0"
-                            step="0.5"
+                            min="1"
+                            max="24"
+                            step="1"
                             label={<label className="main-text">Duration (Hours)</label>}
                             value={serviceDuration}
                             onChange={(e) => setServiceDuration(e.target.value)}
@@ -483,7 +486,7 @@ export const AddEditServicePage = ({isEdit}) => {
             >
                 <div className="flex flex-col justify-center items-center h-full gap-y-10">
                     <h2 className="text-center title-text px-4">
-                        {(isEdit ? "Modification" : "Creation") + (isSuccess ? " was Successful" : " Failed")}
+                        {(isEdit ? "Modification" : "Creation") + (isSuccess ? " was successful" : " failed")}
                     </h2>
                     <Button
                         className={

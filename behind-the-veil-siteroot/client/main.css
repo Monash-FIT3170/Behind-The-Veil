@@ -70,6 +70,13 @@
         line-height: 150%;
     }
 
+    .medium-number-text {
+        @apply text-our-black;
+        font-size: 30px;
+        font-weight: 400;
+        line-height: 150%;
+    }
+
     .logo-text {
         /* TODO: font should be poppins */
         @apply text-our-black;
@@ -154,6 +161,10 @@ on a case by case basis within individual JSX components.
 
     .service-details-header-base {
         @apply grid grid-cols-2 grid-rows-2 gap-x-10 gap-y-4 w-full;
+    }
+    
+    .review-details {
+        @apply grid grid-cols-2 divide-blue-100 divide-x-[3px] w-full min-w-[300px] lg:w-4/5 mx-auto;
     }
 
 }
