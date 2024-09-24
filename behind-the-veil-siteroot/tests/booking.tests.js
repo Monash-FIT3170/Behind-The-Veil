@@ -87,6 +87,8 @@ if (Meteor.isClient) {
                 });
             }).then(retrievedBooking => {
                 assert.notStrictEqual(retrievedBooking, null); // Check if a booking object is returned
+                assert.notStrictEqual(retrievedBooking, undefined); // Check if a booking object is returned
+
             }).catch(error => {
                 assert.fail("Error adding booking. Returned with error:" + error.message);
             });

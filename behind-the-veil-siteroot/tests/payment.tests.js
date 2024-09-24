@@ -5,7 +5,7 @@
  */
 const assert = require('assert');
 import {resetDatabase} from 'meteor/xolvio:cleaner';
-import "../imports/api/methods/payment";
+import "../imports/api/methods/payments";
 
 /**
  * Test suite for client-side payment methods.

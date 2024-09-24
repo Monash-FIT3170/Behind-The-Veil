@@ -9,7 +9,7 @@ import {resetDatabase} from 'meteor/xolvio:cleaner';
 import "../imports/api/methods/users";
 import {UserCollection} from "../imports/api/collections/users";
 import {Accounts} from 'meteor/accounts-base';
-import { useSpecificUser } from "../../DatabaseHelper.jsx";
+// import { useSpecificUser } from "../../behind-the-veil-siteroot/imports/ui/components/DatabaseHelper";
 
 
 
@@ -115,10 +115,11 @@ if (Meteor.isClient) {
                     artistserviceRadius: 0,
                 },
             });
-            Meteor.call('update_service_area', userId, 'clayton', 20 );
+            Meteor.call('update_service_area', userId, 'clayton', "20" );
             const updatedUser = UserCollection.findOne(userId);
+
             assert.strictEqual(updatedUser.profile.artistServiceLocation, 'clayton');
-            assert.strictEqual(updatedUser.profile.artistServiceRadius, 20);
+            assert.strictEqual(updatedUser.profile.artistServiceRadius, "20");
         });
         /**
          * Test case to check if a user alias can be retrieved successfully.
@@ -220,11 +221,11 @@ if (Meteor.isClient) {
             }
             result = Meteor.call('update_availability', 'testuser', initialAvailability  );
 
-            const { isLoading, userData } = useSpecificUser(artistUsername)
-            const updatedUser = UserCollection.findOne(userId);
-            if (userData?.availability) {
-                const artistAvailability = { ...userData.availability }
-            }
+            // const { isLoading, userData } = useSpecificUser(artistUsername)
+            // const updatedUser = UserCollection.findOne(userId);
+            // if (userData?.availability) {
+            //     const artistAvailability = { ...userData.availability }
+            // }
             // not sure how to best replicate a test for the availability objects
 
 
