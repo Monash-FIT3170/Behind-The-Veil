@@ -83,7 +83,7 @@ Meteor.methods({
      * @param {int} serviceId - The ID of the service.
      */
     "has_booking_of_service": function (serviceId) {
-        check(serviceId, Match.Integer)
+        check(serviceId, String) // changed to string rather than integer
 
         const booking = BookingCollection.findOne({ serviceId: serviceId });
     
