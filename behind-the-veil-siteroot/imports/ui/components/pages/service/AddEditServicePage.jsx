@@ -19,7 +19,6 @@ import QuestionMarkCircleIcon from "@heroicons/react/16/solid/QuestionMarkCircle
 import UrlBasePath from "../../../enums/UrlBasePath";
 import {Modal} from "react-responsive-modal";
 import Tippy from '@tippyjs/react/headless';
-import { useServices } from "../../DatabaseHelper";
 
 export const AddEditServicePage = ({isEdit}) => {
     const navigateTo = useNavigate();

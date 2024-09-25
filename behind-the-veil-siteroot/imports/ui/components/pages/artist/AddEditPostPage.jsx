@@ -5,7 +5,7 @@
  */
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useUserInfo } from "../../util.jsx";
+import { imageObj, useUserInfo } from "../../util.jsx";
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button.jsx";
@@ -18,14 +18,15 @@ export const AddEditPostPage = ({ isEdit }) => {
 
   // text for title/save button
   const title = isEdit ? "Edit Photo In Gallery" : "Add Photo To Gallery";
-  const button = isEdit ? "Save" : "Save";
+  const button = isEdit ? "Edit Post" : "Add Post";
 
   const [postDescription, setInputReason] = useState("");
-  const [inputFile, setInputFile] = useState(null);
+  const [imageObject, setImageObject] = useState(null);
   const [fileError, setFileError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
-  const [imagePreviewUrl, setImagePreviewUrl] = useState("");
   const date = new Date();
+
+  const allowedFileTypeExtensions = [".png", ".jpg", ".jpeg"];
 
   const navigateTo = useNavigate();
 
@@ -66,8 +67,7 @@ export const AddEditPostPage = ({ isEdit }) => {
             navigateTo("/" + UrlBasePath.PROFILE);
           }
           setInputReason(post.postDescription); // Set the post description
-          setInputFile(post.postImage.imageData);
-          setImagePreviewUrl(post.postImage.imageData);
+          setImageObject(post.postImage);
         })
         .catch((error) => {
           alert(error);
@@ -88,30 +88,35 @@ export const AddEditPostPage = ({ isEdit }) => {
   function handleFileChange(event) {
     const file = event.target.files[0];
 
-    // Validate file type
-    if (file && !["image/png", "image/jpeg", "image/jpg"].includes(file.type)) {
-      setFileError("Please upload a valid image file (.png, .jpg, .jpeg).");
-      setInputFile(null); // Clear the file input
-      setImagePreviewUrl(""); // Clear the image preview
-      return;
-    }
-
     if (file) {
-      setFileError(""); // Clear the error when a valid file is uploaded
+      // Validate file type
+      if (!["image/png", "image/jpeg", "image/jpg"].includes(file.type)) {
+        setFileError("Please upload a valid image file (.png, .jpg, .jpeg).");
+        setImageObject(null); // Clear the file input
+        return;
+      } else if (imageObject && (imageObject.imageName === file.name && imageObject.imageSize === file.size)) {
+        setFileError("File has already been uploaded!");
+        setImageObject(null); // Clear the file input
+        return;
+      } else if (file.size > 16777216) {
+        setFileError("File must be less than 16MB");
+        setImageObject(null); // Clear the file input
+        return;
+      } else {
+        setFileError(""); // Clear the error when a valid file is uploaded
 
-      const reader = new FileReader();
+        const reader = new FileReader();
 
-      // Convert the file to take URL format
-      reader.onloadend = () => {
-        const imageUrl = reader.result;
-        setInputFile(imageUrl);
-        setImagePreviewUrl(imageUrl);
-      };
+        // Convert the file to take URL format
+        reader.onloadend = () => {
+          const image = imageObj(reader.result, file.name, file.size);
+          setImageObject(image);
+        };
 
-      reader.readAsDataURL(file);
+        reader.readAsDataURL(file);
+      }
     } else {
-      setInputFile(null);
-      setImagePreviewUrl(""); // Clear the preview if no file
+      setImageObject(null);
     }
   }
 
@@ -125,10 +130,9 @@ export const AddEditPostPage = ({ isEdit }) => {
       year: "numeric",
     });
     console.log(postDate);
-    let imageType = "post";
 
     // file errors
-    if (!inputFile) {
+    if (!imageObject) {
       setFileError("Please provide a file.");
       hasError = true;
     } else {
@@ -152,7 +156,7 @@ export const AddEditPostPage = ({ isEdit }) => {
       postDate: postDate,
       postDescription: postDescription,
       artistUsername: userInfo.username,
-      postImage: {imageDate: inputFile}
+      postImage: imageObject
     };
 
     // edit
@@ -178,7 +182,7 @@ export const AddEditPostPage = ({ isEdit }) => {
           postDate,
           postDescription,
           userInfo.username,
-          {imageData: inputFile},
+          imageObject,
           (error, addPostId) => {
             if (error) {
               console.log("Error adding post:", error);
@@ -221,18 +225,19 @@ export const AddEditPostPage = ({ isEdit }) => {
             <input
               id="file-upload"
               type="file"
+              accept={allowedFileTypeExtensions?.join(",")}
               className="hidden"
               ref={fileInputRef}
               onChange={handleFileChange}
             />
           </Button>
-          {inputFile && <div className="text-confirmed-colour">Uploaded image: </div>}
+          {imageObject && <div className="text-confirmed-colour">Uploaded image: </div>}
         </div>
         {/* Image Preview before adding to gallery*/}
-        {imagePreviewUrl && (
-          <div className="mt-4">
+        {imageObject && (
+          <div key={imageObject.imageName} className="mt-4">
             <img
-              src={imagePreviewUrl}
+              src={imageObject.imageData}
               alt="Uploaded Preview"
               className="max-w-full h-auto"
             />

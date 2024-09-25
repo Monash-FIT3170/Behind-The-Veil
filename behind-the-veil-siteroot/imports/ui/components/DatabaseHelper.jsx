@@ -388,37 +388,14 @@ export function useArtistDashboardData(username) {
  * Also, the array of image sources and corresponding post data (all information related to post)
  */
 export function useGalleryTotalCollection(username) {
-  // collect post image data
-  const isLoadingImages = useSubscribe("post_images", []);
-  let imageDataArray = useTracker(() => {
-    return ImageCollection.find({ imageType: "post" }).fetch();
-  });
-
   // collect user post data
   const isLoadingPost = useSubscribe("specific_artist_posts", username);
   const postsData = useTracker(() => {
     return PostCollection.find({ artistUsername: username }).fetch();
   });
 
-  // loop through and collect all the post ID information
-  const postDataIDArray = [];
-  for (let i = 0; i < postsData.length; i++) {
-    postDataIDArray.push(postsData[i]._id);
-  }
-  const imageSourceArray = [];
-
-  //collect relevant post images
-  for (let j = 0; j < postDataIDArray.length; j++) {
-    for (let i = 0; i < imageDataArray.length; i++) {
-      if (imageDataArray[i].target_id === postDataIDArray[j]) {
-        imageSourceArray.push(imageDataArray[i].imageData);
-      }
-    }
-  }
-
   return {
-    isLoading: isLoadingImages() || isLoadingPost(),
-    imageSourceArray,
+    isLoading: isLoadingPost(),
     postsData,
   };
 }
