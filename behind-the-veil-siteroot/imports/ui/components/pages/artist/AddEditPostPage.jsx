@@ -94,10 +94,6 @@ export const AddEditPostPage = ({ isEdit }) => {
         setFileError("Please upload a valid image file (.png, .jpg, .jpeg).");
         setImageObject(null); // Clear the file input
         return;
-      } else if (imageObject && (imageObject.imageName === file.name && imageObject.imageSize === file.size)) {
-        setFileError("File has already been uploaded!");
-        setImageObject(null); // Clear the file input
-        return;
       } else if (file.size > 16777216) {
         setFileError("File must be less than 16MB");
         setImageObject(null); // Clear the file input
