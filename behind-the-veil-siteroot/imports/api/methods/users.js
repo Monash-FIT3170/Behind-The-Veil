@@ -38,10 +38,10 @@ Meteor.methods({
         check(newEmail, String)
 
         // remove old email and add the new one in
-        // Accounts.removeEmail(userId, oldEmail)
-        // Accounts.addEmail(userId, newEmail);
+        Accounts.removeEmail(userId, oldEmail)
+        Accounts.addEmail(userId, newEmail);
         // why are we using the Accounts format here???
-        UserCollection.update(userId, { $set: { "email": newEmail } });
+        // UserCollection.update(userId, { $set: { "email": newEmail } });
 
     },
     /**

@@ -18,7 +18,7 @@ Meteor.methods({
      * @returns {string} The unique ID of the newly created post (postId).
      */
     "add_post": function (postDate, postDescription, artistUsername) {
-        check(postDate, Date)  // should be type Date? I think so, changed for now from string to date
+        check(postDate, String)  // should be type Date? But checking for Date results in an error
         check(postDescription, String)
         check(artistUsername, String)
 
