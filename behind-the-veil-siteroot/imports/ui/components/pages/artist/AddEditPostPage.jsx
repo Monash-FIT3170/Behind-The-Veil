@@ -116,7 +116,7 @@ export const AddEditPostPage = ({ isEdit }) => {
         reader.readAsDataURL(file);
       }
     } else {
-      setImageObject(null);
+      return;
     }
   }
 
