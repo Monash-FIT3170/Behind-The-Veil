@@ -155,7 +155,7 @@ const SpecificServicePage = () => {
                             {/* User Info Container */}
                             <Card
                                 className="flex flex-row items-center justify-center space-x-2 w-fit sm:min-w-[450px] rounded-2xl">
-                                <img src={profileImageData ? profileImageData.imageData : new Error()}
+                                <img src={artistData.profile.profileImage ? artistData.profile.profileImage.imageData : null}
                                      alt="Artist profile image"
                                      className="rounded-[10px] object-cover size-24"
                                      onError={({currentTarget}) => {

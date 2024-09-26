@@ -17,6 +17,7 @@ import "./navigationBar.css"
 import {useUserInfo} from "../../components/util"
 
 import ChatCollection from "/imports/api/collections/chats";
+import ProfilePhoto from "../profilePhoto/ProfilePhoto";
 
 
 /**
@@ -201,7 +202,10 @@ export const NavigationBar = () => {
 
                         {/*profile icon appears for horizontal menu, the word "Account" appears for vertical menu*/}
                         <span className="lg:hidden">Account</span>
-                        <button><UserCircleIcon className="hidden lg:block min-h-14 w-14 cursor-pointer"/></button>
+                        <button>
+                            {userInfo.profileImage ? <ProfilePhoto className="flex container mx-auto w-[8vh] h-[8vh]" userPhotoData={userInfo.profileImage.imageData}/> :
+                            <UserCircleIcon className="hidden lg:block min-h-14 w-14 cursor-pointer"/>}
+                        </button>
                     </NavLink>
                 </li>
 
