@@ -11,7 +11,6 @@ import {Meteor} from "meteor/meteor";
 import {Modal} from 'react-responsive-modal';
 
 import ChatCollection from "/imports/api/collections/chats";
-import ImageCollection from '../../../../api/collections/images.js';
 import "../../../../api/methods/chats.js"
 
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";

@@ -156,7 +156,7 @@ const SpecificServicePage = () => {
                             {/* User Info Container */}
                             <Card
                                 className="flex flex-row items-center justify-center space-x-2 w-fit sm:min-w-[450px] rounded-2xl">
-                                <ProfilePhoto className="flex container mx-auto" userPhotoData={artistData.profile.profileImage ? artistData.profile.profileImage.imageData : null}/>
+                                <ProfilePhoto className="flex container mx-auto w-[14.31vh]" userPhotoData={artistData.profile.profileImage ? artistData.profile.profileImage.imageData : null}/>
                                 <div className="flex flex-col items-start justify-center gap-y-1 w-full">
                                     <div className="flex flex-col items-start justify-center gap-y-1 pl-3">
                                         <span className="large-text line-clamp-1">{artistData.profile.alias}</span>

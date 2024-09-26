@@ -7,7 +7,6 @@ import { useSubscribe, useTracker } from "meteor/react-meteor-data";
 import { Meteor } from "meteor/meteor";
 
 import ServiceCollection from "../../api/collections/services";
-import ImageCollection from "../../api/collections/images";
 import UserCollection from "../../api/collections/users";
 import BookingCollection from "../../api/collections/bookings";
 import PostCollection from "../../api/collections/posts";
@@ -177,27 +176,8 @@ export function useUsers(user_publication, params, filter) {
     return UserCollection.find(filter).fetch();
   });
 
-  // get user profile image from database
-  const isLoadingImages = useSubscribe("profile_images");
-  let imagesData = useTracker(() => {
-    return ImageCollection.find({ imageType: "profile" }).fetch();
-  });
+  const isLoading = isLoadingUsers();
 
-  const isLoading = isLoadingUsers() || isLoadingImages();
-
-  // manual aggregation user data with their image
-  for (let i = 0; i < usersData.length; i++) {
-    for (let j = 0; j < imagesData.length; j++) {
-      // find matching image for the artist
-      if (
-        imagesData[j].imageType === "profile" &&
-        usersData[i].username === imagesData[j].target_id
-      ) {
-        usersData[i].profileImageData = imagesData[j].imageData;
-        break;
-      }
-    }
-  }
   return { isLoading, usersData };
 }
 
@@ -225,26 +205,15 @@ export function useSpecificService(serviceId) {
       username: serviceArtistUsername,
     }).fetch()[0];
   });
-
-  const isLoadingArtistProfile = useSubscribe(
-    "specific_profile_image",
-    serviceArtistUsername
-  );
-  let profileImageData = useTracker(() => {
-    return ImageCollection.find({
-      $and: [{ imageType: "profile" }, { target_id: serviceArtistUsername }],
-    }).fetch()[0];
-  });
+  
 
   const isLoading =
     isLoadingService() ||
-    isLoadingArtist() ||
-    isLoadingArtistProfile();
+    isLoadingArtist();
   return {
     isLoading,
     serviceData,
-    artistData,
-    profileImageData
+    artistData
   };
 }
 
@@ -311,20 +280,9 @@ export function useSpecificUser(username) {
     return UserCollection.find({ username: username }).fetch()[0];
   });
 
-  // get profile images from database
-  const isLoadingProfileImages = useSubscribe(
-    "specific_profile_image",
-    username
-  );
-  let profileImagesData = useTracker(() => {
-    return ImageCollection.find({
-      $and: [{ imageType: "profile" }, { target_id: username }],
-    }).fetch()[0];
-  });
+  const isLoading = isLoadingUser();
 
-  const isLoading = isLoadingUser() || isLoadingProfileImages();
-
-  return { isLoading, userData, profileImagesData };
+  return { isLoading, userData };
 }
 
 /**
