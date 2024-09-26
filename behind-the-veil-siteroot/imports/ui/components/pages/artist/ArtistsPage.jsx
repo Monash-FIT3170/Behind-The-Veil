@@ -43,7 +43,7 @@ export const ArtistsPage = () => {
                 key={user.username}
                 artistUsername={user.username}
                 artistAlias={user.profile.alias}
-                artistProfileImageData={user.profileImageData}/>)
+                artistProfileImageData={user.profile.profileImage ? user.profile.profileImage.imageData : user.profile.profileImage}/>)
         )
 
     // checks if the page and data has loaded

@@ -79,7 +79,7 @@ Meteor.methods({
     },
 
     'update_profile_image': function (userId, image) {
-        UserCollection.UserCollection.update(
+        UserCollection.update(
             {_id: userId},
             {$set: {'profile.profileImage': image}}
         )

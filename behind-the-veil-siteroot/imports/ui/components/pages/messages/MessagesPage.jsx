@@ -57,25 +57,14 @@ export const MessagesPage = () => {
             ]
         }).fetch();
     });
-    const isLoadingUserImages = useSubscribe('profile_images');
-    let usersImagesData = useTracker(() => {
-        return ImageCollection.find().fetch();
-    })
 
-    const isLoading = isLoadingChats() || isLoadingUserImages();
+    const isLoading = isLoadingChats();
 
     // manual aggregation into chatsData with the other user's images
     for (let i = 0; i < chatsData.length; i++) {
         // find the other user's username
         const otherUser = getOtherUsername(userInfo.username, chatsData[i]);
-
-        for (let j = 0; j < usersImagesData.length; j++) {
-            // find the other user's image and add their image to the chat data
-            if (usersImagesData[j].target_id === otherUser) {
-                chatsData[i].otherUserImage = usersImagesData[j].imageData;
-                break;
-            }
-        }
+        chatsData[i].otherUserImage = otherUser.profileImage ? otherUser.profileImage.imageData : otherUser.profileImage;
     }
 
     // sort chats data in descending order for the dates
