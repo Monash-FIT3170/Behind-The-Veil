@@ -3,8 +3,9 @@
  * File version: 1.0
  * Contributors: Laura
  */
+import { config } from '../../../../config.js';
 
-export const mapboxKey = 'pk.eyJ1IjoibHpoYTAxODEiLCJhIjoiY2x2ajl6cG0xMXA0NDJpbjFsMjg3MXRhcCJ9.O6uwgTLaLd3avXJGjJR_4A';
+export const mapboxKey = config.MAPBOX_KEY;
 
 export const getCoordinates = async (location) => {
     try {
