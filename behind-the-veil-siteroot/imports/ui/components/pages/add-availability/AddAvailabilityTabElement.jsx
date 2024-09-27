@@ -1,19 +1,16 @@
 /**
  * File Description: Add Availability Tab Component
- * File version: 1.2=0
+ * File version: 1.0
  * Contributor: Phillip
  * Source/Credit: Laura, Josh
  */
 
 import React, { useEffect, useId, useState } from "react";
-import WhiteBackground from "../../whiteBackground/WhiteBackground";
-import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
 import AvailabilityCalendar, {
   VALID_INTERVAL,
 } from "../../../components/availabilityCalendar/AvailabilityCalendar.jsx";
 import Input from "../../input/Input";
-import PreviousButton from "../../button/PreviousButton";
 import {
   eachHourOfInterval,
   format,
@@ -25,7 +22,6 @@ import {
   set,
   startOfDay,
 } from "date-fns";
-import { useParams, useNavigate } from "react-router-dom";
 import Tippy from "@tippyjs/react/headless";
 import QuestionMarkCircleIcon from "@heroicons/react/16/solid/QuestionMarkCircleIcon";
 import { useSpecificUser } from "../../DatabaseHelper.jsx";
@@ -37,7 +33,6 @@ const AddAvailability = ({ username }) => {
   //   const { artistUsername } = useParams();
 
   const artistUsername = username;
-  console.log(artistUsername);
   // message on save
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -301,6 +296,11 @@ const AddAvailability = ({ username }) => {
                     >
                       Save
                     </Button>
+                    <p className="main-text text-center pt-2">
+                      If availability timeslot is AFTER NOW then it won't appear
+                      for brides to book
+                    </p>
+
                     {successMessage && (
                       <div className="text-confirmed-colour mt-2">
                         {successMessage}
