@@ -4,22 +4,23 @@
  * Contributors: Lucas, Nikki, Kyle
  */
 
-import React, {useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
-import {useUserInfo} from "../../util";
+import { useUserInfo } from "../../util";
 import PageLayout from "/imports/ui/enums/PageLayout";
 import WhiteBackground from "/imports/ui/components/whiteBackground/WhiteBackground.jsx";
 import BackButton from "../../button/BackButton";
 import Input from "../../input/Input";
 import Button from "../../button/Button";
 
-import {CheckIcon, TrashIcon, XMarkIcon} from "@heroicons/react/24/outline";
+import { CheckIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import QuestionMarkCircleIcon from "@heroicons/react/16/solid/QuestionMarkCircleIcon";
 import UrlBasePath from "../../../enums/UrlBasePath";
-import {Modal} from "react-responsive-modal";
+import { Modal } from "react-responsive-modal";
 import Tippy from '@tippyjs/react/headless';
 import { useServices } from "../../DatabaseHelper";
+import Loader from "../../loader/Loader";
 
 export const AddEditServicePage = ({isEdit}) => {
     const navigateTo = useNavigate();
@@ -35,6 +36,10 @@ export const AddEditServicePage = ({isEdit}) => {
     const [servicePrice, setServicePrice] = useState(0);
     const [serviceDescription, setServiceDescription] = useState("");
 
+    // variable for submitting
+    const [successMessage, setSuccessMessage] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     // imagedb is an array of image objects from the database, and images is an array of image html elements
     const [imagedb, setImagedb] = useState([]);
     const [images, setImages] = useState([]);
@@ -47,13 +52,8 @@ export const AddEditServicePage = ({isEdit}) => {
         servicePrice: "",
         serviceDescription: "",
         images: "",
+        overall: ""
     });
-
-    // end status modal
-    const [open, setOpen] = useState(false);
-    const onOpenModal = () => setOpen(true);
-    const onCloseModal = () => setOpen(false);
-    const [isSuccess, setSuccess] = useState(false);
 
     // delete/archive modal
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -69,12 +69,12 @@ export const AddEditServicePage = ({isEdit}) => {
     }
 
     // get service ID from url and load service
-    const { serviceId } = useParams();
-    const { isLoading, servicesData } = useServices("specific_service", [serviceId], {}, false, false);
+    const {serviceId} = useParams();
+    const {isLoading, servicesData} = useServices("specific_service", [serviceId], {}, false, false);
 
     /**
      * function to upload an image to the frontend
-     * @param imageobj - The image object
+     * @param imageObj
      */
     const addImage = (imageObj) => {
         const image = (
@@ -89,7 +89,8 @@ export const AddEditServicePage = ({isEdit}) => {
                     className={"flex justify-center items-center w-12"}
                     onClick={() => removeImage(imageObj)}
                 >
-                    <XMarkIcon className="size-5 hover:bg-white-hover active:bg-light-grey-hover transition duration-200 ease-in-out"></XMarkIcon>
+                    <XMarkIcon
+                        className="size-5 hover:bg-white-hover active:bg-light-grey-hover transition duration-200 ease-in-out"></XMarkIcon>
                 </button>
             </div>
         );
@@ -98,45 +99,42 @@ export const AddEditServicePage = ({isEdit}) => {
 
     // load in existing service information if it is editing
     const [shouldAddImages, setShouldAddImages] = useState(false);
-    useEffect(() => {
-        if (isEdit) {
-            const retrieveService = () => {
-                return servicesData.filter((service) => service._id === serviceId)
-            };
 
-            const service = retrieveService()[0]
-                if (service.artistUsername !== userInfo.username) {
-                    navigateTo("/" + UrlBasePath.PROFILE);
-                }
-                setServiceName(service.serviceName);
-                setServiceType(service.serviceType);
-                setServiceDuration(service.serviceDuration);
-                setServicePrice(service.servicePrice);
-                setServiceDescription(service.serviceDesc);
-                console.log(servicesData);
-                console.log(service);
-                if (service.serviceImageData === "/imageNotFound.png") {
-                    setImagedb([{imageData: "/imageNotFound.png"}]);
-                } else {
-                    service.serviceImageData.forEach((image) => {
-                        setImagedb((prevImages) =>
-                            Array.from(
-                                new Set([
-                                    ...prevImages,
-                                    {
-                                        imageType: image.imageType,
-                                        imageData: image.imageData,
-                                        imageName: image.imageName,
-                                        imageSize: image.imageSize,
-                                    },
-                                ])
-                            )
-                        );
-                    });
-                    setShouldAddImages(true);
-                }
+    useEffect(() => {
+        if (isEdit && !isLoading) {
+            const service = servicesData.filter((service) => service._id === serviceId)[0]
+            if (service.artistUsername !== userInfo.username) {
+                navigateTo("/" + UrlBasePath.PROFILE);
+            }
+
+            setServiceName(service.serviceName);
+            setServiceType(service.serviceType);
+            setServiceDuration(service.serviceDuration);
+            setServicePrice(service.servicePrice);
+            setServiceDescription(service.serviceDesc);
+
+            if (service.serviceImageData === "/imageNotFound.png") {
+                setImagedb([{imageData: "/imageNotFound.png"}]);
+            } else {
+                service.serviceImageData.forEach((image) => {
+                    setImagedb((prevImages) =>
+                        Array.from(
+                            new Set([
+                                ...prevImages,
+                                {
+                                    imageType: image.imageType,
+                                    imageData: image.imageData,
+                                    imageName: image.imageName,
+                                    imageSize: image.imageSize,
+                                },
+                            ])
+                        )
+                    );
+                });
+                setShouldAddImages(true);
+            }
         }
-    }, []);
+    }, [isLoading]);
 
     useEffect(() => {
         if (shouldAddImages) {
@@ -222,6 +220,7 @@ export const AddEditServicePage = ({isEdit}) => {
     // Handles when the service is submitted
     const handleSubmit = (event) => {
         event.preventDefault();
+        setIsSubmitting(true)
 
         // input validation
         let newErrors = {};
@@ -268,24 +267,23 @@ export const AddEditServicePage = ({isEdit}) => {
             // edit
             new Promise((resolve, reject) => {
                 if (isEdit) {
-                    Meteor.call("update_service_details", serviceId, service, (error, result) => {
-                        if (error) {
-                            reject(`Error: ${error.message}`);
-                            setSuccess(false);
-                        } else {
-                            resolve(result);
-                            setSuccess(true);
-                        }
-                    });
-                    Meteor.call("remove_service_images", serviceId, (error, result) => {
-                        if (error) {
-                            reject(`Error: ${error.message}`);
-                            setSuccess(false);
-                        } else {
-                            resolve(result);
-                            setSuccess(true);
-                        }
-                    });
+                    // update the service
+                    Meteor.call("update_service_details", serviceId, service,
+                        (error) => {
+                            if (error) {
+                                reject(`Error: ${error.message}`);
+                            }
+                        });
+
+                    // remove all existing images
+                    Meteor.call("remove_service_images", serviceId,
+                        (error) => {
+                            if (error) {
+                                reject(`Error: ${error.message}`);
+                            }
+                        });
+
+                    // add all new images
                     imagedb.forEach((imageObj) =>
                         Meteor.call(
                             "add_image",
@@ -293,10 +291,19 @@ export const AddEditServicePage = ({isEdit}) => {
                             serviceId,
                             imageObj.imageData,
                             imageObj.imageName,
-                            imageObj.imageSize
+                            imageObj.imageSize,
+                            (error) => {
+                                if (error) {
+                                    reject(`Error: ${error.message}`);
+                                }
+                            }
                         )
                     );
+
+                    resolve(serviceId)
+
                 } else {
+                    // add the new service
                     Meteor.call(
                         "add_service",
                         serviceType,
@@ -308,71 +315,106 @@ export const AddEditServicePage = ({isEdit}) => {
                         (error, result) => {
                             if (error) {
                                 reject(`Error: ${error.message}`);
-                                setSuccess(false);
+
                             } else {
+                                // added new service successfully
                                 const newServiceId = result;
-                                resolve(
-                                    imagedb.forEach((imageObj) =>
-                                        Meteor.call(
-                                            "add_image",
-                                            "service",
-                                            newServiceId,
-                                            imageObj.imageData,
-                                            imageObj.imageName,
-                                            imageObj.imageSize
-                                        )
+
+                                // add each new image
+                                imagedb.forEach((imageObj) =>
+                                    Meteor.call(
+                                        "add_image",
+                                        "service",
+                                        newServiceId,
+                                        imageObj.imageData,
+                                        imageObj.imageName,
+                                        imageObj.imageSize,
+                                        (error) => {
+                                            reject(`Error: ${error.message}`);
+                                        }
                                     )
                                 );
-                                setSuccess(true);
+
+                                resolve(newServiceId)
                             }
                         }
                     );
                 }
+            }).then((serviceId) => {
+                // did not error, success
+                setIsSubmitting(false)
+                if (isEdit) {
+                    // edit, show success message
+                    setSuccessMessage("Service updated successfully!")
+
+                } else {
+                    // creation, navigate to new service page
+                    navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}`);
+                }
+
             }).catch(() => {
                 // there was an error
-                setSuccess(false);
+                setErrors({
+                    overall: "Failed to " + (isEdit ? "update" : "create") + " service, please try again."
+                })
+                setIsSubmitting(false)
             });
-
-            onOpenModal();
+        } else {
+            // errored, no longer submitting
+            setIsSubmitting(false)
         }
     };
 
-    // Handles the delete (or archive) service functionality.
+    // Handles delete (or archive) service functionality.
     const handleDelete = () => {
         // No need to write a promise - as the Collection "bookings" is only being read and not altered.
-        if (Meteor.call("has_booking_of_service", serviceId)) {
-            // Service is to be archived.
 
-            // Write a promise - as the Collection "services" is being altered.
-            new Promise((resolve, reject) => {
-                Meteor.call("update_service_details", serviceId, { serviceActive: false }, (error, result) => {
+        new Promise((resolve, reject) => {
+            Meteor.call("has_booking_of_service", serviceId,
+                (error, result) => {
                     if (error) {
                         reject(`Error: ${error.message}`);
                     } else {
                         resolve(result);
-
-                        // If the deletion (or archiving) is successful, then navigate the user back to the PROFILE page.
-                        navigateTo("/" + UrlBasePath.PROFILE);
                     }
-                });
-            });
-        } else {
-            // Service is to be deleted.
+                })
+        }).then((hasBookings) => {
+            if (hasBookings) {
+                // Service is to be archived.
 
-            // Write a promise - as the Collection "services" is being altered.
-            new Promise((resolve, reject) => {
-                Meteor.call("delete_service", serviceId, (error, result) => {
-                    if (error) {
-                        reject(`Error: ${error.message}`);
-                    } else {
-                        resolve(result);
-
-                        // If the deletion (or archiving) is successful, then navigate the user back to the PROFILE page.
-                        navigateTo("/" + UrlBasePath.PROFILE);
-                    }
+                // Write a promise - as the Collection "services" is being altered.
+                new Promise((resolve, reject) => {
+                    Meteor.call("update_service_details", serviceId, {serviceActive: false},
+                        (error) => {
+                            if (error) {
+                                reject(`Error: ${error.message}`);
+                            } else {
+                                // If the archiving is successful, then navigate the user back to the PROFILE page.
+                                navigateTo("/" + UrlBasePath.PROFILE);
+                            }
+                        });
                 });
-            });
-        }
+            } else {
+                // Service is to be deleted.
+
+                // Write a promise - as the Collection "services" is being altered.
+                new Promise((resolve, reject) => {
+                    Meteor.call("delete_service", serviceId, (error) => {
+                        if (error) {
+                            reject(`Error: ${error.message}`);
+                        } else {
+                            // If the deletion is successful, then navigate the user back to the PROFILE page.
+                            navigateTo("/" + UrlBasePath.PROFILE);
+                        }
+                    });
+                });
+            }
+        }).catch(() => {
+            onCloseDeleteModal()
+            setErrors({
+                overall: "Failed to delete service, please try again."
+            })
+        })
     };
 
     const infoText =
@@ -396,210 +438,197 @@ export const AddEditServicePage = ({isEdit}) => {
         </Tippy>
     );
 
-    return (
-        <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-            <BackButton to={"/" + UrlBasePath.PROFILE} />
-            <div className="flex items-center justify-center">
-                <div className="flex flex-col w-[60%] gap-6">
-                    <p className="title-text">{title}</p>
+    if (isLoading) {
+        return (
+            <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
+                <Loader
+                    loadingText={"loading . . ."}
+                    isLoading={isLoading}
+                    size={100}
+                    speed={1.5}
+                />
+            </WhiteBackground>
+        )
+    } else {
 
-                    <div className="flex flex-col gap-1">
-                        <Input
-                            type="text"
-                            label={<label className="main-text">Service Name</label>}
-                            value={serviceName}
-                            onChange={(e) => setServiceName(e.target.value)}
-                        />
-                        {errors.serviceName && <span className="text-cancelled-colour">{errors.serviceName}</span>}
-                    </div>
+        return (
+            <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
+                <BackButton to={"/" + UrlBasePath.PROFILE}/>
+                <div className="flex items-center justify-center">
+                    <div className="flex flex-col w-[60%] gap-6">
+                        <p className="title-text">{title}</p>
 
-                    <div className="flex flex-col gap-1">
                         <div className="flex flex-col gap-1">
-                            <label className="main-text" htmlFor="type">
-                                Service Type
-                            </label>
-                            <select
-                                name="type"
-                                value={serviceType}
-                                className="flex flex-col gap-1 input-base  md:w-1/2 md:max-w-72"
-                                onChange={(e) => setServiceType(e.target.value)}
-                            >
-                                <option value="None">Please select an option</option>
-                                <option value="Hair">Hair</option>
-                                <option value="Makeup">Makeup</option>
-                            </select>
-                        </div>
-                        {errors.serviceType && <span className="text-cancelled-colour">{errors.serviceType}</span>}
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                        <Input
-                            className="md:w-1/2 md:max-w-72"
-                            type="number"
-                            min="1"
-                            max="24"
-                            step="1"
-                            label={<label className="main-text">Duration (Hours)</label>}
-                            value={serviceDuration}
-                            onChange={(e) => setServiceDuration(e.target.value)}
-                        />
-                        {errors.serviceDuration && (
-                            <span className="text-cancelled-colour">{errors.serviceDuration}</span>
-                        )}
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                        <Input
-                            className="md:w-1/2 md:max-w-72"
-                            type="number"
-                            min="0.00"
-                            step="0.50"
-                            label={<label className="main-text">Price (AUD)</label>}
-                            value={servicePrice}
-                            onChange={(e) => setServicePrice(e.target.value)}
-                        />
-                        {errors.servicePrice && <span className="text-cancelled-colour">{errors.servicePrice}</span>}
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                        <label className="main-text">Description</label>
-                        <textarea
-                            className="input-base h-48"
-                            value={serviceDescription}
-                            onChange={(e) => setServiceDescription(e.target.value)}
-                        />
-                        {errors.serviceDescription && (
-                            <span className="text-cancelled-colour">{errors.serviceDescription}</span>
-                        )}
-                    </div>
-
-                    {/* file upload area */}
-                    <div className="flex flex-col gap-1">
-                        <div className="flex flex-row">
                             <Input
-                                className="text-opacity-0 border-r-0 rounded-r-none w-[130px]"
-                                type="file"
-                                accept={allowedFileTypeExtensions?.join(",")}
-                                label={<label className="main-text">Photos</label>}
-                                onChange={handleFileChange}
-                                onClick={(event) => {
-                                    // this is to allow the same file to be selected again after reset
-                                    event.target.value = null;
-                                }}
-                                multiple
+                                type="text"
+                                label={<label className="main-text">Service Name</label>}
+                                value={serviceName}
+                                onChange={(e) => setServiceName(e.target.value)}
                             />
-                            <TrashIcon
-                                className="input-base border-l-0 rounded-l-none h-[48px] w-[48px] mt-[28px] size-5 hover:bg-white-hover active:bg-light-grey-hover transition duration-200 ease-in-out"
-                                onClick={removeAllImages}
-                            ></TrashIcon>
+                            {errors.serviceName && <span className="text-cancelled-colour">{errors.serviceName}</span>}
                         </div>
-                        {fileRejected && <span className="text-cancelled-colour">{fileRejectedMessage}</span>}
-                        {errors.images && <span className="text-cancelled-colour">{errors.images}</span>}
-                    </div>
 
-                    <div className="grid md:grid-cols-2 gap-5" id="preview">
-                        {images}
-                    </div>
+                        <div className="flex flex-col gap-1">
+                            <div className="flex flex-col gap-1">
+                                <label className="main-text" htmlFor="type">
+                                    Service Type
+                                </label>
+                                <select
+                                    name="type"
+                                    value={serviceType}
+                                    className="flex flex-col gap-1 input-base  md:w-1/2 md:max-w-72"
+                                    onChange={(e) => setServiceType(e.target.value)}
+                                >
+                                    <option value="None">Please select an option</option>
+                                    <option value="Hair">Hair</option>
+                                    <option value="Makeup">Makeup</option>
+                                </select>
+                            </div>
+                            {errors.serviceType && <span className="text-cancelled-colour">{errors.serviceType}</span>}
+                        </div>
 
-                    <Button
-                        className="flex bg-secondary-purple hover:bg-secondary-purple-hover mt-[15px]"
-                        onClick={handleSubmit}
-                    >
-                        <CheckIcon className="icon-base" />
-                        {button}
-                    </Button>
+                        <div className="flex flex-col gap-1">
+                            <Input
+                                className="md:w-1/2 md:max-w-72"
+                                type="number"
+                                min="1"
+                                max="24"
+                                step="1"
+                                label={<label className="main-text">Duration (Hours)</label>}
+                                value={serviceDuration}
+                                onChange={(e) => setServiceDuration(e.target.value)}
+                            />
+                            {errors.serviceDuration && (
+                                <span className="text-cancelled-colour">{errors.serviceDuration}</span>
+                            )}
+                        </div>
+
+                        <div className="flex flex-col gap-1">
+                            <Input
+                                className="md:w-1/2 md:max-w-72"
+                                type="number"
+                                min="0.00"
+                                step="0.50"
+                                label={<label className="main-text">Price (AUD)</label>}
+                                value={servicePrice}
+                                onChange={(e) => setServicePrice(e.target.value)}
+                            />
+                            {errors.servicePrice &&
+                                <span className="text-cancelled-colour">{errors.servicePrice}</span>}
+                        </div>
+
+                        <div className="flex flex-col gap-1">
+                            <label className="main-text">Description</label>
+                            <textarea
+                                className="input-base h-48"
+                                value={serviceDescription}
+                                onChange={(e) => setServiceDescription(e.target.value)}
+                            />
+                            {errors.serviceDescription && (
+                                <span className="text-cancelled-colour">{errors.serviceDescription}</span>
+                            )}
+                        </div>
+
+                        {/* file upload area */}
+                        <div className="flex flex-col gap-1">
+                            <div className="flex flex-row">
+                                <Input
+                                    className="text-opacity-0 border-r-0 rounded-r-none w-[130px]"
+                                    type="file"
+                                    accept={allowedFileTypeExtensions?.join(",")}
+                                    label={<label className="main-text">Photos</label>}
+                                    onChange={handleFileChange}
+                                    onClick={(event) => {
+                                        // this is to allow the same file to be selected again after reset
+                                        event.target.value = null;
+                                    }}
+                                    multiple
+                                />
+                                <TrashIcon
+                                    className="input-base border-l-0 rounded-l-none h-[48px] w-[48px] mt-[28px] size-5 hover:bg-white-hover active:bg-light-grey-hover transition duration-200 ease-in-out"
+                                    onClick={removeAllImages}
+                                ></TrashIcon>
+                            </div>
+                            {fileRejected && <span className="text-cancelled-colour">{fileRejectedMessage}</span>}
+                            {errors.images && <span className="text-cancelled-colour">{errors.images}</span>}
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-5" id="preview">
+                            {images}
+                        </div>
+
+                        {/*error/success message*/}
+                        {errors.overall && <div className="text-cancelled-colour mt-2">{errors.overall}</div>}
+                        {successMessage && <div className="text-confirmed-colour mt-2">{successMessage}</div>}
+
+                        <Button className="flex bg-secondary-purple hover:bg-secondary-purple-hover mt-[15px]"
+                                disabled={isSubmitting}
+                                onClick={handleSubmit}>
+                            <CheckIcon className="icon-base"/>
+                            {button}
+                        </Button>
+                    </div>
                 </div>
-            </div>
 
-            <div className="pl-[80%] flex items-center gap-2">
-                {isEdit && (
-                    <>
-                        <span
-                            className="small-text text-cancelled-colour underline cursor-pointer"
-                            onClick={onOpenDeleteModal}
-                        >
+                {/* delete button on the bottom */}
+                <div className="pl-[80%] flex items-center gap-2">
+                    {isEdit && (
+                        <>
+                        <span className="small-text text-cancelled-colour underline cursor-pointer"
+                              onClick={onOpenDeleteModal}>
                             Delete / Archive Service
                         </span>
-                        {getDeleteHelperElement(true)}
-                    </>
-                )}
-            </div>
-
-            <Modal
-                classNames={{
-                    modal: "w-[550px] h-[300px] rounded-[45px] bg-glass-panel-background border border-main-blue",
-                }}
-                open={open}
-                onClose={onCloseModal}
-                center
-                showCloseIcon={false}
-            >
-                <div className="flex flex-col justify-center items-center h-full gap-y-10">
-                    <h2 className="text-center title-text px-4">
-                        {(isEdit ? "Modification" : "Creation") + (isSuccess ? " was successful" : " failed")}
-                    </h2>
-                    <Button
-                        className={
-                            "btn-base ps-[25px] pe-[25px] flex gap-1 " +
-                            (isSuccess ? "bg-secondary-purple hover:bg-secondary-purple-hover" : "")
-                        }
-                        onClick={() => {
-                            onCloseModal();
-                            if (isSuccess) {
-                                navigateTo("/" + UrlBasePath.PROFILE);
-                            }
-                        }}
-                    >
-                        <CheckIcon className="icon-base" />
-                        {isSuccess ? "Confirm" : "Close"}
-                    </Button>
+                            {getDeleteHelperElement(true)}
+                        </>
+                    )}
                 </div>
-            </Modal>
 
-            <Modal
-                classNames={{
-                    modal: "w-[550px] h-[300px] rounded-[45px] bg-glass-panel-background border border-main-blue",
-                }}
-                open={openDeleteModal}
-                onClose={onCloseDeleteModal}
-                center
-                showCloseIcon={false}
-            >
-                <div className="flex flex-col justify-center items-center h-full gap-y-10">
-                    <h2 className="text-center title-text px-4">Delete / Archive?</h2>
-                    <div className={"flex flex-col gap-1 items-center justify-start"}>
+                {/* delete modal */}
+                <Modal
+                    classNames={{
+                        modal: "w-[550px] h-[300px] rounded-[45px] bg-glass-panel-background border border-main-blue",
+                    }}
+                    open={openDeleteModal}
+                    onClose={onCloseDeleteModal}
+                    center
+                    showCloseIcon={false}
+                >
+                    <div className="flex flex-col justify-center items-center h-full gap-y-10">
+                        <h2 className="text-center title-text px-4">Delete / Archive?</h2>
+                        <div className={"flex flex-col gap-1 items-center justify-start"}>
                         <span className="main-text text-center flex flex-row items-center justify-start gap-1">
                             Are you sure you'd like to delete / archive this service? {getDeleteHelperElement(false)}
                         </span>
 
-                        <span className={"text-cancelled-colour main-text"}>This action cannot be reversed. </span>
+                            <span className={"text-cancelled-colour main-text"}>This action cannot be reversed. </span>
+                        </div>
+                        <div className="flex items-center gap-16">
+                            <Button
+                                className="btn-base ps-[25px] pe-[25px] flex gap-1 bg-secondary-purple hover:bg-secondary-purple-hover"
+                                onClick={() => {
+                                    // If the user confirms deletion (or archiving).
+                                    handleDelete();
+                                }}
+                            >
+                                <CheckIcon className="icon-base"/>
+                                <span>Yes</span>
+                            </Button>
+                            <Button
+                                className="btn-base ps-[25px] pe-[25px] flex gap-1"
+                                onClick={() => {
+                                    // If the user rejects deletion (or archiving), simply close the modal.
+                                    onCloseDeleteModal();
+                                }}
+                            >
+                                <XMarkIcon className="icon-base"/>
+                                <span>No</span>
+                            </Button>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-16">
-                        <Button
-                            className="btn-base ps-[25px] pe-[25px] flex gap-1 bg-secondary-purple hover:bg-secondary-purple-hover"
-                            onClick={() => {
-                                // If the user confirms deletion (or archiving).
-                                handleDelete();
-                            }}
-                        >
-                            <CheckIcon className="icon-base" />
-                            <span>Yes</span>
-                        </Button>
-                        <Button
-                            className="btn-base ps-[25px] pe-[25px] flex gap-1"
-                            onClick={() => {
-                                // If the user rejects deletion (or archiving), simply close the modal.
-                                onCloseDeleteModal();
-                            }}
-                        >
-                            <XMarkIcon className="icon-base" />
-                            <span>No</span>
-                        </Button>
-                    </div>
-                </div>
-            </Modal>
-        </WhiteBackground>
-    );
+                </Modal>
+            </WhiteBackground>
+        );
+    }
 };
 
 export default AddEditServicePage;
