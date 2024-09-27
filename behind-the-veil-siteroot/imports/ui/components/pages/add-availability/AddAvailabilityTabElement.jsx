@@ -1,7 +1,8 @@
 /**
- * File Description: Add Availability page
- * File version: 1.2
- * Contributors: Laura, Josh
+ * File Description: Add Availability Tab Component
+ * File version: 1.2=0
+ * Contributor: Phillip
+ * Source/Credit: Laura, Josh
  */
 
 import React, { useEffect, useId, useState } from "react";
@@ -32,10 +33,11 @@ import { useSpecificUser } from "../../DatabaseHelper.jsx";
 /**
  * Page for artist to add availability
  */
-const AddAvailability = (username) => {
+const AddAvailability = ({ username }) => {
   //   const { artistUsername } = useParams();
 
-  const { artistUsername } = username;
+  const artistUsername = username;
+  console.log(artistUsername);
   // message on save
   const [successMessage, setSuccessMessage] = useState("");
 

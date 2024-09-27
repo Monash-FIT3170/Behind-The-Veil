@@ -12,6 +12,7 @@ import AddAvailabilityTabElement from "../../add-availability/AddAvailabilityTab
  * @param username {string} - username of the current user's profile
  */
 export const ArtistAvailabilityTab = ({ username }) => {
+  console.log(username);
   return (
     <div>
       <AddAvailabilityTabElement
