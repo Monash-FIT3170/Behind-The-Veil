@@ -34,7 +34,6 @@ import { useSpecificUser } from "../../DatabaseHelper.jsx";
  */
 const AddAvailability = () => {
   const { artistUsername } = useParams();
-  console.log(artistUsername);
 
   // message on save
   const [successMessage, setSuccessMessage] = useState("");

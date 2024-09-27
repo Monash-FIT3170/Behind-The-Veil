@@ -15,7 +15,8 @@ import ArtistServicesTab from "./artistTabs/ArtistServicesTab";
 import ArtistReviewsTab from "./artistTabs/ArtistReviewsTab";
 import BookingStatus from "../../../enums/BookingStatus";
 
-import { useUserBookings } from "../../DatabaseHelper.jsx";
+import { useUserBookings, useSpecificUser } from "../../DatabaseHelper.jsx";
+import { isWithinInterval, startOfWeek, endOfWeek, parseISO } from "date-fns";
 
 /**
  * Component for artist's profile tabs
@@ -25,11 +26,40 @@ import { useUserBookings } from "../../DatabaseHelper.jsx";
 export const ArtistProfileTabs = ({ userInfo }) => {
   // Variable for tracking if there bookings the artist hasn't yet responded to
   const [unrespondedBookings, setUnrespondedBookings] = useState(false);
+  const [weeklyAvailabilityFilled, setWeeklyAvailabilityFilled] =
+    useState(false);
+
+  const { isLoadingUser, userData } = useSpecificUser(userInfo.username);
+  const userAvailability = userData.availability;
 
   // Get the artist booking details
   const { isLoadingUserBooking, artistBookingData } = useUserBookings(
     userInfo.username
   );
+
+  useEffect(() => {
+    const checkForCurrentWeekAvailability = (availability) => {
+      const today = new Date();
+      const currentWeek = {
+        start: startOfWeek(today),
+        end: endOfWeek(today),
+      };
+
+      const dates = Object.keys(availability);
+      const hasDateInCurrentWeek = dates.some((date) =>
+        isWithinInterval(parseISO(date), currentWeek)
+      );
+
+      setWeeklyAvailabilityFilled(hasDateInCurrentWeek);
+    };
+
+    if (userData?.availability) {
+      checkForCurrentWeekAvailability(userData.availability);
+    }
+  }, [userData]);
+
+  console.log(weeklyAvailabilityFilled);
+
   const isLoading = isLoadingUserBooking();
 
   // Loop through artist booking data to identify if there is a booking the artist hasn't responded to
@@ -64,7 +94,12 @@ export const ArtistProfileTabs = ({ userInfo }) => {
             <span className="absolute top-0 h-2 w-2 bg-red-500 rounded-full"></span>
           )}
         </span>,
-        <span key={3}>Availability</span>,
+        <span key={3} className="relative">
+          Availability
+          {weeklyAvailabilityFilled == false && (
+            <span className="absolute top-0 h-2 w-2 bg-red-500 rounded-full"></span>
+          )}
+        </span>,
         <span key={4}>My Services</span>,
         <span key={5}>Gallery</span>,
         <span key={6}>Reviews</span>,
