@@ -4,13 +4,21 @@
  * Contributors: Phillip, Laura, Nikki
  */
 
+import React from "react";
+import AddAvailabilityTabElement from "../../add-availability/AddAvailabilityTabElement";
 /**
  * Availability tab of an artist's profile
  *
  * @param username {string} - username of the current user's profile
  */
 export const ArtistAvailabilityTab = ({ username }) => {
-  return "ah";
+  return (
+    <div>
+      <AddAvailabilityTabElement
+        username={username}
+      ></AddAvailabilityTabElement>
+    </div>
+  );
 };
 
 export default ArtistAvailabilityTab;

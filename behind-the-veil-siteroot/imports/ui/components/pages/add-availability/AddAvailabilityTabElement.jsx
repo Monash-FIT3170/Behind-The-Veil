@@ -32,10 +32,10 @@ import { useSpecificUser } from "../../DatabaseHelper.jsx";
 /**
  * Page for artist to add availability
  */
-const AddAvailability = () => {
-  const { artistUsername } = useParams();
-  console.log(artistUsername);
+const AddAvailability = (username) => {
+  //   const { artistUsername } = useParams();
 
+  const { artistUsername } = username;
   // message on save
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -169,9 +169,7 @@ const AddAvailability = () => {
   );
 
   return (
-    <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-      <PreviousButton />
-
+    <>
       {/* Main container for content */}
       <div className="flex flex-col gap-4 xl:px-40">
         {/* input form */}
@@ -313,7 +311,7 @@ const AddAvailability = () => {
           </div>
         </form>
       </div>
-    </WhiteBackground>
+    </>
   );
 };
 
