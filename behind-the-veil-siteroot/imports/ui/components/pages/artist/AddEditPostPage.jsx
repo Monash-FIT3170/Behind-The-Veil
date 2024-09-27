@@ -20,11 +20,14 @@ export const AddEditPostPage = ({ isEdit }) => {
   const title = isEdit ? "Edit Photo In Gallery" : "Add Photo To Gallery";
   const button = isEdit ? "Save" : "Save";
 
-  const [postDescription, setInputReason] = useState("");
+  const [postDescription, setPostDescription] = useState("");
   const [inputFile, setInputFile] = useState(null);
   const [fileError, setFileError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [overallErrorMessage, setOverallErrorMessage] = useState("");
+  const [overallSuccessMessage, setOverallSuccessMessage] = useState("");
   const date = new Date();
 
   const navigateTo = useNavigate();
@@ -36,7 +39,7 @@ export const AddEditPostPage = ({ isEdit }) => {
     navigateTo(`/`);
   }
 
-  // gets the postId from the URL 
+  // gets the postId from the URL
   const { postId } = useParams();
 
   const fileInputRef = useRef(null); // used since the file classname is hidden to ensure that ui is in specific format
@@ -71,14 +74,14 @@ export const AddEditPostPage = ({ isEdit }) => {
           });
         });
       };
-      // firsty use the retrievePost function
+      // first use the retrievePost function
       retrievePost()
         .then((post) => {
           // Validate that the post belongs to the current user if not take them away
           if (post.artistUsername !== userInfo.username) {
             navigateTo("/" + UrlBasePath.PROFILE);
           }
-          setInputReason(post.postDescription); // Set the post description
+          setPostDescription(post.postDescription); // Set the post description
           return retrieveImage(); // Fetch the image next
         })
         .then((image) => {
@@ -95,7 +98,7 @@ export const AddEditPostPage = ({ isEdit }) => {
   // function to handle description
   function handleInputChange(event) {
     const description = event.target.value;
-    setInputReason(description);
+    setPostDescription(description);
     if (event.target.value) {
       setDescriptionError(""); // Clear the error when a description is entered
     }
@@ -133,8 +136,12 @@ export const AddEditPostPage = ({ isEdit }) => {
   }
 
   // main function to handle what's entered on the page when "save" is pressed
-  function handleAddPost(event) {
+  function handleSubmit(event) {
     event.preventDefault();
+    setIsSubmitting(true)
+    setOverallSuccessMessage("")
+    setOverallErrorMessage("")
+
     let hasError = false;
     let postDate = date.toLocaleDateString("en-US", {
       month: "2-digit",
@@ -161,6 +168,7 @@ export const AddEditPostPage = ({ isEdit }) => {
     }
 
     if (hasError) {
+      setIsSubmitting(false)
       return;
     }
 
@@ -188,8 +196,8 @@ export const AddEditPostPage = ({ isEdit }) => {
             if (error) {
               reject(`Error: ${error.message}`);
             } else {
-              console.log("post addded with:", editPostId);
-              resolve(editPostId); 
+              console.log("post added with:", editPostId);
+              resolve(editPostId);
             }
           }
         );
@@ -225,8 +233,7 @@ export const AddEditPostPage = ({ isEdit }) => {
                   reject(`Error: ${error.message}`);
                 } else {
                   resolve(imageId);
-                  alert("Post edited successfully!");
-                  navigateTo("/" + UrlBasePath.PROFILE);
+                  setOverallSuccessMessage("Post updated successfully!")
                 }
               }
             );
@@ -251,8 +258,12 @@ export const AddEditPostPage = ({ isEdit }) => {
             );
           });
         }
-      })
-      .catch((reason) => alert(reason));
+      }).then(() => {
+      setIsSubmitting(false)
+    }).catch(() => {
+      setIsSubmitting(false)
+      setOverallErrorMessage("Failed to " + (isEdit ? "update" : "create") + " post, please try again.")
+    });
   }
 
   function handleFileButtonClick() {
@@ -330,10 +341,13 @@ export const AddEditPostPage = ({ isEdit }) => {
         <div className="flex gap-10">
           {/* save button to add post to gallery tab */}
           <div className="flex flex-col gap-4 grow">
-            <Button
-              className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"
-              onClick={handleAddPost}
-            >
+              {/*error/success message*/}
+              {overallErrorMessage && <div className="text-cancelled-colour mt-2">{overallErrorMessage}</div>}
+              {overallSuccessMessage && <div className="text-confirmed-colour mt-2">{overallSuccessMessage}</div>}
+
+            <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"
+                    disabled={isSubmitting}
+                    onClick={handleSubmit}>
               <CheckIcon className="icon-base" />
               {button}
             </Button>
