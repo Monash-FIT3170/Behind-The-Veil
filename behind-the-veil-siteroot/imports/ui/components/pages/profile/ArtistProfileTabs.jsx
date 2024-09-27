@@ -26,7 +26,7 @@ import { isWithinInterval, startOfWeek, endOfWeek, parseISO } from "date-fns";
 export const ArtistProfileTabs = ({ userInfo }) => {
   // Variable for tracking if there bookings the artist hasn't yet responded to
   const [unrespondedBookings, setUnrespondedBookings] = useState(false);
-  const [weeklyAvailabilityFilled, setWeeklyAvailabilityFilled] =
+  const [weeklyAvailabilityEntered, setWeeklyAvailabilityEntered] =
     useState(false);
 
   const { isLoadingUser, userData } = useSpecificUser(userInfo.username);
@@ -50,7 +50,7 @@ export const ArtistProfileTabs = ({ userInfo }) => {
         isWithinInterval(parseISO(date), currentWeek)
       );
 
-      setWeeklyAvailabilityFilled(hasDateInCurrentWeek);
+      setWeeklyAvailabilityEntered(hasDateInCurrentWeek);
     };
 
     if (userData?.availability) {
@@ -58,7 +58,7 @@ export const ArtistProfileTabs = ({ userInfo }) => {
     }
   }, [userData]);
 
-  console.log(weeklyAvailabilityFilled);
+  console.log(weeklyAvailabilityEntered);
 
   const isLoading = isLoadingUserBooking();
 
@@ -96,7 +96,7 @@ export const ArtistProfileTabs = ({ userInfo }) => {
         </span>,
         <span key={3} className="relative">
           Availability
-          {weeklyAvailabilityFilled == false && (
+          {weeklyAvailabilityEntered == false && (
             <span className="absolute top-0 h-2 w-2 bg-red-500 rounded-full"></span>
           )}
         </span>,
