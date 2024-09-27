@@ -3,17 +3,17 @@
  * File version: 1.2
  * Contributors: Kyle, Nikki
  */
-import React, {useEffect, useState} from "react";
-import {Meteor} from "meteor/meteor";
-import {useSubscribe, useTracker} from "meteor/react-meteor-data";
-import {ArrowUpTrayIcon, CheckIcon} from "@heroicons/react/24/outline";
+import React, { useEffect, useState } from "react";
+import { Meteor } from "meteor/meteor";
+import { useSubscribe, useTracker } from "meteor/react-meteor-data";
+import { ArrowUpTrayIcon, CheckIcon } from "@heroicons/react/24/outline";
 
 import ImageCollection from "../../../../../api/collections/images";
 
 import Input from "../../../input/Input";
 import Button from "../../../button/Button.jsx";
 import ProfilePhoto from "../../../profilePhoto/ProfilePhoto.jsx"
-import {useUserInfo} from "../../../util";
+import { useUserInfo } from "../../../util";
 import Loader from "../../../loader/Loader";
 import UserCollection from "../../../../../api/collections/users";
 
@@ -55,6 +55,7 @@ export const AccountDetails = () => {
     });
 
     // Keeps track of the values in the text inputs
+    const [isSubmitting, setIsSubmitting] = useState(false)
     const [formState, setFormState] = useState({
         alias: "",
         email: "",
@@ -123,6 +124,7 @@ export const AccountDetails = () => {
     // Updates the values inputted into the text fields, if they have changed and are valid.
     const handleSave = (event) => {
         event.preventDefault();
+        setIsSubmitting(true)
 
         // Grabs the updated values from the formState object. (which keeps track of these values as they are changed in the text fields).
         const {alias, email} = formState;
@@ -159,25 +161,53 @@ export const AccountDetails = () => {
         // Update text errors state with new error messages
         setTextErrors(newErrors);
 
+        console.log(isError)
         if (!isError) {
-            // Update alias
-            if (alias !== userInfo.alias && alias !== "") {
-                Meteor.call('update_alias', userInfo.id, alias);
-            }
 
-            // Update email address
-            if (email !== userInfo.email && email !== "") {
-                Meteor.call('update_email', userInfo.id, userInfo.email, email);
-            }
+            new Promise((resolve, reject) => {
+                // Update alias
+                if (alias !== userInfo.alias && alias !== "") {
+                    Meteor.call('update_alias', userInfo.id, alias,
+                        (error) => {
+                            if (error) {
+                                reject(error)
+                            }
+                        });
+                }
 
-            // update profile image
-            if (uploadedFile) {
-                // todo, after image upload setup completed
-                //  remove old profile image then insert the new one
-            }
+                // Update email address
+                if (email !== userInfo.email && email !== "") {
+                    Meteor.call('update_email', userInfo.id, userInfo.email, email,
+                        (error) => {
+                            if (error) {
+                                reject(error)
+                            }
+                        });
+                }
 
-            // reload after update
-            window.location.reload();
+                // update profile image
+                if (uploadedFile) {
+                    // todo, after image upload setup completed
+                    //  remove old profile image then insert the new one
+                }
+
+                resolve()
+
+            }).then(() => {
+                // reload after update
+                setIsSubmitting(false)
+                setFormState({
+                    alias: "",
+                    email: "",
+                })
+
+            }).catch(() => {
+                setIsSubmitting(false)
+                setTextErrors({overall: "Failed to update account settings. Please try again."})
+            })
+
+        } else {
+            setIsSubmitting(false)
         }
     };
 
@@ -262,10 +292,12 @@ export const AccountDetails = () => {
 
                 </div>
 
+                {textErrors.overall && <span className="text-cancelled-colour">{textErrors.overall}</span>}
+
                 {/* Save button */}
-                <Button
-                    className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"
-                    onClick={handleSave}>
+                <Button disabled={isSubmitting}
+                        className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2 load-when-disabled"
+                        onClick={handleSave}>
                     <CheckIcon className="icon-base"/>
                     Save Changes
                 </Button>

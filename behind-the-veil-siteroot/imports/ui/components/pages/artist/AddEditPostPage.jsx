@@ -345,7 +345,7 @@ export const AddEditPostPage = ({ isEdit }) => {
               {overallErrorMessage && <div className="text-cancelled-colour mt-2">{overallErrorMessage}</div>}
               {overallSuccessMessage && <div className="text-confirmed-colour mt-2">{overallSuccessMessage}</div>}
 
-            <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"
+            <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2 load-when-disabled"
                     disabled={isSubmitting}
                     onClick={handleSubmit}>
               <CheckIcon className="icon-base" />

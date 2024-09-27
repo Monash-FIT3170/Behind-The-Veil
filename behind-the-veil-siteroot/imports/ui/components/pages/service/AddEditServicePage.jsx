@@ -561,7 +561,7 @@ export const AddEditServicePage = ({isEdit}) => {
                         {errors.overall && <div className="text-cancelled-colour mt-2">{errors.overall}</div>}
                         {successMessage && <div className="text-confirmed-colour mt-2">{successMessage}</div>}
 
-                        <Button className="flex bg-secondary-purple hover:bg-secondary-purple-hover mt-[15px]"
+                        <Button className="flex bg-secondary-purple hover:bg-secondary-purple-hover mt-[15px] load-when-disabled"
                                 disabled={isSubmitting}
                                 onClick={handleSubmit}>
                             <CheckIcon className="icon-base"/>

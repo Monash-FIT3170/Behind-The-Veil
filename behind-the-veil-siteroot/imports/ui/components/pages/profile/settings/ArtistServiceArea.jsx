@@ -34,24 +34,29 @@ export const ArtistServiceArea = () => {
         setSuccessMessage('');
         setErrorMessage('')
 
-        if (!radius || location.trim() === '') {
-            setErrorMessage('Please fill in all fields');
-        } else {
-            return new Promise((resolve, reject) => {
-                Meteor.call('update_service_area', user._id, location, radius,
-                    (error) => {
-                        if (error) {
-                            reject(error);
-                        } else {
-                            setLocation('');
-                            setRadius('');
-                            setSuccessMessage('Service Area changed successfully!');
-                            resolve(user._id);
-                        }
-                    }
-                );
-            })
+
+        if (!radius && location.trim() === '') {
+            setErrorMessage('No value updated');
+            return;
         }
+
+        const updatedRadius = radius ? radius : user.profile.artistServiceRadius
+        const updatedLocation = location.trim() ? location.trim() : user.profile.artistServiceLocation
+
+        return new Promise((resolve, reject) => {
+            Meteor.call('update_service_area', user._id, updatedLocation, updatedRadius,
+                (error) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        setLocation('');
+                        setRadius('');
+                        setSuccessMessage('Service Area changed successfully!');
+                        resolve(user._id);
+                    }
+                }
+            );
+        })
 
     };
 
