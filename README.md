@@ -64,7 +64,113 @@ npm install -g meteor
 
 ### React
 
-- Installing meteor already installs React so you don't need to do anything!
+Installing meteor already installs React so you don't need to do anything!
+
+
+### Email SMTP Server
+Certain functions in the application require the ability to send emails, thus these third-party 
+dependencies that support this function must be set up.
+
+The application also requires a simple mail transfer protocol (SMTP) server for functionalities that send emails. 
+The project currently uses an SMTP server provided by Twilio SendGrid, but this SMTP server can be from any provider.
+
+#### Prerequisite
+You must already have a Gmail account for the application to send emails FROM. (Some organisational accounts 
+cannot be used, including Monash emails.) 
+
+The current email that the project is using is: behindtheveil010@gmail.com
+
+This will form one of the environment variable required:
+
+```console
+FROM_USER:
+"Nickname<email_address>"
+```
+
+e.g.:
+
+```console
+FROM_USER:
+"Behind the Veil<behindtheveil010@gmail.com>"
+```
+
+#### Set up Twilio SendGrid SMTP Server
+The following steps will take you through setting up an SMTP server on Twilio SendGrid:
+
+1. Create and verify your account
+
+Registration at: https://sendgrid.com/en-us
+
+The Twilio team may reach out for manual verification of identity. You will need to provide details about yourself, 
+your company/organisation, what you will be using email service for, etc.
+
+2. Once your account is verified, log in and add a Single Sender at: https://app.sendgrid.com/settings/sender_auth
+   - add the email address of the gmail account you have prepared during the prerequisite step.
+   - this email address is used for the application to send emails FROM 
+
+
+3. Verify the email address by accessing the inbox and clicking the link sent by Twilio.
+
+
+4. Go to the setup guide for integration and select "SMTP Relay": https://app.sendgrid.com/guide/integrate
+![img.png](images/img.png)
+
+
+5. Create a new API key and record the password
+![img_1.png](images/img_1.png)
+
+
+6. Continue onto the nest steps and obtain the full SMTP connection. It should be something like this:
+
+```console
+MAIL_URL: 
+"smtps://apikey:<YOUR_API_KEY>@smtp.sendgrid.net:465"
+```
+
+This is one of the required environment variables.
+
+
+### Cloud MongoDB Database (MongoDB Atlas)
+The application uses a cloud MongoDB database for storing and syncing data across devices. 
+The following instructions will help you create a cluster for the project and set up the cloud MongoDB connection.
+
+1. Create and verify your account for MongoDB Atlas at: https://account.mongodb.com/account/register
+
+
+2. Log in and create a new project. (optional: invite other team members to the project)
+![img_2.png](images/img_2.png)
+
+
+3. Create a new (free) M0 cluster and name it anything you want
+![img_3.png](images/img_3.png)
+
+
+4. Follow the prompts to create a first admin user for the cluster
+
+
+5. In "Network Access" tab, press "+ Add IP Address" and add "0.0.0.0/0" (this will allow access to the database from anywhere)
+
+
+6. In "Database Access" tab, press "+ Add New Database User"
+   - create a new user with: read-write permissions. 
+   - Make sure you record the username and password
+
+![img_4.png](images/img_4.png)
+
+
+7. In the "Database" tab, press "Connect" on the cluster
+
+
+8. Select "Drivers" and then copy the connect string (URI). 
+   - Replace the <db_username> and <db_password> with the username and password of the user created in step 6.
+
+
+9. You now have the other required environmental variable for connecting to the cloud database. It should look something like:
+```console
+MONGO_URL:
+"mongodb+srv://<db_username>:<db_password>@cluster0.d0qmc.mongodb.net/meteor?retryWrites=true&w=majority&appName=Cluster0"
+```
+
 
 ---
 
@@ -76,15 +182,26 @@ Once all your dependencies have been installed:
   ```console
   cd behind-the-veil-siteroot
   ```
-- Install meteor dependencies inside of the file. This will create your node_modules file, do not skip this step.️
+- Install meteor dependencies inside the file. This will create your node_modules file, do not skip this step.️
   ```console
   meteor npm install
   ```
-- To start the app run:
+- To start the app with LOCAL database run:
   ```console
   meteor npm start
   ```
-  Your app should automatially open on the browser. If it doesn't, the console will show you a link that the app is running on the browser from so click this.
+
+- To start the app with email server AND cloud database export the environment variables that we have created just before.
+  (Currently, the variables has placeholders, please make sure to replace them with the actual values.)
+  ```console
+  export FROM_USER="Nickname<email_address>"
+  export MAIL_URL="smtps://apikey:<YOUR_API_KEY>@smtp.sendgrid.net:465"
+  export MONGO_URL="mongodb+srv://<db_username>:<db_password>@cluster0.d0qmc.mongodb.net/meteor?retryWrites=true&w=majority&appName=Cluster0"
+
+  meteor npm start
+  ```
+  
+  Your app should automatically open on the browser. If it doesn't, the console will show you a link that the app is running on the browser from so click this.
 
 ## Testing
 
@@ -157,26 +274,28 @@ edit the file at `/etc/paths` and add the above address to the end of the file
 3. paste in your path you want to add at the end on a new line
 4. press `escape` and then type `:wq` to save the file
 
-- don't have access to a Mac, try to google for more specific instructions.
 
-### Importing the files
+### Importing the files on LOCAL database
 
 1. run meteor project (make sure it is started)
+
 
 2. Open another terminal and navigate to site-root `\Behind-The-Veil\behind-the-veil-siteroot`
 
 Run command:
 
 ```
-mongoimport -h localhost:PORT --db meteor --collection COLLECTION_NAME --file FILENAME.json --jsonArray
+mongoimport -h localhost:<PORT> --db meteor --collection <COLLECTION_NAME> --file <FILEPATH/FILENAME.json> --jsonArray
 ```
 
 in the above command, replace:
 
-- `PORT` with the port that the mongoDb is running on, if your meteor project is on 3000, then it is most likely 3001
+- `<PORT>` with the port that the mongoDb is running on, if your meteor project is on 3000, then it is most likely 3001
     - (note: if you've run meteor on a different port, then mongoDb is probably running on that port + 1, e.g. meteor running on 4000, mongoDb running on 4001)
-- `COLLECTION_NAME` with the database entity name (such as user, service, image, etc.)
-- `FILENAME.json` with the file path to the file to import
+- `<COLLECTION_NAME>` with the database entity name (such as user, service, image, etc.)
+- `<FILEPATH/FILENAME.json>` with the file path to the file to import
+
+Note: do not include the angled brackets (< and >)
 
 Example commands to import everything (with port 3001)
 
@@ -196,12 +315,34 @@ mongoimport -h localhost:3001 --db meteor --collection posts --file mockdata/pos
 mongoimport -h localhost:3001 --db meteor --collection reviews --file mockdata/reviews12.json --jsonArray
 ```
 
-mongoexport -h localhost:3001 --db meteor --collection images --out=output.txt
+### Importing the files on CLOUD database
+1. run meteor project (make sure it is started) and remember to export the MONGO_URL to conect to the cloud database
 
+
+2. Open another terminal and navigate to site-root `\Behind-The-Veil\behind-the-veil-siteroot`
+
+
+run the command:
+
+```text
+mongoimport --username <CLOUD_USERNAME> --password <CLOUD_PASSWORD> <HOST_URI> --db meteor --collection <COLLECTION_NAME> --file <FILEPATH> --jsonArray
 ```
 
-mongoimport -h localhost:3001 --db meteor --collection bookings --file mockdata/booking_user1000.json --jsonArray
+in the above command, replace:
+
+- `<CLOUD_USERNAME>` with the username of the Cloud MongoDB Database user (refer to step 6 in: [here](#cloud-mongodb-database-mongodb-atlas))
+- `<CLOUD_PASSWORD>` with the password of the Cloud MongoDB Database user (refer to step 6 in: [here](#cloud-mongodb-database-mongodb-atlas))
+- `<HOST_URI>` with the first part of the connection string, should be something like: `mongodb+srv://cluster0.xxxxxxx.mongodb.net`
+- `<COLLECTION_NAME>` with the database entity name (such as user, service, image, etc.)
+- `<FILEPATH/FILENAME.json>` with the file path to the file to import
+
+Note: do not include the angled brackets (< and >)
+
+Example:
+```text
+mongoimport --username meteor-main --password xxxxxx mongodb+srv://cluster0.d99ecyx.mongodb.net --db meteor --collection test --file mockdata\presentation\artists50.json --jsonArray
 ```
+
 
 ## Git Help
   
