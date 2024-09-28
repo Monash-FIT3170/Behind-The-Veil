@@ -10,7 +10,7 @@ import {
     ArrowPathIcon,
     CheckCircleIcon,
     CurrencyDollarIcon,
-    DocumentMagnifyingGlassIcon,
+    DocumentTextIcon,
     NoSymbolIcon,
     PaperAirplaneIcon,
     PencilSquareIcon,
@@ -159,7 +159,7 @@ const BookingDetailsPage = () => {
                             // if already left review
                             actionButtons.push(
                                 <Button className={purpleButtonClass} onClick={navigateReview}>
-                                    <DocumentMagnifyingGlassIcon className="icon-base"/>
+                                    <DocumentTextIcon className="icon-base"/>
                                     View Review
                                 </Button>
                             );

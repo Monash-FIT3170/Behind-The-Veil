@@ -15,6 +15,7 @@ import {
     CheckCircleIcon,
     CurrencyDollarIcon,
     DocumentMagnifyingGlassIcon,
+    DocumentTextIcon,
     EyeIcon,
     PencilSquareIcon,
     XCircleIcon,
@@ -90,7 +91,7 @@ export const BookingCard = ({
                     additionalButtons.push(
                         // TODO: in the navigateTo, add '/review/' + serviceId or bookingId in it to show review of particular item
                         <Button className={purpleButtonClass} onClick={leaveReview}>
-                            <DocumentMagnifyingGlassIcon className="icon-base"/>
+                            <DocumentTextIcon className="icon-base"/>
                             View Review
                         </Button>
                     );

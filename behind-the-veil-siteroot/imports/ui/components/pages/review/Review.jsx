@@ -79,7 +79,6 @@ export const Review = () => {
             setReviewRating(review.reviewRating)
             setReviewComment(review.reviewComment)
         }
-        console.log("review data: ", reviewData)
     }, [reviewData]);
 
     // set the serviceId when bookingData has loaded
@@ -288,19 +287,21 @@ export const Review = () => {
                                         showCloseIcon={false}
                                     >
                                         <div className="flex justify-center items-center h-full">
-                                            <div className="flex flex-col">
+                                            <div className="flex flex-col gap-2">
                                                 <h2 className="text-center title-text">Submit Review?</h2>
-                                                <p className="text-center medium-text">Press cancel to keep editing. You cannot edit your review once it is posted.</p>
+                                                <p className="text-center medium-text">Press No to keep editing.</p>
+                                                <p className="text-center medium-text">You cannot edit your review once it is posted.</p>
                                                 <div className="flex justify-center space-x-6 mt-5">
                                                     <Button
                                                         className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[25px] pe-[25px] flex gap-1"
                                                         onClick={confirmReview}
                                                     >
-                                                        <CheckIcon className="icon-base" />
+                                                        <CheckIcon className="icon-base"/>
                                                         Yes
                                                     </Button>
-                                                    <Button className="btn-base ps-[25px] pe-[25px] flex gap-1" onClick={onCloseModal}>
-                                                        <NoSymbolIcon className="icon-base" />
+                                                    <Button className="btn-base ps-[25px] pe-[25px] flex gap-1"
+                                                            onClick={onCloseModal}>
+                                                        <NoSymbolIcon className="icon-base"/>
                                                         No
                                                     </Button>
                                                 </div>
