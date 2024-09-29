@@ -27,14 +27,14 @@ const PrivacyPolicyPage = () => {
                 <h2 className="text-xl font-bold mt-6 mb-2">2.0 Collection of Personal Information</h2>
                 <div className="pl-4">
                     <p className="mb-2">
-                        <span className="font-bold">2.1</span> [Content for this section was not provided in the original document]
+                        <span className="font-bold">2.1</span> [Content for this section yet to be added]
                     </p>
                 </div>
 
                 <h2 className="text-xl font-bold mt-6 mb-2">3.0 Use of Personal Information</h2>
                 <div className="pl-4">
                     <p className="mb-2">
-                        <span className="font-bold">3.1</span> [Content for this section was not fully provided in the original document]
+                        <span className="font-bold">3.1</span> [Content for this section yet to be added]
                     </p>
                 </div>
 
