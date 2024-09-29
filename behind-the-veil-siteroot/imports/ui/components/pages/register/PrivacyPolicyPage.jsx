@@ -9,7 +9,7 @@ const PrivacyPolicyPage = () => {
                 <h1 className="text-2xl font-bold mb-1 text-center">The Ten Bridesmaids</h1>
                 <h1 className="text-1xl font-bold mb-1 text-center">in respect to its product</h1>
                 <h1 className="text-4xl font-bold mb-1 text-center">Behind The Veil©</h1>
-                <p className="mb-4 text-center">Last Updated: 2024 / 09 / 29</p>
+                <p className="mb-16 text-center">Last Updated: 2024 / 09 / 29</p>
 
                 <h2 className="text-xl font-bold mt-6 mb-2">1.0 About This Policy</h2>
                 <div className="pl-4">
