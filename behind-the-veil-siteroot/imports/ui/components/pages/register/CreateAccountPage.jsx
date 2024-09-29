@@ -26,6 +26,7 @@ const CreateAccountPage = () => {
         email: "",
         password: "",
         retypePassword: "",
+        privacyPolicy: "",
     });
 
     // get the chosen account type from last page
@@ -35,6 +36,9 @@ const CreateAccountPage = () => {
         // if invalid type in url, default to bride
         setAccountType("bride")
     }
+
+    // Checkbox state
+    const [isPrivacyChecked, setIsPrivacyChecked] = useState(false);
 
     // get whether it errored before in the URL
     const urlParams = new URLSearchParams(window.location.search);
@@ -138,6 +142,12 @@ const CreateAccountPage = () => {
 
         } else if (password !== retypePassword) {
             newError.retypePassword = 'Passwords do not match.';
+            isError = true;
+        }
+
+        // Validate if checkbox is ticked
+        if (!isPrivacyChecked) {
+            newError.privacyPolicy = "You must agree to the Privacy Policy to register.";
             isError = true;
         }
 
@@ -283,6 +293,29 @@ const CreateAccountPage = () => {
                             <li className={"ml-2"}>minimum 8 characters</li>
                         </ul>
                     </div>
+
+                    {/* Privacy Policy Checkbox */}
+                    <div className="flex items-start gap-3 w-4/5">
+                        <input
+                            type="checkbox"
+                            id="privacyPolicy"
+                            checked={isPrivacyChecked}
+                            onChange={() => setIsPrivacyChecked(!isPrivacyChecked)}
+                            className="mt-3.5"
+                        />
+                        <label htmlFor="privacyPolicy" className="small-text text-dark-grey text-left">
+                            I confirm that I have read, understand, and agree to Behind The Veil's
+                            <a href={`/${UrlBasePath.PRIVACY_POLICY}`}
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               className="text-secondary-purple underline ml-1"
+                            >Privacy Policy
+                            </a>.
+                        </label>
+                    </div>
+
+                    {/* Display error message if checkbox is not checked */}
+                    {errors.privacyPolicy && (<span className="text-cancelled-colour">{errors.privacyPolicy}</span>)}
 
                     <div className="hidden small-text text-dark-grey text-left w-4/5">
                         Your email address will only be used to send notifications about your account and bookings.
