@@ -15,6 +15,7 @@ import ReviewCollection from "../../api/collections/reviews";
 import BookingStatus from "../enums/BookingStatus";
 import { relativeTimeRounding } from "moment";
 
+
 /**
  * Function to update booking's status in any way (also linked to emailing in the future)
  *
@@ -49,6 +50,7 @@ export function updateBookingStatus(
       });    
   }
 }
+
 
 /**
  * Used for to get a list of service data (includes their image and/or artist data automatically)

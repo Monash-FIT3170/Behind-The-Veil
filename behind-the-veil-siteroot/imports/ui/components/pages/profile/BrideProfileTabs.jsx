@@ -4,41 +4,39 @@
  * Contributors: Katie, Nikki
  */
 
-import React from 'react';
+import React from "react";
 
 import Tabs from "../../../components/tabs/Tabs";
 import Loader from "../../../components/loader/Loader";
 import BookingListView from "../../../components/booking/BookingListView";
 import BookingCard from "../../../components/card/BookingCard";
 import BookingStatus from "../../../../ui/enums/BookingStatus";
-import {useBookings} from "../../DatabaseHelper";
+import { useBookings } from "../../DatabaseHelper";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Component for bride's profile tabs
  *
  * @param userInfo - logged-in user information passed in
  */
-export const BrideProfileTabs = ({userInfo}) => {
+export const BrideProfileTabs = ({ userInfo }) => {
+    const navigate = useNavigate();
+
+    const handleRequestChange = (booking) => {
+        
+        navigate("/request-booking-form", { state: { bookingData: booking } });
+    };
+
 
     // get bookings information from database
     const bookingFilter = {
-        $or: [
-            { "brideUsername": userInfo.username },
-            { "artistUsername": userInfo.username }
-        ]
-    }
-    const {isLoading, bookingsData} = useBookings("all_user_bookings", [userInfo.username], bookingFilter);
+        $or: [{ brideUsername: userInfo.username }, { artistUsername: userInfo.username }],
+    };
+    const { isLoading, bookingsData } = useBookings("all_user_bookings", [userInfo.username], bookingFilter);
 
     // wait for bookings data to be loaded
     if (isLoading) {
-        return (
-            <Loader
-                loadingText={"Bookings are loading . . ."}
-                isLoading={isLoading}
-                size={100}
-                speed={1.5}
-            />
-        );
+        return <Loader loadingText={"Bookings are loading . . ."} isLoading={isLoading} size={100} speed={1.5} />;
     } else {
         // data is loaded
 
@@ -47,11 +45,12 @@ export const BrideProfileTabs = ({userInfo}) => {
             confirmed: [],
             pending: [],
             past: [],
-            archived: []
-        }
+            archived: [],
+        };
 
         // put each booking into the array according to its status
         for (let booking of bookingsData) {
+            // console.log(`The booking id : ${booking._id} and booking status: ${booking.bookingStatus}`);
             switch (booking.bookingStatus) {
                 case BookingStatus.CONFIRMED:
                 case BookingStatus.OVERDUE:
@@ -85,7 +84,8 @@ export const BrideProfileTabs = ({userInfo}) => {
                     bookingStartDateTime={booking.bookingStartDateTime}
                     bookingStatus={booking.bookingStatus}
                     bookingIsReviewed={booking.bookingIsReviewed}
-                    userType={'bride'}
+                    userType={"bride"}
+                    onRequestChange={() => handleRequestChange(booking)}
                 />
             ));
         }
@@ -96,13 +96,13 @@ export const BrideProfileTabs = ({userInfo}) => {
                     <span key={1}>Confirmed Bookings</span>,
                     <span key={2}>Pending Bookings</span>,
                     <span key={3}>Past Bookings</span>,
-                    <span key={4}>Archived Bookings</span>
+                    <span key={4}>Archived Bookings</span>,
                 ]}
                 tabPanels={[
-                    <BookingListView key={"confirmed"} displayBookings={bookings["confirmed"]}/>,
-                    <BookingListView key={"pending"} displayBookings={bookings["pending"]}/>,
-                    <BookingListView key={"past"} displayBookings={bookings["past"]}/>,
-                    <BookingListView key={"archived"} displayBookings={bookings["archived"]}/>
+                    <BookingListView key={"confirmed"} displayBookings={bookings["confirmed"]} />,
+                    <BookingListView key={"pending"} displayBookings={bookings["pending"]} />,
+                    <BookingListView key={"past"} displayBookings={bookings["past"]} />,
+                    <BookingListView key={"archived"} displayBookings={bookings["archived"]} />,
                 ]}
             />
         );

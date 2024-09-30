@@ -50,7 +50,6 @@ Meteor.methods({
 
         return newBookingId;
     },
-
     /**
      * Retrieves a single booking instance from the database based on the booking ID.
      * @param {string} bookingId - The ID of the booking to retrieve.
@@ -86,7 +85,7 @@ Meteor.methods({
         check(serviceId, Match.Integer)
 
         const booking = BookingCollection.findOne({ serviceId: serviceId });
-    
+
         return !!booking;
     },
 
@@ -99,5 +98,5 @@ Meteor.methods({
         check(bookingStatus, String)
 
         return BookingCollection.find({ bookingStatus: bookingStatus }).fetch();
-    }
-})
+    },
+});
