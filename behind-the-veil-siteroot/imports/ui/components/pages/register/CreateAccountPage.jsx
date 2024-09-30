@@ -1,6 +1,6 @@
 /**
  * File Description: Create Account page
- * File version: 1.3
+ * File version: 1.4
  * Contributors: Ryan, Nikki
  */
 

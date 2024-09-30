@@ -1,3 +1,9 @@
+/**
+ * File Description: Privacy Policy Page
+ * File version: 1.0
+ * Contributors: Ryan
+ */
+
 import React from 'react';
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 
