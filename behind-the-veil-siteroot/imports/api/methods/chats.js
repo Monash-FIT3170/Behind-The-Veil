@@ -1,9 +1,6 @@
-// NOTE: for the bookings details page, when they click 'send message' button
-// we have to check if the chat exists - if yes, return the id, if no - create a new chat object
-
 /**
  * File Description: Chat database entity
- * File version: 1.0
+ * File version: 1.1
  * Contributors: Vicky, Katie
  */
 import { ChatCollection } from "../collections/chats";
@@ -24,9 +21,9 @@ Meteor.methods({
         check(brideUsername, String)
         check(artistUsername, String)
         check(chatUpdatedDate, Date)
-        check(chatLastMessage, Boolean)
+        check(chatLastMessage, String)
         check(readByBride, Boolean)
-        check(readByArtist, String)
+        check(readByArtist, Boolean)
         
         return ChatCollection.insert({
             brideUsername: brideUsername,
