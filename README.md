@@ -1,5 +1,7 @@
 # Behind-The-Veil - Project 10 - FIT3170 - 2024
 
+Behind the Veil is currently hosted at: https://behind-the-veil-1077153890194.australia-southeast2.run.app/
+
 ## Table of Contents
 - [Dependencies](#dependencies)
 - [Running the app](#running-the-app)
@@ -7,6 +9,7 @@
 - [Errors](#errors)
 - [Importing Mock Data](#how-to-import-the-mock-data-into-mongodb)
 - [Git Help](#git-help)
+- [Deployment](#deployment)
 - [Team Composition](#team-composition)
 
 ## Dependencies
@@ -365,6 +368,116 @@ git push -f
 ```
 
 **Note** if you are unsure about any of this please reach out to team members via General.
+
+## Deployment
+
+This section outlines how to manually deploy the app using Docker and Google Cloud Platform (GCP). The steps outlined are more specific to our app and workflow, but for general advice and more specific details on how to deploy using GCP, refer to https://cloud.google.com/run/docs/deploying
+
+If you modify the Dockerfile, keep in mind that GCP requires containers to follow this contract https://cloud.google.com/run/docs/container-contract (“Executables in the container image must be compiled for Linux 64-bit. Cloud Run specifically supports the Linux x86_64 ABI format.”)
+
+Note that these steps could probably be optimised, i.e. pushing Docker image straight to Artifact Registry instead of Dockerhub first.
+
+### Prerequisites:
+
+#### Docker:
+1. Install Docker and create a Docker account, then have the Docker engine running when attempting to build the Docker image
+2. Create a Dockerhub repo
+
+#### GCP:
+1. Create Google Cloud project and enable billing
+2. Set up Artifact Registry
+    - Enable Artifact Registry API
+    - Go to Artifact Registry > Repositories
+    - Create a docker repository
+      - In the form, select docker format and Australia region
+3. Configure secrets using Secret Manager
+    - Enable Secret Manager API
+    - Create secrets for each of our sensitive environment variables, e.g.
+      - MONGO_URL
+      - MAIL_URL
+      - FROM_USER
+    - Grant the ’Secret Manager Secret Accessor’ role to the service account being used to deploy
+      - Go to Secret Manager page
+      - ‘Show info panel’
+      - ‘Add principal’
+      - Select the service account used to deploy as new principal
+      - Select ’Secret Manager Secret Accessor’ as role
+
+### Steps:
+
+Assuming you have completed the prerequisites, here is the process when you’re ready to do a release and deploy:
+
+1. Create a branch off of ‘develop’ called ‘release/<version_number>’ (replace with your desired version number)
+2. Merge ‘release/<version_number>’ into ‘main’
+3. Checkout ‘main’ branch
+4. Open terminal. Go to behind-the-veil-siteroot, where the Dockerfile is
+    ```console
+    cd behind-the-veil-siteroot
+    ```
+5. Log in
+   ```console
+   docker login
+   ```
+    - Enter login credentials
+6. Build the Docker image
+   ```console
+   docker buildx build -t behind-the-veil --platform linux/amd64 .
+   ```
+7. Test that the image runs locally
+   ```console
+   docker run -e MONGO_URL=<mongo_url> -e ROOT_URL=<root_url> -e MAIL_URL=<mail_url> -e FROM_USER=<from_user_email> -p 8080:8080 behind-the-veil
+   ```
+    - Replace the environment variables above with our potentially sensitive values, or omit them if you know you don’t need them for testing
+    - If it fails, then debug, rebuild, and test again, else proceed
+
+Note, the following example code snippets assume the following:
+  - Docker username = joshualoongwy
+  - Dockerhub repo name = behind-the-veil
+  - Version number = 2.0.1
+  - GCP project location = australia-southeast2
+  - GCP project id = behind-the-veil
+  - GCP Artifact Registry repo name = behind-the-veil-docker
+
+***Adjust each command according to your needs***
+
+8. Tag Docker image to target Dockerhub repo
+    ```console
+    docker tag behind-the-veil joshualoongwy/behind-the-veil:2.0.1
+    ```
+9. Push Docker image to Dockerhub repo
+    ```console
+    docker push joshualoongwy/behind-the-veil:2.0.1
+    ```
+10. Go to GCP and open Cloud Shell. The following steps are performed in a Cloud Shell terminal. Configure authentication if necessary
+    ```console
+    gcloud auth configure-docker australia-southeast2-docker.pkg.dev
+    ```
+11. Pull Docker image from Dockerhub
+    ```console
+    docker pull joshualoongwy/behind-the-veil:2.0.1
+    ```
+12. Tag Docker image to target Google Artifact Registry repo
+    ```console
+    docker tag joshualoongwy/behind-the-veil:2.0.1 australia-southeast2-docker.pkg.dev/behind-the-veil/behind-the-veil-docker/behind-the-veil:2.0.1
+    ```
+13. Push Docker image to Google Artifact Registry
+    ```console
+    docker push australia-southeast2-docker.pkg.dev/behind-the-veil/behind-the-veil-docker/behind-the-veil:2.0.1
+    ```
+14. Go to Google Cloud Run and fill out service form
+    - If first time deploying, go to ‘Create service’ and fill out Google Cloud Run form fields:
+      - Container Image URL: Select the image you just pushed to Artifact Registry
+      - Region: Select ‘australia-southeast2’
+      - Authentication: Select ‘Allow unauthenticated invocations’
+      - Environment variables: Use the necessary environment variables (some should be configured as secrets in Secret Manager), e.g.
+        - ROOT_URL
+        - MONGO_URL
+        - MAIL_URL
+        - FROM_USER
+      - Increase/adjust resources (e.g. memory) as necessary
+    - If redeploying, select your existing service and go to ‘Edit & deploy new revision’, then make necessary changes in the form
+15. Press ‘Deploy’, wait for GCP to deploy, then go the supplied URL to check for successful deployment
+
 
 ## Team Composition
 
