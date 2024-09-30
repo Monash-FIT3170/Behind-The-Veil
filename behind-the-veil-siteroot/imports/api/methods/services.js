@@ -37,8 +37,6 @@ Meteor.methods({
             artistUsername: artistUsername,
             serviceImages: images
         });
-        
-        return serviceId
     },
 
     get_service: function (serviceId) {
