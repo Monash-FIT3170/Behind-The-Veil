@@ -195,6 +195,7 @@ export const MessagesPage = () => {
             if (userInfo.type === otherUserType) {
                 // if the user types are the same, display a modal indicating an error
                 onOpenModal();
+                setErrors({chatCreation: "Cannot create a chat with another user of the same type."})
                 return;
             }
 
@@ -394,7 +395,6 @@ export const MessagesPage = () => {
                             <h2 className="text-center title-text">
                                 Create Chat
                             </h2>
-                            {/* INSERT SEARCH BAR HERE */}
                             <Input 
                                 id="chatUsername" 
                                 type="search" 
