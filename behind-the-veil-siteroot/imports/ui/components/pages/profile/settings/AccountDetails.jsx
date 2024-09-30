@@ -157,7 +157,7 @@ export const AccountDetails = () => {
             }
 
             // reload after update
-            window.location.reload();
+            // window.location.reload();
         }
     };
 

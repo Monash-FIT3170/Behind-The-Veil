@@ -24,6 +24,7 @@ import {CheckIcon, PlusIcon} from '@heroicons/react/24/outline'
 
 import {useUserInfo} from "../../util.jsx"
 import UrlBasePath from "../../../enums/UrlBasePath";
+import UserCollection from '../../../../api/collections/users.js';
 
 /**
  * Messages page with all users they've chatted with
@@ -106,13 +107,20 @@ export const MessagesPage = () => {
         }).fetch();
     });
 
-    const isLoading = isLoadingChats();
+
+    const isLoadingUsersData = useSubscribe("all_users");
+    let usersData = useTracker(() => {
+        return UserCollection.find().fetch();
+    });
+
+    const isLoading = isLoadingChats() || isLoadingUsersData();
 
     // manual aggregation into chatsData with the other user's images
     for (let i = 0; i < chatsData.length; i++) {
         // find the other user's username
         const otherUser = getOtherUsername(userInfo.username, chatsData[i]);
-        chatsData[i].otherUserImage = otherUser.profileImage ? otherUser.profileImage.imageData : otherUser.profileImage;
+        const otherUserData = usersData.find((user) => user.username === otherUser)
+        chatsData[i].otherUserImage = otherUserData?.profile?.profileImage?.imageData;
     }
 
     // sort chats data in descending order for the dates
