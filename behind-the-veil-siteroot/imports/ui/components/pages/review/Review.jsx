@@ -213,7 +213,7 @@ export const Review = () => {
                         {/* if no review exists, show the leave review page. otherwise, show the review.*/}
                         {leaveReview ? (
                             <form onSubmit={handleSubmitReview} className="flex flex-col gap-6">
-                                <div className="flex flex-col md:flex-row gap-4 md:gap-10">
+                                <div className="flex flex-col md:flex-row gap-4 md:gap-10 md:justify-between">
                                     {/* review title input */}
                                     <div>
                                         <Input 
@@ -228,7 +228,7 @@ export const Review = () => {
                                             }
                                             type="text"
                                             placeholder="Enter Review Title"
-                                            className={"w-64 sm:w-96 lg:w-64 xl:w-96"}
+                                            className={"w-64 sm:w-96"}
                                             name="reviewTitle"
                                             onChange={(e) => {
                                                 setReviewTitle(e.target.value)
@@ -237,7 +237,7 @@ export const Review = () => {
                                         {!reviewTitle && errors.inputReviewTitle && <span className="text-cancelled-colour">{errors.inputReviewTitle}</span>}
                                     </div>
                                     {/* review rating input */}
-                                    <div>
+                                    <div className="pr-20">
                                         <div className="main-text">Rating</div>
                                         <div className="flex items-center">
                                             {/* display 5 star rating clickable icons */}
@@ -246,7 +246,7 @@ export const Review = () => {
                                                 return (
                                                     <StarIcon
                                                         key={i}
-                                                        className={`lg:size-8 ml-2 size-4 cursor-pointer 
+                                                        className={`lg:size-8 ml-2 sm:size-8 md:size-6 size-6 cursor-pointer 
                                                             ${currentStar <= (hoveredStar || reviewRating) ? 'text-secondary-purple-hover' : 'text-gray-400'}`}
                                                         onMouseEnter={() => setHoveredStar(currentStar)} // highlight stars on the left when mouse is hovering
                                                         onMouseLeave={() => setHoveredStar(0)} // reset highlight when mouse stops hovering
@@ -311,7 +311,7 @@ export const Review = () => {
                             </form>
                         ) : (
                             <div className="flex flex-col gap-6">
-                                <div className="flex flex-col md:flex-row gap-4 md:gap-10">
+                                <div className="flex flex-col md:justify-between md:flex-row gap-4 md:gap-10">
                                     <div className="flex flex-col">
                                         <div className="main-text">Review Title</div>
                                         {/* TODO: make the below text grey */}
@@ -328,7 +328,7 @@ export const Review = () => {
                                                     return (
                                                         <StarIcon 
                                                             key={i} 
-                                                            className="lg:size-8 ml-2 size-4 text-secondary-purple-hover" 
+                                                            className="lg:size-8 ml-2  sm:size-8 md:size-6 size-6 text-secondary-purple-hover" 
                                                         /> 
                                                     );
                                                 } 
@@ -337,7 +337,7 @@ export const Review = () => {
                                                     return (
                                                         <StarIcon 
                                                             key={i} 
-                                                            className="lg:size-8 ml-2 size-4 text-gray-400" 
+                                                            className="lg:size-8 ml-2 sm:size-8 md:size-6 size-6 text-gray-400" 
                                                         />
                                                     );
                                                 }
