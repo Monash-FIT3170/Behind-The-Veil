@@ -9,7 +9,6 @@ import Card from "../card/Card";
 import ProfilePhoto from '../profilePhoto/ProfilePhoto';
 import {useUserInfo} from "../util"
 
-// TODO: pass the chat data profile photo/image here to work with once image database has been done
 const MessagesPreview = ({data, onClick, isLeftHandler}) => {
     const {
         brideUsername,
@@ -38,8 +37,8 @@ const MessagesPreview = ({data, onClick, isLeftHandler}) => {
     });
 
 
-    // check that
-    const read = userInfo.username === brideUsername ? readByBride : readByArtist; // recentMessageObj.read;
+    // check whether the current user has read the message
+    const read = userInfo.username === brideUsername ? readByBride : readByArtist;
 
     // this view changes depending on screen sizes.
     return (
