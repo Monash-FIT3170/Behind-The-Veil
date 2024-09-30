@@ -15,13 +15,13 @@ const PrivacyPolicyPage = () => {
                 <h1 className="text-2xl font-bold mb-1 text-center">The Ten Bridesmaids</h1>
                 <h1 className="text-1xl font-bold mb-1 text-center">in respect to its product</h1>
                 <h1 className="text-4xl font-bold mb-1 text-center">Behind The Veil<sup>©</sup></h1>
-                <p className="mb-16 text-center">Last Updated: 2024 / 09 / 29</p>
+                <p className="mb-16 text-center">Last Updated: 2024 / 09 / 30</p>
 
                 <h2 className="text-xl font-bold mt-6 mb-2">1.0 About This Policy</h2>
                 <div className="pl-4">
                     <p className="mb-2">
-                        <span className="font-bold">1.1</span> Under <strong>The Privacy Act (1988)</strong>,
-                        <strong>The Ten Bridesmaids</strong> is bound by the <strong>Australian Privacy
+                        <span className="font-bold">1.1</span> Under <strong>The Privacy Act (1988)</strong>
+                        , <strong>The Ten Bridesmaids</strong> is bound by the <strong>Australian Privacy
                         Principles</strong> and hereby outlines the personal information processing practices within
                         its product: <strong>Behind the Veil</strong><sup>©</sup>.
                     </p>
@@ -42,14 +42,63 @@ const PrivacyPolicyPage = () => {
                 <h2 className="text-xl font-bold mt-6 mb-2">2.0 Collection of Personal Information</h2>
                 <div className="pl-4">
                     <p className="mb-2">
-                        <span className="font-bold">2.1</span> [Content for this section yet to be added]
+                        <span className="font-bold">2.1</span> <strong>The Ten Bridesmaids</strong> only collects
+                        personal information that is imperative to the successful function of the product.
+                    </p>
+                    <p className="mb-2">
+                        <span className="font-bold">2.2</span> <strong>The Ten Bridesmaids</strong> never indirectly
+                        collects personal information. All personal information processed through this product is
+                        explicitly solicited. This is generally in the structure of a form, such as when an individual
+                        first registers an account. This way, it is easy for users to understand when and what personal
+                        information is being collected.
+                    </p>
+                    <p className="mb-2">
+                        <span className="font-bold">2.3</span> Sensitive information is defined as being information or
+                        an opinion regarding an individual’s: racial or ethnic origin; political opinions; membership of
+                        a political association; religious beliefs or affiliations; philosophical beliefs; membership of
+                        a professional or trade association; membership of a trade union; sexual orientation or
+                        practices; criminal record; health information; biometric information. Sensitive information
+                        is never collected nor processed by any means through, or for, <strong>Behind the
+                        Veil</strong><sup>©</sup>.
                     </p>
                 </div>
 
                 <h2 className="text-xl font-bold mt-6 mb-2">3.0 Use of Personal Information</h2>
                 <div className="pl-4">
                     <p className="mb-2">
-                        <span className="font-bold">3.1</span> [Content for this section yet to be added]
+                        <span className="font-bold">3.1</span> <strong>The Ten Bridesmaids</strong> only uses personal
+                        information for the primary purpose which it was collected. It has a legal obligation, in
+                        alignment with <strong>Sub Clause 6.1</strong> of <strong>Australian Privacy
+                        Principles</strong>, to identify a primary purpose for the personal information collection that
+                        it undertakes. The primary purpose of personal information collection and processing regarding
+                        the application <strong>Behind the Veil</strong><sup>©</sup> is: to facilitate connection
+                        between appropriate accounts by enabling adequate account creation, identity-verification,
+                        communication between accounts, transaction management and service booking.
+                    </p>
+                    <p className="mb-2">
+                        <span className="font-bold">3.2</span> By registering an account with <strong>Behind the
+                        Veil</strong><sup>©</sup>, an individual consents to having the personal information that they
+                        provide used for the primary purpose detailed above.
+                    </p>
+                    <p className="mb-2">
+                        <span className="font-bold">3.3</span> Upon account creation, users are prompted to provide an
+                        email address and an alias. Although individuals have a right to use a pseudonym in place of
+                        their given name/s (see <strong>User Rights 6.0</strong> for more detail) it can still be used
+                        to reasonably identify oneself. Therefore, it is still treated as personal information. These
+                        pieces of information are used to verify a user’s identity and to facilitate communication
+                        between accounts.
+                    </p>
+                    <p className="mb-2">
+                        <span className="font-bold">3.4</span> When <strong>Artist</strong> accounts post a service on
+                        the application, they are required to enter a location. This location is used to target services
+                        to <strong>Bride</strong> accounts, and to make the process more seamless for users of both
+                        types of accounts.
+                    </p>
+                    <p className="mb-2">
+                        <span className="font-bold">3.5</span> <strong>Bride</strong> accounts must use valid payment
+                        details when committing a transaction. A transaction is committed only
+                        when <strong>Bride</strong> accounts book a service posted by an <strong>Artist</strong>
+                        account. These payment details are used to confirm the transaction.
                     </p>
                 </div>
 
@@ -64,9 +113,9 @@ const PrivacyPolicyPage = () => {
                     </p>
                     <p className="mb-2">
                         <span className="font-bold">4.2</span> All personal information collected is stored securely,
-                        using appropriate protections to safeguard against unauthorised access, modification or misuse.
-                        <strong>The Ten Bridesmaids</strong>' data storage practices are aligned with industry standards
-                        to reduce the risk of data breaches.
+                        using appropriate protections to safeguard against unauthorised access, modification or
+                        misuse. <strong>The Ten Bridesmaids</strong>' data storage practices are aligned with industry
+                        standards to reduce the risk of data breaches.
                     </p>
                     <p className="mb-2">
                         <span className="font-bold">4.3</span> Data retention policies are followed to guarantee that
@@ -104,16 +153,17 @@ const PrivacyPolicyPage = () => {
                         role, thereby limiting the potential for unauthorised access.
                     </p>
                     <p className="mb-2">
-                        <span className="font-bold">5.3</span> In accordance with data minimisation principles,
-                        <strong>The Ten Bridesmaids</strong> collects only the information necessary for the primary
-                        purpose outlined in <strong>Use of Personal Information 3.0</strong>. Any data that is not
-                        required is either not collected at all or anonymised to protect the privacy of users.
+                        <span className="font-bold">5.3</span> In accordance with data minimisation
+                        principles, <strong>The Ten Bridesmaids</strong> collects only the information necessary
+                        for the primary purpose outlined in <strong>Use of Personal Information 3.0</strong>. Any data
+                        that is not required is either not collected at all or anonymised to protect the privacy of
+                        users.
                     </p>
                     <p className="mb-2">
-                        <span className="font-bold">5.4</span> <strong>Behind the Veil</strong><sup>©</sup> makes use of
-                        <strong>Meteor's User-Accounts Package</strong>, protecting the user's password with appropriate
-                        encryption to maintain security. A secure authentication system has also been implemented to
-                        ensure that only legitimate users can access their accounts.
+                        <span className="font-bold">5.4</span> <strong>Behind the Veil</strong><sup>©</sup> makes use
+                        of <strong>Meteor's User-Accounts Package</strong>, protecting the user's password with
+                        appropriate encryption to maintain security. A secure authentication system has also been
+                        implemented to ensure that only legitimate users can access their accounts.
                     </p>
                     <p className="mb-2">
                         <span className="font-bold">5.5</span> All non-public pages of the application are protected
@@ -135,8 +185,8 @@ const PrivacyPolicyPage = () => {
                     </p>
                     <p className="mb-2">
                         <span className="font-bold">5.8</span> Any unauthorised access to personal information will be
-                        reported in compliance with the <strong>Notifiable Data Breaches</strong> scheme under
-                        <strong>The Privacy Act (1988)</strong>. <strong>The Ten Bridesmaids</strong> will notify
+                        reported in compliance with the <strong>Notifiable Data Breaches</strong> scheme
+                        under <strong>The Privacy Act (1988)</strong>. <strong>The Ten Bridesmaids</strong> will notify
                         affected individuals as required by law.
                     </p>
                 </div>
