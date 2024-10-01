@@ -12,10 +12,6 @@ import "/imports/api/collections/users.js";
 import "/imports/api/methods/users.js";
 import "/imports/api/publications/users.js";
 
-import "/imports/api/collections/images.js";
-import "/imports/api/methods/images.js";
-import "/imports/api/publications/images";
-
 import "/imports/api/collections/posts.js";
 import "/imports/api/methods/posts.js";
 import "/imports/api/publications/posts";

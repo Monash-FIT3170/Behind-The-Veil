@@ -17,16 +17,16 @@ Meteor.methods({
      * @param {string} artistUsername - the username of the artist this post belongs to 
      * @returns {string} The unique ID of the newly created post (postId).
      */
-    "add_post": function (postDate, postDescription, artistUsername) {
+    "add_post": function (postDate, postDescription, artistUsername, postImage) {
         check(postDate, String)  // should be type Date?
         check(postDescription, String)
         check(artistUsername, String)
-
         return PostCollection.insert(
             {
                 "postDate": postDate,
                 "postDescription": postDescription,
                 "artistUsername": artistUsername,
+                "postImage": postImage
             }
         );
     },

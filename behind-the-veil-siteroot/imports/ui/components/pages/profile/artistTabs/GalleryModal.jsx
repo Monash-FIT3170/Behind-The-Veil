@@ -80,7 +80,7 @@ const GalleryModal = ({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel
-                className="grid grid-cols-6 gap-4 w-3/5 transform overflow-hidden rounded-md bg-white p-4 text-left align-middle shadow-xl transition-all"
+                className="grid grid-cols-6 gap-4 transform overflow-hidden rounded-md bg-white w-3/5 lg:min-w-[750px] md:min-h-[350px] p-4 text-left align-middle shadow-xl transition-all"
                 style={{ maxHeight: "80vh" }}
               >
                 <div className="col-span-5">

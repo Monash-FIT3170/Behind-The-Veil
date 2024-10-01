@@ -34,6 +34,7 @@ const SpecificArtistPage = () => {
 
     // get database entry for artist information
     const {isLoading, userData, profileImagesData} = useSpecificUser(artistUsername);
+    console.log(userData)
 
     if (isLoading) {
         // is loading, display loader
@@ -66,7 +67,7 @@ const SpecificArtistPage = () => {
                 </div>
 
                 {/*Top div where user's info*/}
-                <ProfileDisplay imageData={profileImagesData ? profileImagesData.imageData : null}
+                <ProfileDisplay imageData={userData.profile.profileImage ? userData.profile.profileImage.imageData : null}
                                 userAlias={userData.profile.alias}
                                 userUsername={userData.username}
                 />
