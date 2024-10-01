@@ -7,7 +7,6 @@ import { useSubscribe, useTracker } from "meteor/react-meteor-data";
 import { Meteor } from "meteor/meteor";
 
 import ServiceCollection from "../../api/collections/services";
-import ImageCollection from "../../api/collections/images";
 import UserCollection from "../../api/collections/users";
 import BookingCollection from "../../api/collections/bookings";
 import PostCollection from "../../api/collections/posts";
@@ -74,70 +73,41 @@ export function useServices(
         return ServiceCollection.find(filter).fetch();
     });
 
-  // get service images from database
-  const isLoadingServiceImages = useSubscribe("service_images", []);
-  let imagesData = useTracker(() => {
-      return ImageCollection.find({imageType: "service"}).fetch();
-  });
+    // get artist data from database, if needed
+    let isLoadingArtists = () => false;
+    let artistsData = [];
 
-  // get artist data from database, if needed
-  let isLoadingArtists = () => false;
-  let artistsData = [];
-
-  if (requireArtist) {
-    isLoadingArtists = useSubscribe("all_artists");
-    artistsData = useTracker(() => {
-      return UserCollection.find({ "profile.type": "artist" }).fetch();
-    });
-  }
-
-  // variable for loading
-  const isLoading =
-    isLoadingUserServices() || isLoadingArtists() || isLoadingServiceImages();
-
-  // manual aggregation of each service with their image
-  for (let i = 0; i < servicesData.length; i++) {
-    let foundImageMatch = false;
-    
-    // aggregate with artist first
-    for (let j = 0; j < artistsData.length; j++) {
-      // find matching artist and add their name
-      if (servicesData[i].artistUsername === artistsData[j].username) {
-        servicesData[i].artistAlias = artistsData[j].profile.alias;
-        break;
-      }
+    if (requireArtist) {
+        isLoadingArtists = useSubscribe("all_artists");
+        artistsData = useTracker(() => {
+            return UserCollection.find({"profile.type": "artist"}).fetch();
+        });
     }
 
-        // check if the frontend requires on
-        if (oneImage) {
-            // then aggregate with the FIRST image that belong to it
-            for (let j = 0; j < imagesData.length; j++) {
-                // find matching image for the service
-                if (imagesData[j].imageType === "service" && servicesData[i]._id === imagesData[j].target_id) {
-                    servicesData[i].serviceImageData = imagesData[j].imageData;
-                    foundImageMatch = true;
-                    break;
-                }
-            }
-        } else {
-            let serviceImages = [];
-            for (let j = 0; j < imagesData.length; j++) {
-                // find matching images for the service
-                if (imagesData[j].imageType === "service" && servicesData[i]._id === imagesData[j].target_id) {
-                    serviceImages.push(imagesData[j]);
-                    foundImageMatch = true;
-                }
-                servicesData[i].serviceImageData = serviceImages;
-            }
+    // variable for loading
+    const isLoading =
+        isLoadingUserServices() || isLoadingArtists();
 
-            // if not found any images, replace with default
-            if (!foundImageMatch) {
-                servicesData[i].serviceImageData = "/imageNotFound.png";
+    // manual aggregation of each service with their image
+    for (let i = 0; i < servicesData.length; i++) {
+        // aggregate with artist first
+        for (let j = 0; j < artistsData.length; j++) {
+            // find matching artist and add their name
+            if (servicesData[i].artistUsername === artistsData[j].username) {
+                servicesData[i].artistAlias = artistsData[j].profile.alias;
+                break;
             }
         }
+
+        if (!servicesData[i].serviceImages) {
+            servicesData[i].serviceImageData = "/imageNotFound.png";
+        } else {
+            servicesData[i].serviceImageData = servicesData[i].serviceImages[0].imageData
+        }
     }
-  return { isLoading, servicesData };
-}
+    return { isLoading, servicesData };
+  }
+  
 
 /**
  * Used for to get a list of bookings data (includes their image and service data automatically)
@@ -155,7 +125,6 @@ export function useBookings(booking_publication, params, filter) {
   let bookingsData = useTracker(() => {
     return BookingCollection.find(filter).fetch();
   });
-  console.log(bookingsData);
 
   // get services from database
   const isLoadingService = useSubscribe("all_services");
@@ -163,15 +132,9 @@ export function useBookings(booking_publication, params, filter) {
     return ServiceCollection.find().fetch();
   });
 
-  // get service images from database
-  const isLoadingServiceImage = useSubscribe("service_images");
-  let imagesData = useTracker(() => {
-    return ImageCollection.find({ imageType: "service" }).fetch();
-  });
-
   // variable for loading
   const isLoading =
-    isLoadingBooking() || isLoadingService() || isLoadingServiceImage();
+    isLoadingBooking() || isLoadingService();
 
   // manual aggregation into bookingsData with its services and images
   for (let i = 0; i < bookingsData.length; i++) {
@@ -181,26 +144,13 @@ export function useBookings(booking_publication, params, filter) {
       if (bookingsData[i].serviceId === servicesData[j]._id) {
         bookingsData[i].serviceName = servicesData[j].serviceName;
         bookingsData[i].serviceDesc = servicesData[j].serviceDesc;
+        if (!servicesData[j].serviceImages) {
+            bookingsData[i].serviceImageData = "/imageNotFound.png";
+        } else {
+            bookingsData[i].serviceImageData = servicesData[j].serviceImages[0].imageData;
+        }
         break;
       }
-    }
-    // then aggregate with the FIRST service image (cover)
-    let foundImageMatch = false;
-    for (let j = 0; j < imagesData.length; j++) {
-      // find matching image for the service
-      if (
-        imagesData[j].imageType === "service" &&
-        bookingsData[i].serviceId === imagesData[j].target_id
-      ) {
-        bookingsData[i].serviceImageData = imagesData[j].imageData;
-        foundImageMatch = true;
-        break;
-      }
-    }
-
-    // if not found any images, replace with default
-    if (!foundImageMatch) {
-      bookingsData[i].serviceImageData = "/imageNotFound.png";
     }
   }
   return {
@@ -226,27 +176,8 @@ export function useUsers(user_publication, params, filter) {
     return UserCollection.find(filter).fetch();
   });
 
-  // get user profile image from database
-  const isLoadingImages = useSubscribe("profile_images");
-  let imagesData = useTracker(() => {
-    return ImageCollection.find({ imageType: "profile" }).fetch();
-  });
+  const isLoading = isLoadingUsers();
 
-  const isLoading = isLoadingUsers() || isLoadingImages();
-
-  // manual aggregation user data with their image
-  for (let i = 0; i < usersData.length; i++) {
-    for (let j = 0; j < imagesData.length; j++) {
-      // find matching image for the artist
-      if (
-        imagesData[j].imageType === "profile" &&
-        usersData[i].username === imagesData[j].target_id
-      ) {
-        usersData[i].profileImageData = imagesData[j].imageData;
-        break;
-      }
-    }
-  }
   return { isLoading, usersData };
 }
 
@@ -266,17 +197,6 @@ export function useSpecificService(serviceId) {
     }).fetch()[0];
   });
 
-  // get service images from database
-  const isLoadingServiceImages = useSubscribe(
-    "specific_service_images",
-    serviceId
-  );
-  let serviceImagesData = useTracker(() => {
-    return ImageCollection.find({
-      $and: [{ imageType: "service" }, { target_id: serviceId }],
-    }).fetch();
-  });
-
   // get artist data + profile image from database
   const serviceArtistUsername = serviceData ? serviceData.artistUsername : "";
   const isLoadingArtist = useSubscribe("specific_user", serviceArtistUsername);
@@ -285,28 +205,15 @@ export function useSpecificService(serviceId) {
       username: serviceArtistUsername,
     }).fetch()[0];
   });
-
-  const isLoadingArtistProfile = useSubscribe(
-    "specific_profile_image",
-    serviceArtistUsername
-  );
-  let profileImageData = useTracker(() => {
-    return ImageCollection.find({
-      $and: [{ imageType: "profile" }, { target_id: serviceArtistUsername }],
-    }).fetch()[0];
-  });
+  
 
   const isLoading =
     isLoadingService() ||
-    isLoadingArtist() ||
-    isLoadingServiceImages() ||
-    isLoadingArtistProfile();
+    isLoadingArtist();
   return {
     isLoading,
     serviceData,
-    artistData,
-    serviceImagesData,
-    profileImageData,
+    artistData
   };
 }
 
@@ -373,20 +280,9 @@ export function useSpecificUser(username) {
     return UserCollection.find({ username: username }).fetch()[0];
   });
 
-  // get profile images from database
-  const isLoadingProfileImages = useSubscribe(
-    "specific_profile_image",
-    username
-  );
-  let profileImagesData = useTracker(() => {
-    return ImageCollection.find({
-      $and: [{ imageType: "profile" }, { target_id: username }],
-    }).fetch()[0];
-  });
+  const isLoading = isLoadingUser();
 
-  const isLoading = isLoadingUser() || isLoadingProfileImages();
-
-  return { isLoading, userData, profileImagesData };
+  return { isLoading, userData };
 }
 
 /**
@@ -450,37 +346,14 @@ export function useArtistDashboardData(username) {
  * Also, the array of image sources and corresponding post data (all information related to post)
  */
 export function useGalleryTotalCollection(username) {
-  // collect post image data
-  const isLoadingImages = useSubscribe("post_images", []);
-  let imageDataArray = useTracker(() => {
-    return ImageCollection.find({ imageType: "post" }).fetch();
-  });
-
   // collect user post data
   const isLoadingPost = useSubscribe("specific_artist_posts", username);
   const postsData = useTracker(() => {
     return PostCollection.find({ artistUsername: username }).fetch();
   });
 
-  // loop through and collect all the post ID information
-  const postDataIDArray = [];
-  for (let i = 0; i < postsData.length; i++) {
-    postDataIDArray.push(postsData[i]._id);
-  }
-  const imageSourceArray = [];
-
-  //collect relevant post images
-  for (let j = 0; j < postDataIDArray.length; j++) {
-    for (let i = 0; i < imageDataArray.length; i++) {
-      if (imageDataArray[i].target_id === postDataIDArray[j]) {
-        imageSourceArray.push(imageDataArray[i].imageData);
-      }
-    }
-  }
-
   return {
-    isLoading: isLoadingImages() || isLoadingPost(),
-    imageSourceArray,
+    isLoading: isLoadingPost(),
     postsData,
   };
 }

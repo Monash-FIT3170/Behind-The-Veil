@@ -8,12 +8,10 @@ import { Meteor } from "meteor/meteor";
 import { useSubscribe, useTracker } from "meteor/react-meteor-data";
 import { ArrowUpTrayIcon, CheckIcon } from "@heroicons/react/24/outline";
 
-import ImageCollection from "../../../../../api/collections/images";
-
 import Input from "../../../input/Input";
 import Button from "../../../button/Button.jsx";
 import ProfilePhoto from "../../../profilePhoto/ProfilePhoto.jsx"
-import { useUserInfo } from "../../../util";
+import {useUserInfo, imageObj} from "../../../util";
 import Loader from "../../../loader/Loader";
 import UserCollection from "../../../../../api/collections/users";
 
@@ -41,19 +39,6 @@ export const AccountDetails = () => {
         )) : []
     });
 
-
-    // get current profile image
-    const isLoadingProfileImage = useSubscribe('specific_profile_image', userInfo);
-
-    let profileImageData = useTracker(() => {
-        return ImageCollection.find({
-            $and: [
-                {"imageType": "profile"},
-                {"target_id": userInfo.username}
-            ]
-        }).fetch()[0];
-    });
-
     // Keeps track of the values in the text inputs
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [formState, setFormState] = useState({
@@ -79,27 +64,15 @@ export const AccountDetails = () => {
     };
 
     // keep track of uploaded image for profile
-    const [uploadedFile, setUploadedFile] = useState(undefined) // this is the actual file, to be stored in database
-    const [previewImageUrl, setPreviewImageUrl] = useState(undefined) // this is JUST the url of the image for viewing
+    const [imageObject, setImageObject] = useState(null) // this is the actual file, to be stored in database
     const allowedFileTypeExtensions = [".png", ".jpg", ".jpeg"];
 
+    useEffect(() => {
+        setImageObject(userInfo.profileImage)
+    }, [])
 
     // error texts under the text inputs
     const [imageError, setImageError] = useState("")
-
-    // when uploadedFile changes, also change preview
-    useEffect(() => {
-        if (!uploadedFile) {
-            setPreviewImageUrl(undefined)
-            return
-        }
-
-        const objectUrl = URL.createObjectURL(uploadedFile)
-        setPreviewImageUrl(objectUrl)
-
-        // free memory when ever this component is unmounted
-        return () => URL.revokeObjectURL(objectUrl)
-    }, [uploadedFile])
 
     // handler for uploading file button
     const onUploadFile = e => {
@@ -107,18 +80,31 @@ export const AccountDetails = () => {
 
         if (!file) {
             // if no file selected, do nothing
-
-        } else if (!allowedFileTypeExtensions.some((ext) => file.name.endsWith(ext))) {
+            return;
+        } else if (!allowedFileTypeExtensions.some((ext) => file.name.toLowerCase().endsWith(ext.toLowerCase()))) {
             setImageError("Please select a png, jpg, or jpeg file.")
-
-        } else {
+            return;
+        } else if (file.size > 16777216) {
+            setImageError("File must be less than 16MB");
+            return;
+        } 
+        else {
             setImageError("")
-            setUploadedFile(file)
+
+            const reader = new FileReader();
+
+            // Convert the file to take URL format
+            reader.onloadend = () => {
+            const image = imageObj(reader.result, file.name, file.size);
+            setImageObject(image);
+            };
+
+            reader.readAsDataURL(file);
         }
     }
 
     const handleFileClear = (e) => {
-        setUploadedFile(undefined)
+        setImageObject(null)
     }
 
     // Updates the values inputted into the text fields, if they have changed and are valid.
@@ -152,12 +138,6 @@ export const AccountDetails = () => {
             isError = true;
         }
 
-        // check uploaded file is valid
-        if (uploadedFile && !allowedFileTypeExtensions.some((ext) => uploadedFile.name.endsWith(ext))) {
-            setImageError("Please select a png, jpg, or jpeg file.")
-            isError = true;
-        }
-
         // Update text errors state with new error messages
         setTextErrors(newErrors);
 
@@ -184,17 +164,16 @@ export const AccountDetails = () => {
                             }
                         });
                 }
-
+                
                 // update profile image
-                if (uploadedFile) {
-                    // todo, after image upload setup completed
-                    //  remove old profile image then insert the new one
+               if (imageObject !== userInfo.profileImage) {
+                    console.log(imageObject)
+                    Meteor.call('update_profile_image', userInfo.id, imageObject);
                 }
 
                 resolve()
 
             }).then(() => {
-                // reload after update
                 setIsSubmitting(false)
                 setFormState({
                     alias: "",
@@ -211,12 +190,11 @@ export const AccountDetails = () => {
         }
     };
 
-    if (isLoadingProfileImage() || isLoadingUsers()) {
+    if (isLoadingUsers()) {
         // wait for load data
         return (
             <Loader
                 loadingText={"Account details are loading . . ."}
-                isLoading={isLoadingProfileImage()}
                 size={100}
                 speed={1.5}
             />
@@ -261,12 +239,13 @@ export const AccountDetails = () => {
                     <div className="main-text">Profile Image</div>
 
                     <div className="flex flex-col md:flex-row items-center gap-4">
-                        <ProfilePhoto userPhotoData={uploadedFile ? previewImageUrl : profileImageData}/>
+                        <ProfilePhoto userPhotoData={imageObject ? imageObject.imageData : null}/>
 
                         <div className={"flex flex-col gap-1"}>
                             <Input
                                 hidden
                                 type="file"
+                                accept={allowedFileTypeExtensions?.join(",")}
                                 name={"profilePhoto"}
                                 id={"upload-input"}
                                 onChange={onUploadFile}
@@ -280,7 +259,7 @@ export const AccountDetails = () => {
                                 Upload File
                             </label>
                             {
-                                uploadedFile ?
+                                imageObject ?
                                     <Button className="btn-base" onClick={() => handleFileClear()}>
                                         Reset Image
                                     </Button> :

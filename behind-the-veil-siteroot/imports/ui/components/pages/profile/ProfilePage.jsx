@@ -43,7 +43,7 @@ export const ProfilePage = () => {
 
       {/*Top div where user's info*/}
       <ProfileDisplay
-        imageData={""}
+        imageData={userInfo.profileImage ? userInfo.profileImage.imageData : userInfo.profileImage}
         userAlias={userInfo.alias}
         userUsername={userInfo.username}
       />

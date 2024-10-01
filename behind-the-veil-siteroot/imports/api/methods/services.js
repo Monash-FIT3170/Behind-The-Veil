@@ -19,15 +19,15 @@ Meteor.methods({
      * @param {number} duration - how long the service will take in hours, not counting artist preparation and commute time
      * @param {string} artistUsername - username (id) of artist providing the service
      */
-    add_service: function (type, name, desc, price, duration, artistUsername) {
+    add_service: function (type, name, desc, price, duration, artistUsername, images) {
         check(type, String)
         check(name, String)
         check(desc, String)
         check(price, String)
         check(duration, String)
         check(artistUsername, String)
-
-        const serviceId = ServiceCollection.insert({
+        
+        ServiceCollection.insert({
             serviceType: type,
             serviceName: name,
             serviceDesc: desc,
@@ -35,9 +35,8 @@ Meteor.methods({
             serviceActive: true,
             serviceDuration: duration,
             artistUsername: artistUsername,
+            serviceImages: images
         });
-        
-        return serviceId
     },
 
     get_service: function (serviceId) {
