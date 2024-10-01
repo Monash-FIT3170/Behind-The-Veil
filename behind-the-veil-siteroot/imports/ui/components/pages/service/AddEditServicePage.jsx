@@ -7,7 +7,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import {imageObj, useUserInfo} from "../../util";
+import { imageObj, useUserInfo } from "../../util";
 import PageLayout from "/imports/ui/enums/PageLayout";
 import WhiteBackground from "/imports/ui/components/whiteBackground/WhiteBackground.jsx";
 import BackButton from "../../button/BackButton";
@@ -40,7 +40,7 @@ export const AddEditServicePage = ({isEdit}) => {
     const [successMessage, setSuccessMessage] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    
+
     const [imageObjs, setImageObjs] = useState([]);
     const [images, setImages] = useState([]);
 
@@ -68,7 +68,7 @@ export const AddEditServicePage = ({isEdit}) => {
     }
 
     // get service ID from url
-    const { serviceId } = useParams();
+    const {serviceId} = useParams();
     const {isLoading, servicesData} = useServices("specific_service", [serviceId], {}, false, false);
 
     /**
@@ -117,33 +117,21 @@ export const AddEditServicePage = ({isEdit}) => {
     const [shouldAddImages, setShouldAddImages] = useState(false);
 
     useEffect(() => {
-
         if (isEdit && !isLoading) {
-            const retrieveService = () => {
-                return new Promise((resolve, reject) => {
-                    Meteor.call("get_service", serviceId, (error, result) => {
-                        if (error) {
-                            reject(`Error: ${error.message}`);
-                        } else {
-                            resolve(result);
-                        }
-                    });
-                });
             const service = servicesData.filter((service) => service._id === serviceId)[0]
 
-            retrieveService().then((service) => {
-                if (service.artistUsername !== userInfo.username) {
-                    navigateTo("/" + UrlBasePath.PROFILE);
-                }
-                
-                setServiceName(service.serviceName);
-                setServiceType(service.serviceType);
-                setServiceDuration(service.serviceDuration);
-                setServicePrice(service.servicePrice);
-                setServiceDescription(service.serviceDesc);
-                setImageObjs(service.serviceImages);
-                setShouldAddImages(true);
-            });
+            if (service.artistUsername !== userInfo.username) {
+                navigateTo("/" + UrlBasePath.PROFILE);
+            }
+
+            setServiceName(service.serviceName);
+            setServiceType(service.serviceType);
+            setServiceDuration(service.serviceDuration);
+            setServicePrice(service.servicePrice);
+            setServiceDescription(service.serviceDesc);
+            setImageObjs(service.serviceImages);
+            setShouldAddImages(true);
+
         }
     }, [isLoading]);
 
@@ -255,15 +243,12 @@ export const AddEditServicePage = ({isEdit}) => {
             // edit
             new Promise((resolve, reject) => {
                 if (isEdit) {
-                    Meteor.call("update_service_details", serviceId, service, (error, result) => {
-                        if (error) {
-                            reject(`Error: ${error.message}`);
-                            setSuccess(false);
-                        } else {
-                            resolve(result);
-                            setSuccess(true);
-                        }
-                    });
+                    Meteor.call("update_service_details", serviceId, service,
+                        (error) => {
+                            if (error) {
+                                reject(`Error: ${error.message}`);
+                            }
+                        });
                     resolve(serviceId)
                 } else {
                     // add the new service
@@ -282,7 +267,6 @@ export const AddEditServicePage = ({isEdit}) => {
 
                             } else {
                                 resolve(result);
-                                setSuccess(true);
                             }
                         }
                     );
@@ -314,8 +298,6 @@ export const AddEditServicePage = ({isEdit}) => {
 
     // Handles delete (or archive) service functionality.
     const handleDelete = () => {
-        // No need to write a promise - as the Collection "bookings" is only being read and not altered.
-
         new Promise((resolve, reject) => {
             Meteor.call("has_booking_of_service", serviceId,
                 (error, result) => {
@@ -508,9 +490,10 @@ export const AddEditServicePage = ({isEdit}) => {
                         {errors.overall && <div className="text-cancelled-colour mt-2">{errors.overall}</div>}
                         {successMessage && <div className="text-confirmed-colour mt-2">{successMessage}</div>}
 
-                        <Button className="flex bg-secondary-purple hover:bg-secondary-purple-hover mt-[15px] load-when-disabled"
-                                disabled={isSubmitting}
-                                onClick={handleSubmit}>
+                        <Button
+                            className="flex bg-secondary-purple hover:bg-secondary-purple-hover mt-[15px] load-when-disabled"
+                            disabled={isSubmitting}
+                            onClick={handleSubmit}>
                             <CheckIcon className="icon-base"/>
                             {button}
                         </Button>
