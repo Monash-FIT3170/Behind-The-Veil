@@ -7,7 +7,7 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 
-import {useUserInfo} from "../../util";
+import {imageObj, useUserInfo} from "../../util";
 import PageLayout from "/imports/ui/enums/PageLayout";
 import WhiteBackground from "/imports/ui/components/whiteBackground/WhiteBackground.jsx";
 import BackButton from "../../button/BackButton";
@@ -19,7 +19,6 @@ import QuestionMarkCircleIcon from "@heroicons/react/16/solid/QuestionMarkCircle
 import UrlBasePath from "../../../enums/UrlBasePath";
 import {Modal} from "react-responsive-modal";
 import Tippy from '@tippyjs/react/headless';
-import { useServices } from "../../DatabaseHelper";
 
 export const AddEditServicePage = ({isEdit}) => {
     const navigateTo = useNavigate();
@@ -35,11 +34,9 @@ export const AddEditServicePage = ({isEdit}) => {
     const [servicePrice, setServicePrice] = useState(0);
     const [serviceDescription, setServiceDescription] = useState("");
 
-    // imagedb is an array of image objects from the database, and images is an array of image html elements
-    const [imagedb, setImagedb] = useState([]);
+    const [imageObjs, setImageObjs] = useState([]);
     const [images, setImages] = useState([]);
 
-    // error variables
     const [errors, setErrors] = useState({
         serviceName: "",
         serviceType: "",
@@ -68,9 +65,8 @@ export const AddEditServicePage = ({isEdit}) => {
         navigateTo(`/`);
     }
 
-    // get service ID from url and load service
+    // get service ID from url
     const { serviceId } = useParams();
-    const { isLoading, servicesData } = useServices("specific_service", [serviceId], {}, false, false);
 
     /**
      * function to upload an image to the frontend
@@ -96,15 +92,40 @@ export const AddEditServicePage = ({isEdit}) => {
         setImages((prevImages) => Array.from(new Set([...prevImages, image])));
     };
 
+    /**
+     * Removes the image from the database and the frontend
+     * @param imageObj - The image object
+     */
+    const removeImage = (imageObj) => {
+        setImageObjs((prevImages) => prevImages.filter((img) => img !== imageObj));
+        setImages((prevImages) => prevImages.filter((img) => img.key !== imageObj.imageName));
+    };
+
+    /**
+     * Removes all the images for a service from the database and frontend
+     */
+    const removeAllImages = () => {
+        setImageObjs([]);
+        setImages([]);
+    };
+
     // load in existing service information if it is editing
     const [shouldAddImages, setShouldAddImages] = useState(false);
     useEffect(() => {
         if (isEdit) {
             const retrieveService = () => {
-                return servicesData.filter((service) => service._id === serviceId)
+                return new Promise((resolve, reject) => {
+                    Meteor.call("get_service", serviceId, (error, result) => {
+                        if (error) {
+                            reject(`Error: ${error.message}`);
+                        } else {
+                            resolve(result);
+                        }
+                    });
+                });
             };
 
-            const service = retrieveService()[0]
+            retrieveService().then((service) => {
                 if (service.artistUsername !== userInfo.username) {
                     navigateTo("/" + UrlBasePath.PROFILE);
                 }
@@ -113,39 +134,19 @@ export const AddEditServicePage = ({isEdit}) => {
                 setServiceDuration(service.serviceDuration);
                 setServicePrice(service.servicePrice);
                 setServiceDescription(service.serviceDesc);
-                console.log(servicesData);
-                console.log(service);
-                if (service.serviceImageData === "/imageNotFound.png") {
-                    setImagedb([{imageData: "/imageNotFound.png"}]);
-                } else {
-                    service.serviceImageData.forEach((image) => {
-                        setImagedb((prevImages) =>
-                            Array.from(
-                                new Set([
-                                    ...prevImages,
-                                    {
-                                        imageType: image.imageType,
-                                        imageData: image.imageData,
-                                        imageName: image.imageName,
-                                        imageSize: image.imageSize,
-                                    },
-                                ])
-                            )
-                        );
-                    });
-                    setShouldAddImages(true);
-                }
+                setImageObjs(service.serviceImages);
+                setShouldAddImages(true);
+            });
         }
     }, []);
 
     useEffect(() => {
         if (shouldAddImages) {
-            imagedb.forEach((imageObj) => addImage(imageObj));
+            imageObjs.forEach((imageObj) => addImage(imageObj));
             setShouldAddImages(false);
         }
-    }, [shouldAddImages, imagedb]);
+    }, [shouldAddImages, imageObjs]);
 
-    // set the allowed file types and a state for when a file is rejected
     const allowedFileTypeExtensions = [".png", ".jpg", ".jpeg"];
     const [fileRejected, setFileRejected] = useState(false);
     const [fileRejectedMessage, setFileRejectedMessage] = useState("");
@@ -160,14 +161,9 @@ export const AddEditServicePage = ({isEdit}) => {
         reader.addEventListener(
             "load",
             () => {
-                const imageObj = {
-                    imageType: "service",
-                    imageData: reader.result,
-                    imageName: file.name,
-                    imageSize: file.size,
-                };
-                addImage(imageObj);
-                setImagedb((prevImages) => Array.from(new Set([...prevImages, imageObj])));
+                const image = imageObj(reader.result, file.name, file.size);
+                addImage(image);
+                setImageObjs((prevImages) => Array.from(new Set([...prevImages, image])));
             },
             false
         );
@@ -175,24 +171,6 @@ export const AddEditServicePage = ({isEdit}) => {
         reader.readAsDataURL(file);
     };
 
-    /**
-     * Removes the image from the database and the frontend
-     * @param imageObj - The image object
-     */
-    const removeImage = (imageObj) => {
-        setImagedb((prevImages) => prevImages.filter((img) => img !== imageObj));
-        setImages((prevImages) => prevImages.filter((img) => img.key !== imageObj.imageName));
-    };
-
-    /**
-     * Removes all the images for a service from the database and frontend
-     */
-    const removeAllImages = () => {
-        setImagedb([]);
-        setImages([]);
-    };
-
-    // Handles when an image is uploaded
     const handleFileChange = (event) => {
         setFileRejected(false);
         const files = Array.from(event.target.files);
@@ -202,7 +180,7 @@ export const AddEditServicePage = ({isEdit}) => {
                 setFileRejected(true);
                 setFileRejectedMessage("File must be of type/s (" + allowedFileTypeExtensions.join(", ") + ")");
                 return false;
-            } else if (imagedb.some((img) => img.imageName === file.name && img.imageSize === file.size)) {
+            } else if (imageObjs.some((img) => img.imageName === file.name && img.imageSize === file.size)) {
                 setFileRejected(true);
                 setFileRejectedMessage("File has already been uploaded!");
                 return false;
@@ -240,8 +218,8 @@ export const AddEditServicePage = ({isEdit}) => {
             newErrors.servicePrice = "Please input a valid service price";
             isError = true;
         }
-        if (serviceDuration <= 0 || serviceDuration > 24 || !Number.isInteger(Number(serviceDuration))) {
-            newErrors.serviceDuration = "Please input a valid full hour service duration between (1 - 24 hours)";
+        if (serviceDuration <= 0 || serviceDuration > 24) {
+            newErrors.serviceDuration = "Please input a valid service duration between (0.5 - 24 hours)";
             isError = true;
         }
         if (!serviceDescription) {
@@ -263,6 +241,7 @@ export const AddEditServicePage = ({isEdit}) => {
                 servicePrice: servicePrice,
                 serviceDesc: serviceDescription,
                 artistUsername: userInfo.username,
+                serviceImages: imageObjs,
             };
 
             // edit
@@ -277,25 +256,6 @@ export const AddEditServicePage = ({isEdit}) => {
                             setSuccess(true);
                         }
                     });
-                    Meteor.call("remove_service_images", serviceId, (error, result) => {
-                        if (error) {
-                            reject(`Error: ${error.message}`);
-                            setSuccess(false);
-                        } else {
-                            resolve(result);
-                            setSuccess(true);
-                        }
-                    });
-                    imagedb.forEach((imageObj) =>
-                        Meteor.call(
-                            "add_image",
-                            "service",
-                            serviceId,
-                            imageObj.imageData,
-                            imageObj.imageName,
-                            imageObj.imageSize
-                        )
-                    );
                 } else {
                     Meteor.call(
                         "add_service",
@@ -305,24 +265,13 @@ export const AddEditServicePage = ({isEdit}) => {
                         servicePrice,
                         serviceDuration,
                         userInfo.username,
+                        imageObjs,
                         (error, result) => {
                             if (error) {
                                 reject(`Error: ${error.message}`);
                                 setSuccess(false);
                             } else {
-                                const newServiceId = result;
-                                resolve(
-                                    imagedb.forEach((imageObj) =>
-                                        Meteor.call(
-                                            "add_image",
-                                            "service",
-                                            newServiceId,
-                                            imageObj.imageData,
-                                            imageObj.imageName,
-                                            imageObj.imageSize
-                                        )
-                                    )
-                                );
+                                resolve(result);
                                 setSuccess(true);
                             }
                         }

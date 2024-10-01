@@ -38,7 +38,7 @@ export const ArtistGalleryTab = ({username, external = false}) => {
   const [selectedPostId, setSelectedPostId] = useState(null);
   const plusIcon = <PlusIcon className="icon-base"/>;
 
-  const {isLoading, imageSourceArray: galleryImgData, postsData} = useGalleryTotalCollection(username)
+  const {isLoading, postsData} = useGalleryTotalCollection(username)
 
   const userProfileImageSrc = useSpecificUser(username)[2];
   const navigateTo = useNavigate();
@@ -92,14 +92,6 @@ export const ArtistGalleryTab = ({username, external = false}) => {
         console.error("error removing post", error);
       } else {
         console.log("post removed");
-      }
-    });
-
-    Meteor.call("remove_post_image", selectedPostId, (error) => {
-      if (error) {
-        console.error("error removing image", error);
-      } else {
-        console.log("image removed");
       }
     });
 
@@ -160,15 +152,15 @@ export const ArtistGalleryTab = ({username, external = false}) => {
 
         <ResponsiveMasonry>
           <Masonry gutter="5px">
-            {galleryImgData.map((image, index) => (
+            {postsData.map((post, index) => (
               <img
-                key={index}
-                src={image}
+                key={post.postImage.imageName}
+                src={post.postImage.imageData}
                 style={{
                   width: "100%",
                   display: "block",
                 }}
-                onClick={() => openGalleryModal(image, index)}
+                onClick={() => openGalleryModal(post.postImage.imageData, index)}
                 alt={"Gallery Image " + index}
               />
             ))}

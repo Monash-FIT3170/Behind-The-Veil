@@ -56,7 +56,6 @@ const RequestBooking = () => {
         isLoading: isLoadingServices,
         serviceData,
         artistData,
-        serviceImagesData,
         profileImageData,
     } = useSpecificService(serviceId);
 
