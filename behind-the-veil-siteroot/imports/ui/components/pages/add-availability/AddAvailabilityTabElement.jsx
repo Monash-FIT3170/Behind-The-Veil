@@ -144,6 +144,8 @@ const AddAvailability = ({ username }) => {
       Brides can only select from available hours (green) that you set. Please
       note that the available hour denote when the services start and does not
       account for travel time. You may need to account for extra travel time.
+      Red Dot on the "Availability" Tab indicates there no availabilities has
+      been added this week. Add an availability to erase the red dot.
     </div>
   );
 
