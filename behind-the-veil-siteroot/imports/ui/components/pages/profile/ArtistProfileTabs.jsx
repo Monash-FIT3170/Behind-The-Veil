@@ -1,7 +1,7 @@
 /**
  * File Description: Artist profile page tabs
- * File version: 2.1
- * Contributors: Kefei (Phillip) Li, Laura, Nikki, Lucas, Vicky
+ * File version: 2.2
+ * Contributors: Phillip, Laura, Nikki, Lucas, Vicky
  */
 
 import React, { useState, useEffect } from "react";
@@ -37,6 +37,7 @@ export const ArtistProfileTabs = ({ userInfo }) => {
     userInfo.username
   );
 
+  //Checks whether an availability exists in the current week.
   useEffect(() => {
     const checkForCurrentWeekAvailability = (availability) => {
       const today = new Date();
@@ -96,6 +97,7 @@ export const ArtistProfileTabs = ({ userInfo }) => {
         </span>,
         <span key={3} className="relative">
           Availability
+          {/* Display a red dot to indicate that availability hasn't been added this week */}
           {weeklyAvailabilityEntered == false && (
             <span className="absolute top-0 h-2 w-2 bg-red-500 rounded-full"></span>
           )}
