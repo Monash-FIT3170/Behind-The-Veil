@@ -32,12 +32,6 @@ export const AddEditPostPage = ({ isEdit }) => {
 
   const userInfo = useUserInfo();
 
-  // if user is not an artist, navigate them away
-  console.log(userInfo.type)
-  if (userInfo.type === "bride") {
-    navigateTo(`/${UrlBasePath.HOME}`);
-  }
-
   // gets the postId from the URL 
   const { postId } = useParams();
 
@@ -45,6 +39,11 @@ export const AddEditPostPage = ({ isEdit }) => {
 
   // Load in existing post information if it is editing
   useEffect(() => {
+
+    if (userInfo.type === "bride") {
+      navigateTo(`/${UrlBasePath.HOME}`);
+    }
+
     if (isEdit) {
       // Function to retrieve post details
       const retrievePost = () => {
