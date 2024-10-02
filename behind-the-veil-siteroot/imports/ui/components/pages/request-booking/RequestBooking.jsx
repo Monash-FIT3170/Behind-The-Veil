@@ -47,6 +47,11 @@ import BookingCollection from "../../../../api/collections/bookings.js";
 
 const RequestBooking = () => {
     const userInfo = useUserInfo();
+    const navigateTo = useNavigate();
+
+    if (userInfo.type === "artist") {
+        navigateTo(`/${UrlBasePath.HOME}`);
+    }
 
     // grab the service ID from the URL
     const { serviceId } = useParams();
@@ -72,8 +77,6 @@ const RequestBooking = () => {
         return BookingCollection.find().fetch();
     });
     const artistAvailability = artistData?.availability
-
-    const navigateTo = useNavigate();
 
     /**
      * Calculate available times that the user can select, based on date, duration, and existing bookings
@@ -291,7 +294,6 @@ const RequestBooking = () => {
         duration: duration,
         bookings: artistBookings,
     });
-
 
     if (isLoading) {
         // is loader, display loader

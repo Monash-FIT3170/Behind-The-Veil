@@ -22,7 +22,7 @@ import Button from "../../button/Button";
 import FormOutput from "./FormOutput";
 import MarkerMap from "../../map/MarkerMap";
 import BackButton from "../../button/BackButton";
-import {useUserInfo} from "/imports/ui/components/util"
+import {useUserInfo} from "../../util";
 import BookingStatus from "../../../enums/BookingStatus";
 import PageLayout from "../../../enums/PageLayout";
 import Loader from "../../loader/Loader";
@@ -39,6 +39,10 @@ const BookingDetailsPage = () => {
     // Navigate hook for redirecting to another page
     const navigateTo = useNavigate();
     const userInfo = useUserInfo();
+
+    if (userInfo.type === "artist") {
+        navigateTo(`/${UrlBasePath.HOME}`);
+    }
 
     // grab the service ID from the URL
     const {bookingId} = useParams();
