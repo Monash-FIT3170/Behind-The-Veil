@@ -26,11 +26,18 @@ import { useParams, useNavigate } from "react-router-dom";
 import Tippy from '@tippyjs/react/headless';
 import QuestionMarkCircleIcon from "@heroicons/react/16/solid/QuestionMarkCircleIcon";
 import { useSpecificUser } from "../../DatabaseHelper.jsx";
+import {useUserInfo} from "../../util";
+import UrlBasePath from "../../../enums/UrlBasePath";
 
 /**
  * Page for artist to add availability
  */
 const AddAvailability = () => {
+    const navigateTo = useNavigate();
+
+    if (useUserInfo().type === "bride") {
+        navigateTo(`/${UrlBasePath.HOME}`);
+    }
     const { artistUsername } = useParams();
 
     // message on save

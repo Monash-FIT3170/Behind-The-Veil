@@ -2,11 +2,20 @@ import React, { useState } from "react";
 import { PaintBrushIcon, CheckIcon } from "@heroicons/react/24/outline";
 import Input from "../../../input/Input";
 import Button from "../../../button/Button.jsx";
+import {useNavigate} from "react-router-dom";
+import {useUserInfo} from "../../../util";
+import UrlBasePath from "../../../../enums/UrlBasePath";
 
 /**
  * Payment details tab which artist can edit on their own
  */
 export const ArtistPayment = () => {
+    const navigateTo = useNavigate();
+
+    if (useUserInfo().type === "bride") {
+        navigateTo(`/${UrlBasePath.HOME}`);
+    }
+
     // State for editing mode and input values
     const [isEditing, setIsEditing] = useState(false);
     const [accountName, setAccountName] = useState("");

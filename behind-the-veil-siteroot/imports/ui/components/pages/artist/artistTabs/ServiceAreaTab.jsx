@@ -7,6 +7,9 @@
 import React from 'react';
 import FormOutput from "../../request-booking/FormOutput";
 import MarkerMap from "../../../map/MarkerMap";
+import {useUserInfo} from "../../../util";
+import UrlBasePath from "../../../../enums/UrlBasePath";
+import {useNavigate} from "react-router-dom";
 
 
 /**
@@ -16,6 +19,11 @@ import MarkerMap from "../../../map/MarkerMap";
  * @param serviceRadius the radius which artist can service from that location
  */
 export const ServiceAreaTab = ({serviceLocation, serviceRadius}) => {
+    const navigateTo = useNavigate();
+
+    if (useUserInfo().type === "bride") {
+        navigateTo(`/${UrlBasePath.HOME}`);
+    }
 
     // todo: display radius on mapbox and search bar to search (?)
     if (!serviceLocation || serviceRadius === undefined || serviceRadius === null) {

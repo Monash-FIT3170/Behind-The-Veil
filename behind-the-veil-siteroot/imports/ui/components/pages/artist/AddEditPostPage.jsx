@@ -33,8 +33,9 @@ export const AddEditPostPage = ({ isEdit }) => {
   const userInfo = useUserInfo();
 
   // if user is not an artist, navigate them away
-  if (userInfo.type !== "artist") {
-    navigateTo(`/`);
+  console.log(userInfo.type)
+  if (userInfo.type === "bride") {
+    navigateTo(`/${UrlBasePath.HOME}`);
   }
 
   // gets the postId from the URL 

@@ -8,8 +8,8 @@ import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 
 import {imageObj, useUserInfo} from "../../util";
-import PageLayout from "/imports/ui/enums/PageLayout";
-import WhiteBackground from "/imports/ui/components/whiteBackground/WhiteBackground.jsx";
+import PageLayout from "../../../enums/PageLayout";
+import WhiteBackground from "../../../components/whiteBackground/WhiteBackground.jsx";
 import BackButton from "../../button/BackButton";
 import Input from "../../input/Input";
 import Button from "../../button/Button";
@@ -61,7 +61,7 @@ export const AddEditServicePage = ({isEdit}) => {
     const userInfo = useUserInfo();
 
     // if user is not an artist, navigate them away
-    if (userInfo.type !== "artist") {
+    if (userInfo.type === "bride") {
         navigateTo(`/`);
     }
 
@@ -70,7 +70,7 @@ export const AddEditServicePage = ({isEdit}) => {
 
     /**
      * function to upload an image to the frontend
-     * @param imageobj - The image object
+     * @param imageObj
      */
     const addImage = (imageObj) => {
         const image = (
