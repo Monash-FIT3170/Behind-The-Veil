@@ -21,7 +21,6 @@ export const ProfileSettingsPage = () => {
     
     // get current user information
     const userInfo = useTracker(() => Meteor.user());
-    console.log(userInfo)
 
     // display tabs depending on user account type (brides don't have service area settings tab)
     if (userInfo.profile.type === "bride") {
@@ -47,7 +46,6 @@ export const ProfileSettingsPage = () => {
     } else {
         // artist
         let artistServiceLocation = userInfo.profile.artistServiceLocation;
-        console.log(artistServiceLocation)
         let artistPaymentAccount = userInfo.profile.artistPaymentAccount;
         return (
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
