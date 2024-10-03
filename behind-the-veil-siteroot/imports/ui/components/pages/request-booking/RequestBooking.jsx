@@ -242,7 +242,10 @@ const RequestBooking = () => {
         if (!isValid(inputs.time)) {
             alert("Please select a valid time.");
             return;
-        } else if (!inputs.location) {
+        }
+
+        // Validation for location fields
+        if (!(address.street && address.suburb && address.state)) {
             alert("Please select a valid location.");
             return;
         }
