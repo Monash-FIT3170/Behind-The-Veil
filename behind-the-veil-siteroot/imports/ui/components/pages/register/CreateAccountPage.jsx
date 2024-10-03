@@ -26,6 +26,7 @@ const CreateAccountPage = () => {
         email: "",
         password: "",
         retypePassword: "",
+        termCondition: ""
     });
 
     // get the chosen account type from last page
@@ -35,6 +36,9 @@ const CreateAccountPage = () => {
         // if invalid type in url, default to bride
         setAccountType("bride")
     }
+
+    const [isTermChecked, setIsTermChecked] = useState(false);
+
 
     // get whether it errored before in the URL
     const urlParams = new URLSearchParams(window.location.search);
@@ -138,6 +142,12 @@ const CreateAccountPage = () => {
 
         } else if (password !== retypePassword) {
             newError.retypePassword = 'Passwords do not match.';
+            isError = true;
+        }
+
+         // Validate if term and condition checkbox is ticked
+         if (!isTermChecked) {
+            newError.termCondition = "You must agree to the Term and Condtion to register.";
             isError = true;
         }
 
@@ -283,6 +293,29 @@ const CreateAccountPage = () => {
                             <li className={"ml-2"}>minimum 8 characters</li>
                         </ul>
                     </div>
+
+                    {/* Term and Condition Checkbox */}
+                    <div className="flex items-start gap-3 w-4/5">
+                        <input
+                            type="checkbox"
+                            id="termCondition"
+                            checked={isTermChecked}
+                            onChange={() => setIsTermChecked(!isPrivacyChecked)}
+                            className="mt-3.5"
+                        />
+                        <label htmlFor="termCondition" className="small-text text-dark-grey text-left">
+                            I confirm that I have read, understand, and agree to Behind The Veil's
+                            <a href={`/${UrlBasePath.TERMCONDITION}`}
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               className="text-secondary-purple underline ml-1"
+                            >Term and Condition
+                            </a>.
+                        </label>
+                    </div>
+                    {/* Display error message if T&C checkbox is not checked */}
+                    {errors.termCondition && (<span className="text-cancelled-colour">{errors.termCondition}</span>)}
+
 
                     <div className="hidden small-text text-dark-grey text-left w-4/5">
                         Your email address will only be used to send notifications about your account and bookings.
