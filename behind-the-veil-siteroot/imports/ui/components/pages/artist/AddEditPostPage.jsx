@@ -20,7 +20,7 @@ export const AddEditPostPage = ({ isEdit }) => {
   const title = isEdit ? "Edit Photo In Gallery" : "Add Photo To Gallery";
   const button = isEdit ? "Edit Post" : "Add Post";
 
-  const [postDescription, setInputReason] = useState("");
+  const [postDescription, setPostDescription] = useState("");
   const [imageObject, setImageObject] = useState(null);
   const [fileError, setFileError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
@@ -62,14 +62,14 @@ export const AddEditPostPage = ({ isEdit }) => {
         });
       };
 
-      // firsty use the retrievePost function
+      // first use the retrievePost function
       retrievePost()
         .then((post) => {
           // Validate that the post belongs to the current user if not take them away
           if (post.artistUsername !== userInfo.username) {
             navigateTo("/" + UrlBasePath.PROFILE);
           }
-          setInputReason(post.postDescription); // Set the post description
+          setPostDescription(post.postDescription); // Set the post description
           setImageObject(post.postImage);
         })
         .catch((error) => {
@@ -97,10 +97,12 @@ export const AddEditPostPage = ({ isEdit }) => {
         setFileError("Please upload a valid image file (.png, .jpg, .jpeg).");
         setImageObject(null); // Clear the file input
         return;
+
       } else if (file.size > 16777216) {
         setFileError("File must be less than 16MB");
         setImageObject(null); // Clear the file input
         return;
+
       } else {
         setFileError(""); // Clear the error when a valid file is uploaded
 
@@ -132,7 +134,6 @@ export const AddEditPostPage = ({ isEdit }) => {
       day: "2-digit",
       year: "numeric",
     });
-    console.log(postDate);
 
     // file errors
     if (!imageObject) {
@@ -175,7 +176,7 @@ export const AddEditPostPage = ({ isEdit }) => {
               reject(`Error: ${error.message}`);
             } else {
               console.log("post added with:", editPostId);
-              resolve(editPostId); 
+              resolve(editPostId);
             }
           }
         );
@@ -200,6 +201,8 @@ export const AddEditPostPage = ({ isEdit }) => {
       }
     }).then(() => {
       setIsSubmitting(false)
+      navigateTo(`/${UrlBasePath.PROFILE}`)
+
     }).catch(() => {
       setIsSubmitting(false)
       setOverallErrorMessage("Failed to " + (isEdit ? "update" : "create") + " post, please try again.")
@@ -212,10 +215,7 @@ export const AddEditPostPage = ({ isEdit }) => {
 
   return (
     <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-      <BackButton
-        to={`/${UrlBasePath.PROFILE}`}
-        className="your-custom-classes"
-      />
+      <BackButton to={`/${UrlBasePath.PROFILE}`}/>
 
       {/* Main container for content */}
       <div className="flex flex-col gap-4 xl:px-40">

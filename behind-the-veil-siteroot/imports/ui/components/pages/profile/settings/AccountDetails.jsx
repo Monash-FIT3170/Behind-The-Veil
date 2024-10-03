@@ -11,7 +11,7 @@ import { ArrowUpTrayIcon, CheckIcon } from "@heroicons/react/24/outline";
 import Input from "../../../input/Input";
 import Button from "../../../button/Button.jsx";
 import ProfilePhoto from "../../../profilePhoto/ProfilePhoto.jsx"
-import {useUserInfo, imageObj} from "../../../util";
+import { imageObj, useUserInfo } from "../../../util";
 import Loader from "../../../loader/Loader";
 import UserCollection from "../../../../../api/collections/users";
 
@@ -50,7 +50,9 @@ export const AccountDetails = () => {
     const [textErrors, setTextErrors] = useState({
         alias: "",
         email: "",
+        overall: ""
     })
+    const [successMessage, setSuccessMessage] = useState("");
 
     // Changes the values in text input of form
     const handleInputChange = (e) => {
@@ -81,22 +83,24 @@ export const AccountDetails = () => {
         if (!file) {
             // if no file selected, do nothing
             return;
+
         } else if (!allowedFileTypeExtensions.some((ext) => file.name.toLowerCase().endsWith(ext.toLowerCase()))) {
             setImageError("Please select a png, jpg, or jpeg file.")
             return;
+
         } else if (file.size > 16777216) {
             setImageError("File must be less than 16MB");
             return;
-        } 
-        else {
+
+        } else {
             setImageError("")
 
             const reader = new FileReader();
 
             // Convert the file to take URL format
             reader.onloadend = () => {
-            const image = imageObj(reader.result, file.name, file.size);
-            setImageObject(image);
+                const image = imageObj(reader.result, file.name, file.size);
+                setImageObject(image);
             };
 
             reader.readAsDataURL(file);
@@ -111,6 +115,7 @@ export const AccountDetails = () => {
     const handleSave = (event) => {
         event.preventDefault();
         setIsSubmitting(true)
+        setSuccessMessage('');
 
         // Grabs the updated values from the formState object. (which keeps track of these values as they are changed in the text fields).
         const {alias, email} = formState;
@@ -141,7 +146,6 @@ export const AccountDetails = () => {
         // Update text errors state with new error messages
         setTextErrors(newErrors);
 
-        console.log(isError)
         if (!isError) {
 
             new Promise((resolve, reject) => {
@@ -164,11 +168,16 @@ export const AccountDetails = () => {
                             }
                         });
                 }
-                
+
                 // update profile image
-               if (imageObject !== userInfo.profileImage) {
-                    console.log(imageObject)
-                    Meteor.call('update_profile_image', userInfo.id, imageObject);
+                console.log(imageObject)
+                if (imageObject !== userInfo.profileImage) {
+                    Meteor.call('update_profile_image', userInfo.id, imageObject,
+                        (error) => {
+                            if (error) {
+                                reject(error)
+                            }
+                        });
                 }
 
                 resolve()
@@ -179,6 +188,7 @@ export const AccountDetails = () => {
                     alias: "",
                     email: "",
                 })
+                setSuccessMessage('Account details changed successfully!');
 
             }).catch(() => {
                 setIsSubmitting(false)
@@ -217,6 +227,7 @@ export const AccountDetails = () => {
                         label={<label className={"main-text"}>Name/Alias</label>}
                         onChange={handleInputChange}
                         placeholder={userInfo.alias}
+                        value={formState.alias}
                         className="lg:w-[40vw] sm:w-96"
                     />
                     {textErrors.alias && <span className="text-cancelled-colour">{textErrors.alias}</span>}
@@ -230,6 +241,7 @@ export const AccountDetails = () => {
                         label={<label className={"main-text"}>Email</label>}
                         onChange={handleInputChange}
                         placeholder={userInfo.email}
+                        value={formState.email}
                         className="lg:w-[40vw] sm:w-96"/>
                     {textErrors.email && <span className="text-cancelled-colour">{textErrors.email}</span>}
                 </div>
@@ -272,6 +284,7 @@ export const AccountDetails = () => {
                 </div>
 
                 {textErrors.overall && <span className="text-cancelled-colour">{textErrors.overall}</span>}
+                {successMessage && <div className="text-confirmed-colour">{successMessage}</div>}
 
                 {/* Save button */}
                 <Button disabled={isSubmitting}

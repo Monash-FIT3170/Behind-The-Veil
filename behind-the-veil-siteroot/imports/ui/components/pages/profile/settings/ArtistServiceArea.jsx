@@ -29,11 +29,12 @@ export const ArtistServiceArea = () => {
 
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+
+
     const handleSaveChanges = (event) => {
         event.preventDefault();
         setSuccessMessage('');
         setErrorMessage('')
-
 
         if (!radius && location.trim() === '') {
             setErrorMessage('No value updated');
@@ -42,6 +43,16 @@ export const ArtistServiceArea = () => {
 
         const updatedRadius = radius ? radius : user.profile.artistServiceRadius
         const updatedLocation = location.trim() ? location.trim() : user.profile.artistServiceLocation
+
+        if (!updatedRadius) {
+            setErrorMessage('Please fill in the radius');
+            return;
+        }
+
+        if (!updatedLocation) {
+            setErrorMessage('Please fill in the location');
+            return;
+        }
 
         return new Promise((resolve, reject) => {
             Meteor.call('update_service_area', user._id, updatedLocation, updatedRadius,

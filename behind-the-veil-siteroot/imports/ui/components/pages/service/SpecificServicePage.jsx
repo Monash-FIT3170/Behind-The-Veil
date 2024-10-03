@@ -46,10 +46,6 @@ const SpecificServicePage = () => {
     // get service data from database
     const {isLoading, serviceData, artistData, profileImageData} = useSpecificService(serviceId);
 
-    const imageUrls = serviceData.serviceImages
-        ? serviceData.serviceImages.map((image) => image.imageData)
-        : ["/imageNotFound.png"];
-
     const durationTip = "Duration does not include travel. It is the required time to performing the service for the bride.";
 
     if (isLoading) {
@@ -81,6 +77,12 @@ const SpecificServicePage = () => {
                 </WhiteBackground>
             )
         } else {
+
+            const imageUrls = serviceData.serviceImages
+                ? serviceData.serviceImages.map((image) => image.imageData)
+                : ["/imageNotFound.png"];
+
+
             return (
                 <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
                     {/* Title container for centering */}

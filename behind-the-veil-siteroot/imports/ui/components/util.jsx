@@ -52,8 +52,8 @@ export function useUserInfo() {
                 userInfo.emailVerified !== fetchedEmailVerified ||
                 userInfo.alias !== fetchedAlias ||
                 userInfo.type !== fetchedType ||
-                (userInfo.profileImage ? (userInfo.profileImage.imageName !== fetchedProfileImage.imageName ||
-                 userInfo.profileImage.imageSize !== fetchedProfileImage.imageSize) : fetchedProfileImage !== null)
+                (userInfo.profileImage ? (userInfo.profileImage.imageName !== fetchedProfileImage?.imageName ||
+                 userInfo.profileImage.imageSize !== fetchedProfileImage?.imageSize) : fetchedProfileImage !== null)
             ) {
                 setUserInfo(
                     {
