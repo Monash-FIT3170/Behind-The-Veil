@@ -18,8 +18,8 @@ export enum UrlBasePath {
     ARTISTS = "artists",
     PROFILE = "profile",
     MESSAGES = "messages",
-    TERMCONDITION = "term-condition"
-
+    TERMCONDITION = "term-condition",
+    PRIVACY_POLICY = "privacy-policy"
 }
 
 export default UrlBasePath;

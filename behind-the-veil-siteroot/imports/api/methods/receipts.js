@@ -40,7 +40,7 @@ Meteor.methods({
      * @returns {object|null} - The payment receipt object if found, otherwise null.
      */
     "get_receipt": function (paymentId) {
-        check(reviewComment, String)
+        check(paymentId, String)
 
         return ReceiptCollection.findOne(
             { _id: paymentId },
@@ -53,7 +53,7 @@ Meteor.methods({
      * @returns {object|null} - The payment receipt object if found, otherwise null.
      */
     "get_receipt_from_booking": function (bookingId) {
-        check(reviewComment, String)
+        check(bookingId, String)
 
         return ReceiptCollection.findOne({ bookingId: bookingId });
     },
@@ -64,7 +64,7 @@ Meteor.methods({
      * @returns {number} The number of documents updated.
      */
     "deposit_to_refund": function (receiptId) {
-        check(reviewComment, String)
+        check(receiptId, String)
 
         // Get the current date and time
         const currentDatetime = new Date();
@@ -72,13 +72,13 @@ Meteor.methods({
         // Find the receipt with the given receiptId
         const receipt = ReceiptCollection.findOne({ _id: receiptId });
 
-        if (receipt && receipt.paymentStatus === "Deposit") {
+        if (receipt && receipt.paymentType === "Deposit") {
             // Update the receipt's payment status to "Refund" and set the paymentDatetime to the current date and time
             return ReceiptCollection.update(
                 { _id: receiptId }, // Find the receipt by ID
                 {
                     $set: {
-                        paymentStatus: "Refund",
+                        paymentType: "Refund",
                         paymentDatetime: currentDatetime,
                     }
                 }
