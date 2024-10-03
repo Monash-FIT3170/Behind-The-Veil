@@ -297,11 +297,11 @@ const RequestBooking = () => {
         bookings: artistBookings,
     });
 
-    // find next available date in the next 2 years
+    // find next available date in the next 3 years
     const findNextAvailableDate = () => {
         const currentInput = new Date(inputs.date);
 
-        for (let i = 1; i < 365*2; i++) {
+        for (let i = 1; i < 365*3; i++) {
             const nextDate = new Date();
             nextDate.setDate(currentInput.getDate() + i);
     
