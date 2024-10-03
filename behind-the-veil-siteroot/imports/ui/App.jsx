@@ -22,6 +22,7 @@ import MessagesPage from "./components/pages/messages/MessagesPage.jsx";
 import LoginPage from "./components/pages/login/LoginPage.jsx";
 import RegisterPage from "./components/pages/register/RegisterPage.jsx";
 import CreateAccountPage from "./components/pages/register/CreateAccountPage";
+import TermConditionPage from "./components/pages/register/TermConditionPage"
 
 import ForgotPasswordPage from "./components/pages/forgotPassword/ForgotPasswordPage";
 import ResetPasswordPage from "./components/pages/forgotPassword/ResetPasswordPage";
@@ -64,6 +65,9 @@ export const App = () => (
 
                     <Route path={`/${UrlBasePath.ARTISTS}`} element={<ArtistsPage/>}/>
                     <Route path={`/${UrlBasePath.ARTISTS}/:artistUsername`} element={<SpecificArtistPage/>}/>
+
+                    <Route path={`/${UrlBasePath.TERMCONDITION}`} element={<TermConditionPage/>}/>
+
 
                     {/*routes that NOT authenticated users can access*/}
                     <Route
