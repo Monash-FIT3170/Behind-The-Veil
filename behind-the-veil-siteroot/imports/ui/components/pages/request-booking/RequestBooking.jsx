@@ -1,7 +1,7 @@
 /**
  * File Description: Request Booking page
- * File version: 1.3
- * Contributors: Josh, Nikki
+ * File version: 1.4
+ * Contributors: Josh, Nikki, Laura
  */
 
 import React, { useCallback, useEffect, useId, useState } from "react";
@@ -75,6 +75,9 @@ const RequestBooking = () => {
 
     const navigateTo = useNavigate();
 
+    // remove milliseconds from dates
+    const removeMilliseconds = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds());
+
     /**
      * Calculate available times that the user can select, based on date, duration, and existing bookings
      * @param {Date} date day at which we want the available time slots
@@ -147,9 +150,8 @@ const RequestBooking = () => {
             })
 
             const isArtistWorking = serviceHours.every((serviceHour) => {
-                // check if artist working hours includes each hour that the booking would span
-                return Boolean(artistWorkingHours.find((hr) => isEqual(hr, serviceHour)))
-            })
+                return Boolean(artistWorkingHours.find((hr) => isEqual(removeMilliseconds(hr), removeMilliseconds(serviceHour))))
+            });
 
             return noClashWithExistingBookings && isArtistWorking
         })
@@ -240,7 +242,10 @@ const RequestBooking = () => {
         if (!isValid(inputs.time)) {
             alert("Please select a valid time.");
             return;
-        } else if (!inputs.location) {
+        }
+
+        // Validation for location fields
+        if (!(address.street && address.suburb && address.state)) {
             alert("Please select a valid location.");
             return;
         }
@@ -292,6 +297,27 @@ const RequestBooking = () => {
         bookings: artistBookings,
     });
 
+    // find next available date in the next 3 years
+    const findNextAvailableDate = () => {
+        const currentInput = new Date(inputs.date);
+
+        for (let i = 1; i < 365*3; i++) {
+            const nextDate = new Date();
+            nextDate.setDate(currentInput.getDate() + i);
+    
+            const availableTimes = getAvailableTimes({
+                date: nextDate,
+                duration: duration,
+                bookings: artistBookings,
+            });
+
+            if (availableTimes.length > 0) {    
+                return nextDate;
+            }
+        }
+    
+        return null;
+    };
 
     if (isLoading) {
         // is loader, display loader
@@ -476,6 +502,24 @@ const RequestBooking = () => {
                                                     );
                                                 })
                                             )}
+                                        </div>
+                                        <div className="flex justify-center items-center h-full w-full">
+                                            <Button
+                                                className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2 w-fit justify-center" 
+                                                onClick={() => {
+                                                    const nextDate = findNextAvailableDate();
+                                                    if (nextDate) {
+                                                        setInputs((i) => ({
+                                                            ...i,
+                                                            date: nextDate,
+                                                        }));
+                                                    } else {
+                                                        alert("No available dates found");
+                                                    }
+                                                }}
+                                            >
+                                                Next Available Date
+                                            </Button>
                                         </div>
                                     </div>
 
