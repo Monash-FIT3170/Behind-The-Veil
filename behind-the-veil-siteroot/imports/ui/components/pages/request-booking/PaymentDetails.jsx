@@ -80,6 +80,7 @@ const PaymentDetails = () => {
     });
 
     const [isFormValid, setIsFormValid] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Handler for input change
     const [open, setOpen] = useState(false);
@@ -169,6 +170,7 @@ const PaymentDetails = () => {
     };
 
     const confirmPayment = async () => {
+        setIsSubmitting(true)
         let datetimeParts = details.date.split(",");
     
         let startDatetimeString = datetimeParts[0].trim();
@@ -184,7 +186,7 @@ const PaymentDetails = () => {
         const formattedExpiryDate = expDate.replace(/\D/g, ''); // Remove non-digit characters if needed
     
         // Call the payment processing method
-        Meteor.call("processPayment", { cardNumber, cvv, expiryDate: formattedExpiryDate }, (error, result) => {
+        Meteor.call("processPayment", { cardNumber, cvv, expiryDate: formattedExpiryDate }, (error) => {
             if (error) {
                 console.error('Error processing payment:', error);
                 alert('Payment Failed');
@@ -194,9 +196,11 @@ const PaymentDetails = () => {
                         return addPaymentReceipt(new Date(), details.price, "Deposit", "Paid", bookingId);
                     })
                     .then(r => {
+                        setIsSubmitting(false)
                         navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/booking-confirmation?receipt=${r}`);
                     })
                     .catch(reason => {
+                        setIsSubmitting(false)
                         alert(reason);
                     });
             }
@@ -344,16 +348,14 @@ const PaymentDetails = () => {
                             showCloseIcon={false}
                         >
                             <div className="flex justify-center items-center h-full">
-                                <div className="flex flex-col">
+                                <div className="flex flex-col gap-2">
                                     <h2 className="text-center title-text">Confirm Payment</h2>
-                                    {/*TODO: Add price to the modal*/}
                                     <p className="text-center medium-text">You are about make a payment of ${details.price}.</p>
                                     <p className="text-center medium-text">Are you sure?</p>
                                     <div className="flex justify-center space-x-6 mt-5">
-                                        <Button
-                                            className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[25px] pe-[25px] flex gap-1"
-                                            onClick={confirmPayment}
-                                        >
+                                        <Button disabled={isSubmitting}
+                                            className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[25px] pe-[25px] flex gap-1 load-when-disabled"
+                                            onClick={confirmPayment}>
                                             <CheckIcon className="icon-base" />
                                             Confirm
                                         </Button>

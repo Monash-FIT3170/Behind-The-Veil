@@ -83,11 +83,11 @@ Meteor.methods({
      * @param {int} serviceId - The ID of the service.
      */
     "has_booking_of_service": function (serviceId) {
-        check(serviceId, Match.Integer)
+        check(serviceId, String)
 
-        const booking = BookingCollection.findOne({ serviceId: serviceId });
+        const booking = BookingCollection.find({ serviceId: serviceId }).fetch();
     
-        return !!booking;
+        return booking.length > 0;
     },
 
     /**

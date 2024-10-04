@@ -20,10 +20,13 @@ export const AddEditPostPage = ({ isEdit }) => {
   const title = isEdit ? "Edit Photo In Gallery" : "Add Photo To Gallery";
   const button = isEdit ? "Edit Post" : "Add Post";
 
-  const [postDescription, setInputReason] = useState("");
+  const [postDescription, setPostDescription] = useState("");
   const [imageObject, setImageObject] = useState(null);
   const [fileError, setFileError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [overallErrorMessage, setOverallErrorMessage] = useState("");
+  const [overallSuccessMessage, setOverallSuccessMessage] = useState("");
   const date = new Date();
 
   const allowedFileTypeExtensions = [".png", ".jpg", ".jpeg"];
@@ -37,7 +40,7 @@ export const AddEditPostPage = ({ isEdit }) => {
     navigateTo(`/`);
   }
 
-  // gets the postId from the URL 
+  // gets the postId from the URL
   const { postId } = useParams();
 
   const fileInputRef = useRef(null); // used since the file classname is hidden to ensure that ui is in specific format
@@ -59,14 +62,14 @@ export const AddEditPostPage = ({ isEdit }) => {
         });
       };
 
-      // firsty use the retrievePost function
+      // first use the retrievePost function
       retrievePost()
         .then((post) => {
           // Validate that the post belongs to the current user if not take them away
           if (post.artistUsername !== userInfo.username) {
             navigateTo("/" + UrlBasePath.PROFILE);
           }
-          setInputReason(post.postDescription); // Set the post description
+          setPostDescription(post.postDescription); // Set the post description
           setImageObject(post.postImage);
         })
         .catch((error) => {
@@ -78,7 +81,7 @@ export const AddEditPostPage = ({ isEdit }) => {
   // function to handle description
   function handleInputChange(event) {
     const description = event.target.value;
-    setInputReason(description);
+    setPostDescription(description);
     if (event.target.value) {
       setDescriptionError(""); // Clear the error when a description is entered
     }
@@ -94,10 +97,12 @@ export const AddEditPostPage = ({ isEdit }) => {
         setFileError("Please upload a valid image file (.png, .jpg, .jpeg).");
         setImageObject(null); // Clear the file input
         return;
+
       } else if (file.size > 16777216) {
         setFileError("File must be less than 16MB");
         setImageObject(null); // Clear the file input
         return;
+
       } else {
         setFileError(""); // Clear the error when a valid file is uploaded
 
@@ -117,15 +122,18 @@ export const AddEditPostPage = ({ isEdit }) => {
   }
 
   // main function to handle what's entered on the page when "save" is pressed
-  function handleAddPost(event) {
+  function handleSubmit(event) {
     event.preventDefault();
+    setIsSubmitting(true)
+    setOverallSuccessMessage("")
+    setOverallErrorMessage("")
+
     let hasError = false;
     let postDate = date.toLocaleDateString("en-US", {
       month: "2-digit",
       day: "2-digit",
       year: "numeric",
     });
-    console.log(postDate);
 
     // file errors
     if (!imageObject) {
@@ -144,6 +152,7 @@ export const AddEditPostPage = ({ isEdit }) => {
     }
 
     if (hasError) {
+      setIsSubmitting(false)
       return;
     }
 
@@ -167,7 +176,7 @@ export const AddEditPostPage = ({ isEdit }) => {
               reject(`Error: ${error.message}`);
             } else {
               console.log("post added with:", editPostId);
-              resolve(editPostId); 
+              resolve(editPostId);
             }
           }
         );
@@ -190,8 +199,14 @@ export const AddEditPostPage = ({ isEdit }) => {
           }
         );
       }
-    })
-      .catch((reason) => alert(reason));
+    }).then(() => {
+      setIsSubmitting(false)
+      navigateTo(`/${UrlBasePath.PROFILE}`)
+
+    }).catch(() => {
+      setIsSubmitting(false)
+      setOverallErrorMessage("Failed to " + (isEdit ? "update" : "create") + " post, please try again.")
+    });
   }
 
   function handleFileButtonClick() {
@@ -200,10 +215,7 @@ export const AddEditPostPage = ({ isEdit }) => {
 
   return (
     <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
-      <BackButton
-        to={`/${UrlBasePath.PROFILE}`}
-        className="your-custom-classes"
-      />
+      <BackButton to={`/${UrlBasePath.PROFILE}`}/>
 
       {/* Main container for content */}
       <div className="flex flex-col gap-4 xl:px-40">
@@ -270,10 +282,13 @@ export const AddEditPostPage = ({ isEdit }) => {
         <div className="flex gap-10">
           {/* save button to add post to gallery tab */}
           <div className="flex flex-col gap-4 grow">
-            <Button
-              className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"
-              onClick={handleAddPost}
-            >
+              {/*error/success message*/}
+              {overallErrorMessage && <div className="text-cancelled-colour mt-2">{overallErrorMessage}</div>}
+              {overallSuccessMessage && <div className="text-confirmed-colour mt-2">{overallSuccessMessage}</div>}
+
+            <Button className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2 load-when-disabled"
+                    disabled={isSubmitting}
+                    onClick={handleSubmit}>
               <CheckIcon className="icon-base" />
               {button}
             </Button>
