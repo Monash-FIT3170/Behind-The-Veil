@@ -26,7 +26,8 @@ const CreateAccountPage = () => {
         email: "",
         password: "",
         retypePassword: "",
-        privacyPolicy: "",
+        termCondition: "",
+        privacyPolicy: ""
     });
 
     // get the chosen account type from last page
@@ -36,8 +37,11 @@ const CreateAccountPage = () => {
         // if invalid type in url, default to bride
         setAccountType("bride")
     }
+  
+  // Checkbox state for T&C
+    const [isTermChecked, setIsTermChecked] = useState(false);
 
-    // Checkbox state
+  // Checkbox state for PrivacyPolicy
     const [isPrivacyChecked, setIsPrivacyChecked] = useState(false);
 
     // get whether it errored before in the URL
@@ -145,7 +149,14 @@ const CreateAccountPage = () => {
             isError = true;
         }
 
-        // Validate if checkbox is ticked
+         // Validate if term and condition checkbox is ticked
+         if (!isTermChecked) {
+            newError.termCondition = "You must agree to the Term and Condtion to register.";
+            isError = true;
+         }
+         setErrors(newError)
+ 
+        // Validate if privacy policy checkbox is ticked
         if (!isPrivacyChecked) {
             newError.privacyPolicy = "You must agree to the Privacy Policy to register.";
             isError = true;
@@ -293,6 +304,28 @@ const CreateAccountPage = () => {
                             <li className={"ml-2"}>minimum 8 characters</li>
                         </ul>
                     </div>
+
+                    {/* Term and Condition Checkbox */}
+                    <div className="flex items-start gap-3 w-4/5">
+                        <input
+                            type="checkbox"
+                            id="termCondition"
+                            checked={isTermChecked}
+                            onChange={() => setIsTermChecked(!isPrivacyChecked)}
+                            className="mt-3.5"
+                        />
+                        <label htmlFor="termCondition" className="small-text text-dark-grey text-left">
+                            I confirm that I have read, understand, and agree to Behind The Veil's
+                            <a href={`/${UrlBasePath.TERMCONDITION}`}
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               className="text-secondary-purple underline ml-1"
+                            >Term and Condition
+                            </a>.
+                        </label>
+                    </div>
+                    {/* Display error message if T&C checkbox is not checked */}
+                    {errors.termCondition && (<span className="text-cancelled-colour">{errors.termCondition}</span>)}
 
                     {/* Privacy Policy Checkbox */}
                     <div className="flex items-start gap-3 w-4/5">
