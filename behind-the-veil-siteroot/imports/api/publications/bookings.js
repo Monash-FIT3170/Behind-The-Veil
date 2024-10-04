@@ -33,32 +33,8 @@ Meteor.publish('specific_booking', function (bookingId) {
     return BookingCollection.find({_id: bookingId});
 });
 
-Meteor.publish("all_user_complete_bookings", function(username){
-    return BookingCollection.find({
-        $and: [
-            {artistUsername: username},
-            {bookingStatus: "complete"}
-        ]
-    });
-});
-
-Meteor.publish("all_user_pending_bookings", function(username){
-    return BookingCollection.find({
-        $and: [
-            {artistUsername: username},
-            {bookingStatus: "pending"}
-        ]
-    });
-});
-
 Meteor.publish('artist_bookings', function (artistUsername) {
     return BookingCollection.find({
         artistUsername: artistUsername
-    })
-})
-
-Meteor.publish('bride_bookings', function (brideUsername) {
-    return BookingCollection.find({
-        brideUsername: brideUsername
     })
 })
