@@ -148,8 +148,8 @@ export const HomePage = () => {
             </div>
 
             {/* Container for the search bar, drop down and search button */}
-            <div className="z-50 container mx-auto sm:px-20">
-                <SearchBar placeholder={"Search services or artists"}
+            <div className="flex items-center justify-center z-50 container mx-auto sm:px-20 xl:mt-20">
+                <SearchBar placeholder={"Search SERVICES or ARTISTS"}
                            defaultType={"services" }
                            startingValue={""}
                            suggestionsDown={false}

@@ -84,8 +84,7 @@ export const ServicesPage = () => {
                 </div>
 
                 <div className="flex flex-col items-center mb-10">
-                    <SearchBar placeholder={"Search service name or description"}
-                               defaultType={"services" }
+                    <SearchBar defaultType={"services"}
                                startingValue={searchInput}
                                suggestionsDown={true}
                     />

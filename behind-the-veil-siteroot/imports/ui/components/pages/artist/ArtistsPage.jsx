@@ -43,7 +43,7 @@ export const ArtistsPage = () => {
                 key={user.username}
                 artistUsername={user.username}
                 artistAlias={user.profile.alias}
-                artistProfileImageData={user.profile.profileImage ? user.profile.profileImage.imageData : user.profile.profileImage}/>)
+                artistProfileImageData={user.profileImageData}/>)
         )
 
     // checks if the page and data has loaded
@@ -54,8 +54,7 @@ export const ArtistsPage = () => {
                 <span className={"title-text text-center"}>Artists</span>
 
                 <div className="flex flex-col items-center mb-10">
-                    <SearchBar placeholder={"Search artist name or username"}
-                               defaultType={"artists"}
+                    <SearchBar defaultType={"artists"}
                                startingValue={searchInput}
                                suggestionsDown={true}
                     />
