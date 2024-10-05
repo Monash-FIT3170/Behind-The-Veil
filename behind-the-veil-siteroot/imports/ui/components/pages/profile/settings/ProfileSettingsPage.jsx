@@ -13,17 +13,17 @@ import ChangePasswordTab from "./ChangePasswordTab";
 import BackButton from "../../../button/BackButton";
 import ArtistPayment from "./ArtistPayment.jsx";
 
-import { useTracker } from 'meteor/react-meteor-data';
+import {useUserInfo} from "../../../util";
 /**
  * Settings page for all users
  */
 export const ProfileSettingsPage = () => {
     
     // get current user information
-    const userInfo = useTracker(() => Meteor.user());
+    const userInfo = useUserInfo();
 
     // display tabs depending on user account type (brides don't have service area settings tab)
-    if (userInfo.profile.type === "bride") {
+    if (userInfo.alias === "bride") {
         return (
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
                 <BackButton />
@@ -45,8 +45,8 @@ export const ProfileSettingsPage = () => {
         );
     } else {
         // artist
-        let artistServiceLocation = userInfo.profile.artistServiceLocation;
-        let artistPaymentAccount = userInfo.profile.artistPaymentAccount;
+        let artistServiceLocation = userInfo.artistServiceLocation;
+        let artistPaymentAccount = userInfo.artistPaymentAccount;
         return (
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
                 <BackButton />

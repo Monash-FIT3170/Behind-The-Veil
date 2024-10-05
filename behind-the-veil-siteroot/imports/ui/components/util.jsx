@@ -43,6 +43,8 @@ export function useUserInfo() {
             const fetchedAlias = user.profile.alias;
             const fetchedType = user.profile.type;
             const fetchedProfileImage = user.profile.profileImage ? user.profile.profileImage : null;
+            const fetchedArtistServiceLocation = user.profile.artistServiceLocation ? user.profile.artistServiceLocation : null;
+            const fetchedArtistPaymentAccount = user.profile.artistServiceLocation ? user.profile.artistPaymentAccount : null;
 
             // check if an update to the current user info is required or not (this is needed to prevent inf loop)
             if (
@@ -55,17 +57,33 @@ export function useUserInfo() {
                 (userInfo.profileImage ? (userInfo.profileImage.imageName !== fetchedProfileImage.imageName ||
                  userInfo.profileImage.imageSize !== fetchedProfileImage.imageSize) : fetchedProfileImage !== null)
             ) {
-                setUserInfo(
-                    {
-                        "id": fetchedUserId,
-                        "username": fetchedUsername,
-                        "email": fetchedEmail,
-                        "emailVerified": fetchedEmailVerified,
-                        "alias": fetchedAlias,
-                        "type": fetchedType,
-                        "profileImage": fetchedProfileImage,
-                    }
-                )
+                if (fetchedAlias == 'artist') {
+                    setUserInfo(
+                        {
+                            "id": fetchedUserId,
+                            "username": fetchedUsername,
+                            "email": fetchedEmail,
+                            "emailVerified": fetchedEmailVerified,
+                            "alias": fetchedAlias,
+                            "type": fetchedType,
+                            "profileImage": fetchedProfileImage,
+                            "artistServiceLocation": fetchedArtistServiceLocation,
+                            "artistPaymentAccount": fetchedArtistPaymentAccount,
+                        }
+                    )
+                } else {
+                    setUserInfo(
+                        {
+                            "id": fetchedUserId,
+                            "username": fetchedUsername,
+                            "email": fetchedEmail,
+                            "emailVerified": fetchedEmailVerified,
+                            "alias": fetchedAlias,
+                            "type": fetchedType,
+                            "profileImage": fetchedProfileImage
+                        }
+                    )
+                }
             }
         }
     })
