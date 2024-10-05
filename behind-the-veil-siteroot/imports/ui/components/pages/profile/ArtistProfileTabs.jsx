@@ -59,8 +59,6 @@ export const ArtistProfileTabs = ({ userInfo }) => {
     }
   }, [userData]);
 
-  console.log(weeklyAvailabilityEntered);
-
   const isLoading = isLoadingUserBooking();
 
   // Loop through artist booking data to identify if there is a booking the artist hasn't responded to
