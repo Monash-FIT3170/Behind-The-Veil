@@ -4,15 +4,31 @@ Behind the Veil is currently hosted at: https://behind-the-veil-1077153890194.au
 
 ## Table of Contents
 - [Dependencies](#dependencies)
+  - [Meteor](#meteor)
+  - [React](#react)
+  - [Email SMTP Server](#email-smtp-server)
+  - [Cloud MongoDB Database (MongoDB Atlas)](#cloud-mongodb-database-mongodb-atlas)
 - [Running the app](#running-the-app)
 - [Testing](#testing)
 - [Errors](#errors)
 - [Importing Mock Data](#how-to-import-the-mock-data-into-mongodb)
+  - [How to add to PATH](#how-to-add-to-path)
+  - [Importing the files on LOCAL database](#importing-the-files-on-local-database)
+  - [Importing the files on CLOUD database](#importing-the-files-on-cloud-database)
+- [Pull Request Strategy](#pull-request-pr-strategy)
+  - [Chosen workflow: Gitflow](#chosen-workflow-gitflow)
+  - [Overview of the PR Workflow](#overview-of-the-pr-workflow)
 - [Git Help](#git-help)
+  - [Rebasing](#rebasing-)
+  - [Changing Branch name remotely and locally](#changing-branch-name-remotely-and-locally)
+  - [Git push errors](#git-push-errors)
+  - [Merge Request Issues](#merge-request-issues)
 - [Versioning Strategy](#versioning-strategy)
+  - [Version Number Format](#version-number-format)
+  - [Versioning Guidelines](#versioning-guidelines)
 - [Deployment](#deployment)
 - [Team Composition](#team-composition)
-
+---
 ## Dependencies
 
 ### Meteor
@@ -133,7 +149,6 @@ MAIL_URL:
 
 This is one of the required environment variables.
 
-
 ### Cloud MongoDB Database (MongoDB Atlas)
 The application uses a cloud MongoDB database for storing and syncing data across devices. 
 The following instructions will help you create a cluster for the project and set up the cloud MongoDB connection.
@@ -212,7 +227,7 @@ Once all your dependencies have been installed:
 ```console
 meteor test --driver-package meteortesting:mocha
 ```
-
+---
 ## Errors
 
 > In the event your app is crashing or failing to run, scroll up on the error message and it will tell you if you are missing any dependencies.
@@ -229,7 +244,7 @@ meteor npm install --save @babel/runtime react react-dom
   meteor reset
   meteor
   credit: https://stackoverflow.com/questions/38988365/meteor-unexpected-mongo-exit-code-14-restarting-cant-start-mongo-server
-
+---
 ## How to import the mock data into MongoDB
 
 1. Download the "MongoDB Command Line Database Tools" from: https://www.mongodb.com/try/download/database-tools
@@ -346,8 +361,51 @@ Example:
 ```text
 mongoimport --username meteor-main --password xxxxxx mongodb+srv://cluster0.d99ecyx.mongodb.net --db meteor --collection test --file mockdata\presentation\artists50.json --jsonArray
 ```
+---
+## Pull Request (PR) Strategy
+The Pull Request (PR) strategy outlines the process for contributing and reviewing code within the project. Having a PR ensures that all changes are reviewed, tested, and documented properly before being merged into the `main` branch. The strategy is designed to maintain high-quality code, encourage team collaboration, and keep a agreed upon standard of code within the team.
+### Chosen Workflow: Gitflow
+The 10 Bridesmaids have elected to use the Gitflow workflow for this git repository. Instead of a single main branch, this workflow uses two branches to record the history of the project. The `main` branch stores the official release history which will then be used to deploy the application, and the `develop` branch serves as an integration branch for features.
+### Overview of the PR Workflow
+The following is the guidelines to the workflow for the 10 Bridesmaids codebase:
+1. **Branch Creation:** 
+   - Each developer works on a separate feature or bugfix branch, forked from the `develop`.
+   - Branch naming conventions:
+   `<bugfix/feature>/<ticket-id>-brief-name-of-ticket`
+   
+   > For example: feature/86cuw4kj1-unresponded-booking-alert
+2. **Development:** 
+   - Code changes are made and tested locally on the new branch.
+   
+
+3. **Commit and Push:** 
+   - Developers commit their changes and push them to the repository.
+   - Commit message conventions:
+   `<bugfix/feature>/<ticket brief message about the changes made`
+   
+   > For example: feature/86cuw4kj1 added the email api to send user for each unresponded booking
 
 
+4. **Open a PR:** 
+   - Once a feature or task is complete, a pull request is opened against the `develop` branch. 
+   - The PR should include a detailed description of the changes and the link of the ticket it addresses. 
+   - This includes any mock data that needs to be added.
+   
+
+5. **Code Review:** 
+   - The code reviewers for that sprint are assigned to review the code, check for quality, and provide feedback. 
+   - A detailed guide to the code review standards and process steps is linked here for developer use. Please refer to: [Code Review Checklist](doc/Code-review-checklist.pdf)
+
+
+6. **Feedback and Changes:** 
+   - The developer addresses the feedback and pushes any necessary changes.
+
+
+7. **Approval and Merge:** 
+   - Once approved, the branch is <mark>squash merged</mark> into the `develop` branch. The PR is then closed and the branch is deleted remotely.
+   > ✏️ Note: The reason a **squash merge** was chosen as our merge method was due to some of our team members being relatively new to versioning sometimes duplicate commits occured from rebasing/merging. Squash merges ensures even if the developer or the reviewer missed the duplicate commit issue, main branch would have a clean commit log history.
+
+---
 ## Git Help
   
  This file is for all the git issues and their resolution that I've come across before, more than welcome to add to it if you find a solution online to an issue you've had.
@@ -357,11 +415,13 @@ Reference: https://git-scm.com/book/en/v2/Git-Branching-Rebasing
 
 ✅ Step by Step video: https://youtu.be/RGtwxYqkkas?si=nvmMetHWNMegc0v_&t=129 (This guy does it all in his main terminal but i recommend using the IDE terminal so you can see your conflict files)
 
-> **When to use rebasing:** When a new ticket has been merged to develop and your branch is not up to date with the develop branch
-> 
-> **Why do we rebase?** We want to limit the amount of merge conflicts happening in develop so we put all new changes from develop into our own branchs so we can resolve merge conflicts remotely instead of on develop.
-> 
-> **_! IMPORTANT !_** We will be prioritising develop branch over yours, so if a merge conflict occurs in develop, it will be rolled back and your changes will be lost, so please make sure you rebase!
+> 🐛 There is also a screenshotted guide specific to Behind The Veil codebase if you prefer that: [Guide to Rebasing](doc/Guide-to-rebasing.pdf)
+
+**When to use rebasing:** When a new ticket has been merged to develop and your branch is not up to date with the develop branch
+
+**Why do we rebase?** We want to limit the amount of merge conflicts happening in develop so we put all new changes from develop into our own branchs so we can resolve merge conflicts remotely instead of on develop.
+
+**_! IMPORTANT !_** We will be prioritising develop branch over yours, so if a merge conflict occurs in develop, it will be rolled back and your changes will be lost, so please make sure you rebase!
 
 #### Steps to rebase
 
@@ -441,8 +501,8 @@ If everything in your branch is working to your expectations and you are happy w
 git push -f
 ```
 
-Keep in mind git force push will rewrite your remote branch with everything in local regardless of merge conflicts. This is not a bad thing if you are happy with everything on your local and need your remote to match!
-----
+#### Keep in mind git force push will rewrite your remote branch with everything in local regardless of merge conflicts. This is not a bad thing if you are happy with everything on your local and need your remote to match!
+
 
 ### Changing Branch name remotely and locally
 Reference: https://stackoverflow.com/questions/30590083/git-how-to-rename-a-branch-both-local-and-remote
@@ -483,8 +543,6 @@ git push <remote> -u <new_name>
 
 This error means the branch doesn't exist in remote but does locally. To resolve this you can do a git status to see what uncommitted files you have and commit them. Do a git push and the branch should push to remote and create it for you.
 
----
-
 ### Merge Request Issues
 #### Git doesn't give me the option to merge into developer branch?
 This means the branch you are trying to push has a detached head i.e it was never branched off the developer branch.
@@ -516,7 +574,7 @@ git push -f
 
 This strategy outlines how we manage versions in our project to ensure consistency and cohesion across the team for major releases, minor fixes and patching bugs.
 
-Version Number Format:
+### Version Number Format
 
 We use Semantic Versioning to indicate changes in the project. The format follows `v[MAJOR].[MINOR].[PATCH]`.
 - MAJOR: Incremented when significant new features are added to the application. This release is also used for major API changes and features that may require the end user to learn or relearn how to use new feature. i.e New settings page or a new side bar is added etc.
@@ -526,20 +584,20 @@ We use Semantic Versioning to indicate changes in the project. The format follow
 - PATCH/BUG: Incremented when bug fixes are made. These changes do not affect functionality but resolve issues existing in the code. i.e bookings are being duplicated or multiple copies of the same services are added at a time.
 > For example: v1.0.1
 
-### Versioning Guidelines:
-1. Initial Development:
+### Versioning Guidelines
+1. **Initial Development:**
 - During the early stages of the project (pre-launch), the code was predominantly being developed on the `develop` branch hence no versioning was used for this. Once the project is stable and ready for release, we begin with 1.0.0.
-2.	Branch-Based Development:
+2. **Branch-Based Development:**
 - All development is done on develop branches, and versions are assigned when merging back into the main branch (typically main or release).
 - Each version release includes a tag in the repository with the version number, which serves as a snapshot of that point in development.
-3. Changelog:
+3. **Changelog:**
 - A changelog must be maintained to document significant changes between versions. It should outline:
     - New features: new code added for functionality
     - Bug fixes: Fixes on existing code
     - Chores: maintenance work particularly for tech debt, cleaning up or documentation
-4. Release Management:
+4. **Release Management:**
 - All version releases are tagged and documented with a description of the changes in the repository. Tagging allows easy reference to specific versions for debugging or comparison.
-5. Post-Release Process:
+5. **Post-Release Process:**
 - After each release, increment the version number according to the next expected update. For example, after releasing 1.2.0, the next patch might be 1.2.1 or the next minor update could be 1.3.0.
 ---
 ## Deployment
