@@ -5,11 +5,11 @@ Behind the Veil is currently hosted at: https://behind-the-veil-1077153890194.au
 ## Table of Contents
 - [Dependencies](#dependencies)
 - [Running the app](#running-the-app)
-- [Versioning Strategy](#versioning-strategy)
 - [Testing](#testing)
 - [Errors](#errors)
 - [Importing Mock Data](#how-to-import-the-mock-data-into-mongodb)
 - [Git Help](#git-help)
+- [Versioning Strategy](#versioning-strategy)
 - [Deployment](#deployment)
 - [Team Composition](#team-composition)
 
@@ -206,36 +206,6 @@ Once all your dependencies have been installed:
   ```
   
   Your app should automatically open on the browser. If it doesn't, the console will show you a link that the app is running on the browser from so click this.
----
-## Versioning Strategy
-
-This strategy outlines how we manage versions in our project to ensure consistency and cohesion across the team for major releases, minor fixes and patching bugs.
-
-Version Number Format:
-
-We use Semantic Versioning to indicate changes in the project. The format follows `v[MAJOR].[MINOR].[PATCH]`.
-- MAJOR: Incremented when significant new features are added to the application. This release is also used for major API changes and features that may require the end user to learn or relearn how to use new feature. i.e New settings page or a new side bar is added etc. 
-> For example: v2.0.0
-- MINOR: Incremented when less signification new features or improvements are added. These do not break existing functionality but introduce enhancements. i.e Theme changes, button changes and other minor features.
-> For example: v1.1.0
-- PATCH/BUG: Incremented when bug fixes are made. These changes do not affect functionality but resolve issues existing in the code. i.e bookings are being duplicated or multiple copies of the same services are added at a time.
-> For example: v1.0.1
-
-### Versioning Guidelines:
-1. Initial Development:
-- During the early stages of the project (pre-launch), the code was predominantly being developed on the `develop` branch hence no versioning was used for this. Once the project is stable and ready for release, we begin with 1.0.0.
-2.	Branch-Based Development:
-- All development is done on develop branches, and versions are assigned when merging back into the main branch (typically main or release).
-- Each version release includes a tag in the repository with the version number, which serves as a snapshot of that point in development.
-3. Changelog:
-- A changelog must be maintained to document significant changes between versions. It should outline:
-  - New features: new code added for functionality
-  - Bug fixes: Fixes on existing code
-  - Chores: maintenance work particularly for tech debt, cleaning up or documentation
-4. Release Management:
-- All version releases are tagged and documented with a description of the changes in the repository. Tagging allows easy reference to specific versions for debugging or comparison.
-5. Post-Release Process:
-- After each release, increment the version number according to the next expected update. For example, after releasing 1.2.0, the next patch might be 1.2.1 or the next minor update could be 1.3.0.
 ---
 ## Testing
 
@@ -541,6 +511,37 @@ git push -f
 
 **Note** if you are unsure about any of this please reach out to team members via General.
 
+---
+## Versioning Strategy
+
+This strategy outlines how we manage versions in our project to ensure consistency and cohesion across the team for major releases, minor fixes and patching bugs.
+
+Version Number Format:
+
+We use Semantic Versioning to indicate changes in the project. The format follows `v[MAJOR].[MINOR].[PATCH]`.
+- MAJOR: Incremented when significant new features are added to the application. This release is also used for major API changes and features that may require the end user to learn or relearn how to use new feature. i.e New settings page or a new side bar is added etc.
+> For example: v2.0.0
+- MINOR: Incremented when less signification new features or improvements are added. These do not break existing functionality but introduce enhancements. i.e Theme changes, button changes and other minor features.
+> For example: v1.1.0
+- PATCH/BUG: Incremented when bug fixes are made. These changes do not affect functionality but resolve issues existing in the code. i.e bookings are being duplicated or multiple copies of the same services are added at a time.
+> For example: v1.0.1
+
+### Versioning Guidelines:
+1. Initial Development:
+- During the early stages of the project (pre-launch), the code was predominantly being developed on the `develop` branch hence no versioning was used for this. Once the project is stable and ready for release, we begin with 1.0.0.
+2.	Branch-Based Development:
+- All development is done on develop branches, and versions are assigned when merging back into the main branch (typically main or release).
+- Each version release includes a tag in the repository with the version number, which serves as a snapshot of that point in development.
+3. Changelog:
+- A changelog must be maintained to document significant changes between versions. It should outline:
+    - New features: new code added for functionality
+    - Bug fixes: Fixes on existing code
+    - Chores: maintenance work particularly for tech debt, cleaning up or documentation
+4. Release Management:
+- All version releases are tagged and documented with a description of the changes in the repository. Tagging allows easy reference to specific versions for debugging or comparison.
+5. Post-Release Process:
+- After each release, increment the version number according to the next expected update. For example, after releasing 1.2.0, the next patch might be 1.2.1 or the next minor update could be 1.3.0.
+---
 ## Deployment
 
 This section outlines how to manually deploy the app using Docker and Google Cloud Platform (GCP). The steps outlined are more specific to our app and workflow, but for general advice and more specific details on how to deploy using GCP, refer to https://cloud.google.com/run/docs/deploying
