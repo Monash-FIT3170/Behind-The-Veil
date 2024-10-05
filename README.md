@@ -394,7 +394,7 @@ The following is the guidelines to the workflow for the 10 Bridesmaids codebase:
 
 5. **Code Review:** 
    - The code reviewers for that sprint are assigned to review the code, check for quality, and provide feedback. 
-   - A detailed guide to the code review standards and process steps is linked in the 10 Bridesmaids Google Drive called [Code Review Checklist](https://docs.google.com/document/d/1nVOCJMVHorGA5A6GJNvsyNJ3EqOemZ7pq1k20bWQcnw/edit?usp=sharing)
+   - A detailed guide to the code review standards and process steps is linked here for developer use. Please refer to: [Code Review Checklist](doc/Code-review-checklist.pdf)
 
 
 6. **Feedback and Changes:** 
@@ -415,7 +415,7 @@ Reference: https://git-scm.com/book/en/v2/Git-Branching-Rebasing
 
 ✅ Step by Step video: https://youtu.be/RGtwxYqkkas?si=nvmMetHWNMegc0v_&t=129 (This guy does it all in his main terminal but i recommend using the IDE terminal so you can see your conflict files)
 
-> 🐛 There is also a screenshotted guide specific to Behind The Veil codebase if you prefer that: https://docs.google.com/document/d/1CB92KPAVI3ln-sAuBu0XJWlyeoHdkfuWnGifIK8MO2A/edit?usp=sharing
+> 🐛 There is also a screenshotted guide specific to Behind The Veil codebase if you prefer that: [Guide to Rebasing](doc/Guide-to-rebasing.pdf)
 
 **When to use rebasing:** When a new ticket has been merged to develop and your branch is not up to date with the develop branch
 
