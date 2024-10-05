@@ -66,7 +66,7 @@ export const ProfileSettingsPage = () => {
                         <ArtistServiceArea key={"service-area"}/>,
                         <ArtistPayment key={"artist-payment"}/>
                     ]}
-                    tabsClassName="lg:flex lg:justify-between lg:px-[15%] xl:px-[20%] 2xl:px-[25%]"
+                    tabsClassName="lg:flex lg:justify-between xl:px-[12%] 2xl:px-[20%]"
                 />
             </WhiteBackground>
         );

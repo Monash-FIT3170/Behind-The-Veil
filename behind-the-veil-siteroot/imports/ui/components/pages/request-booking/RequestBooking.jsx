@@ -9,7 +9,7 @@ import ServiceDetailsHeader from "../../service-details-header/ServiceDetailsHea
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { ArrowRightIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import AvailabilityCalendar, {
     VALID_INTERVAL,
 } from "../../../components/availabilityCalendar/AvailabilityCalendar.jsx";
@@ -504,8 +504,7 @@ const RequestBooking = () => {
                                             )}
                                         </div>
                                         <div className="flex justify-center items-center h-full w-full">
-                                            <Button
-                                                className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2 w-fit justify-center" 
+                                            <Button className="flex flex-row gap-2 w-fit justify-center"
                                                 onClick={() => {
                                                     const nextDate = findNextAvailableDate();
                                                     if (nextDate) {
@@ -516,9 +515,9 @@ const RequestBooking = () => {
                                                     } else {
                                                         alert("No available dates found");
                                                     }
-                                                }}
-                                            >
+                                                }}>
                                                 Next Available Date
+                                                <ChevronRightIcon className="size-6"/>
                                             </Button>
                                         </div>
                                     </div>
