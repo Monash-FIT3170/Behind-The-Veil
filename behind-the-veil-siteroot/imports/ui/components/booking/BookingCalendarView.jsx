@@ -19,7 +19,7 @@ import Button from "../button/Button";
 const CustomToolbar = ({ label, onNavigate }) => {
   return (
     <div>
-      <div className="flex flex-row items-center -mt-[115px] w-fit gap-x-2">
+      <div className="flex flex-row items-center -mt-[90px] xl:-mt-[115px] w-fit gap-x-2">
         <span className="large-text min-w-40">{label}</span>
         <Button
           className="rounded-full bg-secondary-purple hover:bg-secondary-purple-hover"
