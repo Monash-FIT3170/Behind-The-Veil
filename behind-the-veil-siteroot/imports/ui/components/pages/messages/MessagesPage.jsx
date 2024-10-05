@@ -50,9 +50,9 @@ export const MessagesPage = () => {
 
     // handler for modal displaying for creating chat
     const [openCreateChat, setOpenCreateChat] = useState(false);
-    const onOpenCreateChatModal = () => setOpen(true);
+    const onOpenCreateChatModal = () => setOpenCreateChat(true);
     const onCloseCreateChatModal = () => {
-        setOpen(false);
+        setOpenCreateChat(false);
         setErrors({chatUsername: "", chatCreation: ""})
         setSuccessMessage("");
     }
@@ -221,9 +221,8 @@ export const MessagesPage = () => {
                             }
                         });
                 }).then(() => {
-                    console.log("Chat successfully added");
                     setSuccessMessage("Chat successfully created!")
-                    return;
+                    setOpenCreateChat(false)
                 });
             } catch (error) {
                 console.log("Error adding message. Returned with error:" + error.message);
@@ -301,24 +300,23 @@ export const MessagesPage = () => {
                     {/* only display when inContactList is true */}
 
                     <span className={"title-text text-center " + (inContactList ? "" : "hidden")}>Chats</span>
+
+                    <div className="flex flex-col items-center justify-center gap-y-3">
+                        <Button
+                            className="flex flex-row gap-x-1.5 min-w-48 items-center justify-center bg-secondary-purple hover:bg-secondary-purple-hover"
+                            onClick={onOpenCreateChatModal}>
+                            <PlusIcon className="icon-base"/> Create Chat
+                        </Button>
+                    </div>
+
                     {/* If there are chats, display a message indicating there are no chats to display*/}
                     {chatsData.length > 0 ?
-                        <div className={"flex flex-col gap-3 " + (inContactList ? "" : "hidden")}> 
-                            <div className="flex flex-col items-center justify-center gap-y-3">
-                                <Button
-                                    className="flex flex-row gap-x-1.5 min-w-48 items-center justify-center bg-secondary-purple hover:bg-secondary-purple-hover"
-                                    onClick={onOpenCreateChatModal}>
-                                    <PlusIcon className="icon-base"/> Create Chat
-                                </Button>
-                            </div>
-                            {newMsgPreviewsComponents} 
+                        <div className={"flex flex-col gap-3 " + (inContactList ? "" : "hidden")}>
+
+                            {newMsgPreviewsComponents}
                         </div> :
                         (<div className="flex flex-col items-center justify-center gap-y-3">
-                            <Button
-                                className="flex flex-row gap-x-1.5 min-w-48 items-center justify-center bg-secondary-purple hover:bg-secondary-purple-hover"
-                                onClick={onOpenCreateChatModal}>
-                                <PlusIcon className="icon-base"/> Create Chat
-                            </Button>
+
                             <div className={"main-text text-dark-grey"}>No messages to display</div>
                             <Button onClick={() => isLeftHandler(false)}>Back</Button>
                         </div>)
@@ -329,7 +327,8 @@ export const MessagesPage = () => {
 
                         {/* display conversations if any */}
                         {chatsData.length &&
-                                <Conversation chat={chatsData[selectedConversationIndex]} isLeftHandler={setInContactList} />}
+                            <Conversation chat={chatsData[selectedConversationIndex]}
+                                          isLeftHandler={setInContactList}/>}
                     </div>
                 </WhiteBackground>
 
@@ -385,24 +384,27 @@ export const MessagesPage = () => {
 
                 <Modal
                     classNames={{modal: "w-[480px] h-[300px] rounded-[45px] bg-glass-panel-background border border-main-blue"}}
-                    open={open} onClose={onCloseCreateChatModal} center showCloseIcon={false}>
+                    open={openCreateChat} onClose={onCloseCreateChatModal} center showCloseIcon={false}>
                     <div className="flex justify-center items-center h-full">
-                        <div className="flex flex-col">
+                        <div className="flex flex-col items-center justify-center gap-4">
+
                             <h2 className="text-center title-text">
                                 Create Chat
                             </h2>
-                            <Input 
-                                id="chatUsername" 
-                                type="search" 
-                                placeholder={"Enter username"} 
+
+                            <Input
+                                id="chatUsername"
+                                type="search"
+                                placeholder={"Enter username"}
+                                className={"w-48"}
                                 onChange={handleInputChange}/>
-                            <div className="flex justify-center space-x-6 mt-5">
-                                <Button
-                                    className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[25px] pe-[25px] flex gap-1"
-                                    onClick={handleCreateChat}>
-                                    <PlusIcon className="icon-base"/> Create Chat
-                                </Button>
-                            </div>
+
+                            <Button
+                                className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[25px] pe-[25px] flex gap-1"
+                                onClick={handleCreateChat}>
+                                <PlusIcon className="icon-base"/> Create
+                            </Button>
+
                             {!chatUsername && errors.chatUsername && <div className="text-cancelled-colour text-center">{errors.chatUsername}</div>}
                             {chatUsername && errors.chatCreation && !errors.chatUsername && <div className="text-cancelled-colour text-center">{errors.chatCreation}</div>}
                             {successMessage && <div className="text-confirmed-colour text-center">{successMessage}</div>}

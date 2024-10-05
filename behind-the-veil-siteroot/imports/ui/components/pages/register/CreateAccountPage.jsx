@@ -311,7 +311,7 @@ const CreateAccountPage = () => {
                             type="checkbox"
                             id="termCondition"
                             checked={isTermChecked}
-                            onChange={() => setIsTermChecked(!isPrivacyChecked)}
+                            onChange={() => setIsTermChecked(!isTermChecked)}
                             className="mt-3.5"
                         />
                         <label htmlFor="termCondition" className="small-text text-dark-grey text-left">

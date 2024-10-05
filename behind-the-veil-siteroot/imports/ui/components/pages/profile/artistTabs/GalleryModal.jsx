@@ -76,7 +76,7 @@ const GalleryModal = ({
                       alt="Selected Image for Modal"
                   ></img>
                 </div>
-                <div className="fixed top-2 right-2 p-2 text-gray-500 z-20">
+                <div className="fixed top-2 right-2 p-2 z-20">
                   <button
                       className="text-gray-500 hover:text-gray-700"
                       onClick={closeModal}>
