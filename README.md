@@ -5,6 +5,7 @@ Behind the Veil is currently hosted at: https://behind-the-veil-1077153890194.au
 ## Table of Contents
 - [Dependencies](#dependencies)
 - [Running the app](#running-the-app)
+- [Versioning Strategy](#versioning-strategy)
 - [Testing](#testing)
 - [Errors](#errors)
 - [Importing Mock Data](#how-to-import-the-mock-data-into-mongodb)
