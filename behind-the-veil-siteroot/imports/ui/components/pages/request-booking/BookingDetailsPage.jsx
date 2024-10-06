@@ -10,7 +10,7 @@ import {
     ArrowPathIcon,
     CheckCircleIcon,
     CurrencyDollarIcon,
-    DocumentMagnifyingGlassIcon,
+    DocumentTextIcon,
     NoSymbolIcon,
     PaperAirplaneIcon,
     PencilSquareIcon,
@@ -54,6 +54,13 @@ const BookingDetailsPage = () => {
 
     // get bookings information from database
     const {isLoading, bookingData, serviceData, userData} = useSpecificBooking(bookingId, userInfo.type);
+
+    // navigate to the review page
+    const navigateReview = () => {
+        // add the booking id at the end of the url
+        navigateTo(`/profile/review/${bookingId}`);
+    }
+
 
     if (isLoading) {
         // is loading, display loader
@@ -140,10 +147,10 @@ const BookingDetailsPage = () => {
                 switch (bookingData.bookingStatus) {
                     case BookingStatus.COMPLETED:
                         // if booking is completed, add a "Leave review" or "View review" button
-                        if (bookingData.bookingIsReviewed) {
+                        if (!bookingData.bookingIsReviewed) {
                             // if not reviewed yet
                             actionButtons.push(
-                                <Button className={purpleButtonClass}>
+                                <Button className={purpleButtonClass} onClick={navigateReview}>
                                     <PencilSquareIcon className="icon-base"/>
                                     Leave Review
                                 </Button>
@@ -151,8 +158,8 @@ const BookingDetailsPage = () => {
                         } else {
                             // if already left review
                             actionButtons.push(
-                                <Button className={purpleButtonClass}>
-                                    <DocumentMagnifyingGlassIcon className="icon-base"/>
+                                <Button className={purpleButtonClass} onClick={navigateReview}>
+                                    <DocumentTextIcon className="icon-base"/>
                                     View Review
                                 </Button>
                             );
