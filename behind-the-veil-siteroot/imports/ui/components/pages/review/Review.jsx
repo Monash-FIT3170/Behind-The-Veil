@@ -1,6 +1,6 @@
 /**
  * File Description: Review component
- * File version: 1.0
+ * File version: 1.2
  * Contributors: Vicky
  */
 
@@ -232,7 +232,7 @@ export const Review = () => {
                                             className={"w-64 sm:w-96"}
                                             name="reviewTitle"
                                             onChange={(e) => {
-                                                setReviewTitle(e.target.value)
+                                                setReviewTitle(e.target.value.trim())
                                             }}
                                         />
                                         {!reviewTitle && errors.inputReviewTitle && <span className="text-cancelled-colour">{errors.inputReviewTitle}</span>}
@@ -266,7 +266,7 @@ export const Review = () => {
                                                 className="input-base h-48"
                                                 placeholder="Enter Your Review"
                                                 onChange={(e) => {
-                                                    setReviewComment(e.target.value)
+                                                    setReviewComment(e.target.value.trim())
                                                 }}
                                                 rows={4} cols={40}/>
                                         {!reviewComment && errors.inputReviewComment && <span className="text-cancelled-colour">{errors.inputReviewComment}</span>}
