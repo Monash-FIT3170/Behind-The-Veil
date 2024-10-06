@@ -139,8 +139,6 @@ export const Review = () => {
     const confirmReview = (event) => {
         event.preventDefault();
 
-        console.log("adding the review now")
-        console.log(reviewTitle, reviewRating, reviewComment, bookingId, artistData.profile.alias)
 
         // save the review to the mongodb database and refresh the page to display the review
         try {
