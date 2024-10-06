@@ -23,7 +23,7 @@ export const ProfileSettingsPage = () => {
     const userInfo = useUserInfo();
 
     // display tabs depending on user account type (brides don't have service area settings tab)
-    if (userInfo.alias === "bride") {
+    if (userInfo.type === "bride") {
         return (
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
                 <BackButton />

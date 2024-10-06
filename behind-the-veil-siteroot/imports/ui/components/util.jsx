@@ -57,7 +57,7 @@ export function useUserInfo() {
                 (userInfo.profileImage ? (userInfo.profileImage.imageName !== fetchedProfileImage.imageName ||
                  userInfo.profileImage.imageSize !== fetchedProfileImage.imageSize) : fetchedProfileImage !== null)
             ) {
-                if (fetchedAlias == 'artist') {
+                if (fetchedType == 'artist') {
                     setUserInfo(
                         {
                             "id": fetchedUserId,
