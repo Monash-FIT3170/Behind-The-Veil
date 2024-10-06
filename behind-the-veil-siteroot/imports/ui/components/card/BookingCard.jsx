@@ -15,6 +15,7 @@ import {
     CheckCircleIcon,
     CurrencyDollarIcon,
     DocumentMagnifyingGlassIcon,
+    DocumentTextIcon,
     EyeIcon,
     PencilSquareIcon,
     XCircleIcon,
@@ -78,8 +79,8 @@ export const BookingCard = ({
     const smallPurpleButtonClass = "flex flex-row gap-x-2 justify-center items-center w-[60%] bg-secondary-purple hover:bg-secondary-purple-hover transition duration-500"
 
     const leaveReview = () => {
-        // TODO: add the booking id at the end of the url
-        navigateTo('/profile/review');
+        // add the booking id at the end of the url
+        navigateTo(`/profile/review/${bookingId}`);
     }
     if (userType === 'bride') {
         switch (bookingStatus) {
@@ -90,16 +91,16 @@ export const BookingCard = ({
                     additionalButtons.push(
                         // TODO: in the navigateTo, add '/review/' + serviceId or bookingId in it to show review of particular item
                         <Button className={purpleButtonClass} onClick={leaveReview}>
-                            <PencilSquareIcon className="icon-base"/>
-                            Leave Review
+                            <DocumentTextIcon className="icon-base"/>
+                            View Review
                         </Button>
                     );
                 } else {
                     // if already left review
                     additionalButtons.push(
                         <Button className={purpleButtonClass} onClick={leaveReview}>
-                            <EyeIcon className="icon-base"/>
-                            View Review
+                            <PencilSquareIcon className="icon-base"/>
+                            Leave Review
                         </Button>
                     );
                 }

@@ -171,7 +171,7 @@ export const App = () => (
                     />
                     <Route
                     // TODO: Add this to the url path -> /:serviceId
-                        path={`/${UrlBasePath.PROFILE}/review`}
+                        path={`/${UrlBasePath.PROFILE}/review/:bookingId`}
                         element={
                             <ProtectedRoute accessReq={RoutingAccess.SIGNED_IN_ONLY}>
                                 {/* <Review /> */}
