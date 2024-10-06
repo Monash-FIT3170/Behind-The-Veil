@@ -139,12 +139,15 @@ export const Review = () => {
     const confirmReview = (event) => {
         event.preventDefault();
 
+        console.log("adding the review now")
+        console.log(reviewTitle, reviewRating, reviewComment, bookingId, artistData.profile.alias)
+
         // save the review to the mongodb database and refresh the page to display the review
         try {
             // wrap meteor.call in a promise
             new Promise((resolve, reject) => {
                 // asynchronous operation
-                Meteor.call('add_review', reviewTitle, reviewRating, reviewComment, bookingId, (error, result) => {
+                Meteor.call('add_review', reviewTitle, reviewRating, reviewComment, bookingId, artistData.profile.alias, (error, result) => {
                     if (error) {
                         reject(error); // if there's an error, go to the catch block
                     } else {

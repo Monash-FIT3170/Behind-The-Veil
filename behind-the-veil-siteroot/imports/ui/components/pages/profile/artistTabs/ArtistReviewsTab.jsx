@@ -40,6 +40,10 @@ export const ArtistReviewsTab = ({ username }) => {
 
     const reviewStats = calculateReviewStats(artistReviewData);
 
+    if (!isLoading) {
+        console.log(reviewArray)
+    }
+
     if (isLoading) {
         return (
             <Loader
