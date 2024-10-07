@@ -34,16 +34,6 @@ Meteor.methods({
         check(artistUsername, String)
         check(serviceId, String)
             
-        // Check is needed to validate the right booking data and santise the inputs
-        check(startDateTime, Date)
-        check(bookingEndDateTime, Date)
-        check(location, String)
-        check(price, Number)
-        check(status, String)
-        check(brideUsername, String)
-        check(artistUsername, String)
-        check(serviceId, String)
-            
         const newBookingId = BookingCollection.insert({
             bookingStartDateTime: startDateTime,
             bookingEndDateTime: bookingEndDateTime,
@@ -55,11 +45,7 @@ Meteor.methods({
             artistUsername: artistUsername,
             serviceId: serviceId,
             bookingCreatedDate: new Date()
-            serviceId: serviceId,
-            bookingCreatedDate: new Date()
         });
-
-        Meteor.callAsync("sendNewBookingEmail", newBookingId);
 
         Meteor.callAsync("sendNewBookingEmail", newBookingId);
 
@@ -73,7 +59,6 @@ Meteor.methods({
      */
     "get_booking": function (bookingId) {
         check(bookingId, String)
-        check(bookingId, String)
         return BookingCollection.findOne(
             { _id: bookingId },
         )
@@ -85,9 +70,6 @@ Meteor.methods({
      * @param {object} updateObject - Field and value object of elements that need to be upgraded
      */
     "update_booking_details": function (bookingId, updateObject) {
-        check(bookingId, String)
-        check(updateObject, Object)
-
         check(bookingId, String)
         check(updateObject, Object)
 
@@ -115,8 +97,6 @@ Meteor.methods({
      * @returns {Array} - An array of booking objects that match the given status.
      */
     "get_bookings_by_status": function (bookingStatus) {
-        check(bookingStatus, String)
-
         check(bookingStatus, String)
 
         return BookingCollection.find({ bookingStatus: bookingStatus }).fetch();
