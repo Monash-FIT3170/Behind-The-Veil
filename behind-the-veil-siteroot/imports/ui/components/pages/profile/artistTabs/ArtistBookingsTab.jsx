@@ -27,7 +27,7 @@ export const ArtistBookingsTab = ({username}) => {
     const navigateTo = useNavigate();
 
     // booking view, calendar or list
-    const [bookingView, setBookingView] = useState("list"); // todo: calendar view
+    const [bookingView, setBookingView] = useState("calendar");
 
     // view drop down handler
     const handleViewChange = (event) => {
@@ -127,9 +127,10 @@ export const ArtistBookingsTab = ({username}) => {
                     <div
                         className={"flex flex-col-reverse items-center justify-center sm:flex-row sm:items-center sm:justify-end gap-6"}>
                         {/*drop down for the view*/}
-                        <select defaultValue={"list"} onChange={handleViewChange} className="input-base w-40 min-w-40">
-                            <option value="calendar">Calendar View</option>
-                            <option value="list">List View</option>
+                        <span className={"main-text text-dark-grey"}>Select View: </span>
+                        <select defaultValue={"calendar"} onChange={handleViewChange} className="input-base w-40 min-w-40">
+                            <option value="calendar">Calendar</option>
+                            <option value="list">List</option>
                         </select>
 
                         {/*add availability button on the right*/}

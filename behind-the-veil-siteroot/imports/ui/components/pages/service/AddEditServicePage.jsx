@@ -1,6 +1,6 @@
 /**
  * File Description: AddEditServices page
- * File version: 1.2
+ * File version: 1.3
  * Contributors: Lucas, Nikki, Kyle
  */
 
@@ -383,121 +383,118 @@ export const AddEditServicePage = ({isEdit}) => {
         return (
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
                 <BackButton to={"/" + UrlBasePath.PROFILE}/>
-                <div className="flex items-center justify-center">
-                    <div className="flex flex-col w-[60%] gap-6">
-                        <p className="title-text">{title}</p>
+                <div className="flex flex-col items-start justify-center gap-6 pl-[5%] lg:pl-[15%] w-full">
+                    <p className="title-text">{title}</p>
 
-                        <div className="flex flex-col gap-1">
-                            <Input
-                                type="text"
-                                label={<label className="main-text">Service Name</label>}
-                                value={serviceName}
-                                onChange={(e) => setServiceName(e.target.value)}
-                            />
-                            {errors.serviceName && <span className="text-cancelled-colour">{errors.serviceName}</span>}
-                        </div>
-
-                        <div className="flex flex-col gap-1">
-                            <div className="flex flex-col gap-1">
-                                <label className="main-text" htmlFor="type">
-                                    Service Type
-                                </label>
-                                <select
-                                    name="type"
-                                    value={serviceType}
-                                    className="flex flex-col gap-1 input-base  md:w-1/2 md:max-w-72"
-                                    onChange={(e) => setServiceType(e.target.value)}
-                                >
-                                    <option value="None">Please select an option</option>
-                                    <option value="Hair">Hair</option>
-                                    <option value="Makeup">Makeup</option>
-                                </select>
-                            </div>
-                            {errors.serviceType && <span className="text-cancelled-colour">{errors.serviceType}</span>}
-                        </div>
-
-                        <div className="flex flex-col gap-1">
-                            <Input
-                                className="md:w-1/2 md:max-w-72"
-                                type="number"
-                                min="1"
-                                max="24"
-                                step="1"
-                                label={<label className="main-text">Duration (Hours)</label>}
-                                value={serviceDuration}
-                                onChange={(e) => setServiceDuration(e.target.value)}
-                            />
-                            {errors.serviceDuration && (
-                                <span className="text-cancelled-colour">{errors.serviceDuration}</span>
-                            )}
-                        </div>
-
-                        <div className="flex flex-col gap-1">
-                            <Input
-                                className="md:w-1/2 md:max-w-72"
-                                type="number"
-                                min="0.00"
-                                step="0.50"
-                                label={<label className="main-text">Price (AUD)</label>}
-                                value={servicePrice}
-                                onChange={(e) => setServicePrice(e.target.value)}
-                            />
-                            {errors.servicePrice &&
-                                <span className="text-cancelled-colour">{errors.servicePrice}</span>}
-                        </div>
-
-                        <div className="flex flex-col gap-1">
-                            <label className="main-text">Description</label>
-                            <textarea
-                                className="input-base h-48"
-                                value={serviceDescription}
-                                onChange={(e) => setServiceDescription(e.target.value)}
-                            />
-                            {errors.serviceDescription && (
-                                <span className="text-cancelled-colour">{errors.serviceDescription}</span>
-                            )}
-                        </div>
-
-                        {/* file upload area */}
-                        <div className="flex flex-col gap-1">
-                            <div className="flex flex-row">
-                                <Input
-                                    className="text-opacity-0 border-r-0 rounded-r-none w-[130px]"
-                                    type="file"
-                                    accept={allowedFileTypeExtensions?.join(",")}
-                                    label={<label className="main-text">Photos</label>}
-                                    onChange={handleFileChange}
-                                    onClick={(event) => {
-                                        // this is to allow the same file to be selected again after reset
-                                        event.target.value = null;
-                                    }}
-                                    multiple
-                                />
-                                <TrashIcon
-                                    className="input-base border-l-0 rounded-l-none h-[48px] w-[48px] mt-[28px] size-5 hover:bg-white-hover active:bg-light-grey-hover transition duration-200 ease-in-out"
-                                    onClick={removeAllImages}
-                                ></TrashIcon>
-                            </div>
-                            {fileRejected && <span className="text-cancelled-colour">{fileRejectedMessage}</span>}
-                            {errors.images && <span className="text-cancelled-colour">{errors.images}</span>}
-                        </div>
-
-                        <div className="grid md:grid-cols-2 gap-5" id="preview">
-                            {images}
-                        </div>
-
-                        {/*error/success message*/}
-                        {errors.overall && <div className="text-cancelled-colour mt-2">{errors.overall}</div>}
-                        {successMessage && <div className="text-confirmed-colour mt-2">{successMessage}</div>}
-
-                        <Button
-                            className="flex bg-secondary-purple hover:bg-secondary-purple-hover mt-[15px] load-when-disabled"
-                            disabled={isSubmitting}
-                            onClick={handleSubmit}>
-                            <CheckIcon className="icon-base"/>
-                            {button}
-                        </Button>
+                    <div className="flex flex-col gap-1 w-full">
+                        <Input
+                            type="text"
+                            label={<label className="main-text">Service Name</label>}
+                            value={serviceName}
+                            onChange={(e) => setServiceName(e.target.value)}
+                            className="w-full lg:w-[40vw] sm:w-96"
+                        />
+                        {errors.serviceName && <span className="text-cancelled-colour">{errors.serviceName}</span>}
                     </div>
+
+                    <div className="flex flex-col gap-1 w-full">
+                        <div className="flex flex-col gap-1">
+                            <label className="main-text" htmlFor="type">Service Type</label>
+                            <select
+                                name="type"
+                                value={serviceType}
+                                className="flex flex-col gap-1 input-base w-full lg:w-[20vw] sm:w-96"
+                                onChange={(e) => setServiceType(e.target.value)}
+                            >
+                                <option value="None">Please select an option</option>
+                                <option value="Hair">Hair</option>
+                                <option value="Makeup">Makeup</option>
+                            </select>
+                        </div>
+                        {errors.serviceType && <span className="text-cancelled-colour">{errors.serviceType}</span>}
+                    </div>
+
+                    <div className="flex flex-col gap-1 w-full">
+                        <Input
+                            className="w-full lg:w-[20vw] sm:w-48"
+                            type="number"
+                            min="1"
+                            max="24"
+                            step="1"
+                            label={<label className="main-text">Duration (Hours)</label>}
+                            value={serviceDuration}
+                            onChange={(e) => setServiceDuration(e.target.value)}
+                        />
+                        {errors.serviceDuration && (
+                            <span className="text-cancelled-colour">{errors.serviceDuration}</span>
+                        )}
+                    </div>
+
+                    <div className="flex flex-col gap-1 w-full">
+                        <Input
+                            className="w-full lg:w-[20vw] sm:w-48"
+                            type="number"
+                            min="0.00"
+                            step="0.50"
+                            label={<label className="main-text">Price (AUD)</label>}
+                            value={servicePrice}
+                            onChange={(e) => setServicePrice(e.target.value)}
+                        />
+                        {errors.servicePrice &&
+                            <span className="text-cancelled-colour">{errors.servicePrice}</span>}
+                    </div>
+
+                    <div className="flex flex-col gap-1 w-full">
+                        <label className="main-text">Description</label>
+                        <textarea
+                            className="input-base h-48 lg:w-[40vw] sm:w-96 w-full"
+                            value={serviceDescription}
+                            onChange={(e) => setServiceDescription(e.target.value)}
+                        />
+                        {errors.serviceDescription && (
+                            <span className="text-cancelled-colour">{errors.serviceDescription}</span>
+                        )}
+                    </div>
+
+                    {/* file upload area */}
+                    <div className="flex flex-col gap-1 w-full">
+                        <div className="flex flex-row">
+                            <Input
+                                className="text-opacity-0 border-r-0 rounded-r-none lg:w-[15vw] sm:w-calc(384px-48px) w-full"
+                                type="file"
+                                accept={allowedFileTypeExtensions?.join(",")}
+                                label={<label className="main-text">Photos</label>}
+                                onChange={handleFileChange}
+                                onClick={(event) => {
+                                    // this is to allow the same file to be selected again after reset
+                                    event.target.value = null;
+                                }}
+                                multiple
+                            />
+                            <TrashIcon
+                                className="input-base border-l-0 rounded-l-none h-[48px] w-[48px] mt-[28px] size-5 hover:bg-white-hover active:bg-light-grey-hover transition duration-200 ease-in-out"
+                                onClick={removeAllImages}
+                            ></TrashIcon>
+                        </div>
+                        {fileRejected && <span className="text-cancelled-colour">{fileRejectedMessage}</span>}
+                        {errors.images && <span className="text-cancelled-colour">{errors.images}</span>}
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-5" id="preview">
+                        {images}
+                    </div>
+
+                    {/*error/success message*/}
+                    {errors.overall && <div className="text-cancelled-colour mt-2">{errors.overall}</div>}
+                    {successMessage && <div className="text-confirmed-colour mt-2">{successMessage}</div>}
+
+                    <Button
+                        className="flex bg-secondary-purple hover:bg-secondary-purple-hover mt-[15px] load-when-disabled"
+                        disabled={isSubmitting}
+                        onClick={handleSubmit}>
+                        <CheckIcon className="icon-base"/>
+                        {button}
+                    </Button>
                 </div>
 
                 {/* delete button on the bottom */}

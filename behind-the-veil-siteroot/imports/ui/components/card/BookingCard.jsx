@@ -176,7 +176,7 @@ export const BookingCard = ({
     return (
         <Card className={cardClasses} {...cardProps}>
             <div className={"flex flex-row gap-x-4 justify-center"}>
-                <div className={"cursor-default px-4"}>
+                <div className={"cursor-default px-4 w-full"}>
 
                     <div className={"flex flex-col justify-between h-[300px]"}>
 
