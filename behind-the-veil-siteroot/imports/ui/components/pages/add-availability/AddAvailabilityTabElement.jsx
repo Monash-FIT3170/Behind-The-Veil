@@ -170,14 +170,14 @@ const AddAvailability = ({ username }) => {
   return (
     <>
       {/* Main container for content */}
-      <div className="flex flex-col gap-4 xl:px-40">
+      <div className="flex flex-col items-start justify-center gap-6 pl-[5%] xl:px-40 w-full">
         {/* input form */}
         <form onSubmit={handleSave}>
           <div className="flex flex-col gap-4">
             {/* date/time */}
-            <div className="flex flex-col md:flex-row gap-4 md:gap-10">
+            <div className="flex flex-col lg:flex-row gap-4 lg:gap-10">
               {/* date input + calendar */}
-              <div className="flex flex-col flex-grow gap-1 md:max-w-[350px] lg:max-w-[420px] xl:lg:max-w-[490px]">
+              <div className="flex flex-col flex-grow gap-1 md:max-w-[420px] xl:lg:max-w-[490px]">
                 <div className="flex flex-col gap-4">
                   <Input
                     id={dateInputId}

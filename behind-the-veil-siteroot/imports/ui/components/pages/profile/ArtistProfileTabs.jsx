@@ -90,14 +90,14 @@ export const ArtistProfileTabs = ({ userInfo }) => {
           Bookings
           {/* Display a red dot to indicate that a booking has not been responded to */}
           {unrespondedBookings && (
-            <span className="absolute top-0 h-2 w-2 bg-red-500 rounded-full"></span>
+            <span className="absolute top-0 h-2 w-2 bg-cancelled-colour rounded-full"></span>
           )}
         </span>,
         <span key={3} className="relative">
           Availability
           {/* Display a red dot to indicate that availability hasn't been added this week */}
-          {weeklyAvailabilityEntered == false && (
-            <span className="absolute top-0 h-2 w-2 bg-red-500 rounded-full"></span>
+          {weeklyAvailabilityEntered === false && (
+            <span className="absolute top-0 h-2 w-2 bg-cancelled-colour rounded-full"></span>
           )}
         </span>,
         <span key={4}>My Services</span>,
