@@ -9,6 +9,8 @@ import {resetDatabase} from 'meteor/xolvio:cleaner';
 import "../imports/api/methods/users";
 import {UserCollection} from "../imports/api/collections/users";
 import {Accounts} from 'meteor/accounts-base';
+import {useUserInfo} from "../imports/ui/components/util";
+
 // import { useSpecificUser } from "../../behind-the-veil-siteroot/imports/ui/components/DatabaseHelper";
 
 
@@ -74,8 +76,14 @@ if (Meteor.isClient) {
                     artistserviceRadius: 0,
                 },
             });
+
+            
+
+            
             Meteor.call("update_email", userId, 'testuser@example.com', 'updateuser@example.com');
-            const updatedUser = UserCollection.findOne(userId);
+            const updatedUser = UserCollection.findOne(
+                { username: "testuser" },
+            );
             assert.strictEqual(updatedUser.email, 'updateuser@example.com');
             // throwing an error because it is not updating 
             // maybe because the Accounts is used in "update_email"
@@ -229,6 +237,32 @@ if (Meteor.isClient) {
             // not sure how to best replicate a test for the availability objects
 
 
+            // How the user is created
+
+            // Accounts.createUser(newUser, (error) => {
+            //     if (error) {
+            //         if (error.reason.toLowerCase().includes("email")) {
+            //             // email is already taken
+            //             window.location.replace("?error=email")
+
+            //         } else if (error.reason.toLowerCase().includes("username")) {
+            //             // username is already taken
+            //             window.location.replace("?error=username")
+
+            //         } else {
+            //             // other reason
+            //             window.location.replace("?error=true")
+            //         }
+
+            //     } else {
+            //         // verify its email right after it is created
+            //         Meteor.call("verify_email", Meteor.userId());
+            //         Meteor.logout()
+
+            //         // After successful activation, navigate to activation completed page
+            //         navigate(`/${UrlBasePath.REGISTER}/accountCreated`);
+            //     }
+            // });
 
         });
         
