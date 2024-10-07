@@ -35,9 +35,7 @@ const LinkSentPage = () => {
 
                 <div className={"w-4/5 text-center mt-1.5"}>
                     <div className={"main-text"}>
-                        Please access the
-                        <span className={"text-pending-colour"}> link </span>
-                        sent to your email to {urlBase === UrlBasePath.REGISTER ? "verify your email" : "reset your password"}!
+                        Please access the link sent to your email to {urlBase === UrlBasePath.REGISTER ? "verify your email" : "reset your password"}!
                     </div>
                 </div>
 

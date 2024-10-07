@@ -102,9 +102,11 @@ export const NavigationBar = () => {
     const NavBarLinks = () => {
         return (
             // horizontal menu on large screens, vertical menu on smaller screens
-            <ul className="flex list-none
+            <ul
+                className="flex list-none
             flex-col gap-y-5
-            lg:flex-row lg:items-center lg:gap-x-5">
+            lg:flex-row lg:items-center lg:gap-x-5"
+            >
                 {/*Examples page TODO: remove once dev is done*/}
                 {/*<li>*/}
                 {/*    <NavLink to={`/${UrlBasePath.EXAMPLES}`}*/}
@@ -117,71 +119,103 @@ export const NavigationBar = () => {
                 {/*</li>*/}
                 {/*Home Page*/}
                 <li>
-                    <NavLink to={"/" + UrlBasePath.HOME}
-                             onClick={() => {
-                                 autoCloseMenu();
-                             }}
-                             className={baseUrl === UrlBasePath.HOME ?
-                                 "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3" :
-                                 "main-text navbar-link-inactive p-3"}>Home</NavLink>
+                    <NavLink
+                        to={"/" + UrlBasePath.HOME}
+                        onClick={() => {
+                            autoCloseMenu();
+                        }}
+                        className={
+                            baseUrl === UrlBasePath.HOME
+                                ? "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3"
+                                : "main-text navbar-link-inactive p-3"
+                        }
+                    >
+                        Home
+                    </NavLink>
                 </li>
                 {/*Services Page*/}
                 <li>
-                    <NavLink to={"/" + UrlBasePath.SERVICES}
-                             onClick={() => {
-                                 autoCloseMenu();
-                             }}
-                             className={baseUrl === UrlBasePath.SERVICES ?
-                                 "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3" :
-                                 "main-text navbar-link-inactive p-3"}>Services</NavLink>
+                    <NavLink
+                        to={"/" + UrlBasePath.SERVICES}
+                        onClick={() => {
+                            autoCloseMenu();
+                        }}
+                        className={
+                            baseUrl === UrlBasePath.SERVICES
+                                ? "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3"
+                                : "main-text navbar-link-inactive p-3"
+                        }
+                    >
+                        Services
+                    </NavLink>
                 </li>
                 {/*Artists Page*/}
                 <li>
-                    <NavLink to={"/" + UrlBasePath.ARTISTS}
-                             onClick={() => {
-                                 autoCloseMenu();
-                             }}
-                             className={baseUrl === UrlBasePath.ARTISTS ?
-                                 "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3" :
-                                 "main-text navbar-link-inactive p-3"}>Artists</NavLink>
+                    <NavLink
+                        to={"/" + UrlBasePath.ARTISTS}
+                        onClick={() => {
+                            autoCloseMenu();
+                        }}
+                        className={
+                            baseUrl === UrlBasePath.ARTISTS
+                                ? "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3"
+                                : "main-text navbar-link-inactive p-3"
+                        }
+                    >
+                        Artists
+                    </NavLink>
                 </li>
                 {/*Messages Page*/}
                 <li className={loggedInUserId ? "" : "hidden"}>
-                    <NavLink to={"/" + UrlBasePath.MESSAGES}
-                             onClick={() => {
-                                 autoCloseMenu();
-                             }}
-                             className={baseUrl === UrlBasePath.MESSAGES ?
-                                 "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3 relative" :
-                                 "main-text navbar-link-inactive p-3 relative"}>Messages {unreadMessages && (
-                                    <span className="absolute -top-[0.01px] -right-[0.5px] block h-2.5 w-2.5 rounded-full bg-red-600"></span>
-                                  )}
-                                 </NavLink>
+                    <NavLink
+                        to={"/" + UrlBasePath.MESSAGES}
+                        onClick={() => {
+                            autoCloseMenu();
+                        }}
+                        className={
+                            baseUrl === UrlBasePath.MESSAGES
+                                ? "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3 relative"
+                                : "main-text navbar-link-inactive p-3 relative"
+                        }
+                    >
+                        Messages{" "}
+                        {unreadMessages && (
+                            <span className="absolute -top-[0.01px] -right-[0.5px] block h-2.5 w-2.5 rounded-full bg-red-600"></span>
+                        )}
+                    </NavLink>
                 </li>
                 {/*Login Page*/}
                 <li className={!loggedInUserId ? "" : "hidden"}>
-                    <NavLink to={"/" + UrlBasePath.LOGIN}
-                             onClick={() => {
-                                 autoCloseMenu();
-                             }}>
-                        <Button type="button"
-                                className="
+                    <NavLink
+                        to={"/" + UrlBasePath.LOGIN}
+                        onClick={() => {
+                            autoCloseMenu();
+                        }}
+                    >
+                        <Button
+                            type="button"
+                            className="
                                 bg-white hover:bg-light-grey
-                                outline outline-2 outline-light-grey">
+                                outline outline-2 outline-light-grey"
+                        >
                             Sign In
                         </Button>
                     </NavLink>
                 </li>
                 {/*Register Page*/}
                 <li className={!loggedInUserId ? "" : "hidden"}>
-                    <NavLink to={"/" + UrlBasePath.REGISTER}
-                             onClick={() => {
-                                 autoCloseMenu();
-                             }}>
-                        <Button type="button"
-                                className="
+                    <NavLink
+                        to={"/" + UrlBasePath.REGISTER}
+                        onClick={() => {
+                            autoCloseMenu();
+                        }}
+                    >
+                        <Button
+                            type="button"
+                            className="
                                     bg-secondary-purple hover:bg-secondary-purple-hover
-                                    outline outline-2 outline-secondary-purple">
+                                    outline outline-2 outline-secondary-purple"
+                        >
                             Register
                         </Button>
                     </NavLink>
@@ -189,31 +223,38 @@ export const NavigationBar = () => {
 
                 {/*Profile Page*/}
                 <li className={loggedInUserId ? "" : "hidden"}>
-
-                    <NavLink to={"/" + UrlBasePath.PROFILE}
-                             onClick={() => {
-                                 autoCloseMenu();
-                             }}
-
-                             className={baseUrl === UrlBasePath.PROFILE ?
-                                 "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3 lg:p-0" :
-                                 "main-text navbar-link-inactive p-3 lg:p-0"}>
-
+                    <NavLink
+                        to={"/" + UrlBasePath.PROFILE}
+                        onClick={() => {
+                            autoCloseMenu();
+                        }}
+                        className={
+                            baseUrl === UrlBasePath.PROFILE
+                                ? "main-text navbar-link-active lg:border-b-2 lg:border-dark-grey p-3 lg:p-0"
+                                : "main-text navbar-link-inactive p-3 lg:p-0"
+                        }
+                    >
                         {/*profile icon appears for horizontal menu, the word "Account" appears for vertical menu*/}
                         <span className="lg:hidden">Account</span>
-                        <button><UserCircleIcon className="hidden lg:block min-h-14 w-14 cursor-pointer"/></button>
+                        <button>
+                            <UserCircleIcon className="hidden lg:block min-h-14 w-14 cursor-pointer" />
+                        </button>
                     </NavLink>
                 </li>
 
                 {/*Logout button*/}
                 <li className={loggedInUserId ? "" : "hidden"}>
-                    <NavLink to="/"
-                             onClick={() => {
-                                 Meteor.logout();
-                                 autoCloseMenu();
-                             }}>
-                        <Button type="button"
-                                className="bg-white hover:bg-light-grey outline outline-2 outline-light-grey">
+                    <NavLink
+                        to="/"
+                        onClick={() => {
+                            Meteor.logout();
+                            autoCloseMenu();
+                        }}
+                    >
+                        <Button
+                            type="button"
+                            className="bg-white hover:bg-light-grey outline outline-2 outline-light-grey"
+                        >
                             Logout
                         </Button>
                     </NavLink>

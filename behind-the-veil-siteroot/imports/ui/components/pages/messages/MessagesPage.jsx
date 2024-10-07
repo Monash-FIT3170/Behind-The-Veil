@@ -11,7 +11,6 @@ import {Meteor} from "meteor/meteor";
 import {Modal} from 'react-responsive-modal';
 
 import ChatCollection from "/imports/api/collections/chats";
-import ImageCollection from '../../../../api/collections/images.js';
 import "../../../../api/methods/chats.js"
 
 import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
@@ -20,10 +19,12 @@ import Conversation from '../../message/Conversation';
 import MessagesPreview from '../../message/MessagesPreview';
 import Loader from "/imports/ui/components/loader/Loader";
 import Button from "../../button/Button.jsx";
-import {CheckIcon} from '@heroicons/react/24/outline'
+import Input from '../../input/Input.jsx';
+import {CheckIcon, PlusIcon} from '@heroicons/react/24/outline'
 
 import {useUserInfo} from "../../util.jsx"
 import UrlBasePath from "../../../enums/UrlBasePath";
+import UserCollection from '../../../../api/collections/users.js';
 
 /**
  * Messages page with all users they've chatted with
@@ -47,6 +48,54 @@ export const MessagesPage = () => {
         routeToDefaultChat();
     }
 
+    // handler for modal displaying for creating chat
+    const [openCreateChat, setOpenCreateChat] = useState(false);
+    const onOpenCreateChatModal = () => setOpenCreateChat(true);
+    const onCloseCreateChatModal = () => {
+        setOpenCreateChat(false);
+        setErrors({chatUsername: "", chatCreation: ""})
+        setSuccessMessage("");
+    }
+
+    // State for input values and errors
+    const [chatUsername, setChatUsername] = useState("")
+    const [errors, setErrors] = useState({
+        chatUsername: "",
+        chatCreation: "",
+    });
+    const [successMessage, setSuccessMessage] = useState("");
+
+
+    const handleCreateChat = (event) => {
+        event.preventDefault();
+        setSuccessMessage('');
+
+        const chatUsername = document.getElementById('chatUsername').value.trim();
+        console.log("other username", chatUsername)
+        let newErrors = {};
+        let isError = false;
+        // first check to ensure all text fields have inputs
+        if (!chatUsername) {
+            newErrors.chatUsername = 'Please input a username'
+            setErrors(newErrors);
+        }
+        else {
+            const chatIndex = findChatIndex(chatUsername);
+            // if chat is found, set it as the selected conversation
+            if (chatIndex !== -1) {
+                setErrors({chatCreation: "Chat already exists."})
+            } else {
+                setErrors(newErrors)
+                createNewChat(chatUsername);
+            }
+        }
+    }
+
+    const handleInputChange = (event) => {
+        setChatUsername(event.target.value);
+        setErrors({})
+    }
+
     // set up subscription (publication is in the "publication" folder)
     const isLoadingChats = useSubscribe('all_user_chats', userInfo.username);
     let chatsData = useTracker(() => {
@@ -57,25 +106,21 @@ export const MessagesPage = () => {
             ]
         }).fetch();
     });
-    const isLoadingUserImages = useSubscribe('profile_images');
-    let usersImagesData = useTracker(() => {
-        return ImageCollection.find().fetch();
-    })
 
-    const isLoading = isLoadingChats() || isLoadingUserImages();
+
+    const isLoadingUsersData = useSubscribe("all_users");
+    let usersData = useTracker(() => {
+        return UserCollection.find().fetch();
+    });
+
+    const isLoading = isLoadingChats() || isLoadingUsersData();
 
     // manual aggregation into chatsData with the other user's images
     for (let i = 0; i < chatsData.length; i++) {
         // find the other user's username
         const otherUser = getOtherUsername(userInfo.username, chatsData[i]);
-
-        for (let j = 0; j < usersImagesData.length; j++) {
-            // find the other user's image and add their image to the chat data
-            if (usersImagesData[j].target_id === otherUser) {
-                chatsData[i].otherUserImage = usersImagesData[j].imageData;
-                break;
-            }
-        }
+        const otherUserData = usersData.find((user) => user.username === otherUser)
+        chatsData[i].otherUserImage = otherUserData?.profile?.profileImage?.imageData;
     }
 
     // sort chats data in descending order for the dates
@@ -91,17 +136,17 @@ export const MessagesPage = () => {
     // set the default conversation to the conversation that was updated most recently
     const [selectedConversationIndex, setSelectedConversationIndex] = useState(0);  // track the conversation selected, initially 0
 
+    // helper function to find an existing chat
+    const findChatIndex = (username) => {
+        return chatsData.findIndex(chat =>
+            username === chat.artistUsername || username === chat.brideUsername
+        );
+    };
+
     // if the user is already in a conversation with someone (based on the url), show the conversation with 
     // that user. if it doesn't exist, create a new chat with that user.
     useEffect(() => {
         const otherUsername = window.location.hash.slice(1);
-
-        // helper function to find an existing chat
-        const findChatIndex = (username) => {
-            return chatsData.findIndex(chat =>
-                username === chat.artistUsername || username === chat.brideUsername
-            );
-        };
 
         if (isLoading) return; // return if chats are still loading
 
@@ -124,12 +169,18 @@ export const MessagesPage = () => {
     }, [chatsData, window.location.hash.slice(1), isLoadingChats()]);
 
 
-    // create a new chat with the provided username
+    // create a new chat with the provided username, returns a boolean indicating if a chat has
+    // been successfully created
     const createNewChat = (username) => {
         // get the other user
         Meteor.call('get_user', username, (error, result) => {
             if (error) {
                 console.error('Error fetching alias:', error);
+                return;
+            }
+            if (!result) {
+                console.error('User not found:', username);
+                setErrors({ chatUsername: "", chatCreation: "User does not exist." })
                 return;
             }
 
@@ -140,6 +191,7 @@ export const MessagesPage = () => {
             if (userInfo.type === otherUserType) {
                 // if the user types are the same, display a modal indicating an error
                 onOpenModal();
+                setErrors({chatCreation: "Cannot create a chat with another user of the same type."})
                 return;
             }
 
@@ -169,10 +221,12 @@ export const MessagesPage = () => {
                             }
                         });
                 }).then(() => {
-                    console.log("Chat successfully added");
+                    setSuccessMessage("Chat successfully created!")
+                    setOpenCreateChat(false)
                 });
             } catch (error) {
                 console.log("Error adding message. Returned with error:" + error.message);
+                return;
             }
         });
     }
@@ -219,6 +273,8 @@ export const MessagesPage = () => {
     }
 
 
+
+
     // mobile/small view variables
     const [inContactList, setInContactList] = React.useState(true);
 
@@ -244,12 +300,23 @@ export const MessagesPage = () => {
                     {/* only display when inContactList is true */}
 
                     <span className={"title-text text-center " + (inContactList ? "" : "hidden")}>Chats</span>
+
+                    <div className="flex flex-col items-center justify-center gap-y-3">
+                        <Button
+                            className="flex flex-row gap-x-1.5 min-w-48 items-center justify-center bg-secondary-purple hover:bg-secondary-purple-hover"
+                            onClick={onOpenCreateChatModal}>
+                            <PlusIcon className="icon-base"/> Create Chat
+                        </Button>
+                    </div>
+
                     {/* If there are chats, display a message indicating there are no chats to display*/}
                     {chatsData.length > 0 ?
-                        <div className={"flex flex-col gap-3 " + (inContactList ? "" : "hidden")}> 
-                            {newMsgPreviewsComponents} 
+                        <div className={"flex flex-col gap-3 " + (inContactList ? "" : "hidden")}>
+
+                            {newMsgPreviewsComponents}
                         </div> :
                         (<div className="flex flex-col items-center justify-center gap-y-3">
+
                             <div className={"main-text text-dark-grey"}>No messages to display</div>
                             <Button onClick={() => isLeftHandler(false)}>Back</Button>
                         </div>)
@@ -260,7 +327,8 @@ export const MessagesPage = () => {
 
                         {/* display conversations if any */}
                         {chatsData.length &&
-                                <Conversation chat={chatsData[selectedConversationIndex]} isLeftHandler={setInContactList} />}
+                            <Conversation chat={chatsData[selectedConversationIndex]}
+                                          isLeftHandler={setInContactList}/>}
                     </div>
                 </WhiteBackground>
 
@@ -268,6 +336,13 @@ export const MessagesPage = () => {
                 <WhiteBackground className={"hidden lg:flex"} pageLayout={PageLayout.MESSAGES_PAGE}>
                     {/*you MUST keep this div and put everything on the left side inside of it*/}
                     <div className="flex flex-col gap-3 w-full">
+                        <div className='flex items-center justify-center gap-y-3'>
+                            <Button
+                                className="flex flex-row gap-x-1.5 min-w-48 items-center justify-center bg-secondary-purple hover:bg-secondary-purple-hover"
+                                onClick={onOpenCreateChatModal}>
+                                <PlusIcon className="icon-base"/> Create Chat
+                            </Button>
+                        </div>
                         {newMsgPreviewsComponents}
                     </div>
 
@@ -303,6 +378,36 @@ export const MessagesPage = () => {
                                 </Button>
 
                             </div>
+                        </div>
+                    </div>
+                </Modal>
+
+                <Modal
+                    classNames={{modal: "w-[480px] h-[300px] rounded-[45px] bg-glass-panel-background border border-main-blue"}}
+                    open={openCreateChat} onClose={onCloseCreateChatModal} center showCloseIcon={false}>
+                    <div className="flex justify-center items-center h-full">
+                        <div className="flex flex-col items-center justify-center gap-4">
+
+                            <h2 className="text-center title-text">
+                                Create Chat
+                            </h2>
+
+                            <Input
+                                id="chatUsername"
+                                type="search"
+                                placeholder={"Enter username"}
+                                className={"w-48"}
+                                onChange={handleInputChange}/>
+
+                            <Button
+                                className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[25px] pe-[25px] flex gap-1"
+                                onClick={handleCreateChat}>
+                                <PlusIcon className="icon-base"/> Create
+                            </Button>
+
+                            {!chatUsername && errors.chatUsername && <div className="text-cancelled-colour text-center">{errors.chatUsername}</div>}
+                            {chatUsername && errors.chatCreation && !errors.chatUsername && <div className="text-cancelled-colour text-center">{errors.chatCreation}</div>}
+                            {successMessage && <div className="text-confirmed-colour text-center">{successMessage}</div>}
                         </div>
                     </div>
                 </Modal>

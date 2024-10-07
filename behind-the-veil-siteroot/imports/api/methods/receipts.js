@@ -72,13 +72,13 @@ Meteor.methods({
         // Find the receipt with the given receiptId
         const receipt = ReceiptCollection.findOne({ _id: receiptId });
 
-        if (receipt && receipt.paymentStatus === "Paid") {
+        if (receipt && receipt.paymentType === "Deposit") {
             // Update the receipt's payment status to "Refund" and set the paymentDatetime to the current date and time
             return ReceiptCollection.update(
                 { _id: receiptId }, // Find the receipt by ID
                 {
                     $set: {
-                        paymentStatus: "Refund",
+                        paymentType: "Refund",
                         paymentDatetime: currentDatetime,
                     }
                 }

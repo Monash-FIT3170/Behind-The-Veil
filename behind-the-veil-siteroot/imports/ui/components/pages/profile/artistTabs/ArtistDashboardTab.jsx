@@ -195,11 +195,11 @@ export const ArtistDashboardTab = ({ username }) => {
   }
 
   function getPendingEarningsCard() {
-    if (filterYear == -1 && filterLocation != "") {
+    if (filterYear === -1 && filterLocation !== "") {
       return "Pending Earnings - " + filterLocation + ", " + "All Years";
     }
 
-    if (filterYear != -1 && filterLocation == "") {
+    if (filterYear !== -1 && filterLocation === "") {
       return "Pending Earnings - " + filterYear;
     }
 
@@ -254,7 +254,7 @@ export const ArtistDashboardTab = ({ username }) => {
         <DashboardCard
           key="earnings-pending"
           dashboardCardTitle={
-            filterActive ? getPendingEarningsCard() : "Pending Earnings"
+            filterActive ? getPendingEarningsCard() : "Upcoming Earnings"
           }
           dashboardCardDesc="Cash currently in transit!"
           dashboardCardValue={

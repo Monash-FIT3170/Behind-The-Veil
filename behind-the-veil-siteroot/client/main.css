@@ -126,6 +126,7 @@
         font-weight: 600;
         line-height: 150%;
     }
+
 }
 
 /* 
@@ -137,6 +138,10 @@ on a case by case basis within individual JSX components.
     .btn-base {
         @apply bg-light-grey hover:bg-light-grey-hover transition duration-500 ease-in-out
         main-text font-bold py-2 px-4 rounded-full w-fit;
+    }
+
+    .load-when-disabled:disabled {
+        @apply cursor-wait;
     }
 
     /*used for ALL cards and background (basically anything that is a background and is white, use this)*/

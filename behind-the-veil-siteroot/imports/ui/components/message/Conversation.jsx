@@ -9,7 +9,6 @@ import { Meteor } from 'meteor/meteor';
 import {useSubscribe, useTracker } from 'meteor/react-meteor-data';
 
 import MessageCollection from "/imports/api/collections/messages";
-import ImageCollection from "/imports/api/collections/images";
 import "/imports/api/methods/messages";
 import {useUserInfo} from "../util"
 
@@ -28,16 +27,12 @@ export const Conversation = ({chat, isLeftHandler}) => {
     const [formValue, setFormValue] = useState('');
     // set up subscription to messages for the particular chat
     const isLoadingMessages = useSubscribe('all_chat_messages', chat._id);
-    const isLoadingUserImages = useSubscribe('profile_images');
-    const isLoading = isLoadingMessages() || isLoadingUserImages();
+    const isLoading = isLoadingMessages();
 
     // get data from db
     let messagesData = useTracker(() => {
         return MessageCollection.find({ chatId: chat._id }).fetch();
     });
-    let usersImagesData = useTracker(() => {
-        return ImageCollection.find().fetch;
-    })
 
     // sort messages based on sent date (oldest to newest)
     messagesData.sort(function(chat1, chat2) {

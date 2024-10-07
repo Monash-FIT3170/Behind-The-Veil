@@ -12,6 +12,7 @@ import Button from "../button/Button";
 import BookingStatus from "../../enums/BookingStatus";
 import {updateBookingStatus} from "../DatabaseHelper";
 import bookings from "../../../api/collections/bookings";
+import { useUserInfo } from '../util';
 
 /**
  * Confirmation dialog that comes up when you accept/reject/complete/cancel a booking
@@ -24,6 +25,9 @@ import bookings from "../../../api/collections/bookings";
  */
 export const BookingStatusConfirmModal = ({open, closeHandler, bookingId, toBeStatus, cancelAttributes, sideEffects=[]}) => {
     const navigate = useNavigate();
+    const userInfo = useUserInfo();
+
+    const isBride = userInfo.type === 'bride';
 
     let statusText = ""
     let warningText = ""
@@ -60,7 +64,7 @@ export const BookingStatusConfirmModal = ({open, closeHandler, bookingId, toBeSt
                     <div className="flex justify-center space-x-6 mt-5">
                         <Button className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[30px] pe-[30px] flex gap-1"
                                 onClick={() => {
-                                    updateBookingStatus(bookingId, toBeStatus, cancelAttributes);
+                                    updateBookingStatus(bookingId, toBeStatus, cancelAttributes, isBride);
                                     closeHandler();
                                     if (toBeStatus === BookingStatus.CANCELLED) {
                                         navigate(`/booking/${bookingId}`);

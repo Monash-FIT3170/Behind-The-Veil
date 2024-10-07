@@ -6,7 +6,13 @@
 
 import React, {useState} from "react";
 import BookingStatus from "../../enums/BookingStatus";
-import { XCircleIcon, ClockIcon, MapPinIcon, DocumentMagnifyingGlassIcon, CheckCircleIcon } from "@heroicons/react/24/outline"
+import {
+    CheckCircleIcon,
+    ClockIcon,
+    DocumentMagnifyingGlassIcon,
+    MapPinIcon,
+    XCircleIcon
+} from "@heroicons/react/24/outline"
 import Button from "../button/Button";
 import { useNavigate } from "react-router-dom";
 import BookingStatusConfirmModal from "../booking/BookingStatusConfirmModal";
@@ -41,13 +47,13 @@ const ViewDetailsButton = ({ bookingId }) => {
  * @param onClose close handler callback
  */
 const CalendarPopupContent = ({
-    bookingId,
-    bookingStatus,
-    brideName,
-    bookingTime,
-    bookingLocation,
-    onClose
-}) => {
+                                  bookingId,
+                                  bookingStatus,
+                                  brideName,
+                                  bookingTime,
+                                  bookingLocation,
+                                  onClose
+                              }) => {
 
     // confirmation modal attributes
     const [open, setOpen] = useState(false);
@@ -59,6 +65,23 @@ const CalendarPopupContent = ({
     const onCloseModal = () => setOpen(false);
 
     const navigateTo = useNavigate();
+
+    let statusColour = "text-our-black";
+    switch (bookingStatus) {
+        case BookingStatus.COMPLETED:
+        case BookingStatus.CONFIRMED:
+            statusColour = "text-confirmed-colour";
+            break;
+        case BookingStatus.PENDING:
+            statusColour = "text-pending-colour";
+            break;
+        case BookingStatus.REJECTED:
+        case BookingStatus.CANCELLED:
+        case BookingStatus.OVERDUE:
+            statusColour = "text-cancelled-colour";
+            break;
+    }
+
     return (
         <>
             {/* close button */}
@@ -77,20 +100,30 @@ const CalendarPopupContent = ({
                 </div>
             </div>
 
-            <hr />
+            <hr/>
 
             <div className="flex flex-col gap-y-3 justify-center items-center py-2">
+                {/* display WHEN booking is */}
                 <div className="flex items-center gap-x-2">
-                    <ClockIcon className="icon-base stroke-1 stroke-dark-grey" />
-                    <div className="text-dark-grey max-w-full break-all line-clamp-1 text-center">
+                    <ClockIcon className="icon-base stroke-1 stroke-dark-grey"/>
+                    <div className="text-dark-grey max-w-full break-all line-clamp-1 text-center medium-text">
                         {bookingTime}
                     </div>
                 </div>
+
+
+                {/* display WHERE booking is */}
                 <div className="flex items-center gap-x-2">
-                    <MapPinIcon className="icon-base stroke-1 stroke-dark-grey" />
-                    <div className="text-dark-grey max-w-full break-all line-clamp-1 text-center">
+                    <MapPinIcon className="icon-base stroke-1 stroke-dark-grey"/>
+                    <div className="text-dark-grey max-w-full break-all line-clamp-1 text-center medium-text">
                         {bookingLocation}
                     </div>
+                </div>
+
+                {/* display STATUS of booking is */}
+                <div>
+                    <span className={"text-dark-grey medium-text"}> Status: </span>
+                    <span className={statusColour + " capitalize medium-text"}>{bookingStatus}</span>
                 </div>
             </div>
 

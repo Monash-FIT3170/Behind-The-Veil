@@ -32,7 +32,8 @@ Meteor.methods({
         if (bookingData && serviceData && usersData) {
             const from = "Behind the Veil <behindtheveil010@gmail.com>";
             const subject = "[Behind the Veil] Booking status change alert";
-            let text = `Booking Details: \n`;
+            let text = `This is an automatic email sent by Behind the Veil: \n\n`;
+            text += `Booking Details: \n`;
             text += `Service Name: ${serviceData.serviceName} \n`;
             text += `Service Description: ${serviceData.serviceDesc} \n`;
             text += `Date: ${new Date(bookingData.bookingStartDateTime).toLocaleString()} \n`;
@@ -73,7 +74,8 @@ Meteor.methods({
         if (bookingData && serviceData && usersData) {
             const from = "Behind the Veil <behindtheveil010@gmail.com>";
             const subject = "[Behind the Veil] New Booking";
-            let text = `You have a new booking: \n\n`;
+            let text = `This is an automatic email sent by Behind the Veil. \n\n`;
+            text += `You have a new booking: \n\n`;
             text += `Booking Details: \n`;
             text += `Service Name: ${serviceData.serviceName} \n`;
             text += `Service Description: ${serviceData.serviceDesc} \n`;
@@ -98,7 +100,8 @@ export function sendUnrespondedBookingEmail(artistUsername) {
     if (artistData) {
         const from = "Behind the Veil <behindtheveil010@gmail.com>";
         const subject = "[Behind the Veil] Unresponded Booking/s";
-        let text = `You have one or more unresponded bookings \n\n`;
+        let text = `This is an automatic reminder email sent by Behind the Veil. \n\n`;
+        text += `You have one or more booking requests that you still have to respond to!\n\n`;
         text += `Please respond to the bride before the event is passed!`;
 
         const artistEmail = artistData.emails[0].address;

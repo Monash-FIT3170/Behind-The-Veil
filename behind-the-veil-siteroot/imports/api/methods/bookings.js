@@ -4,6 +4,7 @@
  * Contributors: Neth, Nikki, Katie
  */
 import { BookingCollection } from "../collections/bookings";
+
 import {Meteor} from "meteor/meteor";
 import { check } from 'meteor/check';
 import { Match } from "meteor/check";
@@ -33,6 +34,16 @@ Meteor.methods({
         check(artistUsername, String)
         check(serviceId, String)
             
+        // Check is needed to validate the right booking data and santise the inputs
+        check(startDateTime, Date)
+        check(bookingEndDateTime, Date)
+        check(location, String)
+        check(price, Number)
+        check(status, String)
+        check(brideUsername, String)
+        check(artistUsername, String)
+        check(serviceId, String)
+            
         const newBookingId = BookingCollection.insert({
             bookingStartDateTime: startDateTime,
             bookingEndDateTime: bookingEndDateTime,
@@ -44,7 +55,11 @@ Meteor.methods({
             artistUsername: artistUsername,
             serviceId: serviceId,
             bookingCreatedDate: new Date()
+            serviceId: serviceId,
+            bookingCreatedDate: new Date()
         });
+
+        Meteor.callAsync("sendNewBookingEmail", newBookingId);
 
         Meteor.callAsync("sendNewBookingEmail", newBookingId);
 
@@ -57,6 +72,7 @@ Meteor.methods({
      * @returns {object|null} - The booking object if found, otherwise null.
      */
     "get_booking": function (bookingId) {
+        check(bookingId, String)
         check(bookingId, String)
         return BookingCollection.findOne(
             { _id: bookingId },
@@ -72,6 +88,9 @@ Meteor.methods({
         check(bookingId, String)
         check(updateObject, Object)
 
+        check(bookingId, String)
+        check(updateObject, Object)
+
         BookingCollection.update(
             { _id: bookingId },
             { $set: updateObject },
@@ -83,11 +102,11 @@ Meteor.methods({
      * @param {int} serviceId - The ID of the service.
      */
     "has_booking_of_service": function (serviceId) {
-        check(serviceId, String) // changed to string rather than integer
+        check(serviceId, String)
 
-        const booking = BookingCollection.findOne({ serviceId: serviceId });
+        const booking = BookingCollection.find({ serviceId: serviceId }).fetch();
     
-        return !!booking;
+        return booking.length > 0;
     },
 
     /**
@@ -96,6 +115,8 @@ Meteor.methods({
      * @returns {Array} - An array of booking objects that match the given status.
      */
     "get_bookings_by_status": function (bookingStatus) {
+        check(bookingStatus, String)
+
         check(bookingStatus, String)
 
         return BookingCollection.find({ bookingStatus: bookingStatus }).fetch();

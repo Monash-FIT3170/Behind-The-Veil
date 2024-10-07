@@ -17,7 +17,7 @@ import {UserCircleIcon} from "@heroicons/react/20/solid"
  */
 export const ProfilePhoto = ({className, userPhotoData, hoverEffect=true}) => {
 
-    const classes = classNames(className, "relative h-[10vh] w-[10vh]");
+    const classes = classNames("relative h-[10vh] w-[10vh]", className);
 
     // if the profile image data is available
     if (userPhotoData) {

@@ -24,7 +24,8 @@ export function useUserInfo() {
             "email": null,
             "emailVerified": null,
             "alias": null,
-            "type": null
+            "type": null,
+            "profileImage": null,
         }
     );
 
@@ -41,6 +42,9 @@ export function useUserInfo() {
             const fetchedEmailVerified = user.emails[0] ? user.emails[0].verified : null;
             const fetchedAlias = user.profile.alias;
             const fetchedType = user.profile.type;
+            const fetchedProfileImage = user.profile.profileImage ? user.profile.profileImage : null;
+            const fetchedArtistServiceLocation = user.profile.artistServiceLocation ? user.profile.artistServiceLocation : null;
+            const fetchedArtistPaymentAccount = user.profile.artistServiceLocation ? user.profile.artistPaymentAccount : null;
 
             // check if an update to the current user info is required or not (this is needed to prevent inf loop)
             if (
@@ -49,18 +53,37 @@ export function useUserInfo() {
                 userInfo.email !== fetchedEmail ||
                 userInfo.emailVerified !== fetchedEmailVerified ||
                 userInfo.alias !== fetchedAlias ||
-                userInfo.type !== fetchedType
+                userInfo.type !== fetchedType ||
+                (userInfo.profileImage ? (userInfo.profileImage.imageName !== fetchedProfileImage?.imageName ||
+                 userInfo.profileImage.imageSize !== fetchedProfileImage?.imageSize) : fetchedProfileImage !== null)
             ) {
-                setUserInfo(
-                    {
-                        "id": fetchedUserId,
-                        "username": fetchedUsername,
-                        "email": fetchedEmail,
-                        "emailVerified": fetchedEmailVerified,
-                        "alias": fetchedAlias,
-                        "type": fetchedType
-                    }
-                )
+                if (fetchedType == 'artist') {
+                    setUserInfo(
+                        {
+                            "id": fetchedUserId,
+                            "username": fetchedUsername,
+                            "email": fetchedEmail,
+                            "emailVerified": fetchedEmailVerified,
+                            "alias": fetchedAlias,
+                            "type": fetchedType,
+                            "profileImage": fetchedProfileImage,
+                            "artistServiceLocation": fetchedArtistServiceLocation,
+                            "artistPaymentAccount": fetchedArtistPaymentAccount,
+                        }
+                    )
+                } else {
+                    setUserInfo(
+                        {
+                            "id": fetchedUserId,
+                            "username": fetchedUsername,
+                            "email": fetchedEmail,
+                            "emailVerified": fetchedEmailVerified,
+                            "alias": fetchedAlias,
+                            "type": fetchedType,
+                            "profileImage": fetchedProfileImage
+                        }
+                    )
+                }
             }
         }
     })
@@ -104,4 +127,12 @@ export function getSearchSuggestions(type, usersData, servicesData) {
 
     }
     return allKeyWords
+}
+
+export const imageObj = (imageData, name, size) => {
+    return {
+        imageData: imageData,
+        imageName: name,
+        imageSize: size
+    }
 }

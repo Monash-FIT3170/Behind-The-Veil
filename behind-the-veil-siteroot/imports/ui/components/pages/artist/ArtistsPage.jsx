@@ -54,8 +54,7 @@ export const ArtistsPage = () => {
                 <span className={"title-text text-center"}>Artists</span>
 
                 <div className="flex flex-col items-center mb-10">
-                    <SearchBar placeholder={"Search artist name or username"}
-                               defaultType={"artists"}
+                    <SearchBar defaultType={"artists"}
                                startingValue={searchInput}
                                suggestionsDown={true}
                     />

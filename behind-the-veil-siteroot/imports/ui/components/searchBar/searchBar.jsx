@@ -159,7 +159,7 @@ const SearchBar = ({
             "line-clamp-1 break-words hover:bg-white-hover transition duration-300 ease-in-out cursor-pointer"
 
         if (suggestionsDown) {
-            ulClassnames = classNames(ulClassnames, "top-48 flex-col");
+            ulClassnames = classNames(ulClassnames, "top-[220px] flex-col");
             liClassnames = classNames(liClassnames, "border-t-0");
         } else {
             //
@@ -167,63 +167,72 @@ const SearchBar = ({
             liClassnames = classNames(liClassnames, "border-b-0");
         }
 
+        const searchLabelText = (searchType === "services" ?
+                <span className={"main-text h-6"}>Search for service name or service description:</span> :
+                <span className={"main-text h-6"}>Search for artist name or username:</span>
+        )
+
         return (
-            <div
-                className="flex flex-col items-center justify-start md:flex-row md:items-start md:justify-center gap-3">
-                {/* input + suggestion div */}
-                <div className={"flex flex-col items-center justify-center"} onBlur={onBlurInput}>
+            <div className={"flex flex-col w-fit gap-y-1"}>
+                {/*show the search label text when NOT on home screen */}
+                {suggestionsDown ? searchLabelText : null}
+                <div className="flex flex-col items-center justify-start md:flex-row md:items-start md:justify-center gap-3">
+                    {/* input + suggestion div */}
+                    <div className={"flex flex-col items-center justify-center"} onBlur={onBlurInput}>
 
-                    <form className="flex h-12" onSubmit={handleButtonClickOrSubmit}>
-                        {/* The search input field (i.e. the search bar) */}
-                        <Input
-                            {...searchBarProps}
-                            type="search"
-                            id={"search-input"}
-                            className={classNames("rounded-r-none border-r-0 w-[200px] sm:w-[35vw]", classnames)}
-                            placeholder={placeholder}
-                            value={inputValue}
-                            onChange={handleInputChange}
-                            onClick={onClickInput}
-                        />
+                        <form className="flex h-12" onSubmit={handleButtonClickOrSubmit}>
+                            {/* The search input field (i.e. the search bar) */}
+                            <Input
+                                {...searchBarProps}
+                                type="search"
+                                id={"search-input"}
+                                className={classNames("rounded-r-none border-r-0 w-[200px] sm:w-[35vw]", classnames)}
+                                placeholder={placeholder}
+                                value={inputValue}
+                                onChange={handleInputChange}
+                                onClick={onClickInput}
+                            />
 
-                        {/* The reset button which resets the value of the search input field to an empty string */}
-                        <button type="button"
-                                className={"input-base flex justify-center items-center w-12 border-l-0 rounded-l-none"}
-                                onClick={handleReset}>
-                            <XMarkIcon className="size-7 stroke-2 rounded-full p-1
+                            {/* The reset button which resets the value of the search input field to an empty string */}
+                            <button type="button"
+                                    className={"input-base flex justify-center items-center w-12 border-l-0 rounded-l-none"}
+                                    onClick={handleReset}>
+                                <XMarkIcon className="size-7 stroke-2 rounded-full p-1
                         hover:bg-white-hover active:bg-light-grey-hover transition duration-200 ease-in-out"></XMarkIcon>
-                        </button>
-                    </form>
+                            </button>
+                        </form>
 
-                    {/* suggestion component */}
-                    <ul className={ulClassnames}>
-                        {filteredSuggestions ?
-                            filteredSuggestions.map((suggestion, index) => (
-                                index <= maxSuggestion ?
-                                    <li tabIndex={0}
-                                        key={suggestion.main}
-                                        name={"suggestion-list-item"}
-                                        className={liClassnames}
-                                        onClick={() => handleSuggestionSelect(suggestion)}>
-                                        {searchType === 'artists' ? `${suggestion.sub} (@${suggestion.main})` : suggestion.main}
-                                    </li> : null
-                            )) : null
-                        }
-                    </ul>
-                </div>
+                        {/* suggestion component */}
+                        <ul className={ulClassnames}>
+                            {filteredSuggestions ?
+                                filteredSuggestions.map((suggestion, index) => (
+                                    index <= maxSuggestion ?
+                                        <li tabIndex={0}
+                                            key={suggestion.main}
+                                            name={"suggestion-list-item"}
+                                            className={liClassnames}
+                                            onClick={() => handleSuggestionSelect(suggestion)}>
+                                            {searchType === 'artists' ? `${suggestion.sub} (@${suggestion.main})` : suggestion.main}
+                                        </li> : null
+                                )) : null
+                            }
+                        </ul>
+                    </div>
 
-                {/* search button + search type */}
-                <div className="flex flex-row items-center justify-center gap-3">
-                    <select defaultValue={defaultType} onChange={handleSearchTypeChange} className="input-base w-28">
-                        <option value="artists">Artists</option>
-                        <option value="services">Services</option>
-                    </select>
-                    <Button
-                        className="flex justify-center items-center rounded-full h-12 w-12 p-2
+                    {/* search button + search type */}
+                    <div className="flex flex-row items-center justify-center gap-3">
+                        <select defaultValue={defaultType} onChange={handleSearchTypeChange}
+                                className="input-base w-28">
+                            <option value="artists">Artists</option>
+                            <option value="services">Services</option>
+                        </select>
+                        <Button
+                            className="flex justify-center items-center rounded-full h-12 w-12 p-2
                             bg-secondary-purple hover:bg-secondary-purple-hover"
-                        onClick={handleButtonClickOrSubmit}>
-                        <MagnifyingGlassIcon className="icon-base"/>
-                    </Button>
+                            onClick={handleButtonClickOrSubmit}>
+                            <MagnifyingGlassIcon className="icon-base"/>
+                        </Button>
+                    </div>
                 </div>
             </div>
         );

@@ -18,6 +18,7 @@ import PreviousButton from "../../button/PreviousButton";
 import UrlBasePath from "../../../enums/UrlBasePath";
 import {useSpecificService} from "../../DatabaseHelper";
 import {useUserInfo} from "../../util";
+import ProfilePhoto from '../../profilePhoto/ProfilePhoto.jsx';
 
 /**
  * Displays a page for a specific service
@@ -43,11 +44,7 @@ const SpecificServicePage = () => {
     const {serviceId} = useParams();
 
     // get service data from database
-    const {isLoading, serviceData, artistData, serviceImagesData, profileImageData} = useSpecificService(serviceId);
-
-    const imageUrls = serviceImagesData.map((image) => (
-        image.imageData
-    ))
+    const {isLoading, serviceData, artistData, profileImageData} = useSpecificService(serviceId);
 
     const durationTip = "Duration does not include travel. It is the required time to performing the service for the bride.";
 
@@ -80,6 +77,12 @@ const SpecificServicePage = () => {
                 </WhiteBackground>
             )
         } else {
+
+            const imageUrls = serviceData.serviceImages
+                ? serviceData.serviceImages.map((image) => image.imageData)
+                : ["/imageNotFound.png"];
+
+
             return (
                 <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
                     {/* Title container for centering */}
@@ -155,15 +158,7 @@ const SpecificServicePage = () => {
                             {/* User Info Container */}
                             <Card
                                 className="flex flex-row items-center justify-center space-x-2 w-fit sm:min-w-[450px] rounded-2xl">
-                                <img src={profileImageData ? profileImageData.imageData : new Error()}
-                                     alt="Artist profile image"
-                                     className="rounded-[10px] object-cover size-24"
-                                     onError={({currentTarget}) => {
-                                         currentTarget.onError = null; // prevent infinite loop
-                                         currentTarget.src = '/imageNotFound.png';
-                                     }}
-                                />
-
+                                <ProfilePhoto className="flex container mx-auto w-[14.31vh]" userPhotoData={artistData.profile.profileImage ? artistData.profile.profileImage.imageData : null}/>
                                 <div className="flex flex-col items-start justify-center gap-y-1 w-full">
                                     <div className="flex flex-col items-start justify-center gap-y-1 pl-3">
                                         <span className="large-text line-clamp-1">{artistData.profile.alias}</span>
