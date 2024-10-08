@@ -1,7 +1,7 @@
 /**
  * File Description: Review database testing
  * File version: 1.0
- * Contributors: Vicky
+ * Contributors: Vicky, Katie
  */
 const assert = require('assert');
 import {resetDatabase} from 'meteor/xolvio:cleaner';
