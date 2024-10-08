@@ -87,6 +87,8 @@ if (Meteor.isClient) {
                 });
             }).then(retrievedBooking => {
                 assert.notStrictEqual(retrievedBooking, null); // Check if a booking object is returned
+                assert.notStrictEqual(retrievedBooking, undefined); // Check if a booking object is returned
+
             }).catch(error => {
                 assert.fail("Error adding booking. Returned with error:" + error.message);
             });
@@ -108,6 +110,104 @@ if (Meteor.isClient) {
             Meteor.call('update_booking_details', bookingId, {'bookingStatus': 'Confirmed'});
             const updatedBooking = BookingCollection.findOne(bookingId);
             assert.strictEqual(updatedBooking.bookingStatus, 'Confirmed');
+        });
+
+        // has_booking_of_service
+        /**
+         * Test case to check if a booking with a particular service id can be found successfully.
+         */
+        
+        it('can check if a booking exists for a service', function () {
+            return new Promise((resolve, reject) => {
+                const bookingId = BookingCollection.insert({
+                    bookingStartDateTime: new Date(),
+                    bookingEndDateTime: new Date(),
+                    bookingLocation: 'Location',
+                    bookingPrice: 100,
+                    bookingStatus: 'Pending',
+                    brideUsername: 'bride123',
+                    artistUsername: 'artist456',
+                    serviceId: 'service789'
+                }, (error, result) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(result);
+                    }
+                });
+            }).then(bookingId => {
+                return new Promise((resolve, reject) => {
+                    Meteor.call('has_booking_of_service', 'service789', (error, bookingExists) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(bookingExists);
+                        }
+                    });
+                });
+            }).then(bookingExists => {
+                assert.strictEqual(bookingExists, true); // Check if the booking exists for the service
+            }).catch(error => {
+                assert.fail("Error checking booking for service. Returned with error:" + error.message);
+            });
+        });
+
+        /**
+         * Test case to check if bookings can be retrieved by their status.
+         */
+        it('can retrieve bookings by status', function () {
+            return new Promise((resolve, reject) => {
+                const booking1 = BookingCollection.insert({
+                    bookingStartDateTime: new Date(),
+                    bookingEndDateTime: new Date(),
+                    bookingLocation: 'Location1',
+                    bookingPrice: 100,
+                    bookingStatus: 'Confirmed',
+                    brideUsername: 'bride123',
+                    artistUsername: 'artist456',
+                    serviceId: 'service789'
+                });
+
+                const booking2 = BookingCollection.insert({
+                    bookingStartDateTime: new Date(),
+                    bookingEndDateTime: new Date(),
+                    bookingLocation: 'Location2',
+                    bookingPrice: 150,
+                    bookingStatus: 'Pending',
+                    brideUsername: 'bride234',
+                    artistUsername: 'artist567',
+                    serviceId: 'service987'
+                });
+
+                const booking3 = BookingCollection.insert({
+                    bookingStartDateTime: new Date(),
+                    bookingEndDateTime: new Date(),
+                    bookingLocation: 'Location3',
+                    bookingPrice: 200,
+                    bookingStatus: 'Confirmed',
+                    brideUsername: 'bride345',
+                    artistUsername: 'artist678',
+                    serviceId: 'service654'
+                });
+
+                resolve([booking1, booking2, booking3]);
+            }).then(() => {
+                return new Promise((resolve, reject) => {
+                    Meteor.call('get_bookings_by_status', 'Confirmed', (error, bookings) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(bookings);
+                        }
+                    });
+                });
+            }).then(bookings => {
+                assert.strictEqual(bookings.length, 2); 
+                assert.strictEqual(bookings[0].bookingStatus, 'Confirmed');
+                assert.strictEqual(bookings[1].bookingStatus, 'Confirmed');
+            }).catch(error => {
+                assert.fail("Error retrieving bookings by status. Returned with error:" + error.message);
+            });
         });
     });
 }
