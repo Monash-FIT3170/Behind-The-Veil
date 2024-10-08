@@ -1,7 +1,7 @@
 /**
  * File Description: Review database testing
  * File version: 1.0
- * Contributors: Vicky
+ * Contributors: Vicky, Katie
  */
 const assert = require('assert');
 import {resetDatabase} from 'meteor/xolvio:cleaner';
@@ -30,6 +30,7 @@ if (Meteor.isClient) {
                     3,
                     'Review comment',
                     'bookingId123',
+                    'artist',
                     // up to here it knows these are its args - it (somehow) also knows that you get back
                     // either an error or a value that is stuffed into reviewId (this can be any name).
                     (error, reviewId) => {

@@ -1,7 +1,7 @@
 /**
  * File Description: Post database testing
  * File version: 1.0
- * Contributors: Vicky
+ * Contributors: Vicky, Katie
  */
 const assert = require('assert');
 import {resetDatabase} from 'meteor/xolvio:cleaner';
@@ -25,21 +25,23 @@ if (Meteor.isClient) {
         it('can add a post', function () {
             // Wrap the Meteor.call in a Promise
             return new Promise((resolve, reject) => {
+                const date = new Date();
+                let postDate = date.toLocaleDateString("en-US", {
+                    month: "2-digit",
+                    day: "2-digit",
+                    year: "numeric",
+                  });
                 Meteor.call("add_post",
-                    new Date(),
+                    postDate,
                     'Description',
                     'artist456',
-                    // up to here it knows these are its args - it (somehow) also knows that you get back
-                    // either an error or a value that is stuffed into postId (this can be any name).
                     (error, postId) => {
                         if (error) {
                             reject(error);
                         } else {
                             resolve(postId);
                         }
-                    } // this something that comes with promises. If reject and resolve are
-                    // not present the promise doesn't understand its finished and will keep powering
-                    // thru the method until it finds an end (there is none)
+                    }
                 );
             }).then(postId => {
                 assert.notStrictEqual(postId, undefined, "Post ID is undefined");
@@ -76,6 +78,7 @@ if (Meteor.isClient) {
                     });
                 });
             }).then(retrievedPost => {
+                assert.notStrictEqual(retrievedPost, undefined); // Check if a post object is returned
                 assert.notStrictEqual(retrievedPost, null); // Check if a post object is returned
             }).catch(error => {
                 assert.fail("Error adding post. Returned with error:" + error.message);
