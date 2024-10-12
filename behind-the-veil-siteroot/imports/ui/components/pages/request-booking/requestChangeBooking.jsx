@@ -1,3 +1,9 @@
+/**
+ * File Description: Request Booking page
+ * File version: 1.0
+ * Contributors: Glenn
+ */
+
 import React, { useState, useEffect, useCallback, useId } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTracker } from "meteor/react-meteor-data";
@@ -57,12 +63,13 @@ const RequestChangeBooking = () => {
     const artistBookings = useTracker(() => {
         return BookingCollection.find().fetch();
     });
-    console.log(bookingId);
+
     const artistAvailability = artistData?.availability;
     const duration = serviceData?.duration ?? 1; // Default to 1 hour if not specified
 
     const removeMilliseconds = (date) =>
         new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds());
+
     const formatDateInput = (dateInput) => {
         return isValid(dateInput) && isDate(dateInput) ? format(dateInput, "dd-MM-yyyy") : dateInput;
     };
@@ -156,11 +163,24 @@ const RequestChangeBooking = () => {
         }
     }, [isLoading]);
 
-    const [address, setAddress] = useState({
-        street: "",
-        suburb: "",
-        state: "",
-        post: "",
+    const parseAddress = (location) => {
+        if (!location) return { street: "", suburb: "", state: "", post: "" };
+
+        const parts = location.split(",").map((part) => part.trim());
+
+        let street = parts[0] || "";
+        let suburb = parts[1] || "";
+        let stateAndPost = (parts[2] || "").split(" ");
+
+        let state = stateAndPost[0] || "";
+        let post = stateAndPost[1] || "";
+
+        return { street, suburb, state, post };
+    };
+
+    const [address, setAddress] = useState(() => {
+        const bookingLocation = bookingData?.bookingLocation || "";
+        return parseAddress(bookingLocation);
     });
 
     const locationInputId = useId();
@@ -190,11 +210,7 @@ const RequestChangeBooking = () => {
             return;
         }
 
-        if (!(address.street && address.suburb && address.state) && !bookingData.bookingLocation) {
-            alert("Please select a valid location.");
-            return;
-        }
-        if (!bookingData.bookingLocation) {
+        if (!(address.street && address.suburb && address.state)) {
             alert("Please select a valid location.");
             return;
         }
@@ -259,8 +275,8 @@ const RequestChangeBooking = () => {
 
         new Promise((resolve, reject) => {
             Meteor.callAsync("update_booking_details", bookingId, {
-                bookingStartDateTime: new Date(updatedInputs.date),
-                bookingEndDateTime: new Date(new Date(updatedInputs.date).getTime() + duration * 60 * 60 * 1000),
+                bookingStartDateTime: new Date(inputs.time),
+                bookingEndDateTime: new Date(new Date(inputs.time).getTime() + duration * 60 * 60 * 1000),
                 bookingLocation: updatedInputs.location,
             })
                 .then(() => {
@@ -443,7 +459,9 @@ const RequestChangeBooking = () => {
                                                 <Button
                                                     key={time.toISOString()}
                                                     className={className}
-                                                    onClick={() => setInputs((i) => ({ ...i, time: time }))}
+                                                    onClick={() => {
+                                                        setInputs((i) => ({ ...i, time: time }));
+                                                    }}
                                                 >
                                                     {format(time, "p")}
                                                 </Button>

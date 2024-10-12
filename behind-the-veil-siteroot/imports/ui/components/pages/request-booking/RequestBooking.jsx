@@ -256,7 +256,7 @@ const RequestBooking = () => {
 
     const handleManualDateInput = (event) => {
         const dateInput = event.target.value;
-
+        console.log(`HERE IS THE DATE INPUT : ${dateInput} asdf`);
         // if manual input is a valid date within the allowable interval
         // convert it to a date object and store it
         const dateFormat = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(19|20)\d{2}$/;
@@ -451,6 +451,7 @@ const RequestBooking = () => {
                                                             key={time}
                                                             className={className}
                                                             onClick={() => {
+                                                                console.log("this is the time ", time);
                                                                 setInputs((i) => {
                                                                     return {
                                                                         ...i,
