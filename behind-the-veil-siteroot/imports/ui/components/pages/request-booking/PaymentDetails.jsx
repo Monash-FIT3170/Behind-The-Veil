@@ -4,16 +4,16 @@
  * Contributors: Neth, Nikki
  */
 
-import React, { useId, useEffect, useState} from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useId, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import WhiteBackground from "../../whiteBackground/WhiteBackground";
 import PageLayout from "../../../enums/PageLayout";
 import Button from "../../button/Button";
 import { CheckIcon, CurrencyDollarIcon, NoSymbolIcon } from "@heroicons/react/24/outline";
 import Input from "../../input/Input";
-import 'react-responsive-modal/styles.css';
-import {Modal} from 'react-responsive-modal';
-import {useNavigate, useParams} from "react-router-dom";
+import "react-responsive-modal/styles.css";
+import { Modal } from "react-responsive-modal";
+import { useNavigate, useParams } from "react-router-dom";
 import PreviousButton from "../../button/PreviousButton";
 import BookingStatus from "../../../enums/BookingStatus";
 import UrlBasePath from "../../../enums/UrlBasePath";
@@ -31,7 +31,7 @@ const PaymentDetails = () => {
     const navigateTo = useNavigate();
 
     // grab the service ID from the URL
-    const {serviceId} = useParams();
+    const { serviceId } = useParams();
 
     const location = useLocation();
     const [details, setDetails] = useState({});
@@ -40,13 +40,13 @@ const PaymentDetails = () => {
         const searchParams = new URLSearchParams(location.search);
 
         // Extracting the parameters
-        const artistusername = searchParams.get('artistUsername');
-        const brideUsername = searchParams.get('brideUsername');
-        const service = searchParams.get('service');
-        const serviceLocation = searchParams.get('location');
-        const date = searchParams.get('date');
-        const priceString = searchParams.get('totalPrice');
-        let priceFloat = parseFloat(priceString.replace('$', ''));
+        const artistusername = searchParams.get("artistUsername");
+        const brideUsername = searchParams.get("brideUsername");
+        const service = searchParams.get("service");
+        const serviceLocation = searchParams.get("location");
+        const date = searchParams.get("date");
+        const priceString = searchParams.get("totalPrice");
+        let priceFloat = parseFloat(priceString.replace("$", ""));
 
         setDetails({
             artistUsername: artistusername,
@@ -56,7 +56,6 @@ const PaymentDetails = () => {
             date: date,
             price: priceFloat,
         });
-
     }, [location.search]);
 
     const cardNumberId = useId();
@@ -170,84 +169,88 @@ const PaymentDetails = () => {
     };
 
     const confirmPayment = async () => {
-        setIsSubmitting(true)
+        setIsSubmitting(true);
         let datetimeParts = details.date.split(",");
-    
+
         let startDatetimeString = datetimeParts[0].trim();
         let endDatetimeString = datetimeParts[1].trim();
-    
+
         let startDatetime = new Date(startDatetimeString);
         let endDatetime = new Date(endDatetimeString);
-    
+        console.log(`IN PAYMENT DEETS: ${datetimeParts[0]}`);
         // Destructure the inputs from the state
         const { cardNumber, expDate, cvv } = inputs;
-    
+
         // Make sure expDate is formatted correctly for your backend
-        const formattedExpiryDate = expDate.replace(/\D/g, ''); // Remove non-digit characters if needed
-    
+        const formattedExpiryDate = expDate.replace(/\D/g, ""); // Remove non-digit characters if needed
+
         // Call the payment processing method
         Meteor.call("processPayment", { cardNumber, cvv, expiryDate: formattedExpiryDate }, (error) => {
             if (error) {
-                console.error('Error processing payment:', error);
-                alert('Payment Failed');
+                console.error("Error processing payment:", error);
+                alert("Payment Failed");
             } else {
-                addToBooking(startDatetime, endDatetime, details.location, details.price, BookingStatus.PENDING, details.brideUsername, details.artistUsername, serviceId)
-                    .then(bookingId => {
+                addToBooking(
+                    startDatetime,
+                    endDatetime,
+                    details.location,
+                    details.price,
+                    BookingStatus.PENDING,
+                    details.brideUsername,
+                    details.artistUsername,
+                    serviceId
+                )
+                    .then((bookingId) => {
                         return addPaymentReceipt(new Date(), details.price, "Deposit", "Paid", bookingId);
                     })
-                    .then(r => {
-                        setIsSubmitting(false)
+                    .then((r) => {
+                        setIsSubmitting(false);
                         navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/booking-confirmation?receipt=${r}`);
                     })
-                    .catch(reason => {
-                        setIsSubmitting(false)
+                    .catch((reason) => {
+                        setIsSubmitting(false);
                         alert(reason);
                     });
             }
-        })
-    }
-
-    const addPaymentReceipt = (paymentDatetime, paymentAmount, paymentType, paymentStatus, bookingId) => new Promise((resolve, reject) => {
-        Meteor.call("add_receipt", 
-            paymentDatetime, 
-            paymentAmount, 
-            paymentType, 
-            paymentStatus, 
-            bookingId, 
-            (error, receiptId) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve(receiptId);
-            }
         });
-    });
-    
+    };
 
-    const addToBooking = (startDateTime, endDateTime, location, price, status, brideUsername, artistUsername, serviceId) => new Promise((resolve, reject) => {
-        Meteor.call("add_booking",
-            startDateTime,
-            endDateTime,
-            location,
-            price,
-            status,
-            brideUsername,
-            artistUsername,
-            serviceId,
-            // up to here it knows these are its args - it (somehow) also knows that you get back
-            // either an error or a value that is stuffed into bookingID (this can be any name).
-            (error, bookingId) => {
+    const addPaymentReceipt = (paymentDatetime, paymentAmount, paymentType, paymentStatus, bookingId) =>
+        new Promise((resolve, reject) => {
+            Meteor.call("add_receipt", paymentDatetime, paymentAmount, paymentType, paymentStatus, bookingId, (error, receiptId) => {
                 if (error) {
                     reject(error);
                 } else {
-                    resolve(bookingId);
+                    resolve(receiptId);
                 }
-            } // this something that comes with promises. If reject and resolve are
-            // not present the promise doesn't understand its finished and will keep powering
-            // thru the method until it finds an end (there is none)
-        );
-    });
+            });
+        });
 
+    const addToBooking = (startDateTime, endDateTime, location, price, status, brideUsername, artistUsername, serviceId) =>
+        new Promise((resolve, reject) => {
+            Meteor.call(
+                "add_booking",
+                startDateTime,
+                endDateTime,
+                location,
+                price,
+                status,
+                brideUsername,
+                artistUsername,
+                serviceId,
+                // up to here it knows these are its args - it (somehow) also knows that you get back
+                // either an error or a value that is stuffed into bookingID (this can be any name).
+                (error, bookingId) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(bookingId);
+                    }
+                } // this something that comes with promises. If reject and resolve are
+                // not present the promise doesn't understand its finished and will keep powering
+                // thru the method until it finds an end (there is none)
+            );
+        });
 
     return (
         <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
@@ -353,9 +356,11 @@ const PaymentDetails = () => {
                                     <p className="text-center medium-text">You are about make a payment of ${details.price}.</p>
                                     <p className="text-center medium-text">Are you sure?</p>
                                     <div className="flex justify-center space-x-6 mt-5">
-                                        <Button disabled={isSubmitting}
+                                        <Button
+                                            disabled={isSubmitting}
                                             className="btn-base bg-secondary-purple hover:bg-secondary-purple-hover ps-[25px] pe-[25px] flex gap-1 load-when-disabled"
-                                            onClick={confirmPayment}>
+                                            onClick={confirmPayment}
+                                        >
                                             <CheckIcon className="icon-base" />
                                             Confirm
                                         </Button>

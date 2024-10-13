@@ -270,7 +270,7 @@ export function useSpecificBooking(bookingId, userType) {
       ? bookingData.artistUsername
       : bookingData.brideUsername
     : "";
-  console.log(bookingData);
+  // console.log(bookingData);
   const isLoadingUser = useSubscribe("specific_user", bookingUsername);
 
   // filter for only the other user's data (if not then you get your own data too)
