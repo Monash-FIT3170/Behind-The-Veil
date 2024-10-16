@@ -3,7 +3,6 @@
  * File version: 1.2
  * Contributors: Hirun, Nikki
  */
-
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { imageObj, useUserInfo } from "../../util.jsx";
@@ -102,6 +101,7 @@ export const AddEditPostPage = ({isEdit}) => {
                 setFileError("File must be less than 16MB");
                 setImageObject(null); // Clear the file input
                 return;
+
             } else {
                 setFileError(""); // Clear the error when a valid file is uploaded
 
