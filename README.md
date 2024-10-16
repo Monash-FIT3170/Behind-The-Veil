@@ -1,14 +1,34 @@
 # Behind-The-Veil - Project 10 - FIT3170 - 2024
 
+Behind the Veil is currently hosted at: https://behind-the-veil-1077153890194.australia-southeast2.run.app/
+
 ## Table of Contents
 - [Dependencies](#dependencies)
+  - [Meteor](#meteor)
+  - [React](#react)
+  - [Email SMTP Server](#email-smtp-server)
+  - [Cloud MongoDB Database (MongoDB Atlas)](#cloud-mongodb-database-mongodb-atlas)
 - [Running the app](#running-the-app)
 - [Testing](#testing)
 - [Errors](#errors)
 - [Importing Mock Data](#how-to-import-the-mock-data-into-mongodb)
+  - [How to add to PATH](#how-to-add-to-path)
+  - [Importing the files on LOCAL database](#importing-the-files-on-local-database)
+  - [Importing the files on CLOUD database](#importing-the-files-on-cloud-database)
+- [Pull Request Strategy](#pull-request-pr-strategy)
+  - [Chosen workflow: Gitflow](#chosen-workflow-gitflow)
+  - [Overview of the PR Workflow](#overview-of-the-pr-workflow)
 - [Git Help](#git-help)
+  - [Rebasing](#rebasing-)
+  - [Changing Branch name remotely and locally](#changing-branch-name-remotely-and-locally)
+  - [Git push errors](#git-push-errors)
+  - [Merge Request Issues](#merge-request-issues)
+- [Versioning Strategy](#versioning-strategy)
+  - [Version Number Format](#version-number-format)
+  - [Versioning Guidelines](#versioning-guidelines)
+- [Deployment](#deployment)
 - [Team Composition](#team-composition)
-
+---
 ## Dependencies
 
 ### Meteor
@@ -64,7 +84,112 @@ npm install -g meteor
 
 ### React
 
-- Installing meteor already installs React so you don't need to do anything!
+Installing meteor already installs React so you don't need to do anything!
+
+
+### Email SMTP Server
+Certain functions in the application require the ability to send emails, thus these third-party 
+dependencies that support this function must be set up.
+
+The application also requires a simple mail transfer protocol (SMTP) server for functionalities that send emails. 
+The project currently uses an SMTP server provided by Twilio SendGrid, but this SMTP server can be from any provider.
+
+#### Prerequisite
+You must already have a Gmail account for the application to send emails FROM. (Some organisational accounts 
+cannot be used, including Monash emails.) 
+
+The current email that the project is using is: behindtheveil010@gmail.com
+
+This will form one of the environment variable required:
+
+```console
+FROM_USER:
+"Nickname<email_address>"
+```
+
+e.g.:
+
+```console
+FROM_USER:
+"Behind the Veil<behindtheveil010@gmail.com>"
+```
+
+#### Set up Twilio SendGrid SMTP Server
+The following steps will take you through setting up an SMTP server on Twilio SendGrid:
+
+1. Create and verify your account
+
+Registration at: https://sendgrid.com/en-us
+
+The Twilio team may reach out for manual verification of identity. You will need to provide details about yourself, 
+your company/organisation, what you will be using email service for, etc.
+
+2. Once your account is verified, log in and add a Single Sender at: https://app.sendgrid.com/settings/sender_auth
+   - add the email address of the gmail account you have prepared during the prerequisite step.
+   - this email address is used for the application to send emails FROM 
+
+
+3. Verify the email address by accessing the inbox and clicking the link sent by Twilio.
+
+
+4. Go to the setup guide for integration and select "SMTP Relay": https://app.sendgrid.com/guide/integrate
+![img.png](images/img.png)
+
+
+5. Create a new API key and record the password
+![img_1.png](images/img_1.png)
+
+
+6. Continue onto the nest steps and obtain the full SMTP connection. It should be something like this:
+
+```console
+MAIL_URL: 
+"smtps://apikey:<YOUR_API_KEY>@smtp.sendgrid.net:465"
+```
+
+This is one of the required environment variables.
+
+### Cloud MongoDB Database (MongoDB Atlas)
+The application uses a cloud MongoDB database for storing and syncing data across devices. 
+The following instructions will help you create a cluster for the project and set up the cloud MongoDB connection.
+
+1. Create and verify your account for MongoDB Atlas at: https://account.mongodb.com/account/register
+
+
+2. Log in and create a new project. (optional: invite other team members to the project)
+![img_2.png](images/img_2.png)
+
+
+3. Create a new (free) M0 cluster and name it anything you want
+![img_3.png](images/img_3.png)
+
+
+4. Follow the prompts to create a first admin user for the cluster
+
+
+5. In "Network Access" tab, press "+ Add IP Address" and add "0.0.0.0/0" (this will allow access to the database from anywhere)
+
+
+6. In "Database Access" tab, press "+ Add New Database User"
+   - create a new user with: read-write permissions. 
+   - Make sure you record the username and password
+
+![img_4.png](images/img_4.png)
+
+
+7. In the "Database" tab, press "Connect" on the cluster
+
+
+8. Select "Drivers" and then copy the connect string (URI). 
+   - Replace the <db_username> and <db_password> with the username and password of the user created in step 6.
+
+
+9. You now have the other required environmental variable for connecting to the cloud database. It should look something like:
+```console
+MONGO_URL:
+"mongodb+srv://<db_username>:<db_password>@cluster0.d0qmc.mongodb.net/meteor?retryWrites=true&w=majority&appName=Cluster0"
+```
+
 
 ---
 
@@ -76,22 +201,33 @@ Once all your dependencies have been installed:
   ```console
   cd behind-the-veil-siteroot
   ```
-- Install meteor dependencies inside of the file. This will create your node_modules file, do not skip this step.️
+- Install meteor dependencies inside the file. This will create your node_modules file, do not skip this step.️
   ```console
   meteor npm install
   ```
-- To start the app run:
+- To start the app with LOCAL database run:
   ```console
   meteor npm start
   ```
-  Your app should automatially open on the browser. If it doesn't, the console will show you a link that the app is running on the browser from so click this.
 
+- To start the app with email server AND cloud database export the environment variables that we have created just before.
+  (Currently, the variables has placeholders, please make sure to replace them with the actual values.)
+  ```console
+  export FROM_USER="Nickname<email_address>"
+  export MAIL_URL="smtps://apikey:<YOUR_API_KEY>@smtp.sendgrid.net:465"
+  export MONGO_URL="mongodb+srv://<db_username>:<db_password>@cluster0.d0qmc.mongodb.net/meteor?retryWrites=true&w=majority&appName=Cluster0"
+
+  meteor npm start
+  ```
+  
+  Your app should automatically open on the browser. If it doesn't, the console will show you a link that the app is running on the browser from so click this.
+---
 ## Testing
 
 ```console
 meteor test --driver-package meteortesting:mocha
 ```
-
+---
 ## Errors
 
 > In the event your app is crashing or failing to run, scroll up on the error message and it will tell you if you are missing any dependencies.
@@ -108,7 +244,7 @@ meteor npm install --save @babel/runtime react react-dom
   meteor reset
   meteor
   credit: https://stackoverflow.com/questions/38988365/meteor-unexpected-mongo-exit-code-14-restarting-cant-start-mongo-server
-
+---
 ## How to import the mock data into MongoDB
 
 1. Download the "MongoDB Command Line Database Tools" from: https://www.mongodb.com/try/download/database-tools
@@ -157,26 +293,28 @@ edit the file at `/etc/paths` and add the above address to the end of the file
 3. paste in your path you want to add at the end on a new line
 4. press `escape` and then type `:wq` to save the file
 
-- don't have access to a Mac, try to google for more specific instructions.
 
-### Importing the files
+### Importing the files on LOCAL database
 
 1. run meteor project (make sure it is started)
+
 
 2. Open another terminal and navigate to site-root `\Behind-The-Veil\behind-the-veil-siteroot`
 
 Run command:
 
 ```
-mongoimport -h localhost:PORT --db meteor --collection COLLECTION_NAME --file FILENAME.json --jsonArray
+mongoimport -h localhost:<PORT> --db meteor --collection <COLLECTION_NAME> --file <FILEPATH/FILENAME.json> --jsonArray
 ```
 
 in the above command, replace:
 
-- `PORT` with the port that the mongoDb is running on, if your meteor project is on 3000, then it is most likely 3001
+- `<PORT>` with the port that the mongoDb is running on, if your meteor project is on 3000, then it is most likely 3001
     - (note: if you've run meteor on a different port, then mongoDb is probably running on that port + 1, e.g. meteor running on 4000, mongoDb running on 4001)
-- `COLLECTION_NAME` with the database entity name (such as user, service, image, etc.)
-- `FILENAME.json` with the file path to the file to import
+- `<COLLECTION_NAME>` with the database entity name (such as user, service, image, etc.)
+- `<FILEPATH/FILENAME.json>` with the file path to the file to import
+
+Note: do not include the angled brackets (< and >)
 
 Example commands to import everything (with port 3001)
 
@@ -196,13 +334,78 @@ mongoimport -h localhost:3001 --db meteor --collection posts --file mockdata/pos
 mongoimport -h localhost:3001 --db meteor --collection reviews --file mockdata/reviews12.json --jsonArray
 ```
 
-mongoexport -h localhost:3001 --db meteor --collection images --out=output.txt
+### Importing the files on CLOUD database
+1. run meteor project (make sure it is started) and remember to export the MONGO_URL to conect to the cloud database
 
+
+2. Open another terminal and navigate to site-root `\Behind-The-Veil\behind-the-veil-siteroot`
+
+
+run the command:
+
+```text
+mongoimport --username <CLOUD_USERNAME> --password <CLOUD_PASSWORD> <HOST_URI> --db meteor --collection <COLLECTION_NAME> --file <FILEPATH> --jsonArray
 ```
 
-mongoimport -h localhost:3001 --db meteor --collection bookings --file mockdata/booking_user1000.json --jsonArray
-```
+in the above command, replace:
 
+- `<CLOUD_USERNAME>` with the username of the Cloud MongoDB Database user (refer to step 6 in: [here](#cloud-mongodb-database-mongodb-atlas))
+- `<CLOUD_PASSWORD>` with the password of the Cloud MongoDB Database user (refer to step 6 in: [here](#cloud-mongodb-database-mongodb-atlas))
+- `<HOST_URI>` with the first part of the connection string, should be something like: `mongodb+srv://cluster0.xxxxxxx.mongodb.net`
+- `<COLLECTION_NAME>` with the database entity name (such as user, service, image, etc.)
+- `<FILEPATH/FILENAME.json>` with the file path to the file to import
+
+Note: do not include the angled brackets (< and >)
+
+Example:
+```text
+mongoimport --username meteor-main --password xxxxxx mongodb+srv://cluster0.d99ecyx.mongodb.net --db meteor --collection test --file mockdata\presentation\artists50.json --jsonArray
+```
+---
+## Pull Request (PR) Strategy
+The Pull Request (PR) strategy outlines the process for contributing and reviewing code within the project. Having a PR ensures that all changes are reviewed, tested, and documented properly before being merged into the `main` branch. The strategy is designed to maintain high-quality code, encourage team collaboration, and keep a agreed upon standard of code within the team.
+### Chosen Workflow: Gitflow
+The 10 Bridesmaids have elected to use the Gitflow workflow for this git repository. Instead of a single main branch, this workflow uses two branches to record the history of the project. The `main` branch stores the official release history which will then be used to deploy the application, and the `develop` branch serves as an integration branch for features.
+### Overview of the PR Workflow
+The following is the guidelines to the workflow for the 10 Bridesmaids codebase:
+1. **Branch Creation:** 
+   - Each developer works on a separate feature or bugfix branch, forked from the `develop`.
+   - Branch naming conventions:
+   `<bugfix/feature>/<ticket-id>-brief-name-of-ticket`
+   
+   > For example: feature/86cuw4kj1-unresponded-booking-alert
+2. **Development:** 
+   - Code changes are made and tested locally on the new branch.
+   
+
+3. **Commit and Push:** 
+   - Developers commit their changes and push them to the repository.
+   - Commit message conventions:
+   `<bugfix/feature>/<ticket brief message about the changes made`
+   
+   > For example: feature/86cuw4kj1 added the email api to send user for each unresponded booking
+
+
+4. **Open a PR:** 
+   - Once a feature or task is complete, a pull request is opened against the `develop` branch. 
+   - The PR should include a detailed description of the changes and the link of the ticket it addresses. 
+   - This includes any mock data that needs to be added.
+   
+
+5. **Code Review:** 
+   - The code reviewers for that sprint are assigned to review the code, check for quality, and provide feedback. 
+   - A detailed guide to the code review standards and process steps is linked here for developer use. Please refer to: [Code Review Checklist](doc/Code-review-checklist.pdf)
+
+
+6. **Feedback and Changes:** 
+   - The developer addresses the feedback and pushes any necessary changes.
+
+
+7. **Approval and Merge:** 
+   - Once approved, the branch is <mark>squash merged</mark> into the `develop` branch. The PR is then closed and the branch is deleted remotely.
+   > ✏️ Note: The reason a **squash merge** was chosen as our merge method was due to some of our team members being relatively new to versioning sometimes duplicate commits occured from rebasing/merging. Squash merges ensures even if the developer or the reviewer missed the duplicate commit issue, main branch would have a clean commit log history.
+
+---
 ## Git Help
   
  This file is for all the git issues and their resolution that I've come across before, more than welcome to add to it if you find a solution online to an issue you've had.
@@ -212,11 +415,13 @@ Reference: https://git-scm.com/book/en/v2/Git-Branching-Rebasing
 
 ✅ Step by Step video: https://youtu.be/RGtwxYqkkas?si=nvmMetHWNMegc0v_&t=129 (This guy does it all in his main terminal but i recommend using the IDE terminal so you can see your conflict files)
 
-> **When to use rebasing:** When a new ticket has been merged to develop and your branch is not up to date with the develop branch
-> 
-> **Why do we rebase?** We want to limit the amount of merge conflicts happening in develop so we put all new changes from develop into our own branchs so we can resolve merge conflicts remotely instead of on develop.
-> 
-> **_! IMPORTANT !_** We will be prioritising develop branch over yours, so if a merge conflict occurs in develop, it will be rolled back and your changes will be lost, so please make sure you rebase!
+> 🐛 There is also a screenshotted guide specific to Behind The Veil codebase if you prefer that: [Guide to Rebasing](doc/Guide-to-rebasing.pdf)
+
+**When to use rebasing:** When a new ticket has been merged to develop and your branch is not up to date with the develop branch
+
+**Why do we rebase?** We want to limit the amount of merge conflicts happening in develop so we put all new changes from develop into our own branchs so we can resolve merge conflicts remotely instead of on develop.
+
+**_! IMPORTANT !_** We will be prioritising develop branch over yours, so if a merge conflict occurs in develop, it will be rolled back and your changes will be lost, so please make sure you rebase!
 
 #### Steps to rebase
 
@@ -296,8 +501,8 @@ If everything in your branch is working to your expectations and you are happy w
 git push -f
 ```
 
-Keep in mind git force push will rewrite your remote branch with everything in local regardless of merge conflicts. This is not a bad thing if you are happy with everything on your local and need your remote to match!
-----
+#### Keep in mind git force push will rewrite your remote branch with everything in local regardless of merge conflicts. This is not a bad thing if you are happy with everything on your local and need your remote to match!
+
 
 ### Changing Branch name remotely and locally
 Reference: https://stackoverflow.com/questions/30590083/git-how-to-rename-a-branch-both-local-and-remote
@@ -338,8 +543,6 @@ git push <remote> -u <new_name>
 
 This error means the branch doesn't exist in remote but does locally. To resolve this you can do a git status to see what uncommitted files you have and commit them. Do a git push and the branch should push to remote and create it for you.
 
----
-
 ### Merge Request Issues
 #### Git doesn't give me the option to merge into developer branch?
 This means the branch you are trying to push has a detached head i.e it was never branched off the developer branch.
@@ -365,6 +568,147 @@ git push -f
 ```
 
 **Note** if you are unsure about any of this please reach out to team members via General.
+
+---
+## Versioning Strategy
+
+This strategy outlines how we manage versions in our project to ensure consistency and cohesion across the team for major releases, minor fixes and patching bugs.
+
+### Version Number Format
+
+We use Semantic Versioning to indicate changes in the project. The format follows `v[MAJOR].[MINOR].[PATCH]`.
+- MAJOR: Incremented when significant new features are added to the application. This release is also used for major API changes and features that may require the end user to learn or relearn how to use new feature. i.e New settings page or a new side bar is added etc.
+> For example: v2.0.0
+- MINOR: Incremented when less signification new features or improvements are added. These do not break existing functionality but introduce enhancements. i.e Theme changes, button changes and other minor features.
+> For example: v1.1.0
+- PATCH/BUG: Incremented when bug fixes are made. These changes do not affect functionality but resolve issues existing in the code. i.e bookings are being duplicated or multiple copies of the same services are added at a time.
+> For example: v1.0.1
+
+### Versioning Guidelines
+1. **Initial Development:**
+- During the early stages of the project (pre-launch), the code was predominantly being developed on the `develop` branch hence no versioning was used for this. Once the project is stable and ready for release, we begin with 1.0.0.
+2. **Branch-Based Development:**
+- All development is done on develop branches, and versions are assigned when merging back into the main branch (typically main or release).
+- Each version release includes a tag in the repository with the version number, which serves as a snapshot of that point in development.
+3. **Changelog:**
+- A changelog must be maintained to document significant changes between versions. It should outline:
+    - New features: new code added for functionality
+    - Bug fixes: Fixes on existing code
+    - Chores: maintenance work particularly for tech debt, cleaning up or documentation
+4. **Release Management:**
+- All version releases are tagged and documented with a description of the changes in the repository. Tagging allows easy reference to specific versions for debugging or comparison.
+5. **Post-Release Process:**
+- After each release, increment the version number according to the next expected update. For example, after releasing 1.2.0, the next patch might be 1.2.1 or the next minor update could be 1.3.0.
+---
+## Deployment
+
+This section outlines how to manually deploy the app using Docker and Google Cloud Platform (GCP). The steps outlined are more specific to our app and workflow, but for general advice and more specific details on how to deploy using GCP, refer to https://cloud.google.com/run/docs/deploying
+
+If you modify the Dockerfile, keep in mind that GCP requires containers to follow this contract https://cloud.google.com/run/docs/container-contract (“Executables in the container image must be compiled for Linux 64-bit. Cloud Run specifically supports the Linux x86_64 ABI format.”)
+
+Note that these steps could probably be optimised, i.e. pushing Docker image straight to Artifact Registry instead of Dockerhub first.
+
+### Prerequisites:
+
+#### Docker:
+1. Install Docker and create a Docker account, then have the Docker engine running when attempting to build the Docker image
+2. Create a Dockerhub repo
+
+#### GCP:
+1. Create Google Cloud project and enable billing
+2. Set up Artifact Registry
+    - Enable Artifact Registry API
+    - Go to Artifact Registry > Repositories
+    - Create a docker repository
+      - In the form, select docker format and Australia region
+3. Configure secrets using Secret Manager
+    - Enable Secret Manager API
+    - Create secrets for each of our sensitive environment variables, e.g.
+      - MONGO_URL
+      - MAIL_URL
+      - FROM_USER
+    - Grant the ’Secret Manager Secret Accessor’ role to the service account being used to deploy
+      - Go to Secret Manager page
+      - ‘Show info panel’
+      - ‘Add principal’
+      - Select the service account used to deploy as new principal
+      - Select ’Secret Manager Secret Accessor’ as role
+
+### Steps:
+
+Assuming you have completed the prerequisites, here is the process when you’re ready to do a release and deploy:
+
+1. Create a branch off of ‘develop’ called ‘release/<version_number>’ (replace with your desired version number)
+2. Merge ‘release/<version_number>’ into ‘main’
+3. Checkout ‘main’ branch
+4. Open terminal. Go to behind-the-veil-siteroot, where the Dockerfile is
+    ```console
+    cd behind-the-veil-siteroot
+    ```
+5. Log in
+   ```console
+   docker login
+   ```
+    - Enter login credentials
+6. Build the Docker image
+   ```console
+   docker buildx build -t behind-the-veil --platform linux/amd64 .
+   ```
+7. Test that the image runs locally
+   ```console
+   docker run -e MONGO_URL=<mongo_url> -e ROOT_URL=<root_url> -e MAIL_URL=<mail_url> -e FROM_USER=<from_user_email> -p 8080:8080 behind-the-veil
+   ```
+    - Replace the environment variables above with our potentially sensitive values, or omit them if you know you don’t need them for testing
+    - If it fails, then debug, rebuild, and test again, else proceed
+
+Note, the following example code snippets assume the following:
+  - Docker username = joshualoongwy
+  - Dockerhub repo name = behind-the-veil
+  - Version number = 2.0.1
+  - GCP project location = australia-southeast2
+  - GCP project id = behind-the-veil
+  - GCP Artifact Registry repo name = behind-the-veil-docker
+
+***Adjust each command according to your needs***
+
+8. Tag Docker image to target Dockerhub repo
+    ```console
+    docker tag behind-the-veil joshualoongwy/behind-the-veil:2.0.1
+    ```
+9. Push Docker image to Dockerhub repo
+    ```console
+    docker push joshualoongwy/behind-the-veil:2.0.1
+    ```
+10. Go to GCP and open Cloud Shell. The following steps are performed in a Cloud Shell terminal. Configure authentication if necessary
+    ```console
+    gcloud auth configure-docker australia-southeast2-docker.pkg.dev
+    ```
+11. Pull Docker image from Dockerhub
+    ```console
+    docker pull joshualoongwy/behind-the-veil:2.0.1
+    ```
+12. Tag Docker image to target Google Artifact Registry repo
+    ```console
+    docker tag joshualoongwy/behind-the-veil:2.0.1 australia-southeast2-docker.pkg.dev/behind-the-veil/behind-the-veil-docker/behind-the-veil:2.0.1
+    ```
+13. Push Docker image to Google Artifact Registry
+    ```console
+    docker push australia-southeast2-docker.pkg.dev/behind-the-veil/behind-the-veil-docker/behind-the-veil:2.0.1
+    ```
+14. Go to Google Cloud Run and fill out service form
+    - If first time deploying, go to ‘Create service’ and fill out Google Cloud Run form fields:
+      - Container Image URL: Select the image you just pushed to Artifact Registry
+      - Region: Select ‘australia-southeast2’
+      - Authentication: Select ‘Allow unauthenticated invocations’
+      - Environment variables: Use the necessary environment variables (some should be configured as secrets in Secret Manager), e.g.
+        - ROOT_URL
+        - MONGO_URL
+        - MAIL_URL
+        - FROM_USER
+      - Increase/adjust resources (e.g. memory) as necessary
+    - If redeploying, select your existing service and go to ‘Edit & deploy new revision’, then make necessary changes in the form
+15. Press ‘Deploy’, wait for GCP to deploy, then go the supplied URL to check for successful deployment
+
 
 ## Team Composition
 

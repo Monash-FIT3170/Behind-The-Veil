@@ -3,17 +3,15 @@
  * File version: 1.2
  * Contributors: Kyle, Nikki
  */
-import React, {useEffect, useState} from "react";
-import {Meteor} from "meteor/meteor";
-import {useSubscribe, useTracker} from "meteor/react-meteor-data";
-import {ArrowUpTrayIcon, CheckIcon} from "@heroicons/react/24/outline";
-
-import ImageCollection from "../../../../../api/collections/images";
+import React, { useEffect, useState } from "react";
+import { Meteor } from "meteor/meteor";
+import { useSubscribe, useTracker } from "meteor/react-meteor-data";
+import { ArrowUpTrayIcon, CheckIcon } from "@heroicons/react/24/outline";
 
 import Input from "../../../input/Input";
 import Button from "../../../button/Button.jsx";
 import ProfilePhoto from "../../../profilePhoto/ProfilePhoto.jsx"
-import {useUserInfo} from "../../../util";
+import { imageObj, useUserInfo } from "../../../util";
 import Loader from "../../../loader/Loader";
 import UserCollection from "../../../../../api/collections/users";
 
@@ -41,20 +39,8 @@ export const AccountDetails = () => {
         )) : []
     });
 
-
-    // get current profile image
-    const isLoadingProfileImage = useSubscribe('specific_profile_image', userInfo);
-
-    let profileImageData = useTracker(() => {
-        return ImageCollection.find({
-            $and: [
-                {"imageType": "profile"},
-                {"target_id": userInfo.username}
-            ]
-        }).fetch()[0];
-    });
-
     // Keeps track of the values in the text inputs
+    const [isSubmitting, setIsSubmitting] = useState(false)
     const [formState, setFormState] = useState({
         alias: "",
         email: "",
@@ -64,7 +50,9 @@ export const AccountDetails = () => {
     const [textErrors, setTextErrors] = useState({
         alias: "",
         email: "",
+        overall: ""
     })
+    const [successMessage, setSuccessMessage] = useState("");
 
     // Changes the values in text input of form
     const handleInputChange = (e) => {
@@ -78,27 +66,15 @@ export const AccountDetails = () => {
     };
 
     // keep track of uploaded image for profile
-    const [uploadedFile, setUploadedFile] = useState(undefined) // this is the actual file, to be stored in database
-    const [previewImageUrl, setPreviewImageUrl] = useState(undefined) // this is JUST the url of the image for viewing
+    const [imageObject, setImageObject] = useState(null) // this is the actual file, to be stored in database
     const allowedFileTypeExtensions = [".png", ".jpg", ".jpeg"];
 
+    useEffect(() => {
+        setImageObject(userInfo.profileImage)
+    }, [])
 
     // error texts under the text inputs
     const [imageError, setImageError] = useState("")
-
-    // when uploadedFile changes, also change preview
-    useEffect(() => {
-        if (!uploadedFile) {
-            setPreviewImageUrl(undefined)
-            return
-        }
-
-        const objectUrl = URL.createObjectURL(uploadedFile)
-        setPreviewImageUrl(objectUrl)
-
-        // free memory when ever this component is unmounted
-        return () => URL.revokeObjectURL(objectUrl)
-    }, [uploadedFile])
 
     // handler for uploading file button
     const onUploadFile = e => {
@@ -106,23 +82,40 @@ export const AccountDetails = () => {
 
         if (!file) {
             // if no file selected, do nothing
+            return;
 
-        } else if (!allowedFileTypeExtensions.some((ext) => file.name.endsWith(ext))) {
+        } else if (!allowedFileTypeExtensions.some((ext) => file.name.toLowerCase().endsWith(ext.toLowerCase()))) {
             setImageError("Please select a png, jpg, or jpeg file.")
+            return;
+
+        } else if (file.size > 16777216) {
+            setImageError("File must be less than 16MB");
+            return;
 
         } else {
             setImageError("")
-            setUploadedFile(file)
+
+            const reader = new FileReader();
+
+            // Convert the file to take URL format
+            reader.onloadend = () => {
+                const image = imageObj(reader.result, file.name, file.size);
+                setImageObject(image);
+            };
+
+            reader.readAsDataURL(file);
         }
     }
 
     const handleFileClear = (e) => {
-        setUploadedFile(undefined)
+        setImageObject(null)
     }
 
     // Updates the values inputted into the text fields, if they have changed and are valid.
     const handleSave = (event) => {
         event.preventDefault();
+        setIsSubmitting(true)
+        setSuccessMessage('');
 
         // Grabs the updated values from the formState object. (which keeps track of these values as they are changed in the text fields).
         const {alias, email} = formState;
@@ -150,43 +143,68 @@ export const AccountDetails = () => {
             isError = true;
         }
 
-        // check uploaded file is valid
-        if (uploadedFile && !allowedFileTypeExtensions.some((ext) => uploadedFile.name.endsWith(ext))) {
-            setImageError("Please select a png, jpg, or jpeg file.")
-            isError = true;
-        }
-
         // Update text errors state with new error messages
         setTextErrors(newErrors);
 
         if (!isError) {
-            // Update alias
-            if (alias !== userInfo.alias && alias !== "") {
-                Meteor.call('update_alias', userInfo.id, alias);
-            }
 
-            // Update email address
-            if (email !== userInfo.email && email !== "") {
-                Meteor.call('update_email', userInfo.id, userInfo.email, email);
-            }
+            new Promise((resolve, reject) => {
+                // Update alias
+                if (alias !== userInfo.alias && alias !== "") {
+                    Meteor.call('update_alias', userInfo.id, alias,
+                        (error) => {
+                            if (error) {
+                                reject(error)
+                            }
+                        });
+                }
 
-            // update profile image
-            if (uploadedFile) {
-                // todo, after image upload setup completed
-                //  remove old profile image then insert the new one
-            }
+                // Update email address
+                if (email !== userInfo.email && email !== "") {
+                    Meteor.call('update_email', userInfo.id, userInfo.email, email,
+                        (error) => {
+                            if (error) {
+                                reject(error)
+                            }
+                        });
+                }
 
-            // reload after update
-            window.location.reload();
+                // update profile image
+                console.log(imageObject)
+                if (imageObject !== userInfo.profileImage) {
+                    Meteor.call('update_profile_image', userInfo.id, imageObject,
+                        (error) => {
+                            if (error) {
+                                reject(error)
+                            }
+                        });
+                }
+
+                resolve()
+
+            }).then(() => {
+                setIsSubmitting(false)
+                setFormState({
+                    alias: "",
+                    email: "",
+                })
+                setSuccessMessage('Account details changed successfully!');
+
+            }).catch(() => {
+                setIsSubmitting(false)
+                setTextErrors({overall: "Failed to update account settings. Please try again."})
+            })
+
+        } else {
+            setIsSubmitting(false)
         }
     };
 
-    if (isLoadingProfileImage() || isLoadingUsers()) {
+    if (isLoadingUsers()) {
         // wait for load data
         return (
             <Loader
                 loadingText={"Account details are loading . . ."}
-                isLoading={isLoadingProfileImage()}
                 size={100}
                 speed={1.5}
             />
@@ -209,6 +227,7 @@ export const AccountDetails = () => {
                         label={<label className={"main-text"}>Name/Alias</label>}
                         onChange={handleInputChange}
                         placeholder={userInfo.alias}
+                        value={formState.alias}
                         className="lg:w-[40vw] sm:w-96"
                     />
                     {textErrors.alias && <span className="text-cancelled-colour">{textErrors.alias}</span>}
@@ -222,6 +241,7 @@ export const AccountDetails = () => {
                         label={<label className={"main-text"}>Email</label>}
                         onChange={handleInputChange}
                         placeholder={userInfo.email}
+                        value={formState.email}
                         className="lg:w-[40vw] sm:w-96"/>
                     {textErrors.email && <span className="text-cancelled-colour">{textErrors.email}</span>}
                 </div>
@@ -231,12 +251,13 @@ export const AccountDetails = () => {
                     <div className="main-text">Profile Image</div>
 
                     <div className="flex flex-col md:flex-row items-center gap-4">
-                        <ProfilePhoto userPhotoData={uploadedFile ? previewImageUrl : profileImageData}/>
+                        <ProfilePhoto userPhotoData={imageObject ? imageObject.imageData : null}/>
 
                         <div className={"flex flex-col gap-1"}>
                             <Input
                                 hidden
                                 type="file"
+                                accept={allowedFileTypeExtensions?.join(",")}
                                 name={"profilePhoto"}
                                 id={"upload-input"}
                                 onChange={onUploadFile}
@@ -250,7 +271,7 @@ export const AccountDetails = () => {
                                 Upload File
                             </label>
                             {
-                                uploadedFile ?
+                                imageObject ?
                                     <Button className="btn-base" onClick={() => handleFileClear()}>
                                         Reset Image
                                     </Button> :
@@ -262,10 +283,13 @@ export const AccountDetails = () => {
 
                 </div>
 
+                {textErrors.overall && <span className="text-cancelled-colour">{textErrors.overall}</span>}
+                {successMessage && <div className="text-confirmed-colour">{successMessage}</div>}
+
                 {/* Save button */}
-                <Button
-                    className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"
-                    onClick={handleSave}>
+                <Button disabled={isSubmitting}
+                        className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2 load-when-disabled"
+                        onClick={handleSave}>
                     <CheckIcon className="icon-base"/>
                     Save Changes
                 </Button>

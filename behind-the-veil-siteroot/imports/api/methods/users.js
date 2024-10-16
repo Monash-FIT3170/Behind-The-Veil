@@ -11,12 +11,7 @@ import { check } from 'meteor/check';
 
 
 Meteor.methods({
-    /**
-     * Function to remove all users - for testing purposes
-     */
-    "remove_all_users": function () {
-        UserCollection.remove({});
-    },
+
     /**
      * Finds a user by their _id and emails a verification email
      * @param {string} id - id of the user (mongo DB attribute)
@@ -24,7 +19,9 @@ Meteor.methods({
     "verify_email": function (id) {
         check(id, String)
 
-        Accounts.sendVerificationEmail(id);
+        if (Meteor.isServer) {
+            Accounts.sendVerificationEmail(id);
+        }
     },
     /**
      * Changes the email address associated with a user.
@@ -76,6 +73,13 @@ Meteor.methods({
                 }
             },
         );
+    },
+
+    'update_profile_image': function (userId, image) {
+        UserCollection.update(
+            {_id: userId},
+            {$set: {'profile.profileImage': image}}
+        )
     },
 
     /**

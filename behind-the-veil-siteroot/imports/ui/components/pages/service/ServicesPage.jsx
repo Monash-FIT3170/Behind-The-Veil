@@ -4,22 +4,26 @@
  * Contributors: Nikki
  */
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import PageLayout from "/imports/ui/enums/PageLayout";
-import WhiteBackground from "/imports/ui/components/whiteBackground/WhiteBackground.jsx";
-import Pagination from "/imports/ui/components/pagination/Pagination.jsx"
-import ServiceCard from "/imports/ui/components/card/ServiceCard.jsx";
-import SearchBar from "/imports/ui/components/searchBar/searchBar.jsx";
-import Loader from "/imports/ui/components/loader/Loader";
+import PageLayout from "../../../enums/PageLayout";
+import WhiteBackground from "../../../components/whiteBackground/WhiteBackground.jsx";
+import Pagination from "../../../components/pagination/Pagination.jsx"
+import ServiceCard from "../../../components/card/ServiceCard.jsx";
+import SearchBar from "../../../components/searchBar/searchBar.jsx";
+import Loader from "../../../components/loader/Loader";
 import {useServices} from "../../DatabaseHelper";
 import URLSearchParams from "@ungap/url-search-params";
-import {useLocation} from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import Tippy from '@tippyjs/react/headless';
+import InformationCircleIcon from "@heroicons/react/24/solid/InformationCircleIcon";
+import { useUserInfo } from "../../util";
 
 /**
  * Page of a list of Service cards for users to see
  */
 export const ServicesPage = () => {
+    const userInfo = useUserInfo();
 
     // default number of items on each page
     const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -52,16 +56,35 @@ export const ServicesPage = () => {
             />)
         )
 
+
+    // help hover element
+    const infoText = "If you would like to add a new service, please go into Account > My Services > Add Service.";
+    const serviceHelperElement = (
+        <Tippy render={(attrs) => (
+            <div className="box border border-main-blue rounded-lg mt-1 px-6 py-6 white-glass-base shadow-lg w-[500px]"
+                 tabIndex="-1"
+                 {...attrs}>
+                {infoText}
+            </div>
+        )}
+        >
+            <InformationCircleIcon className={"tooltip-icon size-6 text-dark-grey mt-2"}/>
+        </Tippy>
+    );
+
+
     // checks if the page and data has loaded
     if (document.readyState === "complete" && !isLoading) {
         return (
             <WhiteBackground pageLayout={PageLayout.LARGE_CENTER}>
 
-                <span className={"title-text text-center"}>Services</span>
+                <div className={"flex flex-row items-center justify-center gap-x-2"}>
+                    <span className={"title-text text-center"}>Services</span>
+                    {userInfo.type === "artist" ? serviceHelperElement : null}
+                </div>
 
                 <div className="flex flex-col items-center mb-10">
-                    <SearchBar placeholder={"Search service name or description"}
-                               defaultType={"services" }
+                    <SearchBar defaultType={"services"}
                                startingValue={searchInput}
                                suggestionsDown={true}
                     />

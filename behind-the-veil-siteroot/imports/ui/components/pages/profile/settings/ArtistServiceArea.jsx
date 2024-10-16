@@ -14,6 +14,9 @@ import Button from "../../../button/Button.jsx";
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import "/imports/api/methods/users";
+import {useNavigate} from "react-router-dom";
+import {useUserInfo} from "../../../util";
+import UrlBasePath from "../../../../enums/UrlBasePath";
 
 /**
  * This page allows the artist to enter a location as well as provide a radius in which they can travel from that location
@@ -22,6 +25,11 @@ import "/imports/api/methods/users";
  */
 
 export const ArtistServiceArea = () => {
+    const navigateTo = useNavigate();
+
+    if (useUserInfo().type === "bride") {
+        navigateTo(`/${UrlBasePath.HOME}`);
+    }
     const user = useTracker(() => Meteor.user());
 
     const [location, setLocation] = useState('');
@@ -29,29 +37,45 @@ export const ArtistServiceArea = () => {
 
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+
+
     const handleSaveChanges = (event) => {
         event.preventDefault();
         setSuccessMessage('');
         setErrorMessage('')
 
-        if (!radius || location.trim() === '') {
-            setErrorMessage('Please fill in all fields');
-        } else {
-            return new Promise((resolve, reject) => {
-                Meteor.call('update_service_area', user._id, location, radius,
-                    (error) => {
-                        if (error) {
-                            reject(error);
-                        } else {
-                            setLocation('');
-                            setRadius('');
-                            setSuccessMessage('Service Area changed successfully!');
-                            resolve(user._id);
-                        }
-                    }
-                );
-            })
+        if (!radius && location.trim() === '') {
+            setErrorMessage('No value updated');
+            return;
         }
+
+        const updatedRadius = radius ? radius : user.profile.artistServiceRadius
+        const updatedLocation = location.trim() ? location.trim() : user.profile.artistServiceLocation
+
+        if (!updatedRadius) {
+            setErrorMessage('Please fill in the radius');
+            return;
+        }
+
+        if (!updatedLocation) {
+            setErrorMessage('Please fill in the location');
+            return;
+        }
+
+        return new Promise((resolve, reject) => {
+            Meteor.call('update_service_area', user._id, updatedLocation, updatedRadius,
+                (error) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        setLocation('');
+                        setRadius('');
+                        setSuccessMessage('Service Area changed successfully!');
+                        resolve(user._id);
+                    }
+                }
+            );
+        })
 
     };
 

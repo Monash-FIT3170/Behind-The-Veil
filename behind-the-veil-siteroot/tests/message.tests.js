@@ -28,20 +28,16 @@ if (Meteor.isClient) {
                 Meteor.call("add_message",
                     new Date(),
                     'Message content',
-                    'photo123',
+                    true,
                     'bride123',
                     'chat123',
-                    // up to here it knows these are its args - it (somehow) also knows that you get back
-                    // either an error or a value that is stuffed into messageID (this can be any name).
                     (error, messageId) => {
                         if (error) {
                             reject(error);
                         } else {
                             resolve(messageId);
                         }
-                    } // this something that comes with promises. If reject and resolve are
-                    // not present the promise doesn't understand its finished and will keep powering
-                    // thru the method until it finds an end (there is none)
+                    } 
                 );
             }).then(messageId => {
                 assert.notStrictEqual(messageId, undefined);

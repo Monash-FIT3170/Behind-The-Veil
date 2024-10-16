@@ -12,7 +12,7 @@ import WhiteBackground from "../../whiteBackground/WhiteBackground.jsx";
 import PageLayout from "../../../enums/PageLayout";
 import ArtistCard from "../../card/ArtistCard";
 import Pagination from "../../pagination/Pagination";
-import SearchBar from "/imports/ui/components/searchBar/searchBar.jsx";
+import SearchBar from "../../../components/searchBar/searchBar.jsx";
 import Loader from "../../loader/Loader";
 import {useUsers} from "../../DatabaseHelper";
 
@@ -54,8 +54,7 @@ export const ArtistsPage = () => {
                 <span className={"title-text text-center"}>Artists</span>
 
                 <div className="flex flex-col items-center mb-10">
-                    <SearchBar placeholder={"Search artist name or username"}
-                               defaultType={"artists"}
+                    <SearchBar defaultType={"artists"}
                                startingValue={searchInput}
                                suggestionsDown={true}
                     />

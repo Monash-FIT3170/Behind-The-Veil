@@ -16,6 +16,7 @@ import Pagination from "../../../pagination/Pagination";
 import UrlBasePath from "../../../../enums/UrlBasePath.tsx";
 
 import {useServices} from "../../../DatabaseHelper";
+import {useUserInfo} from "../../../util";
 
 /**
  * Service tab of an artist's profile.

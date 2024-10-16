@@ -1,7 +1,7 @@
 /**
  * File Description: Review database testing
  * File version: 1.0
- * Contributors: Vicky
+ * Contributors: Vicky, Katie
  */
 const assert = require('assert');
 import {resetDatabase} from 'meteor/xolvio:cleaner';
@@ -26,9 +26,11 @@ if (Meteor.isClient) {
             // Wrap the Meteor.call in a Promise
             return new Promise((resolve, reject) => {
                 Meteor.call("add_review",
+                    'Review title',
                     3,
                     'Review comment',
                     'bookingId123',
+                    'artist',
                     // up to here it knows these are its args - it (somehow) also knows that you get back
                     // either an error or a value that is stuffed into reviewId (this can be any name).
                     (error, reviewId) => {
@@ -55,6 +57,7 @@ if (Meteor.isClient) {
         it('can retrieve a review', function () {
             return new Promise((resolve, reject) => {
                 const reviewId = ReviewCollection.insert({
+                    reviewTitle: 'Review title',
                     reviewRating: 3,
                     reviewComment: 'Review comment',
                     bookingId: 'bookingId123'

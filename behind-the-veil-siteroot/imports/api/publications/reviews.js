@@ -14,7 +14,7 @@ import { ReviewCollection } from "../collections/reviews";
  */
 Meteor.publish('specific_review', function(bookingId) {
     // Check if the username matches either the user
-    return ReviewCollection.find({_id: bookingId});
+    return ReviewCollection.find({bookingId: bookingId});
 });
 
 /**
