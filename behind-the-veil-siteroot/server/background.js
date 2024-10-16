@@ -22,7 +22,7 @@ export const checkBookings = () => {
         }
 
         confirmedBookings.forEach((booking) => {
-            const confirmedBookingEnd = booking.bookingEndDateTime
+            const confirmedBookingEnd = new Date(booking.bookingEndDateTime)
 
             if (confirmedBookingEnd < now) {
                 updateBookingStatus(booking._id, BookingStatus.OVERDUE)
