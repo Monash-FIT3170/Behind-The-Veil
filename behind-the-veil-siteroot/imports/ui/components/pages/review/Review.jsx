@@ -161,7 +161,7 @@ export const Review = () => {
         }
 
         // set the bookingIsReviewed attribute of the booking to 'true'
-        bookingReviewedObj = {
+        let bookingReviewedObj = {
             bookingIsReviewed: true
         }
         try {
@@ -202,7 +202,7 @@ export const Review = () => {
                 <PreviousButton/>
                 {/* main container for content */}
                 <div className="flex flex-col gap-4 xl:px-40">
-                    <div className="large-text">Leave a Review</div>
+                    <div className="large-text">{leaveReview ? "Leave a Review" : "Your Review"}</div>
                     {/* display review details as a card */}
                     <ServiceDetailsHeader
                     service={serviceData.serviceName}
