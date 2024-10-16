@@ -24,9 +24,9 @@ Meteor.methods({
         check(brideUsername, String)
         check(artistUsername, String)
         check(chatUpdatedDate, Date)
-        check(chatLastMessage, Boolean)
+        check(chatLastMessage, String)
         check(readByBride, Boolean)
-        check(readByArtist, String)
+        check(readByArtist, Boolean)
         
         return ChatCollection.insert({
             brideUsername: brideUsername,
