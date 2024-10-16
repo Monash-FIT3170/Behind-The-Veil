@@ -131,7 +131,6 @@ export const ArtistGalleryTab = ({username, external = false}) => {
           selectedPostDescription={selectedPostDescription}
           userInfo={userInfo}
           external={external}
-          isEdit= {!external}
         />
         <DeletePostConfirmationModal
           isOpen={isDeleteModalOpen}
@@ -142,7 +141,7 @@ export const ArtistGalleryTab = ({username, external = false}) => {
         {external ? null :
           <div className="sticky top-20 z-20 flex justify-end">
             <Button
-              className="absolute top-5 flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover mt-2"
+              className="absolute top-0 flex flex-row gap-x-1.5 bg-secondary-purple hover:bg-secondary-purple-hover mt-2"
               onClick={addPostNavigate}
             >
               {plusIcon} Add Photo

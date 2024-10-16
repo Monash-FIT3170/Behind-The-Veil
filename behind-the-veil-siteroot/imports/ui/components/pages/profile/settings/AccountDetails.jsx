@@ -3,15 +3,15 @@
  * File version: 1.2
  * Contributors: Kyle, Nikki
  */
-import React, {useEffect, useState} from "react";
-import {Meteor} from "meteor/meteor";
-import {useSubscribe, useTracker} from "meteor/react-meteor-data";
-import {ArrowUpTrayIcon, CheckIcon} from "@heroicons/react/24/outline";
+import React, { useEffect, useState } from "react";
+import { Meteor } from "meteor/meteor";
+import { useSubscribe, useTracker } from "meteor/react-meteor-data";
+import { ArrowUpTrayIcon, CheckIcon } from "@heroicons/react/24/outline";
 
 import Input from "../../../input/Input";
 import Button from "../../../button/Button.jsx";
 import ProfilePhoto from "../../../profilePhoto/ProfilePhoto.jsx"
-import {useUserInfo, imageObj} from "../../../util";
+import { imageObj, useUserInfo } from "../../../util";
 import Loader from "../../../loader/Loader";
 import UserCollection from "../../../../../api/collections/users";
 
@@ -40,6 +40,7 @@ export const AccountDetails = () => {
     });
 
     // Keeps track of the values in the text inputs
+    const [isSubmitting, setIsSubmitting] = useState(false)
     const [formState, setFormState] = useState({
         alias: "",
         email: "",
@@ -49,7 +50,9 @@ export const AccountDetails = () => {
     const [textErrors, setTextErrors] = useState({
         alias: "",
         email: "",
+        overall: ""
     })
+    const [successMessage, setSuccessMessage] = useState("");
 
     // Changes the values in text input of form
     const handleInputChange = (e) => {
@@ -80,22 +83,24 @@ export const AccountDetails = () => {
         if (!file) {
             // if no file selected, do nothing
             return;
+
         } else if (!allowedFileTypeExtensions.some((ext) => file.name.toLowerCase().endsWith(ext.toLowerCase()))) {
             setImageError("Please select a png, jpg, or jpeg file.")
             return;
+
         } else if (file.size > 16777216) {
             setImageError("File must be less than 16MB");
             return;
-        } 
-        else {
+
+        } else {
             setImageError("")
 
             const reader = new FileReader();
 
             // Convert the file to take URL format
             reader.onloadend = () => {
-            const image = imageObj(reader.result, file.name, file.size);
-            setImageObject(image);
+                const image = imageObj(reader.result, file.name, file.size);
+                setImageObject(image);
             };
 
             reader.readAsDataURL(file);
@@ -109,6 +114,8 @@ export const AccountDetails = () => {
     // Updates the values inputted into the text fields, if they have changed and are valid.
     const handleSave = (event) => {
         event.preventDefault();
+        setIsSubmitting(true)
+        setSuccessMessage('');
 
         // Grabs the updated values from the formState object. (which keeps track of these values as they are changed in the text fields).
         const {alias, email} = formState;
@@ -140,24 +147,56 @@ export const AccountDetails = () => {
         setTextErrors(newErrors);
 
         if (!isError) {
-            // Update alias
-            if (alias !== userInfo.alias && alias !== "") {
-                Meteor.call('update_alias', userInfo.id, alias);
-            }
 
-            // Update email address
-            if (email !== userInfo.email && email !== "") {
-                Meteor.call('update_email', userInfo.id, userInfo.email, email);
-            }
+            new Promise((resolve, reject) => {
+                // Update alias
+                if (alias !== userInfo.alias && alias !== "") {
+                    Meteor.call('update_alias', userInfo.id, alias,
+                        (error) => {
+                            if (error) {
+                                reject(error)
+                            }
+                        });
+                }
 
-            // update profile image
-            if (imageObject !== userInfo.profileImage) {
+                // Update email address
+                if (email !== userInfo.email && email !== "") {
+                    Meteor.call('update_email', userInfo.id, userInfo.email, email,
+                        (error) => {
+                            if (error) {
+                                reject(error)
+                            }
+                        });
+                }
+
+                // update profile image
                 console.log(imageObject)
-                Meteor.call('update_profile_image', userInfo.id, imageObject);
-            }
+                if (imageObject !== userInfo.profileImage) {
+                    Meteor.call('update_profile_image', userInfo.id, imageObject,
+                        (error) => {
+                            if (error) {
+                                reject(error)
+                            }
+                        });
+                }
 
-            // reload after update
-            // window.location.reload();
+                resolve()
+
+            }).then(() => {
+                setIsSubmitting(false)
+                setFormState({
+                    alias: "",
+                    email: "",
+                })
+                setSuccessMessage('Account details changed successfully!');
+
+            }).catch(() => {
+                setIsSubmitting(false)
+                setTextErrors({overall: "Failed to update account settings. Please try again."})
+            })
+
+        } else {
+            setIsSubmitting(false)
         }
     };
 
@@ -188,6 +227,7 @@ export const AccountDetails = () => {
                         label={<label className={"main-text"}>Name/Alias</label>}
                         onChange={handleInputChange}
                         placeholder={userInfo.alias}
+                        value={formState.alias}
                         className="lg:w-[40vw] sm:w-96"
                     />
                     {textErrors.alias && <span className="text-cancelled-colour">{textErrors.alias}</span>}
@@ -201,6 +241,7 @@ export const AccountDetails = () => {
                         label={<label className={"main-text"}>Email</label>}
                         onChange={handleInputChange}
                         placeholder={userInfo.email}
+                        value={formState.email}
                         className="lg:w-[40vw] sm:w-96"/>
                     {textErrors.email && <span className="text-cancelled-colour">{textErrors.email}</span>}
                 </div>
@@ -242,10 +283,13 @@ export const AccountDetails = () => {
 
                 </div>
 
+                {textErrors.overall && <span className="text-cancelled-colour">{textErrors.overall}</span>}
+                {successMessage && <div className="text-confirmed-colour">{successMessage}</div>}
+
                 {/* Save button */}
-                <Button
-                    className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"
-                    onClick={handleSave}>
+                <Button disabled={isSubmitting}
+                        className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2 load-when-disabled"
+                        onClick={handleSave}>
                     <CheckIcon className="icon-base"/>
                     Save Changes
                 </Button>

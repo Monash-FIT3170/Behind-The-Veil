@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { PaintBrushIcon, CheckIcon } from "@heroicons/react/24/outline";
+import { CheckIcon, PencilIcon } from "@heroicons/react/24/outline";
 import Input from "../../../input/Input";
 import Button from "../../../button/Button.jsx";
 import {useNavigate} from "react-router-dom";
@@ -156,7 +156,7 @@ export const ArtistPayment = () => {
                     className="bg-secondary-purple hover:bg-secondary-purple-hover flex gap-2"
                     onClick={handleEditClick}
                 >
-                    <PaintBrushIcon className="icon-base" />
+                    <PencilIcon className="icon-base" />
                     Edit Bank Details
                 </Button>
             )}

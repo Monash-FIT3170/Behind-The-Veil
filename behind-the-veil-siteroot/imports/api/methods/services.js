@@ -27,7 +27,7 @@ Meteor.methods({
         check(duration, String)
         check(artistUsername, String)
         
-        ServiceCollection.insert({
+        return ServiceCollection.insert({
             serviceType: type,
             serviceName: name,
             serviceDesc: desc,

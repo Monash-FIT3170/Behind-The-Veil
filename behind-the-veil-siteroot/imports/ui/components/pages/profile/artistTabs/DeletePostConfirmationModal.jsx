@@ -37,11 +37,11 @@ const DeletePostConfirmationModal = ({ isOpen, closeModal, deleteImage }) => {
                 <Dialog.Title className="title-text text-center">
                   Delete Post?
                 </Dialog.Title>
-                <div className="mt-2">
+                <div className="flex flex-col gap-1 mt-2">
                   <p className="main-text text-center">
                     Are you sure you want to delete this post?
                   </p>
-                  <p className="main-text text-center">
+                  <p className="main-text text-cancelled-colour text-center">
                     This action cannot be reversed.
                   </p>
                 </div>

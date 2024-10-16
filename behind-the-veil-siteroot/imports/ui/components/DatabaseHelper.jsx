@@ -13,6 +13,7 @@ import PostCollection from "../../api/collections/posts";
 import ReviewCollection from "../../api/collections/reviews";
 import BookingStatus from "../enums/BookingStatus";
 import { relativeTimeRounding } from "moment";
+import { useUserInfo } from "./util";
 
 /**
  * Function to update booking's status in any way (also linked to emailing in the future)
@@ -24,7 +25,8 @@ import { relativeTimeRounding } from "moment";
 export function updateBookingStatus(
   bookingId,
   newStatus,
-  cancelAttributes = {}
+  cancelAttributes = {},
+  isBride = false
 ) {
   if (newStatus === BookingStatus.CANCELLED) {
     Meteor.call("update_booking_details", bookingId, {
@@ -38,14 +40,31 @@ export function updateBookingStatus(
   }
   // email about the update
   Meteor.callAsync("sendStatusUpdateEmail", bookingId, newStatus);
-  
+
   if (newStatus === BookingStatus.CANCELLED || newStatus === BookingStatus.REJECTED) {
-      Meteor.call('get_receipt_from_booking', bookingId, (error, receipt) => {
-          if (receipt && receipt.paymentStatus === "Deposit") {
-              // Update the receipt to change its status from Deposit to Refunded
-              Meteor.call('deposit_to_refund', receipt._id);
+    if (isBride) {
+      const currentDate = new Date()
+      const acceptedDate = new Date(currentDate)
+      acceptedDate.setDate(currentDate.getDate() + 14)
+      Meteor.call('get_booking', bookingId, (error, booking) => {
+        if (acceptedDate < booking.bookingStartDateTime){
+          Meteor.call('get_receipt_from_booking', bookingId, (error, receipt) => {
+          if (receipt && receipt.paymentType === "Deposit") {
+            // Update the receipt to change its status from Deposit to Refunded
+            Meteor.call('deposit_to_refund', receipt._id);
           }
-      });    
+        });
+        }
+      })
+    } else {
+      Meteor.call('get_receipt_from_booking', bookingId, (error, receipt) => {
+        if (receipt && receipt.paymentType === "Deposit") {
+            // Update the receipt to change its status from Deposit to Refunded
+            Meteor.call('deposit_to_refund', receipt._id);
+        }
+      });
+    }
+          
   }
 }
 
@@ -251,7 +270,7 @@ export function useSpecificBooking(bookingId, userType) {
       ? bookingData.artistUsername
       : bookingData.brideUsername
     : "";
-  console.log(bookingData);
+  // console.log(bookingData);
   const isLoadingUser = useSubscribe("specific_user", bookingUsername);
 
   // filter for only the other user's data (if not then you get your own data too)
