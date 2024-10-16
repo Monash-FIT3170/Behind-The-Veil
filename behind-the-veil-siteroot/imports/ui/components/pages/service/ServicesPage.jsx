@@ -6,13 +6,13 @@
 
 import React, { useState } from 'react';
 
-import PageLayout from "/imports/ui/enums/PageLayout";
-import WhiteBackground from "/imports/ui/components/whiteBackground/WhiteBackground.jsx";
-import Pagination from "/imports/ui/components/pagination/Pagination.jsx"
-import ServiceCard from "/imports/ui/components/card/ServiceCard.jsx";
-import SearchBar from "/imports/ui/components/searchBar/searchBar.jsx";
-import Loader from "/imports/ui/components/loader/Loader";
-import { useServices } from "../../DatabaseHelper";
+import PageLayout from "../../../enums/PageLayout";
+import WhiteBackground from "../../../components/whiteBackground/WhiteBackground.jsx";
+import Pagination from "../../../components/pagination/Pagination.jsx"
+import ServiceCard from "../../../components/card/ServiceCard.jsx";
+import SearchBar from "../../../components/searchBar/searchBar.jsx";
+import Loader from "../../../components/loader/Loader";
+import {useServices} from "../../DatabaseHelper";
 import URLSearchParams from "@ungap/url-search-params";
 import { useLocation } from "react-router-dom";
 import Tippy from '@tippyjs/react/headless';

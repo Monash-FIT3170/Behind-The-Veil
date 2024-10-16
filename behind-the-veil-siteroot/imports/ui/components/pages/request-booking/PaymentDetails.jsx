@@ -17,6 +17,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import PreviousButton from "../../button/PreviousButton";
 import BookingStatus from "../../../enums/BookingStatus";
 import UrlBasePath from "../../../enums/UrlBasePath";
+import {useUserInfo} from "../../util";
 
 /**
  * Component for handling payment details.
@@ -29,6 +30,11 @@ import UrlBasePath from "../../../enums/UrlBasePath";
  */
 const PaymentDetails = () => {
     const navigateTo = useNavigate();
+    const userInfo = useUserInfo()
+
+    if (userInfo.type === "artist") {
+        navigateTo(`/${UrlBasePath.HOME}`);
+    }
 
     // grab the service ID from the URL
     const { serviceId } = useParams();

@@ -11,6 +11,7 @@ import {CheckCircleIcon, CheckIcon} from "@heroicons/react/24/outline";
 import {useLocation, useNavigate} from "react-router-dom";
 import UrlBasePath from "../../../enums/UrlBasePath";
 import URLSearchParams from "@ungap/url-search-params";
+import {useUserInfo} from "../../util";
 
 /**
  * * Component for displaying a booking confirmation message.
@@ -23,6 +24,10 @@ import URLSearchParams from "@ungap/url-search-params";
  */
 const BookingConfirmation = () => {
     const navigateTo = useNavigate();
+
+    if (useUserInfo().type === "artist") {
+        navigateTo(`/${UrlBasePath.HOME}`);
+    }
 
     const bookingId = new URLSearchParams(useLocation().search).get("receipt");
 

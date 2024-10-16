@@ -14,6 +14,9 @@ import Button from "../../../button/Button.jsx";
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import "/imports/api/methods/users";
+import {useNavigate} from "react-router-dom";
+import {useUserInfo} from "../../../util";
+import UrlBasePath from "../../../../enums/UrlBasePath";
 
 /**
  * This page allows the artist to enter a location as well as provide a radius in which they can travel from that location
@@ -22,6 +25,11 @@ import "/imports/api/methods/users";
  */
 
 export const ArtistServiceArea = () => {
+    const navigateTo = useNavigate();
+
+    if (useUserInfo().type === "bride") {
+        navigateTo(`/${UrlBasePath.HOME}`);
+    }
     const user = useTracker(() => Meteor.user());
 
     const [location, setLocation] = useState('');

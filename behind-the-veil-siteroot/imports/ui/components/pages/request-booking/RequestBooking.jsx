@@ -45,6 +45,11 @@ import BookingCollection from "../../../../api/collections/bookings.js";
 
 const RequestBooking = () => {
     const userInfo = useUserInfo();
+    const navigateTo = useNavigate();
+
+    if (userInfo.type === "artist") {
+        navigateTo(`/${UrlBasePath.HOME}`);
+    }
 
     // grab the service ID from the URL
     const { serviceId } = useParams();
@@ -65,8 +70,6 @@ const RequestBooking = () => {
         return BookingCollection.find().fetch();
     });
     const artistAvailability = artistData?.availability;
-
-    const navigateTo = useNavigate();
 
     // remove milliseconds from dates
     const removeMilliseconds = (date) =>

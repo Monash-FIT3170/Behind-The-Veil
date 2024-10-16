@@ -19,7 +19,13 @@ import UrlBasePath from "../../../enums/UrlBasePath";
  * Component for displaying booking summary and allowing continuation to the next step.
  */
 const BookingSummary = () => {
+    // Navigate hook for redirecting to another page
+    const navigateTo = useNavigate();
     const userInfo = useUserInfo();
+
+    if (userInfo.type === "artist") {
+        navigateTo(`/${UrlBasePath.HOME}`);
+    }
 
     // grab the service ID from the URL
     const { serviceId } = useParams();
@@ -85,9 +91,6 @@ const BookingSummary = () => {
         const query = new URLSearchParams(newQuery).toString();
         navigateTo(`/${UrlBasePath.SERVICES}/${serviceId}/payment-details?${query}`);
     };
-
-    // Navigate hook for redirecting to another page
-    const navigateTo = useNavigate();
 
     return (
         <WhiteBackground>
